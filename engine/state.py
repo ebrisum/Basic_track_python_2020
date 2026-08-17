@@ -15,11 +15,26 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from cards.database import CardData, CardDatabase
+from cards.dsl import (
+    Ability,
+    ChoiceRequest,
+    DiscardCost,
+    Duration,
+    ExhaustSelf,
+    PayEnergy,
+    PayPower,
+    RecycleFromTrash,
+    TriggerKind,
+)
+from cards.primitives import EffectContext, execute
+from cards.scripts import script_for
 from engine.actions import (
     Action,
+    ActivateAbility,
     AssignDamageTo,
     ChannelRune,
     ChooseBattlefield,
+    ChooseTarget,
     Concede,
     ExhaustRuneForEnergy,
     Mulligan,
@@ -55,6 +70,7 @@ class Phase(str, Enum):
     DRAW = "draw"  # 315.4
     MAIN = "main"  # 316
     COMBAT_ASSIGN = "combat_assign"  # 465.2.c
+    CHOOSING = "choosing"  # 355.2 -- an effect is waiting on a choice
     ENDING = "ending"  # 317
     GAME_OVER = "game_over"
 
@@ -116,6 +132,14 @@ class RiftboundState:
     # turn produces meaningless statistics. It is therefore offered only in
     # interactive play; batch simulation leaves it off. See RQ-9.
     allow_concede: bool = False
+    # Effect resolution: a queue of (effect, context) pushed when a card or
+    # ability resolves, drained by `_resolve_effects`.
+    pending: list = field(default_factory=list)
+    awaiting: ChoiceRequest | None = None
+    # Which players' units enter ready this turn (Confront).
+    units_enter_ready: set = field(default_factory=set)
+    # Phase to return to once the effect queue drains.
+    _resume_phase: "Phase | None" = None
     _rng: random.Random = field(default_factory=random.Random)
 
     # ---------------------------------------------------------------- helpers
@@ -167,6 +191,8 @@ class RiftboundState:
 
     def _legal_actions_inner(self) -> list[Action]:
         player = self._current_player
+        if self.phase is Phase.CHOOSING and self.awaiting is not None:
+            player = self.awaiting.player
         if self.phase is Phase.SETUP_BATTLEFIELD:
             return [
                 ChooseBattlefield(i)
@@ -176,6 +202,9 @@ class RiftboundState:
             return self._mulligan_actions(player)
         if self.phase is Phase.MAIN:
             return self._main_phase_actions(player)
+        if self.phase is Phase.CHOOSING:
+            assert self.awaiting is not None
+            return [ChooseTarget(i) for i in self.awaiting.options]
         if self.phase is Phase.COMBAT_ASSIGN:
             return self._assign_actions(player)
         return [PassPhase()]
@@ -232,6 +261,17 @@ class RiftboundState:
                                 StandardMove(ref.instance_id, bf_location(bf.index))
                             )
 
+        # Activated abilities on permanents the player controls (376, 145.2).
+        for ref in self.cards.values():
+            if ref.controller != player or ref.location is None:
+                continue
+            script = script_for(ref.card_id)
+            if script is None:
+                continue
+            for index, ability in enumerate(script.of_kind(TriggerKind.ACTIVATED)):
+                if self._can_pay_ability(ref, ability):
+                    actions.append(ActivateAbility(ref.instance_id, index))
+
         # Rune abilities (164.2). Both are Reactions, so both are legal here.
         for instance_id in state.channeled_runes:
             ref = self.cards[instance_id]
@@ -259,14 +299,124 @@ class RiftboundState:
         return [AssignDamageTo(r.instance_id) for r in pool]
 
     def might_of(self, ref: CardRef) -> int:
-        """Current Might, including Assault while attacking (807)."""
+        """Current Might: printed, plus buffs (426/701), plus Assault (807).
+
+        Assault counts printed and granted instances; a unit given ASSAULT 3
+        by Cleave attacks for +3.
+        """
         card = self.db[ref.card_id]
-        bonus = card.assault if ref.is_attacker else 0
-        return card.might + bonus
+        assault = card.assault
+        for name, value, _duration in ref.granted_keywords:
+            if name == "Assault":
+                assault += value
+        bonus = assault if ref.is_attacker else 0
+        # Attached gear contributes its printed Might (716).
+        attached = sum(
+            self.db[g.card_id].might
+            for g in self.cards.values()
+            if g.attached_to == ref.instance_id
+        )
+        return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
 
     def _has_lethal(self, ref: CardRef) -> bool:
         """142.4.a -- lethal damage is nonzero damage >= Might."""
         return ref.damage > 0 and ref.damage >= self.might_of(ref)
+
+    # ------------------------------------------------- effects and abilities
+
+    def _can_pay_ability(self, ref: CardRef, ability: Ability) -> bool:
+        """201-204 -- an ability is only legal if every cost can be paid."""
+        state = self.players[ref.controller]
+        for cost in ability.costs:
+            if isinstance(cost, ExhaustSelf):
+                if ref.exhausted:
+                    return False
+            elif isinstance(cost, DiscardCost):
+                if len(state.hand) < cost.count:
+                    return False
+            elif isinstance(cost, RecycleFromTrash):
+                # 416.3 -- the recycle must be completable.
+                if len(state.trash) < cost.count:
+                    return False
+            elif isinstance(cost, PayPower):
+                if not state.pool.can_pay(0, [cost.domain] * cost.count):
+                    return False
+            elif isinstance(cost, PayEnergy):
+                if state.pool.energy < cost.count:
+                    return False
+            else:
+                return False
+        return True
+
+    def _pay_ability(self, ref: CardRef, ability: Ability) -> None:
+        state = self.players[ref.controller]
+        for cost in ability.costs:
+            if isinstance(cost, ExhaustSelf):
+                ref.exhausted = True
+            elif isinstance(cost, DiscardCost):
+                for instance_id in list(state.hand[: cost.count]):
+                    state.hand.remove(instance_id)
+                    self.players[self.cards[instance_id].owner].trash.append(instance_id)
+            elif isinstance(cost, RecycleFromTrash):
+                for instance_id in list(state.trash[: cost.count]):
+                    state.trash.remove(instance_id)
+                    state.main_deck.append(instance_id)  # 416.1 -- to the bottom
+            elif isinstance(cost, PayPower):
+                state.pool.pay(0, [cost.domain] * cost.count)
+            elif isinstance(cost, PayEnergy):
+                state.pool.pay(cost.count, [])
+
+    def _queue(self, ability: Ability, controller: int, source: int | None) -> None:
+        """Push an ability's effects onto the resolution queue."""
+        for effect in ability.effects:
+            self.pending.append((effect, EffectContext(controller=controller, source=source)))
+
+    def _fire(self, kind: TriggerKind, instance_id: int) -> None:
+        """382 -- queue every ability of `kind` printed on this card."""
+        ref = self.cards[instance_id]
+        script = script_for(ref.card_id)
+        if script is None:
+            return
+        for ability in script.of_kind(kind):
+            self._queue(ability, ref.controller, instance_id)
+
+    def _resolve_effects(self) -> None:
+        """Drain the effect queue, pausing whenever a choice is needed."""
+        guard = 0
+        while self.pending and self.awaiting is None:
+            guard += 1
+            if guard > 256:
+                raise RuntimeError("effect resolution did not terminate")
+            effect, ctx = self.pending[0]
+            request = execute(self, effect, ctx)
+            if request is not None:
+                self.awaiting = request
+                if self._resume_phase is None:
+                    self._resume_phase = self.phase
+                self.phase = Phase.CHOOSING
+                self._current_player = request.player
+                return
+            self.pending.pop(0)
+
+        if not self.pending and self.awaiting is None and self._resume_phase is not None:
+            self.phase = self._resume_phase
+            self._resume_phase = None
+            self._current_player = self.turn_player
+
+    def _apply_choice(self, action: ChooseTarget) -> None:
+        """Feed a chosen instance back into the paused effect (355.2)."""
+        assert self.awaiting is not None and self.pending
+        effect, ctx = self.pending[0]
+        ctx.chosen = (action.instance_id,)
+        self.awaiting = None
+        request = execute(self, effect, ctx)
+        if request is not None:
+            # A multi-part effect (e.g. each player kills a gear) asks again.
+            self.awaiting = request
+            self._current_player = request.player
+            return
+        self.pending.pop(0)
+        self._resolve_effects()
 
     # ----------------------------------------------------------------- apply
 
@@ -288,6 +438,10 @@ class RiftboundState:
             self._apply_tap_energy(action)
         elif isinstance(action, RecycleRuneForPower):
             self._apply_recycle_power(action)
+        elif isinstance(action, ActivateAbility):
+            self._apply_activate(action)
+        elif isinstance(action, ChooseTarget):
+            self._apply_choice(action)
         elif isinstance(action, AssignDamageTo):
             self._apply_assign(action)
         elif isinstance(action, Concede):
@@ -356,9 +510,9 @@ class RiftboundState:
 
         if card.type == "spell":
             # 351.2 -- a spell's effects execute, then it goes to the trash.
-            # APPROX: unscripted card text is a no-op. See RQ-5.
-            state.trash.append(action.instance_id)
             self._emit(f"P{player} plays {card.name} (spell)")
+            self._fire(TriggerKind.ON_RESOLVE, action.instance_id)
+            state.trash.append(action.instance_id)
         else:
             # Units and Gear are played to the controller's Base (148.1.a.1);
             # they resolve immediately off the chain (337.2).
@@ -366,6 +520,8 @@ class RiftboundState:
             ref.exhausted = False
             state.base.append(action.instance_id)
             self._emit(f"P{player} plays {card.name}")
+            self._fire(TriggerKind.ON_PLAY, action.instance_id)
+        self._resolve_effects()
 
     def _apply_move(self, action: StandardMove) -> None:
         """144 Standard Move; 190.3.a Contested; 450."""
@@ -418,6 +574,17 @@ class RiftboundState:
         )
         if combat.remaining <= 0:
             self._finish_assignment()
+
+    def _apply_activate(self, action: ActivateAbility) -> None:
+        """376 -- pay the costs, then queue the effects."""
+        ref = self.cards[action.instance_id]
+        script = script_for(ref.card_id)
+        assert script is not None
+        ability = script.of_kind(TriggerKind.ACTIVATED)[action.index]
+        self._pay_ability(ref, ability)
+        self._emit(f"P{ref.controller} activates {self.db[ref.card_id].name}")
+        self._queue(ability, ref.controller, ref.instance_id)
+        self._resolve_effects()
 
     def _apply_concede(self) -> None:
         player = self._current_player
@@ -525,7 +692,13 @@ class RiftboundState:
         self._current_player = self.turn_player
 
     def _phase_ending(self) -> None:
-        """317, then the turn passes (306)."""
+        """317, then the turn passes (306). Turn-scoped modifiers expire."""
+        for ref in self.cards.values():
+            ref.might_this_turn = 0
+            ref.granted_keywords = tuple(
+                g for g in ref.granted_keywords if g[2] != Duration.THIS_TURN.value
+            )
+        self.units_enter_ready.clear()
         self.turn_player = self.opponent(self.turn_player)
         self.turn_number += 1
         self._current_player = self.turn_player
@@ -571,6 +744,12 @@ class RiftboundState:
 
     def _kill(self, ref: CardRef) -> None:
         """428 Kill -- the card goes to its owner's trash (108.2.b)."""
+        # 457.1 -- gear left unattached at a battlefield is recalled; gear
+        # attached to a dying unit detaches here.
+        for gear in self.cards.values():
+            if gear.attached_to == ref.instance_id:
+                gear.attached_to = None
+                gear.location = BASE_LOCATION
         state = self.players[ref.controller]
         if ref.instance_id in state.base:
             state.base.remove(ref.instance_id)
@@ -734,6 +913,13 @@ class RiftboundState:
 
         state.points += 1
         self._emit(f"P{player} scores by {how} ({state.points} points)")
+        if how == "Conquer":
+            # 471.2.a -- Conquer abilities trigger. Gear attached to that
+            # player's units carries the "When I conquer" abilities here.
+            for ref in sorted(self.cards.values(), key=lambda r: r.instance_id):
+                if ref.controller == player and ref.location is not None:
+                    self._fire(TriggerKind.ON_CONQUER, ref.instance_id)
+            self._resolve_effects()
 
     # ----------------------------------------------------------------- draw
 

@@ -53,6 +53,14 @@ class CardRef:
     is_attacker: bool = False  # 464.2.c.3
     is_defender: bool = False
     # Damage marked this combat is cleared in the Resolution Step (466).
+    # Might modifiers (426 Buff, 701). Turn-scoped ones clear in the Ending
+    # Phase; permanent ones persist while the object stays on the board.
+    might_this_turn: int = 0
+    might_permanent: int = 0
+    # Keywords granted by effects: (name, value, duration).
+    granted_keywords: tuple[tuple[str, int, str], ...] = ()
+    # 434 Attach / 716 -- the unit this gear is attached to.
+    attached_to: int | None = None
 
     def clone_key(self) -> tuple:
         """Canonical tuple for hashing/serialization."""
@@ -66,6 +74,10 @@ class CardRef:
             self.damage,
             self.is_attacker,
             self.is_defender,
+            self.might_this_turn,
+            self.might_permanent,
+            self.granted_keywords,
+            self.attached_to,
         )
 
 

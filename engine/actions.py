@@ -133,6 +133,27 @@ class AssignDamageTo(Action):
 
 
 @dataclass(frozen=True, order=False)
+class ChooseTarget(Action):
+    """Answer a `ChoiceRequest` raised mid-effect (355.2 -- make choices)."""
+
+    instance_id: int
+
+    def __repr__(self) -> str:
+        return f"choose:{self.instance_id}"
+
+
+@dataclass(frozen=True, order=False)
+class ActivateAbility(Action):
+    """376 -- activate a card's `Cost: effect` ability."""
+
+    instance_id: int
+    index: int = 0
+
+    def __repr__(self) -> str:
+        return f"activate:{self.instance_id}#{self.index}"
+
+
+@dataclass(frozen=True, order=False)
 class Concede(Action):
     """649 -- leave the game; the opponent is the only player remaining (195)."""
 

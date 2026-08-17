@@ -64,6 +64,11 @@ class CanonicalCard:
     is_battlefield: bool | None = None
     is_rune: bool | None = None
     set: str = ""
+    # Card art. `image_url` is Riot's own CDN render (the actual card face);
+    # `image_alt` is a TCGPlayer product photo used only as a fallback. They
+    # come from different sources on purpose, so they never conflict.
+    image_url: str = ""
+    image_alt: str = ""
     # Provenance: field name -> source key that supplied the winning value.
     provenance: dict[str, str] = field(default_factory=dict)
 
@@ -170,6 +175,8 @@ def adapt_riftbound_tools(raw_dir: Path) -> list[CanonicalCard]:
                 domains=sorted(rec.get("domain") or []),
                 keywords=sorted(set(rec.get("keywords") or []) | set(rec.get("tags") or [])),
                 rules_text=str(rec.get("text") or "").strip(),
+                # Riot's official card render.
+                image_url=str(rec.get("imageUrl") or "").strip(),
                 # This source flattens champions into a bare "Unit", so it has
                 # no opinion on is_champion -- left None, not False.
                 is_battlefield=(card_type == "battlefield"),
@@ -221,6 +228,7 @@ def adapt_apitcg(raw_dir: Path) -> list[CanonicalCard]:
                     ),
                     keywords=sorted({t for t in subtypes if " " in t or "Token" in t}),
                     rules_text=_strip_html(str(rec.get("description") or "")),
+                    image_alt=str((rec.get("images") or {}).get("large") or "").strip(),
                     is_champion="champion" in lowered,
                     is_battlefield="battlefield" in lowered,
                     is_rune="rune" in lowered,
