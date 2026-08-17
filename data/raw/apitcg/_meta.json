@@ -1,0 +1,26 @@
+{
+  "_sets.json": {
+    "bytes": 690,
+    "fetched_at": "2026-08-17T19:36:52.427985+00:00",
+    "sha256": "7249983197dc284aaf7d25161d7b1d8d979b3b1a524d85578cccb79a9939c2e8",
+    "url": "https://github.com/apitcg/riftbound-tcg-data.git#sets/en.json"
+  },
+  "origins-proving-grounds.json": {
+    "bytes": 32579,
+    "fetched_at": "2026-08-17T19:36:52.422863+00:00",
+    "sha256": "b0b10507d01431979c810c81212da8f0c7e9d3f8b4bbcf6269cb3c8641b45c96",
+    "url": "https://github.com/apitcg/riftbound-tcg-data.git#cards/en/*.json"
+  },
+  "origins.json": {
+    "bytes": 473944,
+    "fetched_at": "2026-08-17T19:36:52.425245+00:00",
+    "sha256": "e09209602879b634059b90f69836252ea2127a3496b80ccc36c52b56f756b06a",
+    "url": "https://github.com/apitcg/riftbound-tcg-data.git#cards/en/*.json"
+  },
+  "spiritforged.json": {
+    "bytes": 362073,
+    "fetched_at": "2026-08-17T19:36:52.427045+00:00",
+    "sha256": "02ae5084763b441e55f7f5254fb93ca06eb1c0c90479f656554827beff8e6d3e",
+    "url": "https://github.com/apitcg/riftbound-tcg-data.git#cards/en/*.json"
+  }
+}

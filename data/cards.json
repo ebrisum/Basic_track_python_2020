@@ -104,7 +104,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-003",
-    "rules_text": "ASSAULT (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 1.",
+    "rules_text": "ASSAULT (+2 Might while I'm an attacker.)\nWhen you play me, discard 1.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -137,7 +137,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-004",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -170,7 +170,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-005",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -303,7 +303,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-008",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -336,7 +336,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-009",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -515,7 +515,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-014",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nThis spell's Energy cost is reduced by the highest Might among units you control.\n\n\nDeal 5 to a unit at a battlefield.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nThis spell's Energy cost is reduced by the highest Might among units you control.\nDeal 5 to a unit at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -552,7 +552,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-015",
-    "rules_text": "Other friendly units here have ASSAULT.\n\n\n(+1 Might while they're attackers.)",
+    "rules_text": "Other friendly units here have ASSAULT.\n(+1 Might while they're attackers.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -622,7 +622,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-017",
-    "rules_text": "This enters exhausted.\n\n\nExhaust: Deal 2 to a unit at a battlefield.",
+    "rules_text": "This enters exhausted.\nExhaust: Deal 2 to a unit at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "gear"
@@ -799,7 +799,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-022",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nKill all gear.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nKill all gear.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -865,7 +865,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-024",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nDeal 4 to a unit at a battlefield. Draw 1.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDeal 4 to a unit at a battlefield. Draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -898,7 +898,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-025",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1075,7 +1075,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-029",
-    "rules_text": "Do this twice:\n\n\nDeal 3 to a unit. (You can choose different units.)",
+    "rules_text": "Do this twice:\nDeal 3 to a unit. (You can choose different units.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1111,7 +1111,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-030",
-    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 2.",
+    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1147,7 +1147,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-030A",
-    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\n\nWhen you play me, discard 2.",
+    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1250,7 +1250,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-033",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1322,7 +1322,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-035",
-    "rules_text": "ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand.",
+    "rules_text": "ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1358,7 +1358,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-036",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\nRecycle 1 from your trash: Give me +1 Might this turn.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nRecycle 1 from your trash: Give me +1 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1394,7 +1394,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-037",
-    "rules_text": "ASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash.",
+    "rules_text": "ASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1467,7 +1467,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-039",
-    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nWhen I conquer, draw 1.",
+    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1503,7 +1503,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-039A",
-    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nWhen I conquer, draw 1.",
+    "rules_text": "ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1572,7 +1572,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-041",
-    "rules_text": "DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.",
+    "rules_text": "DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1608,7 +1608,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-041A",
-    "rules_text": "DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.",
+    "rules_text": "DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -1774,7 +1774,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-045",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell that costs no more than 4 and no more than 1 Power.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell that costs no more than 4 and no more than 1 Power.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1807,7 +1807,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-046",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1840,7 +1840,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-047",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\n\n\nDraw 1 and channel 1 rune exhausted.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\nDraw 1 and channel 1 rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1873,7 +1873,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-048",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -1942,7 +1942,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-050",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nStun a unit. (It doesn't deal combat damage this turn.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nStun a unit. (It doesn't deal combat damage this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2047,7 +2047,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-053",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2083,7 +2083,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-054",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2189,7 +2189,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-057",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2222,7 +2222,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-058",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit +2 Might this turn. Draw 1.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn. Draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2394,7 +2394,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-063",
-    "rules_text": "When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\n\n\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)",
+    "rules_text": "When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)",
     "runes": [],
     "set": "OGN",
     "type": "gear"
@@ -2427,7 +2427,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-064",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2571,7 +2571,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-067",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\nWhen you play me to a battlefield, you may move an enemy unit to here.\n\n\nWhen I hold, return me to my owner's hand.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nWhen you play me to a battlefield, you may move an enemy unit to here.\nWhen I hold, return me to my owner's hand.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2607,7 +2607,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-068",
-    "rules_text": "I must be assigned combat damage last.\n\n\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield.",
+    "rules_text": "I must be assigned combat damage last.\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2640,7 +2640,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-069",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2676,7 +2676,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-070",
-    "rules_text": "While I'm at a battlefield, opponents can only play units to their base.\n\n\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears.",
+    "rules_text": "While I'm at a battlefield, opponents can only play units to their base.\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2709,7 +2709,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-071",
-    "rules_text": "Each other player chooses Cards or Runes.\n\n\nFor each player that chooses Cards, you and that player each draw 1.\n\n\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.",
+    "rules_text": "Each other player chooses Cards or Runes.\nFor each player that chooses Cards, you and that player each draw 1.\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -2814,7 +2814,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-074",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nOther friendly units here have SHIELD.",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nOther friendly units here have SHIELD.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2851,7 +2851,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-075",
-    "rules_text": "ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)",
+    "rules_text": "ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -2956,7 +2956,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-077",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)",
     "runes": [],
     "set": "OGN",
     "type": "gear"
@@ -2992,7 +2992,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-078",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\nI can have any number of buffs.",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3028,7 +3028,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-078A",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\n\nI can have any number of buffs.",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3064,7 +3064,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-079",
-    "rules_text": "If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might.",
+    "rules_text": "If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3100,7 +3100,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-079A",
-    "rules_text": "If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might.",
+    "rules_text": "If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3133,7 +3133,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-080",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGain control of a spell. You may make new choices for it.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nGain control of a spell. You may make new choices for it.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -3236,7 +3236,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-083",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nREACTION (Play any time, even before spells and abilities resolve.)\n\n\nDraw 2.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nREACTION (Play any time, even before spells and abilities resolve.)\nDraw 2.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -3341,7 +3341,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-086",
-    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nSHIELD (+1 Might while I'm a defender.)",
+    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nSHIELD (+1 Might while I'm a defender.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3378,7 +3378,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-087",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, draw 1.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nWhen you play me, draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3650,7 +3650,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-094",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -3683,7 +3683,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-095",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -3756,7 +3756,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-097",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3858,7 +3858,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-100",
-    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nOther friendly units have VISION.",
+    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nOther friendly units have VISION.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -3924,7 +3924,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-102",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nBanish a friendly unit, then play it to base, ignoring its cost.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nBanish a friendly unit, then play it to base, ignoring its cost.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -3993,7 +3993,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-104",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -4131,7 +4131,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-108",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -4167,7 +4167,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-109",
-    "rules_text": "My Might is increased by the number of cards on your trash.\n\n\nAt the start of your Beginning Phase, recycle 3 from your trash.",
+    "rules_text": "My Might is increased by the number of cards on your trash.\nAt the start of your Beginning Phase, recycle 3 from your trash.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4203,7 +4203,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-110",
-    "rules_text": "ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)",
+    "rules_text": "ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4275,7 +4275,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-112",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4311,7 +4311,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-112A",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4413,7 +4413,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-115",
-    "rules_text": "Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\n\n\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)",
+    "rules_text": "Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -4449,7 +4449,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-116",
-    "rules_text": "ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.",
+    "rules_text": "ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4699,7 +4699,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-121",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4735,7 +4735,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-121A",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -4967,7 +4967,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-127",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 2 to all enemy units in combat.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nDeal 2 to all enemy units in combat.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5000,7 +5000,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-128",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5033,7 +5033,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-129",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nUnits you play this turn enter ready.\n\n\nDraw 1.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nUnits you play this turn enter ready.\nDraw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5177,7 +5177,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-133",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 1 to all units at battlefields.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nDeal 1 to all units at battlefields.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5319,7 +5319,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-137",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, channel 1 rune exhausted.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nWhen you play me, channel 1 rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -5562,7 +5562,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-144",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nIf an enemy unit has died this turn, this costs 2 less.\n\n\nDraw 2.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nIf an enemy unit has died this turn, this costs 2 less.\nDraw 2.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5595,7 +5595,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-145",
-    "rules_text": "REACTION (Play at any time, even before spells and abilities resolve.)\n\n\nPrevent all spell and ability damage this turn.",
+    "rules_text": "REACTION (Play at any time, even before spells and abilities resolve.)\nPrevent all spell and ability damage this turn.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5628,7 +5628,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-146",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5773,7 +5773,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-150",
-    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nASSAULT (+1 Might while i'm an attacker.)\n\n\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend.",
+    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nASSAULT (+1 Might while i'm an attacker.)\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -5809,7 +5809,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-151",
-    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nOther buffed friendly units at my battlefield have +2 Might.",
+    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -5845,7 +5845,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-151A",
-    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nOther buffed friendly units at my battlefield have +2 Might.",
+    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -5911,7 +5911,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-153",
-    "rules_text": "ACTION (play on your turn or in showdowns.)\n\n\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)",
+    "rules_text": "ACTION (play on your turn or in showdowns.)\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5944,7 +5944,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-154",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit +7 Might this turn.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nGive a unit +7 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -5980,7 +5980,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-155",
-    "rules_text": "DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhen I conquer, draw 1 or channel 1 Rune exhausted.",
+    "rules_text": "DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhen I conquer, draw 1 or channel 1 Rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6049,7 +6049,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-157",
-    "rules_text": "Spend my buff: Choose one you've not chosen turn \u2014\n\n\n\u2022Deal 2 to a unit at a battlefield.\n\n\n\u2022Stun a unit at a battlefield\n\n\n\u2022Ready me.\n\n\n\u2022Give me GANKING this turn.",
+    "rules_text": "Spend my buff: Choose one you've not chosen turn \u2014\n\u2022Deal 2 to a unit at a battlefield.\n\u2022Stun a unit at a battlefield\n\u2022Ready me.\n\u2022Give me GANKING this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6085,7 +6085,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-158",
-    "rules_text": "SHIELD 3 (+3 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)",
+    "rules_text": "SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6121,7 +6121,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-158A",
-    "rules_text": "SHIELD 3 (+3 Might while I'm a defender.)\n\n\n\nTANK (I must be assigned combat damage first.)\n\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)",
+    "rules_text": "SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6157,7 +6157,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-159",
-    "rules_text": "I enter ready.\n\n\nWhen I attack, kill all damaged enemy units here.",
+    "rules_text": "I enter ready.\nWhen I attack, kill all damaged enemy units here.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6226,7 +6226,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-161",
-    "rules_text": "DEFLECT (Opponents must play rune to choose me with a spell or effect.)\n\n\nYou may play me to an occupied enemy battlefield.",
+    "rules_text": "DEFLECT (Opponents must play rune to choose me with a spell or effect.)\nYou may play me to an occupied enemy battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6262,7 +6262,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-162",
-    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\nThe first time I move each turn, you may ready something else that's exhausted.",
+    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6298,7 +6298,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-162A",
-    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\n\nThe first time I move each turn, you may ready something else that's exhausted.",
+    "rules_text": "ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6367,7 +6367,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-164",
-    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn.",
+    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6403,7 +6403,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-164A",
-    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\n\nSpend my buff: Give me +4 Might this turn.",
+    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6573,7 +6573,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-168",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nMove a unit from a battlefield to its base.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nMove a unit from a battlefield to its base.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -6606,7 +6606,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-169",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a unit at a battlefield with 3 Might or less to its owner's hand.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nReturn a unit at a battlefield with 3 Might or less to its owner's hand.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -6639,7 +6639,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-170",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit from your trash to your hand.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nReturn a unit from your trash to your hand.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -6708,7 +6708,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-172",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit at a battlefield to its owner's hand.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nReturn a unit at a battlefield to its owner's hand.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -6741,7 +6741,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-173",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nMove a friendly unit and ready it.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nMove a friendly unit and ready it.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -6777,7 +6777,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-174",
-    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nYou may play me to an open battlefield.",
+    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nYou may play me to an open battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -6952,7 +6952,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-179",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nEach player kills one of their gear.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nEach player kills one of their gear.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -7084,7 +7084,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-183",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -7291,7 +7291,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-189",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\nIf I have moved twice this turn, I don't take damage.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nIf I have moved twice this turn, I don't take damage.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7364,7 +7364,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-191",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, move a unit from a battlefield to its base.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nWhen you play me, move a unit from a battlefield to its base.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7437,7 +7437,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-193",
-    "rules_text": "You may play me to an open battlefield.\n\n\nFriendly units may be played to open battlefields.",
+    "rules_text": "You may play me to an open battlefield.\nFriendly units may be played to open battlefields.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7473,7 +7473,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-193A",
-    "rules_text": "You may play me to an open battlefield.\n\n\n\nFriendly units may be played to open battlefields.",
+    "rules_text": "You may play me to an open battlefield.\nFriendly units may be played to open battlefields.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7619,7 +7619,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-197",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give me +3 Might this turn.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7655,7 +7655,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-197A",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen you play me, give me +3 Might this turn.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7724,7 +7724,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-199",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7760,7 +7760,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-200",
-    "rules_text": "When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\n\n\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\n\n\nMind - Draw 1.\n\n\nOrder - Stun an enemy unit.",
+    "rules_text": "When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\nMind - Draw 1.\nOrder - Stun an enemy unit.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -7898,7 +7898,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-203",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -7967,7 +7967,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-205",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -8003,7 +8003,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-205A",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\n\nThe third time I move in a turn, you score 1 point.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -8036,7 +8036,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-206",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive two friendly units each +2 Might this turn.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nGive two friendly units each +2 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -8069,7 +8069,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-207",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\n\n\nGive a unit +3 Might this turn.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\nGive a unit +3 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -8243,7 +8243,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-212",
-    "rules_text": "When you play this, play a 1 Might Recruit unit token at your base.\n\n\nKill this: Recycle up to 4 cards from trashes.",
+    "rules_text": "When you play this, play a 1 Might Recruit unit token at your base.\nKill this: Recycle up to 4 cards from trashes.",
     "runes": [],
     "set": "OGN",
     "type": "gear"
@@ -8276,7 +8276,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-213",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill a unit at a battlefield. Its controller draws 2.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield. Its controller draws 2.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -8557,7 +8557,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-220",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -8696,7 +8696,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-224",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nYou may kill a gear. Draw 1.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nYou may kill a gear. Draw 1.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -8904,7 +8904,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-230",
-    "rules_text": "When you play me, spend any number of buffs.\n\n\nFor each buff spent, channel 1 rune exhausted.",
+    "rules_text": "When you play me, spend any number of buffs.\nFor each buff spent, channel 1 rune exhausted.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -8941,7 +8941,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-231",
-    "rules_text": "As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\n\n\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\n\n\nGANKING (I can move from battlefield to battlefield.)",
+    "rules_text": "As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\nGANKING (I can move from battlefield to battlefield.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9011,7 +9011,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-233",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nGive friendly units +5 Might this turn.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nGive friendly units +5 Might this turn.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -9084,7 +9084,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-235",
-    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)",
+    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9189,7 +9189,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-238",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\nWhen I attack, stun an enemy unit here.\n\n\n(It doesn't deal combat damage this turn.)",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9225,7 +9225,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-238A",
-    "rules_text": "SHIELD (+1 Might while I'm a defender.)\n\n\n\nWhen I attack, stun an enemy unit here.\n\n\n\n(It doesn't deal combat damage this turn.)",
+    "rules_text": "SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9297,7 +9297,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-240",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\nI get +1 might for each buffed friendly unit at my battlefield.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9333,7 +9333,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-240A",
-    "rules_text": "TANK (I must be assigned combat damage first.)\n\n\n\nI get +1 might for each buffed friendly unit at my battlefield.",
+    "rules_text": "TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9369,7 +9369,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-241",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nSHIELD 2 (+2 might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nSHIELD 2 (+2 might while I'm a defender.)\nTANK (I must be assigned combat damage first.)",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9438,7 +9438,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-243",
-    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here.",
+    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9474,7 +9474,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-243A",
-    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\n\nOther friendly units have +1 might here.",
+    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here.",
     "runes": [],
     "set": "OGN",
     "type": "unit"
@@ -9686,7 +9686,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-248",
-    "rules_text": "Do this 6 times:\n\n\nDeal 2 to a unit. (You can choose different units.)",
+    "rules_text": "Do this 6 times:\nDeal 2 to a unit. (You can choose different units.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -9834,7 +9834,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-252",
-    "rules_text": "Deal 5 to a unit.\n\n\nWhen you conquer, you may discard 1 to return this from your trash to your hand.",
+    "rules_text": "Deal 5 to a unit.\nWhen you conquer, you may discard 1 to return this from your trash to your hand.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -9908,7 +9908,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-254",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nChoose a unit. Kill it the next time it takes damage this turn.\n\n\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nChoose a unit. Kill it the next time it takes damage this turn.\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -9982,7 +9982,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-256",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill any number of units at a battlefield with total Might 4 or less.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill any number of units at a battlefield with total Might 4 or less.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -10130,7 +10130,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-260",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -10204,7 +10204,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-262",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -10241,7 +10241,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-263",
-    "rules_text": "You may pay 1 to hide a card with HIDDEN instead of rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.",
+    "rules_text": "You may pay 1 to hide a card with HIDDEN instead of rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.",
     "runes": [],
     "set": "OGN",
     "type": "legend"
@@ -10352,7 +10352,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-266",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -10426,7 +10426,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-268",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\n\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.",
     "runes": [],
     "set": "OGN",
     "type": "spell"
@@ -10460,7 +10460,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-269",
-    "rules_text": "When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me.",
+    "rules_text": "When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me.",
     "runes": [],
     "set": "OGN",
     "type": "legend"
@@ -11746,7 +11746,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-307",
-    "rules_text": "You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.",
+    "rules_text": "You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.",
     "runes": [],
     "set": "OGN",
     "type": "legend"
@@ -11854,7 +11854,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGN-310",
-    "rules_text": "When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me.",
+    "rules_text": "When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me.",
     "runes": [],
     "set": "OGN",
     "type": "legend"
@@ -11923,7 +11923,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-001",
-    "rules_text": "Your spells and abilities deal 1 Bonus Damage.\n\n(Each instance of damage they deal is increased by 1.)",
+    "rules_text": "Your spells and abilities deal 1 Bonus Damage.\n(Each instance of damage they deal is increased by 1.)",
     "runes": [],
     "set": "OGS",
     "type": "unit"
@@ -11989,7 +11989,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-003",
-    "rules_text": "ACTION (play on your turn or in showdowns.)\n\nDeal 2 to a unit at a battlefield.",
+    "rules_text": "ACTION (play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12167,7 +12167,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-008",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12203,7 +12203,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-009",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\nI enter ready.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nI enter ready.",
     "runes": [],
     "set": "OGS",
     "type": "unit"
@@ -12272,7 +12272,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-011",
-    "rules_text": "REACTION (Play at any time, even before spells and abilities resolve.)\n\nMove up to 2 friendly units to base.",
+    "rules_text": "REACTION (Play at any time, even before spells and abilities resolve.)\nMove up to 2 friendly units to base.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12305,7 +12305,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-012",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12377,7 +12377,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-014",
-    "rules_text": "Exhaust: REACTION - ADD 2. Use only to play spells.\n\n(Abilities that add resources can't be reacted to.)",
+    "rules_text": "Exhaust: REACTION - ADD 2. Use only to play spells.\n(Abilities that add resources can't be reacted to.)",
     "runes": [],
     "set": "OGS",
     "type": "unit"
@@ -12410,7 +12410,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-015",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12595,7 +12595,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-020",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12669,7 +12669,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-022",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\nDeal 8 to a unit.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nDeal 8 to a unit.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12743,7 +12743,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "OGS-024",
-    "rules_text": "ACTION (Play on your turn or in showdowns.)\n\nGive friendly units +2 Might this turn.",
+    "rules_text": "ACTION (Play on your turn or in showdowns.)\nGive friendly units +2 Might this turn.",
     "runes": [],
     "set": "OGS",
     "type": "spell"
@@ -12776,7 +12776,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-001",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -12843,7 +12843,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-003",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -12875,7 +12875,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-004",
-    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nFriendly units enter ready this turn. Play a Gold gear token exhausted.",
+    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nFriendly units enter ready this turn. Play a Gold gear token exhausted.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -13052,7 +13052,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-009",
-    "rules_text": "[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm attacking.)\n\n\nMight +0",
+    "rules_text": "[EQUIP Fury] (Fury: Attach this to a unit you control.)\n[ASSAULT 2] (+2 Might while I'm attacking.)\nMight +0",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -13119,7 +13119,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-011",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -13190,7 +13190,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-013",
-    "rules_text": "You may pay 1 and Fury as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.",
+    "rules_text": "You may pay 1 and Fury as an additional cost to play me.\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13295,7 +13295,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-016",
-    "rules_text": "[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nWhen I attack or defend, deal 2 to an enemy unit here.\n\n\nMight +0",
+    "rules_text": "[EQUIP Fury] (Fury: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to an enemy unit here.\nMight +0",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -13326,7 +13326,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-017",
-    "rules_text": "[HIDDEN] (Hide now for 0 to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead.",
+    "rules_text": "[HIDDEN] (Hide now for 0 to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -13429,7 +13429,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-020",
-    "rules_text": "When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.",
+    "rules_text": "When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13465,7 +13465,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-020A",
-    "rules_text": "When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.",
+    "rules_text": "When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13539,7 +13539,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-022",
-    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nMight +2",
+    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\nMight +2",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -13571,7 +13571,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-023",
-    "rules_text": "[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit.",
+    "rules_text": "[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -13606,7 +13606,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-024",
-    "rules_text": "[TANK] (I must be assigned combat damage first.)\n\n\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.",
+    "rules_text": "[TANK] (I must be assigned combat damage first.)\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13642,7 +13642,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-025",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm an attacker.)\n\n\nI can be played to a battlefield you're attacking.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n[ASSAULT 2] (+2 Might while I'm an attacker.)\nI can be played to a battlefield you're attacking.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13677,7 +13677,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-026",
-    "rules_text": "Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\n\n\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled.",
+    "rules_text": "Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13748,7 +13748,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-027",
-    "rules_text": "If you have two or fewer cards in your hand, I enter ready.\n\n\nWhen I hold, draw 2.",
+    "rules_text": "If you have two or fewer cards in your hand, I enter ready.\nWhen I hold, draw 2.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13783,7 +13783,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-028",
-    "rules_text": "[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here.",
+    "rules_text": "[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13818,7 +13818,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-028A",
-    "rules_text": "[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here.",
+    "rules_text": "[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13854,7 +13854,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-029",
-    "rules_text": "[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE].",
+    "rules_text": "[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE].",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13890,7 +13890,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-029A",
-    "rules_text": "[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE].",
+    "rules_text": "[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE].",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -13924,7 +13924,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-030",
-    "rules_text": "[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\n\n\nMy hold effects are also conquer effects, and vice verse.\n\n\nMight +2",
+    "rules_text": "[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\nMy hold effects are also conquer effects, and vice verse.\nMight +2",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -13955,7 +13955,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-031",
-    "rules_text": "[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\n\nPlay a 2 Might Sand Soldier unit token.",
+    "rules_text": "[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\nPlay a 2 Might Sand Soldier unit token.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -14027,7 +14027,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-033",
-    "rules_text": "[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nTANK (I must be assigned combat damage first.) +1 Might",
+    "rules_text": "[EQUIP Calm] (Calm: Attach this to a unit you control.)\nTANK (I must be assigned combat damage first.) +1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -14060,7 +14060,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-034",
-    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit +2 Might this turn.",
+    "rules_text": "REACTION (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit +2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -14270,7 +14270,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-040",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nStun an attacking unit. (It doesn't deal combat damage this turn.)",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\nStun an attacking unit. (It doesn't deal combat damage this turn.)",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -14339,7 +14339,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-042",
-    "rules_text": "[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nIf this was attached to me this turn, I have an additional +2 Might.\n\n\n+1 Might.",
+    "rules_text": "[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nIf this was attached to me this turn, I have an additional +2 Might.\n+1 Might.",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -14370,7 +14370,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-043",
-    "rules_text": "[HIDDEN] (Hide for now Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nMove any number of friendly units at a battlefield on their base.",
+    "rules_text": "[HIDDEN] (Hide for now Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nMove any number of friendly units at a battlefield on their base.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -14439,7 +14439,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-045",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nCounter an enemy spell or ability that chooses a friendly unit or gear.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nCounter an enemy spell or ability that chooses a friendly unit or gear.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -14471,7 +14471,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-046",
-    "rules_text": "When you play this, draw 1.\n\n1 Calm, Exhaust, Kill this: Draw 1.",
+    "rules_text": "When you play this, draw 1.\n1 Calm, Exhaust, Kill this: Draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -14579,7 +14579,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-049",
-    "rules_text": "When you attach an Equipment to me, choose one that hasn't been chosen this turn \u2014\n\n\u2022Ready 2 runes.\n\n\u2022Channel 1 rune exhausted.\n\n\u2022Buff a friendly unit.",
+    "rules_text": "When you attach an Equipment to me, choose one that hasn't been chosen this turn \u2014\n\u2022Ready 2 runes.\n\u2022Channel 1 rune exhausted.\n\u2022Buff a friendly unit.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14687,7 +14687,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-051",
-    "rules_text": "[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\n\n\nMight +1",
+    "rules_text": "[EQUIP Calm] (Calm: Attach this to a unit you control.)\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\nMight +1",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -14755,7 +14755,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-053",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nWhen you play me, heal your units here, then move an enemy unit from here to its base.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nWhen you play me, heal your units here, then move an enemy unit from here to its base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14791,7 +14791,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-054",
-    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)",
+    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14827,7 +14827,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-054A",
-    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)",
+    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14864,7 +14864,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-055",
-    "rules_text": "[SHIELD 5] (+5 Might while I'm a defender.)\n\n\n[TANK] (I must be assigned combat damage first.)\n\n\nI cost 2 and 1 Calm less for each point you scored from holding this turn.",
+    "rules_text": "[SHIELD 5] (+5 Might while I'm a defender.)\n[TANK] (I must be assigned combat damage first.)\nI cost 2 and 1 Calm less for each point you scored from holding this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14900,7 +14900,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-056",
-    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nMight +3",
+    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\nMight +3",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -14936,7 +14936,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-057",
-    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.",
+    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -14972,7 +14972,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-057A",
-    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.",
+    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15077,7 +15077,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-059",
-    "rules_text": "[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\n\n\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\n\n\nMight +0",
+    "rules_text": "[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\nMight +0",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -15114,7 +15114,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-060",
-    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhile I'm at a battlefield, opponents can't score points.",
+    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhile I'm at a battlefield, opponents can't score points.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15252,7 +15252,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-064",
-    "rules_text": "[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\n\n[SHIELD 2] (+2 Might while I'm a defender.)\n\n\nMight +2",
+    "rules_text": "[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n[SHIELD 2] (+2 Might while I'm a defender.)\nMight +2",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -15320,7 +15320,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-066",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit -2 Might this turn.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit -2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -15356,7 +15356,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-067",
-    "rules_text": "You may pay Mind as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.",
+    "rules_text": "You may pay Mind as an additional cost to play me.\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15391,7 +15391,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-068",
-    "rules_text": "[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\n\n\nEach Equipment attached to me gives double its base Might bonus.",
+    "rules_text": "[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\nEach Equipment attached to me gives double its base Might bonus.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15460,7 +15460,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-070",
-    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.",
+    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -15498,7 +15498,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-071",
-    "rules_text": "Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\n\n\nI enter ready if you control another Mech.",
+    "rules_text": "Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\nI enter ready if you control another Mech.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15567,7 +15567,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-073",
-    "rules_text": "[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nI am a mech.\n\n\n+1 Might",
+    "rules_text": "[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nI am a mech.\n+1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -15672,7 +15672,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-076",
-    "rules_text": "This costs 2 less if you control a Mech.\n\nPlay a 3 Might Mech unit token to your base.\n\nDraw 1.",
+    "rules_text": "This costs 2 less if you control a Mech.\nPlay a 3 Might Mech unit token to your base.\nDraw 1.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -15705,7 +15705,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-077",
-    "rules_text": "[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\n\nChoose one \u2014\n\n\u2022 Deal 4 to a unit in a base.\n\n\u2022 Kill a gear.",
+    "rules_text": "[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\nChoose one \u2014\n\u2022 Deal 4 to a unit in a base.\n\u2022 Kill a gear.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -15772,7 +15772,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-079",
-    "rules_text": "You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.",
+    "rules_text": "You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15804,7 +15804,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-080",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 1 to up to three units at the same location.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 1 to up to three units at the same location.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -15875,7 +15875,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-082",
-    "rules_text": "When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] \u2014 Move me to your base.",
+    "rules_text": "When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] \u2014 Move me to your base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -15911,7 +15911,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-082A",
-    "rules_text": "When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] \u2014 Move me to your base.",
+    "rules_text": "When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] \u2014 Move me to your base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16013,7 +16013,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-085",
-    "rules_text": "[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear.",
+    "rules_text": "[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16048,7 +16048,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-085A",
-    "rules_text": "[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear.",
+    "rules_text": "[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16084,7 +16084,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-086",
-    "rules_text": "[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\nWhen I hold, play two Gold gear tokens exhausted. +2 Might",
+    "rules_text": "[EQUIP Mind] (Mind: Attach this to a unit you control.)\nWhen I hold, play two Gold gear tokens exhausted. +2 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16116,7 +16116,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-087",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nDraw 3.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 3.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -16151,7 +16151,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-088",
-    "rules_text": "1, Mind: Draw 1.\n\n\n1,4 Mind, Exhaust: Score 1 point.\n\n\nUse my abilities only while I'm at a battlefield.",
+    "rules_text": "1, Mind: Draw 1.\n1,4 Mind, Exhaust: Score 1 point.\nUse my abilities only while I'm at a battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16220,7 +16220,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-089",
-    "rules_text": "Your Mechs have +1 Might (including me).\n\n\nWhen I hold, play a 3 Might Mech unit token to your base.",
+    "rules_text": "Your Mechs have +1 Might (including me).\nWhen I hold, play a 3 Might Mech unit token to your base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16289,7 +16289,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-090",
-    "rules_text": "[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n\n\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n\n\n[DEATHKNELL] \u2014 Banish me. (When I die, get the effect.)\n\n\nMight +2",
+    "rules_text": "[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n[DEATHKNELL] \u2014 Banish me. (When I die, get the effect.)\nMight +2",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16469,7 +16469,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-095",
-    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n\n+2 Might",
+    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n+2 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16537,7 +16537,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-097",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\nGive a unit +5 Might this turn.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\nGive a unit +5 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -16573,7 +16573,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-098",
-    "rules_text": "You may pay 1 as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)",
+    "rules_text": "You may pay 1 as an additional cost to play me.\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16684,7 +16684,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-101",
-    "rules_text": "When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\n\nWhen you spend a buff, play a Gold gear token exhausted.",
+    "rules_text": "When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\nWhen you spend a buff, play a Gold gear token exhausted.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16718,7 +16718,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-102",
-    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might",
+    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16754,7 +16754,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-103",
-    "rules_text": "[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\n\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)",
+    "rules_text": "[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -16785,7 +16785,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-104",
-    "rules_text": "[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\n\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)",
+    "rules_text": "[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16852,7 +16852,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-106",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -16920,7 +16920,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-108",
-    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might",
+    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -16955,7 +16955,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-109",
-    "rules_text": "[WEAPONMASTER]\n\nYou may pay Body Body as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me.",
+    "rules_text": "[WEAPONMASTER]\nYou may pay Body Body as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17060,7 +17060,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-111",
-    "rules_text": "[HIDDEN] (Hide now for Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.",
+    "rules_text": "[HIDDEN] (Hide now for Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -17096,7 +17096,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-112",
-    "rules_text": "[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\n\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.",
+    "rules_text": "[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17132,7 +17132,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-113",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17168,7 +17168,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-113A",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17199,7 +17199,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-114",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -17235,7 +17235,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-115",
-    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\n\n\nWhen I hold, score 1 point. +2 Might",
+    "rules_text": "[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I hold, score 1 point. +2 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -17271,7 +17271,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-116",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17339,7 +17339,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-118",
-    "rules_text": "[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\n\nWhen I conquer, channel 1 rune exhausted. Might +2.",
+    "rules_text": "[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\nWhen I conquer, channel 1 rune exhausted. Might +2.",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -17375,7 +17375,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-119",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17411,7 +17411,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-119A",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17447,7 +17447,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-120",
-    "rules_text": "[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.",
+    "rules_text": "[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17483,7 +17483,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-120A",
-    "rules_text": "[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.",
+    "rules_text": "[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17551,7 +17551,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-122",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\n\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -17587,7 +17587,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-123",
-    "rules_text": "When I move to a battlefield, discard 1.\n\n\nWhen I win combat, draw 1.",
+    "rules_text": "When I move to a battlefield, discard 1.\nWhen I win combat, draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17623,7 +17623,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-124",
-    "rules_text": "[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\nWhen I conquer, discard 1, then draw 1. +1 Might",
+    "rules_text": "[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer, discard 1, then draw 1. +1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -17797,7 +17797,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-129",
-    "rules_text": "[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nMove an enemy unit to a location where there's a unit with the same controller.",
+    "rules_text": "[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nMove an enemy unit to a location where there's a unit with the same controller.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -17868,7 +17868,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-131",
-    "rules_text": "[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\n\n\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)",
+    "rules_text": "[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -17939,7 +17939,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-133",
-    "rules_text": "[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n\n\n[GANKING] (I can move from battlefield to battlefield)",
+    "rules_text": "[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n[GANKING] (I can move from battlefield to battlefield)",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -17973,7 +17973,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-134",
-    "rules_text": "[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\n\nWhen I conquer play a Gold gear token exhausted.\n\n\nMight +1",
+    "rules_text": "[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer play a Gold gear token exhausted.\nMight +1",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -18004,7 +18004,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-135",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns)\n\n\nReturn a gear to its owner's hand.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns)\nReturn a gear to its owner's hand.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -18035,7 +18035,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-136",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nCounter a spell unless its controller pays 2.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nCounter a spell unless its controller pays 2.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -18106,7 +18106,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-138",
-    "rules_text": "[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand.",
+    "rules_text": "[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18140,7 +18140,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-139",
-    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play this from face down, attach it to a unit you control here.\n\n\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n\n\n+2 Might",
+    "rules_text": "[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nWhen you play this from face down, attach it to a unit you control here.\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n+2 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -18320,7 +18320,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-143",
-    "rules_text": "[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)",
+    "rules_text": "[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18356,7 +18356,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-143A",
-    "rules_text": "[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)",
+    "rules_text": "[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18419,7 +18419,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-145",
-    "rules_text": "[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\n[ACTION] {Play on your turn or in showdowns.)\n\n\nSwap the Might of two units at the same battlefield this turn.",
+    "rules_text": "[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n[ACTION] {Play on your turn or in showdowns.)\nSwap the Might of two units at the same battlefield this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -18523,7 +18523,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-148",
-    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.",
+    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18559,7 +18559,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-148A",
-    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.",
+    "rules_text": "[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18595,7 +18595,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-149",
-    "rules_text": "When you play me, discard 1, then draw 2.\n\n\nOptional additional costs you pay cost 1 or 1 Rune less.",
+    "rules_text": "When you play me, discard 1, then draw 2.\nOptional additional costs you pay cost 1 or 1 Rune less.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -18663,7 +18663,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-150",
-    "rules_text": "[EQUIP] \u2014 Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\n\n\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)",
+    "rules_text": "[EQUIP] \u2014 Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -18694,7 +18694,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-151",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive two friendly units each +1 Might this turn.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive two friendly units each +1 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -18763,7 +18763,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-153",
-    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\n\nWhen I move, play a 1 Might Recruit unit token here.",
+    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\nWhen I move, play a 1 Might Recruit unit token here.",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -18794,7 +18794,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-154",
-    "rules_text": "[HIDDEN] (Hide now for Rune to react with later for 0.)\n\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.",
+    "rules_text": "[HIDDEN] (Hide now for Rune to react with later for 0.)\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19007,7 +19007,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-160",
-    "rules_text": "You may kill a friendly gear as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, kill a gear.",
+    "rules_text": "You may kill a friendly gear as an additional cost to play me.\nWhen you play me, if you paid the additional cost, kill a gear.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19043,7 +19043,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-161",
-    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\n\n+3 Might",
+    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\n+3 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -19074,7 +19074,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-162",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19105,7 +19105,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-163",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve)\n\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve)\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19137,7 +19137,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-164",
-    "rules_text": "[Action] (Play on your turn or in showdowns.)\n\n\nI cost  less to play from anywhere other than your hand.\n\n\nKill a unit at a battlefield.",
+    "rules_text": "[Action] (Play on your turn or in showdowns.)\nI cost  less to play from anywhere other than your hand.\nKill a unit at a battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19204,7 +19204,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-166",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\n\nDraw 1",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\nDraw 1",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19485,7 +19485,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-172",
-    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\n\n\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n\n\n+1 Might",
+    "rules_text": "[EQUIP Order] (Order: Attach this to a unit you control.)\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n+1 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -19521,7 +19521,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-173",
-    "rules_text": "I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)",
+    "rules_text": "I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19593,7 +19593,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-175",
-    "rules_text": "When you play me, give your other units +2 Might this turn.\n\n\nAs I'm revealed from your deck, [ADD] 2.",
+    "rules_text": "When you play me, give your other units +2 Might this turn.\nAs I'm revealed from your deck, [ADD] 2.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19629,7 +19629,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-176",
-    "rules_text": "[TANK] (I must be assigned combat damage first.)\n\n\nI enter ready if you have two or more other units in your base.",
+    "rules_text": "[TANK] (I must be assigned combat damage first.)\nI enter ready if you have two or more other units in your base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19664,7 +19664,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-177",
-    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.",
+    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19699,7 +19699,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-177A",
-    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.",
+    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19735,7 +19735,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-178",
-    "rules_text": "[EQUIP] \u2014 Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n\n\n+4 Might",
+    "rules_text": "[EQUIP] \u2014 Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n+4 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -19771,7 +19771,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-179",
-    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.",
+    "rules_text": "[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -19915,7 +19915,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-182",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\n\nGive your Mechs +1 Might this turn",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\nGive your Mechs +1 Might this turn",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -19989,7 +19989,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-184",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has \"When I conquer, you may move me to my base.\"",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has \"When I conquer, you may move me to my base.\"",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -20063,7 +20063,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-186",
-    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\n\n\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)",
+    "rules_text": "[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -20210,7 +20210,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-190",
-    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.",
+    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -20246,7 +20246,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-191",
-    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might",
+    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -20282,7 +20282,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-192",
-    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen you play this, ready your units.\n\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might",
+    "rules_text": "[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen you play this, ready your units.\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might",
     "runes": [],
     "set": "SFD",
     "type": "gear"
@@ -20319,7 +20319,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-193",
-    "rules_text": "1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.",
+    "rules_text": "1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -20355,7 +20355,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-194",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -20392,7 +20392,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-195",
-    "rules_text": "When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.",
+    "rules_text": "When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -20429,7 +20429,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-196",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a unit +2 Might this turn and another unit -2 Might this turn.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn and another unit -2 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -20466,7 +20466,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-197",
-    "rules_text": "Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn.",
+    "rules_text": "Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -20575,7 +20575,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-200",
-    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\n\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.",
+    "rules_text": "[ACTION] (Play on your turn or in showdowns.)\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -20612,7 +20612,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-201",
-    "rules_text": "When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.",
+    "rules_text": "When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -20648,7 +20648,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-202",
-    "rules_text": "[Hidden] (Hide now for Rune to react with later for 0)\n\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\n\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)",
+    "rules_text": "[Hidden] (Hide now for Rune to react with later for 0)\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -20685,7 +20685,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-203",
-    "rules_text": "When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.",
+    "rules_text": "When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -20794,7 +20794,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-206",
-    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn.",
+    "rules_text": "[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn.",
     "runes": [],
     "set": "SFD",
     "type": "spell"
@@ -21316,7 +21316,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-223",
-    "rules_text": "ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand.",
+    "rules_text": "ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21352,7 +21352,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-224",
-    "rules_text": "When you attach an Equipment to me, choose one that hasn't been chosen this turn \u2014\n\n\u2022Ready 2 runes.\n\n\u2022Channel 1 rune exhausted.\n\n\u2022Buff a friendly unit.",
+    "rules_text": "When you attach an Equipment to me, choose one that hasn't been chosen this turn \u2014\n\u2022Ready 2 runes.\n\u2022Channel 1 rune exhausted.\n\u2022Buff a friendly unit.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21388,7 +21388,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-225",
-    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.",
+    "rules_text": "DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21493,7 +21493,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-228",
-    "rules_text": "You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.",
+    "rules_text": "You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21562,7 +21562,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-230",
-    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
+    "rules_text": "HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21631,7 +21631,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-232",
-    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn.",
+    "rules_text": "When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21667,7 +21667,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-233",
-    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base.",
+    "rules_text": "[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21736,7 +21736,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-235",
-    "rules_text": "GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.",
+    "rules_text": "GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21772,7 +21772,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-236",
-    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here.",
+    "rules_text": "LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here.",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21808,7 +21808,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-237",
-    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)",
+    "rules_text": "VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -21877,7 +21877,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-239",
-    "rules_text": "I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)",
+    "rules_text": "I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)",
     "runes": [],
     "set": "SFD",
     "type": "unit"
@@ -22099,7 +22099,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-245",
-    "rules_text": "1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.",
+    "rules_text": "1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -22136,7 +22136,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-246",
-    "rules_text": "When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.",
+    "rules_text": "When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -22173,7 +22173,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-247",
-    "rules_text": "Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn.",
+    "rules_text": "Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn.",
     "runes": [],
     "set": "SFD",
     "type": "legend"
@@ -22284,7 +22284,7 @@
       "type": "apitcg"
     },
     "riftbound_id": "SFD-250",
-    "rules_text": "When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.",
+    "rules_text": "When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.",
     "runes": [],
     "set": "SFD",
     "type": "legend"

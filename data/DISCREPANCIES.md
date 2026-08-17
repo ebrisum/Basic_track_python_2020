@@ -1246,23 +1246,23 @@ Missing field counts across incomplete cards:
 - **OGN-002** Brazen Buccaneer -> chose `'As you play me, you may discard a card as an additional cost. If you do, reduce my cost by 2.'` from `apitcg`
   - `apitcg`: `'As you play me, you may discard a card as an additional cost. If you do, reduce my cost by 2.'`
   - `riftbound_tools`: `'As you play me, you may discard 1 as an additional cost. If you do, reduce my cost by 2 energy.'`
-- **OGN-003** Chemtech Enforcer -> chose `"ASSAULT (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 1."` from `apitcg`
-  - `apitcg`: `"ASSAULT (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 1."`
+- **OGN-003** Chemtech Enforcer -> chose `"ASSAULT (+2 Might while I'm an attacker.)\nWhen you play me, discard 1."` from `apitcg`
+  - `apitcg`: `"ASSAULT (+2 Might while I'm an attacker.)\nWhen you play me, discard 1."`
   - `riftbound_tools`: `"[Assault 2] (+2 might while I'm an attacker.) When you play me, discard 1."`
-- **OGN-004** Cleave -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)"`
+- **OGN-004** Cleave -> chose `"ACTION (Play on your turn or in showdowns.)\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nGive a unit ASSAULT 3 this turn. (+3 Might while it's an attacker.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Give a unit [Assault 3] this turn. (+3 might while it's an attacker.)"`
-- **OGN-005** Disintegrate -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.'`
+- **OGN-005** Disintegrate -> chose `'ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. If this kills it, draw 1.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 3 to a unit at a battlefield. If this kills it, do this: draw 1.'`
 - **OGN-006** Flame Chompers -> chose `'When you discard me, you may pay 1 Fury to play me.'` from `apitcg`
   - `apitcg`: `'When you discard me, you may pay 1 Fury to play me.'`
   - `riftbound_tools`: `'When you discard me, you may pay 1 fury rune to play me.'`
-- **OGN-008** Get Excited! -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)'`
+- **OGN-008** Get Excited! -> chose `'ACTION (Play on your turn or in showdowns.)\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nDiscard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Discard 1. Deal its Energy cost as damage to a unit at a battlefield. (Ignore its Power cost.)'`
-- **OGN-009** Hextech Ray -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield.'`
+- **OGN-009** Hextech Ray -> chose `'ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 3 to a unit at a battlefield.'`
 - **OGN-010** Legion Rearguard -> chose `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)'` from `apitcg`
   - `apitcg`: `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)'`
@@ -1273,17 +1273,17 @@ Missing field counts across incomplete cards:
 - **OGN-013** Pouty Poro -> chose `'DEFLECT (Opponents must pay Power to choose me with a spell or ability.)'` from `apitcg`
   - `apitcg`: `'DEFLECT (Opponents must pay Power to choose me with a spell or ability.)'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.)'`
-- **OGN-014** Sky Splitter -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nThis spell's Energy cost is reduced by the highest Might among units you control.\n\n\nDeal 5 to a unit at a battlefield."` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nThis spell's Energy cost is reduced by the highest Might among units you control.\n\n\nDeal 5 to a unit at a battlefield."`
+- **OGN-014** Sky Splitter -> chose `"ACTION (Play on your turn or in showdowns.)\nThis spell's Energy cost is reduced by the highest Might among units you control.\nDeal 5 to a unit at a battlefield."` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nThis spell's Energy cost is reduced by the highest Might among units you control.\nDeal 5 to a unit at a battlefield."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) This spell's Energy cost is reduced by the highest Might among units you control. Deal 5 to a unit at a battlefield."`
-- **OGN-015** Captain Farron -> chose `"Other friendly units here have ASSAULT.\n\n\n(+1 Might while they're attackers.)"` from `apitcg`
-  - `apitcg`: `"Other friendly units here have ASSAULT.\n\n\n(+1 Might while they're attackers.)"`
+- **OGN-015** Captain Farron -> chose `"Other friendly units here have ASSAULT.\n(+1 Might while they're attackers.)"` from `apitcg`
+  - `apitcg`: `"Other friendly units here have ASSAULT.\n(+1 Might while they're attackers.)"`
   - `riftbound_tools`: `"Other friendly units here have [Assault]. (+1 might while they're attackers.)"`
 - **OGN-016** Dangerous Duo -> chose `"LEGION - When you play me, give a unit +2 Might this turn. (Get the effect if you've played another card this turn.)"` from `apitcg`
   - `apitcg`: `"LEGION - When you play me, give a unit +2 Might this turn. (Get the effect if you've played another card this turn.)"`
   - `riftbound_tools`: `"[Legion] — When you play me, give a unit +2 might this turn. (Get the effect if you've played another card this turn.)"`
-- **OGN-017** Iron Ballista -> chose `'This enters exhausted.\n\n\nExhaust: Deal 2 to a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'This enters exhausted.\n\n\nExhaust: Deal 2 to a unit at a battlefield.'`
+- **OGN-017** Iron Ballista -> chose `'This enters exhausted.\nExhaust: Deal 2 to a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'This enters exhausted.\nExhaust: Deal 2 to a unit at a battlefield.'`
   - `riftbound_tools`: `'This enters exhausted. exhaust: Deal 2 to a unit at a battlefield.'`
 - **OGN-018** Noxus Saboteur -> chose `"Your opponents' HIDDEN cards can't be revealed here."` from `apitcg`
   - `apitcg`: `"Your opponents' HIDDEN cards can't be revealed here."`
@@ -1297,17 +1297,17 @@ Missing field counts across incomplete cards:
 - **OGN-021** Sun Disc -> chose `"Exhaust: LEGION - The next unit you play this turn enters ready. (Get the effect if you've played another card this turn.)"` from `apitcg`
   - `apitcg`: `"Exhaust: LEGION - The next unit you play this turn enters ready. (Get the effect if you've played another card this turn.)"`
   - `riftbound_tools`: `"exhaust: [Legion] — The next unit you play this turn enters ready. (Get the effect if you've played another card this turn.)"`
-- **OGN-022** Thermo Beam -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nKill all gear.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nKill all gear.'`
+- **OGN-022** Thermo Beam -> chose `'ACTION (Play on your turn or in showdowns.)\nKill all gear.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nKill all gear.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Kill all gear.'`
 - **OGN-023** Unlicensed Armory -> chose `"Discard 1, Exhaust: Choose a friendly unit. The next time it dies this turn, you may pay 1 Fury to recall it exhausted instead. (Send it to base. This isn't a move.)"` from `apitcg`
   - `apitcg`: `"Discard 1, Exhaust: Choose a friendly unit. The next time it dies this turn, you may pay 1 Fury to recall it exhausted instead. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"Discard 1, exhaust: Choose a friendly unit. The next time it would die this turn, you may pay 1 fury rune to heal it, exhaust it, and recall it instead. (Send it to base. This isn't a move.)"`
-- **OGN-024** Void Seeker -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 4 to a unit at a battlefield. Draw 1.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nDeal 4 to a unit at a battlefield. Draw 1.'`
+- **OGN-024** Void Seeker -> chose `'ACTION (Play on your turn or in showdowns.)\nDeal 4 to a unit at a battlefield. Draw 1.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nDeal 4 to a unit at a battlefield. Draw 1.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 4 to a unit at a battlefield. Draw 1.'`
-- **OGN-025** Blind Fury -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.'`
+- **OGN-025** Blind Fury -> chose `'ACTION (Play on your turn or in showdowns.)\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nEach opponent reveals the top card of their Main Deck. Choose one and play it, ignoring its cost. Then recycle the rest.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Each opponent reveals the top card of their Main Deck. Choose one and banish it, then play it, ignoring its cost. Then recycle the rest.'`
 - **OGN-027** Darius - Trifarian -> chose `'When you play your second card in a turn, give me +2 Might this turn and ready me.'` from `apitcg`
   - `apitcg`: `'When you play your second card in a turn, give me +2 Might this turn and ready me.'`
@@ -1315,14 +1315,14 @@ Missing field counts across incomplete cards:
 - **OGN-027A** Darius - Trifarian (Alternate Art) -> chose `'When you play your second card in a turn, give me +2 Might this turn and ready me.'` from `apitcg`
   - `apitcg`: `'When you play your second card in a turn, give me +2 Might this turn and ready me.'`
   - `riftbound_tools`: `'When you play your second card in a turn, give me +2 might this turn and ready me.'`
-- **OGN-029** Falling Star -> chose `'Do this twice:\n\n\nDeal 3 to a unit. (You can choose different units.)'` from `apitcg`
-  - `apitcg`: `'Do this twice:\n\n\nDeal 3 to a unit. (You can choose different units.)'`
+- **OGN-029** Falling Star -> chose `'Do this twice:\nDeal 3 to a unit. (You can choose different units.)'` from `apitcg`
+  - `apitcg`: `'Do this twice:\nDeal 3 to a unit. (You can choose different units.)'`
   - `riftbound_tools`: `'Deal 3 to a unit. Deal 3 to a unit.'`
-- **OGN-030** Jinx - Demolitionist -> chose `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 2."` from `apitcg`
-  - `apitcg`: `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you play me, discard 2."`
+- **OGN-030** Jinx - Demolitionist -> chose `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2."` from `apitcg`
+  - `apitcg`: `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) [Assault 2] (+2 might while I'm an attacker.) When you play me, discard 2."`
-- **OGN-030A** Jinx - Demolitionist (Alternate Art) -> chose `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\n\nWhen you play me, discard 2."` from `apitcg`
-  - `apitcg`: `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nASSAULT 2 (+2 Might while I'm an attacker.)\n\n\n\nWhen you play me, discard 2."`
+- **OGN-030A** Jinx - Demolitionist (Alternate Art) -> chose `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2."` from `apitcg`
+  - `apitcg`: `"ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you play me, discard 2."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) [Assault 2] (+2 might while I'm an attacker.) When you play me, discard 2."`
 - **OGN-031** Raging Firebrand -> chose `'When you play me, the next spell you play this turn costs 5 less.'` from `apitcg`
   - `apitcg`: `'When you play me, the next spell you play this turn costs 5 less.'`
@@ -1330,62 +1330,62 @@ Missing field counts across incomplete cards:
 - **OGN-032** Ravenborn Tome -> chose `'Exhaust: The next spell you play deals 1 Bonus Damage. (Each instance of damage the spell deals is increased by 1.)'` from `apitcg`
   - `apitcg`: `'Exhaust: The next spell you play deals 1 Bonus Damage. (Each instance of damage the spell deals is increased by 1.)'`
   - `riftbound_tools`: `'exhaust: The next spell you play this turn deals 1 Bonus Damage. (Each instance of damage the spell deals is increased by 1.)'`
-- **OGN-033** Shakedown -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.'`
+- **OGN-033** Shakedown -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose an enemy unit. Deal 6 to it unless its controller has you draw 2.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Choose an enemy unit. Deal 6 to it unless its controller has you draw 2.'`
-- **OGN-035** Vayne - Hunter -> chose `"ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand."` from `apitcg`
-  - `apitcg`: `"ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand."`
+- **OGN-035** Vayne - Hunter -> chose `"ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand."` from `apitcg`
+  - `apitcg`: `"ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand."`
   - `riftbound_tools`: `"[Assault 3] (+3 might while I'm an attacker.) If an opponent controls a battlefield, I enter ready. When I conquer, you may pay 1 energy to return me to my owner's hand."`
-- **OGN-036** Vi - Destructive -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\nRecycle 1 from your trash: Give me +1 Might this turn.'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\nRecycle 1 from your trash: Give me +1 Might this turn.'`
+- **OGN-036** Vi - Destructive -> chose `'GANKING (I can move from battlefield to battlefield.)\nRecycle 1 from your trash: Give me +1 Might this turn.'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nRecycle 1 from your trash: Give me +1 Might this turn.'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) Recycle 1 from your trash: Give me +1 might this turn.'`
-- **OGN-037** Immortal Phoenix -> chose `"ASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash."` from `apitcg`
-  - `apitcg`: `"ASSAULT 2 (+2 Might while I'm an attacker.)\n\n\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash."`
+- **OGN-037** Immortal Phoenix -> chose `"ASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash."` from `apitcg`
+  - `apitcg`: `"ASSAULT 2 (+2 Might while I'm an attacker.)\nWhen you kill a unit with a spell, you may pay 1 Fury to play me from your trash."`
   - `riftbound_tools`: `"[Assault 2] (+2 might while I'm an attacker.) When you kill a unit with a spell, you may pay 1 energy and 1 fury rune to play me from your trash."`
 - **OGN-038** Kadregrin the Infernal -> chose `'When you play me, draw 1 for each of your MIGHTY units. (A unit is Mighty while it has 5+ Might.)'` from `apitcg`
   - `apitcg`: `'When you play me, draw 1 for each of your MIGHTY units. (A unit is Mighty while it has 5+ Might.)'`
   - `riftbound_tools`: `'When you play me, draw 1 for each of your [Mighty] units. (A unit is Mighty while it has 5+ might.)'`
-- **OGN-039** Kai'Sa - Survivor -> chose `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nWhen I conquer, draw 1.'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\nWhen I conquer, draw 1.'`
+- **OGN-039** Kai'Sa - Survivor -> chose `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) When I conquer, draw 1.'`
-- **OGN-039A** Kai'Sa - Survivor (Alternate Art) -> chose `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nWhen I conquer, draw 1.'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n\n\nWhen I conquer, draw 1.'`
+- **OGN-039A** Kai'Sa - Survivor (Alternate Art) -> chose `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 Fury as an additional cost to have me enter ready.)\nWhen I conquer, draw 1.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) When I conquer, draw 1.'`
 - **OGN-040** Seal of Rage -> chose `"Exhaust: REACTION - ADD 1 Fury. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD 1 Fury. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 fury rune. (Abilities that add resources can't be reacted to.)"`
-- **OGN-041** Volibear - Furious -> chose `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.'` from `apitcg`
-  - `apitcg`: `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.'`
+- **OGN-041** Volibear - Furious -> chose `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.'` from `apitcg`
+  - `apitcg`: `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.'`
   - `riftbound_tools`: `'[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or ability.) When I attack, deal 5 damage split among any number of enemy units here.'`
-- **OGN-041A** Volibear - Furious (Alternate Art) -> chose `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.'` from `apitcg`
-  - `apitcg`: `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\n\n\n\nWhen I attack, deal 5 damage split among any number of enemy units here.'`
+- **OGN-041A** Volibear - Furious (Alternate Art) -> chose `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.'` from `apitcg`
+  - `apitcg`: `'DEFLECT 2 (Opponents must play 2 Power to choose me with a spell or ability.)\nWhen I attack, deal 5 damage split among any number of enemy units here.'`
   - `riftbound_tools`: `'[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or ability.) When I attack, deal 5 damage split among any number of enemy units here.'`
 - **OGN-044** Clockwork Keeper -> chose `'As you play me, you may pay 1 Calm as an additional cost. If you do, draw 1.'` from `apitcg`
   - `apitcg`: `'As you play me, you may pay 1 Calm as an additional cost. If you do, draw 1.'`
   - `riftbound_tools`: `'You may pay 1 calm rune as an additional cost to play me. When you play me, if you paid the additional cost, draw 1.'`
-- **OGN-045** Defy -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell that costs no more than 4 and no more than 1 Power.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell that costs no more than 4 and no more than 1 Power.'`
+- **OGN-045** Defy -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell that costs no more than 4 and no more than 1 Power.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell that costs no more than 4 and no more than 1 Power.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Counter a spell that costs no more than 4 energy and no more than 1 rune of any type.'`
-- **OGN-046** En Garde -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.'`
+- **OGN-046** En Garde -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a friendly unit +1 Might this turn, then an additional +1 Might this turn if it is the only unit you control there.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a friendly unit +1 might this turn, then an additional +1 might this turn if it is the only unit you control there.'`
-- **OGN-047** Find Your Center -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\n\n\nDraw 1 and channel 1 rune exhausted."` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\n\n\nDraw 1 and channel 1 rune exhausted."`
+- **OGN-047** Find Your Center -> chose `"ACTION (Play on your turn or in showdowns.)\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\nDraw 1 and channel 1 rune exhausted."` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nIf an opponent's score is within 3 points of the Victory Score, this costs 2 less.\nDraw 1 and channel 1 rune exhausted."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) If an opponent's score is within 3 points of the Victory Score, this costs 2 energy less. Draw 1 and channel 1 rune exhausted."`
-- **OGN-048** Meditation -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.'`
+- **OGN-048** Meditation -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nAs an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) As an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1.'`
-- **OGN-050** Rune Prison -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nStun a unit. (It doesn't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nStun a unit. (It doesn't deal combat damage this turn.)"`
+- **OGN-050** Rune Prison -> chose `"ACTION (Play on your turn or in showdowns.)\nStun a unit. (It doesn't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nStun a unit. (It doesn't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Stun a unit. (It doesn't deal combat damage this turn.)"`
 - **OGN-052** Stalwart Poro -> chose `"SHIELD (+1 Might while I'm a defender.)"` from `apitcg`
   - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)"`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.)"`
-- **OGN-053** Stand United -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"`
+- **OGN-053** Stand United -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nBuff a friendly unit. Buffs give an additional +1 Might to friendly units this turn. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Buff a friendly unit. Buffs give an additional +1 might to friendly units this turn. (To buff a unit, give it a +1 might buff if it doesn't already have one.)"`
-- **OGN-054** Sunlit Guardian -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)"` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)"`
+- **OGN-054** Sunlit Guardian -> chose `"SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)"` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)"`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) [Tank] (I must be assigned combat damage first.)"`
 - **OGN-055** Wielder of Water -> chose `"While I'm attacking or defending alone, I have +2 Might."` from `apitcg`
   - `apitcg`: `"While I'm attacking or defending alone, I have +2 Might."`
@@ -1393,11 +1393,11 @@ Missing field counts across incomplete cards:
 - **OGN-056** Adaptatron -> chose `"When I conquer, you may kill a gear. If you do, buff me. (If I don't have a buff, I get a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When I conquer, you may kill a gear. If you do, buff me. (If I don't have a buff, I get a +1 Might buff.)"`
   - `riftbound_tools`: `"When I conquer, you may kill a gear. If you do, buff me. (If I don't have a buff, I get a +1 might buff.)"`
-- **OGN-057** Block -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)"` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)"`
+- **OGN-057** Block -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)"` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nGive a unit SHIELD 3 and TANK this turn. (+3 Might while it's a defender. It must be assigned combat damage first.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Give a unit [Shield 3] and [Tank] this turn. (+3 might while it's a defender. It must be assigned combat damage first.)"`
-- **OGN-058** Discipline -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit +2 Might this turn. Draw 1.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit +2 Might this turn. Draw 1.'`
+- **OGN-058** Discipline -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn. Draw 1.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn. Draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit +2 might this turn. Draw 1.'`
 - **OGN-059** Eclipse Herald -> chose `'When you stun an enemy unit, ready me and give me +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you stun an enemy unit, ready me and give me +1 Might this turn.'`
@@ -1411,56 +1411,56 @@ Missing field counts across incomplete cards:
 - **OGN-062** Reinforce -> chose `'Look at the top 5 cards of you Main Deck. You may play a unit from among them. Its Energy cost is reduced by 5. Then recycle the remaining cards.'` from `apitcg`
   - `apitcg`: `'Look at the top 5 cards of you Main Deck. You may play a unit from among them. Its Energy cost is reduced by 5. Then recycle the remaining cards.'`
   - `riftbound_tools`: `'Look at the top 5 cards of your Main Deck. You may banish a unit from among them, then play it, reducing its cost by 5 energy. Recycle the remaining cards.'`
-- **OGN-063** Spirit's Refuge -> chose `"When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\n\n\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)"` from `apitcg`
-  - `apitcg`: `"When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\n\n\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)"`
+- **OGN-063** Spirit's Refuge -> chose `"When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)"` from `apitcg`
+  - `apitcg`: `"When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)\nFriendly buffed units have DEFLECT if they didn't already. (Opponents must pay 1 Power to choose those units with a spell or ability.)"`
   - `riftbound_tools`: `"When you play this, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff.) Friendly buffed units have [Deflect] if they didn't already. (Opponents must pay 1 rune of any type to choose those units with a spell or ability.)"`
-- **OGN-064** Wind Wall -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nCounter a spell.'`
+- **OGN-064** Wind Wall -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nCounter a spell.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Counter a spell.'`
 - **OGN-065** Wizened Elder -> chose `"While I'm buffed, I have an additional +1 Might."` from `apitcg`
   - `apitcg`: `"While I'm buffed, I have an additional +1 Might."`
   - `riftbound_tools`: `"While I'm buffed, I have an additional +1 might."`
-- **OGN-067** Blitzcrank - Impassive -> chose `"TANK (I must be assigned combat damage first.)\n\n\nWhen you play me to a battlefield, you may move an enemy unit to here.\n\n\nWhen I hold, return me to my owner's hand."` from `apitcg`
-  - `apitcg`: `"TANK (I must be assigned combat damage first.)\n\n\nWhen you play me to a battlefield, you may move an enemy unit to here.\n\n\nWhen I hold, return me to my owner's hand."`
+- **OGN-067** Blitzcrank - Impassive -> chose `"TANK (I must be assigned combat damage first.)\nWhen you play me to a battlefield, you may move an enemy unit to here.\nWhen I hold, return me to my owner's hand."` from `apitcg`
+  - `apitcg`: `"TANK (I must be assigned combat damage first.)\nWhen you play me to a battlefield, you may move an enemy unit to here.\nWhen I hold, return me to my owner's hand."`
   - `riftbound_tools`: `"[Tank] (I must be assigned combat damage first.) When you play me to a battlefield, you may move an enemy unit to here. When I hold, return me to my owner's hand."`
-- **OGN-068** Caitlyn - Patrolling -> chose `"I must be assigned combat damage last.\n\n\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield."` from `apitcg`
-  - `apitcg`: `"I must be assigned combat damage last.\n\n\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield."`
+- **OGN-068** Caitlyn - Patrolling -> chose `"I must be assigned combat damage last.\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield."` from `apitcg`
+  - `apitcg`: `"I must be assigned combat damage last.\nExhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield."`
   - `riftbound_tools`: `"I must be assigned combat damage last. exhaust: Deal damage equal to my Might to a unit at a battlefield. Use this ability only while I'm at a battlefield."`
-- **OGN-069** Last Stand -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
+- **OGN-069** Last Stand -> chose `"ACTION (Play on your turn or in showdowns.)\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nDouble a friendly unit's Might this turn. Give it TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Double a friendly unit's Might this turn. Give it [Temporary]. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
-- **OGN-070** Mageseeker Warden -> chose `"While I'm at a battlefield, opponents can only play units to their base.\n\n\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears."` from `apitcg`
-  - `apitcg`: `"While I'm at a battlefield, opponents can only play units to their base.\n\n\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears."`
+- **OGN-070** Mageseeker Warden -> chose `"While I'm at a battlefield, opponents can only play units to their base.\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears."` from `apitcg`
+  - `apitcg`: `"While I'm at a battlefield, opponents can only play units to their base.\nWhile I'm at a battlefield, spells and abilities can't ready enemy units and gears."`
   - `riftbound_tools`: `"While I'm at a battlefield, opponents can only play units to their base. While I'm at a battlefield, spells and abilities can't ready enemy units and gear."`
-- **OGN-071** Party Favors -> chose `'Each other player chooses Cards or Runes.\n\n\nFor each player that chooses Cards, you and that player each draw 1.\n\n\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.'` from `apitcg`
-  - `apitcg`: `'Each other player chooses Cards or Runes.\n\n\nFor each player that chooses Cards, you and that player each draw 1.\n\n\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.'`
+- **OGN-071** Party Favors -> chose `'Each other player chooses Cards or Runes.\nFor each player that chooses Cards, you and that player each draw 1.\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.'` from `apitcg`
+  - `apitcg`: `'Each other player chooses Cards or Runes.\nFor each player that chooses Cards, you and that player each draw 1.\nFor each player that chooses Runes, you and that player each channel 1 rune exhausted.'`
   - `riftbound_tools`: `'Each other player chooses Cards or Runes. For each player that chooses Cards, you and that player each draw 1. For each player that chooses Runes, you and that player each channel 1 rune exhausted.'`
 - **OGN-073** Sona - Harmonious -> chose `"While I'm at a battlefield, ready 4 friendly runes at the end of your turn."` from `apitcg`
   - `apitcg`: `"While I'm at a battlefield, ready 4 friendly runes at the end of your turn."`
   - `riftbound_tools`: `"At the end of your turn, if I'm at a battlefield, ready up to 4 friendly runes."`
-- **OGN-074** Taric - Protector -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nOther friendly units here have SHIELD."` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nOther friendly units here have SHIELD."`
+- **OGN-074** Taric - Protector -> chose `"SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nOther friendly units here have SHIELD."` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nOther friendly units here have SHIELD."`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) [Tank] (I must be assigned combat damage first.) Other friendly units here have [Shield]."`
-- **OGN-075** Tasty Faefolk -> chose `'ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)'`
+- **OGN-075** Tasty Faefolk -> chose `'ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may play 1 Calm as an additional cost to have me enter ready.)\nDEATHKNELL - Channel 2 runes exhausted and draw 1. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 calm rune as an additional cost to have me enter ready.) [Deathknell] — Channel 2 runes exhausted and draw 1. (When I die, get the effect.)'`
-- **OGN-077** Zhonya's Hourglass -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)"`
+- **OGN-077** Zhonya's Hourglass -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nThe next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) If a friendly unit would die, kill this instead. Heal that unit, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
-- **OGN-078** Lee Sin - Ascetic -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\nI can have any number of buffs."` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\nI can have any number of buffs."`
+- **OGN-078** Lee Sin - Ascetic -> chose `"SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs."` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs."`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) exhaust: Buff me. (I get a +1 might buff.) I can have any number of buffs."`
-- **OGN-078A** Lee Sin - Ascetic (Alternate Art) -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\n\nI can have any number of buffs."` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\n\nExhaust: Buff me. (I get a +1 Might buff.)\n\n\n\nI can have any number of buffs."`
+- **OGN-078A** Lee Sin - Ascetic (Alternate Art) -> chose `"SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs."` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nExhaust: Buff me. (I get a +1 Might buff.)\nI can have any number of buffs."`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) exhaust: Buff me. (I get a +1 might buff.) I can have any number of buffs."`
-- **OGN-079** Leona - Zealot -> chose `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might."` from `apitcg`
-  - `apitcg`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might."`
+- **OGN-079** Leona - Zealot -> chose `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might."` from `apitcg`
+  - `apitcg`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might."`
   - `riftbound_tools`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready. Stunned enemy units here have -8 might, to a minimum of 1 might."`
-- **OGN-079A** Leona - Zealot (Alternate Art) -> chose `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might."` from `apitcg`
-  - `apitcg`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\n\n\n\nStunned enemy units here have -8 Might, to a minimum of 1 Might."`
+- **OGN-079A** Leona - Zealot (Alternate Art) -> chose `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might."` from `apitcg`
+  - `apitcg`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready.\nStunned enemy units here have -8 Might, to a minimum of 1 Might."`
   - `riftbound_tools`: `"If an opponent's score is within 3 points of the Victory Score, I enter ready. Stunned enemy units here have -8 might, to a minimum of 1 might."`
-- **OGN-080** Mystic Reversal -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGain control of a spell. You may make new choices for it.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGain control of a spell. You may make new choices for it.'`
+- **OGN-080** Mystic Reversal -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nGain control of a spell. You may make new choices for it.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nGain control of a spell. You may make new choices for it.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Gain control of a spell. You may make new choices for it.'`
 - **OGN-081** Seal of Focus -> chose `"Exhaust: REACTION - ADD calm. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD calm. (Abilities that add resources can't be reacted to.)"`
@@ -1468,8 +1468,8 @@ Missing field counts across incomplete cards:
 - **OGN-082** Whiteflame Protector -> chose `'When you play me, give a unit +8 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you play me, give a unit +8 Might this turn.'`
   - `riftbound_tools`: `'When you play me, give a unit +8 might this turn.'`
-- **OGN-083** Consult the Past -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nREACTION (Play any time, even before spells and abilities resolve.)\n\n\nDraw 2.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nREACTION (Play any time, even before spells and abilities resolve.)\n\n\nDraw 2.'`
+- **OGN-083** Consult the Past -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nREACTION (Play any time, even before spells and abilities resolve.)\nDraw 2.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nREACTION (Play any time, even before spells and abilities resolve.)\nDraw 2.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Reaction] (Play any time, even before spells and abilities resolve.) Draw 2.'`
 - **OGN-084** Eager Apprentice -> chose `"While I'm at a battlefield, the Energy costs for spells you play is reduced by 1, to a minimum of 1."` from `apitcg`
   - `apitcg`: `"While I'm at a battlefield, the Energy costs for spells you play is reduced by 1, to a minimum of 1."`
@@ -1477,11 +1477,11 @@ Missing field counts across incomplete cards:
 - **OGN-085** Falling Comet -> chose `'ACTION (play on your turn or in showdowns.)'` from `apitcg`
   - `apitcg`: `'ACTION (play on your turn or in showdowns.)'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 6 to a unit at a battlefield.'`
-- **OGN-086** Jeweled Colossus -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nSHIELD (+1 Might while I'm a defender.)"` from `apitcg`
-  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nSHIELD (+1 Might while I'm a defender.)"`
+- **OGN-086** Jeweled Colossus -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nSHIELD (+1 Might while I'm a defender.)"` from `apitcg`
+  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nSHIELD (+1 Might while I'm a defender.)"`
   - `riftbound_tools`: `"[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.) [Shield] (+1 might while I'm a defender.)"`
-- **OGN-087** Lecturing Yordle -> chose `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, draw 1.'` from `apitcg`
-  - `apitcg`: `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, draw 1.'`
+- **OGN-087** Lecturing Yordle -> chose `'TANK (I must be assigned combat damage first.)\nWhen you play me, draw 1.'` from `apitcg`
+  - `apitcg`: `'TANK (I must be assigned combat damage first.)\nWhen you play me, draw 1.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) When you play me, draw 1.'`
 - **OGN-090** Orb of Regret -> chose `'Exhaust: Give a unit -1 Might this turn, to a minimum of 1 Might.'` from `apitcg`
   - `apitcg`: `'Exhaust: Give a unit -1 Might this turn, to a minimum of 1 Might.'`
@@ -1489,17 +1489,17 @@ Missing field counts across incomplete cards:
 - **OGN-093** Smoke Screen -> chose `'Exhaust: Give a unit -1 Might this turn, to a minimum of 1 Might.'` from `apitcg`
   - `apitcg`: `'Exhaust: Give a unit -1 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit -4 might this turn, to a minimum of 1 might.'`
-- **OGN-094** Sprite Call -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
+- **OGN-094** Sprite Call -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nPlay a ready 3 Might Sprite unit token with TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Play a ready 3 might Sprite unit token with [Temporary]. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
-- **OGN-095** Stupefy -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.'`
+- **OGN-095** Stupefy -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nGive a unit -1 Might this turn, to a minimum of 1 Might. Draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit -1 might this turn, to a minimum of 1 might. Draw 1.'`
 - **OGN-096** Watchful Sentry -> chose `'DEATHKNELL - Draw 1. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'DEATHKNELL - Draw 1. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Deathknell] — Draw 1. (When I die, get the effect.)'`
-- **OGN-097** Blastcone Fae -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.'`
+- **OGN-097** Blastcone Fae -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give a unit -2 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me, give a unit -2 might this turn, to a minimum of 1 might.'`
 - **OGN-098** Energy Conduit -> chose `"Exhaust: REACTION - ADD 1. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD 1. (Abilities that add resources can't be reacted to.)"`
@@ -1507,17 +1507,17 @@ Missing field counts across incomplete cards:
 - **OGN-099** Garbage Grabber -> chose `'Recycle 3 from your trash, 1, Exhaust: Draw 1.'` from `apitcg`
   - `apitcg`: `'Recycle 3 from your trash, 1, Exhaust: Draw 1.'`
   - `riftbound_tools`: `'Recycle 3 from your trash, 1 energy, exhaust: Draw 1.'`
-- **OGN-100** Gemcraft Seer -> chose `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nOther friendly units have VISION.'` from `apitcg`
-  - `apitcg`: `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nOther friendly units have VISION.'`
+- **OGN-100** Gemcraft Seer -> chose `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nOther friendly units have VISION.'` from `apitcg`
+  - `apitcg`: `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nOther friendly units have VISION.'`
   - `riftbound_tools`: `'[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.) Other friendly units have [Vision].'`
-- **OGN-102** Portal Rescue -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nBanish a friendly unit, then play it to base, ignoring its cost.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nBanish a friendly unit, then play it to base, ignoring its cost.'`
+- **OGN-102** Portal Rescue -> chose `'ACTION (Play on your turn or in showdowns.)\nBanish a friendly unit, then play it to base, ignoring its cost.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nBanish a friendly unit, then play it to base, ignoring its cost.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Banish a friendly unit, then its owner plays it to their base, ignoring its cost.'`
 - **OGN-103** Ravenbloom Student -> chose `'When you play a spell, give me +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you play a spell, give me +1 Might this turn.'`
   - `riftbound_tools`: `'When you play a spell, give me +1 might this turn.'`
-- **OGN-104** Retreat -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."`
+- **OGN-104** Retreat -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\nReturn a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) Return a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."`
 - **OGN-106** Sprite Mother -> chose `"When you play me, play a ready 3 Might Sprite unit token with TEMPORARY here. (Kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
   - `apitcg`: `"When you play me, play a ready 3 Might Sprite unit token with TEMPORARY here. (Kill it at the start of its controller's Beginning Phase, before scoring.)"`
@@ -1525,32 +1525,32 @@ Missing field counts across incomplete cards:
 - **OGN-107** Ava Achiever -> chose `'When I attack, you may pay mind to play a card with HIDDEN from your hand here, ignoring its cost.'` from `apitcg`
   - `apitcg`: `'When I attack, you may pay mind to play a card with HIDDEN from your hand here, ignoring its cost.'`
   - `riftbound_tools`: `'When I attack, you may pay 1 mind rune to play a card with [Hidden] from your hand, ignoring its cost. If it’s a unit, play it here.'`
-- **OGN-108** Convergent Mutation -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.'`
+- **OGN-108** Convergent Mutation -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. Increase its Might until it equals the Might of another friendly unit.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Choose a friendly unit. This turn, increase its Might to the Might of another friendly unit.'`
-- **OGN-109** Dr. Mundo - Expert -> chose `'My Might is increased by the number of cards on your trash.\n\n\nAt the start of your Beginning Phase, recycle 3 from your trash.'` from `apitcg`
-  - `apitcg`: `'My Might is increased by the number of cards on your trash.\n\n\nAt the start of your Beginning Phase, recycle 3 from your trash.'`
+- **OGN-109** Dr. Mundo - Expert -> chose `'My Might is increased by the number of cards on your trash.\nAt the start of your Beginning Phase, recycle 3 from your trash.'` from `apitcg`
+  - `apitcg`: `'My Might is increased by the number of cards on your trash.\nAt the start of your Beginning Phase, recycle 3 from your trash.'`
   - `riftbound_tools`: `'My Might is increased by the number of cards in your trash. At the start of your Beginning Phase, recycle 3 from your trash.'`
-- **OGN-110** Ekko - Recurrent -> chose `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)'`
+- **OGN-110** Ekko - Recurrent -> chose `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nDEATHKNELL - Recycle me to ready your runes. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 mind rune as an additional cost to have me enter ready.) [Deathknell] — Recycle me to ready your runes. (When I die, get the effect.)'`
 - **OGN-111** Heimerdinger - Inventor -> chose `'I have all exhaust abilities of all friendly legends, units and gear.'` from `apitcg`
   - `apitcg`: `'I have all exhaust abilities of all friendly legends, units and gear.'`
   - `riftbound_tools`: `'I have all exhaust abilities of all friendly legends, units, and gear.'`
-- **OGN-112** Kai'Sa - Evolutionary -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
+- **OGN-112** Kai'Sa - Evolutionary -> chose `'GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) When I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
-- **OGN-112A** Kai'Sa - Evolutionary (Alternate Art) -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\n\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
+- **OGN-112A** Kai'Sa - Evolutionary (Alternate Art) -> chose `'GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nWhen I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) When I conquer, you may play a spell from your trash with Energy cost less than your points without paying its Energy cost. Then recycle it. (You must still pay its Power cost.)'`
 - **OGN-113** Malzahar - Fanatic -> chose `"Kill a friend unit or gear, exhaust : ACTION - ADD rune rune. (Use on your turn or in showdowns. Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Kill a friend unit or gear, exhaust : ACTION - ADD rune rune. (Use on your turn or in showdowns. Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"Kill a friendly unit or gear, exhaust: [Action] — [Add] 2 runes of any type. (Use on your turn or in showdowns. Abilities that add resources can't be reacted to.)"`
-- **OGN-115** Promising Future -> chose `'Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\n\n\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)'` from `apitcg`
-  - `apitcg`: `'Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\n\n\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)'`
+- **OGN-115** Promising Future -> chose `'Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)'` from `apitcg`
+  - `apitcg`: `'Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.\nStarting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)'`
   - `riftbound_tools`: `'Each player looks at the top 5 cards of their Main Deck, banishes one of them, then recycles the rest. Starting with the next player, each player plays those cards, ignoring Energy costs. (They must still pay Power costs.)'`
-- **OGN-116** Thousand-Tailed Watcher -> chose `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\n\n\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.'`
+- **OGN-116** Thousand-Tailed Watcher -> chose `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 mind as an additional cost to have me enter ready.)\nWhen you play me, give enemy units -3 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 mind rune as an additional cost to have me enter ready.) When you play me, give enemy units -3 might this turn, to a minimum of 1 might.'`
 - **OGN-117** Viktor - Innovator -> chose `"When you play a card on an opponent's turn, play a 1 Might Recruit unit token in your base."` from `apitcg`
   - `apitcg`: `"When you play a card on an opponent's turn, play a 1 Might Recruit unit token in your base."`
@@ -1567,11 +1567,11 @@ Missing field counts across incomplete cards:
 - **OGN-120** Seal of Insight -> chose `"Exhaust: REACTION - ADD mind. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD mind. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 mind rune. (Abilities that add resources can't be reacted to.)"`
-- **OGN-121** Teemo - Strategist -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
+- **OGN-121** Teemo - Strategist -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When I defend, choose an enemy unit here and reveal the top 5 cards of your Main Deck. Deal 1 to that unit for each card with [Hidden] revealed this way, then recycle the revealed cards.'`
-- **OGN-121A** Teemo - Strategist (Alternate Art) -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
+- **OGN-121A** Teemo - Strategist (Alternate Art) -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When I defend, choose an enemy unit here and reveal the top 5 cards of your Main Deck. Deal 1 to that unit for each card with [Hidden] revealed this way, then recycle the revealed cards.'`
 - **OGN-123** Unchecked Power -> chose `'Exhaust all friendly units, then deal 12 to all units at battlefields.'` from `apitcg`
   - `apitcg`: `'Exhaust all friendly units, then deal 12 to all units at battlefields.'`
@@ -1582,20 +1582,20 @@ Missing field counts across incomplete cards:
 - **OGN-125** Bilgewater Bully -> chose `"While I'm buffed, I have GANKING. (I can move from battlefield to battlefield.)"` from `apitcg`
   - `apitcg`: `"While I'm buffed, I have GANKING. (I can move from battlefield to battlefield.)"`
   - `riftbound_tools`: `"While I'm buffed, I have [Ganking]. (I can move from battlefield to battlefield.)"`
-- **OGN-127** Cannon Barrage -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 2 to all enemy units in combat.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 2 to all enemy units in combat.'`
+- **OGN-127** Cannon Barrage -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nDeal 2 to all enemy units in combat.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nDeal 2 to all enemy units in combat.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Deal 2 to all enemy units in combat.'`
-- **OGN-128** Challenge -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.'`
+- **OGN-128** Challenge -> chose `'ACTION (Play on your turn or in showdowns.)\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nChoose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Choose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other.'`
-- **OGN-129** Confront -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nUnits you play this turn enter ready.\n\n\nDraw 1.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nUnits you play this turn enter ready.\n\n\nDraw 1.'`
+- **OGN-129** Confront -> chose `'ACTION (Play on your turn or in showdowns.)\nUnits you play this turn enter ready.\nDraw 1.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nUnits you play this turn enter ready.\nDraw 1.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Units you play this turn enter ready. Draw 1.'`
 - **OGN-131** Dune Drake -> chose `'When I attack, give me +2 Might if there is a ready enemy unit here.'` from `apitcg`
   - `apitcg`: `'When I attack, give me +2 Might if there is a ready enemy unit here.'`
   - `riftbound_tools`: `'When I attack, give me +2 might this turn if there is a ready enemy unit here.'`
-- **OGN-133** Flurry of Blades -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 1 to all units at battlefields.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nDeal 1 to all units at battlefields.'`
+- **OGN-133** Flurry of Blades -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nDeal 1 to all units at battlefields.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nDeal 1 to all units at battlefields.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Deal 1 to all units at battlefields.'`
 - **OGN-135** Pakaa Cub -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)'` from `apitcg`
   - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)'`
@@ -1603,8 +1603,8 @@ Missing field counts across incomplete cards:
 - **OGN-136** Pit Rookie -> chose `"When you play me, buff another friendly unit. (If it doesn't have a buff, it gets +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When you play me, buff another friendly unit. (If it doesn't have a buff, it gets +1 Might buff.)"`
   - `riftbound_tools`: `"When you play me, buff another friendly unit. (If it doesn't have a buff, it gets a +1 might buff.)"`
-- **OGN-137** Stormclaw Ursine -> chose `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, channel 1 rune exhausted.'` from `apitcg`
-  - `apitcg`: `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, channel 1 rune exhausted.'`
+- **OGN-137** Stormclaw Ursine -> chose `'TANK (I must be assigned combat damage first.)\nWhen you play me, channel 1 rune exhausted.'` from `apitcg`
+  - `apitcg`: `'TANK (I must be assigned combat damage first.)\nWhen you play me, channel 1 rune exhausted.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) When you play me, channel 1 rune exhausted.'`
 - **OGN-139** Cithria of Cloudfield -> chose `"When you play another unit, buff me. (If I don't have a buff, I get a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When you play another unit, buff me. (If I don't have a buff, I get a +1 Might buff.)"`
@@ -1618,101 +1618,101 @@ Missing field counts across incomplete cards:
 - **OGN-143** Pirate's Haven -> chose `'When you ready a friendly unit, give it +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you ready a friendly unit, give it +1 Might this turn.'`
   - `riftbound_tools`: `'When you ready a friendly unit, give it +1 might this turn.'`
-- **OGN-144** Spoils of War -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nIf an enemy unit has died this turn, this costs 2 less.\n\n\nDraw 2.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nIf an enemy unit has died this turn, this costs 2 less.\n\n\nDraw 2.'`
+- **OGN-144** Spoils of War -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nIf an enemy unit has died this turn, this costs 2 less.\nDraw 2.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nIf an enemy unit has died this turn, this costs 2 less.\nDraw 2.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) If an enemy unit has died this turn, this costs 2 energy less. Draw 2.'`
-- **OGN-145** Unyielding Spirit -> chose `'REACTION (Play at any time, even before spells and abilities resolve.)\n\n\nPrevent all spell and ability damage this turn.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play at any time, even before spells and abilities resolve.)\n\n\nPrevent all spell and ability damage this turn.'`
+- **OGN-145** Unyielding Spirit -> chose `'REACTION (Play at any time, even before spells and abilities resolve.)\nPrevent all spell and ability damage this turn.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play at any time, even before spells and abilities resolve.)\nPrevent all spell and ability damage this turn.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Prevent all spell and ability damage this turn.'`
-- **OGN-146** Wallop -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."`
+- **OGN-146** Wallop -> chose `"ACTION (Play on your turn or in showdowns.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) As you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."`
 - **OGN-147** Wildclaw Shaman -> chose `"When you play me, you may spend a buff to buff me and ready me. (If I don't have a buff, I get a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When you play me, you may spend a buff to buff me and ready me. (If I don't have a buff, I get a +1 Might buff.)"`
   - `riftbound_tools`: `"When you play me, you may spend a buff to buff me and ready me. (If I don't have a buff, I get a +1 might buff.)"`
-- **OGN-150** Kraken Hunter -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nASSAULT (+1 Might while i'm an attacker.)\n\n\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend."` from `apitcg`
-  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nASSAULT (+1 Might while i'm an attacker.)\n\n\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend."`
+- **OGN-150** Kraken Hunter -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nASSAULT (+1 Might while i'm an attacker.)\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend."` from `apitcg`
+  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nASSAULT (+1 Might while i'm an attacker.)\nAs you play me, you may spend any number of buffs as an additional cost. Reduce my cost by body for each buff you spend."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) [Assault] (+1 might while I'm an attacker.) As you play me, you may spend any number of buffs as an additional cost. Reduce my cost by 1 body rune for each buff you spend."`
-- **OGN-151** Lee Sin - Centered -> chose `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nOther buffed friendly units at my battlefield have +2 Might.'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nOther buffed friendly units at my battlefield have +2 Might.'`
+- **OGN-151** Lee Sin - Centered -> chose `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) Other buffed friendly units at my battlefield have +2 might.'`
-- **OGN-151A** Lee Sin - Centered (Alternate Art) -> chose `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nOther buffed friendly units at my battlefield have +2 Might.'` from `apitcg`
-  - `apitcg`: `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nOther buffed friendly units at my battlefield have +2 Might.'`
+- **OGN-151A** Lee Sin - Centered (Alternate Art) -> chose `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.'` from `apitcg`
+  - `apitcg`: `'ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nOther buffed friendly units at my battlefield have +2 Might.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) Other buffed friendly units at my battlefield have +2 might.'`
 - **OGN-152** Mistfall -> chose `'When you buff a friendly unit, you may pay body and exhaust this to ready it.'` from `apitcg`
   - `apitcg`: `'When you buff a friendly unit, you may pay body and exhaust this to ready it.'`
   - `riftbound_tools`: `'When you buff a friendly unit, you may pay 1 body rune and exhaust this to ready it.'`
-- **OGN-153** Overt Operation -> chose `"ACTION (play on your turn or in showdowns.)\n\n\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)"` from `apitcg`
-  - `apitcg`: `"ACTION (play on your turn or in showdowns.)\n\n\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)"`
+- **OGN-153** Overt Operation -> chose `"ACTION (play on your turn or in showdowns.)\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)"` from `apitcg`
+  - `apitcg`: `"ACTION (play on your turn or in showdowns.)\nFor each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 Might buff.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) For each friendly unit, you may spend its buff to ready it. Then buff all friendly units. (Each one that doesn't have a buff gets a +1 might buff.)"`
-- **OGN-154** Primal Strength -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit +7 Might this turn.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nGive a unit +7 Might this turn.'`
+- **OGN-154** Primal Strength -> chose `'ACTION (Play on your turn or in showdowns.)\nGive a unit +7 Might this turn.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nGive a unit +7 Might this turn.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Give a unit +7 might this turn.'`
-- **OGN-155** Qiyana - Victorious -> chose `'DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhen I conquer, draw 1 or channel 1 Rune exhausted.'` from `apitcg`
-  - `apitcg`: `'DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhen I conquer, draw 1 or channel 1 Rune exhausted.'`
+- **OGN-155** Qiyana - Victorious -> chose `'DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhen I conquer, draw 1 or channel 1 Rune exhausted.'` from `apitcg`
+  - `apitcg`: `'DEFLECT (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhen I conquer, draw 1 or channel 1 Rune exhausted.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When I conquer, draw 1 or channel 1 rune exhausted.'`
-- **OGN-157** Udyr - Wildman -> chose `"Spend my buff: Choose one you've not chosen turn —\n\n\n•Deal 2 to a unit at a battlefield.\n\n\n•Stun a unit at a battlefield\n\n\n•Ready me.\n\n\n•Give me GANKING this turn."` from `apitcg`
-  - `apitcg`: `"Spend my buff: Choose one you've not chosen turn —\n\n\n•Deal 2 to a unit at a battlefield.\n\n\n•Stun a unit at a battlefield\n\n\n•Ready me.\n\n\n•Give me GANKING this turn."`
+- **OGN-157** Udyr - Wildman -> chose `"Spend my buff: Choose one you've not chosen turn —\n•Deal 2 to a unit at a battlefield.\n•Stun a unit at a battlefield\n•Ready me.\n•Give me GANKING this turn."` from `apitcg`
+  - `apitcg`: `"Spend my buff: Choose one you've not chosen turn —\n•Deal 2 to a unit at a battlefield.\n•Stun a unit at a battlefield\n•Ready me.\n•Give me GANKING this turn."`
   - `riftbound_tools`: `"Spend my buff: Choose one you've not chosen this turn —<ul><li>Deal 2 to a unit at a battlefield.</li><li>Stun a unit at a battlefield.</li><li>Ready me.</li><li>Give me [Ganking] this turn.</li></ul>"`
-- **OGN-158** Volibear - Imposing -> chose `"SHIELD 3 (+3 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"` from `apitcg`
-  - `apitcg`: `"SHIELD 3 (+3 Might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"`
+- **OGN-158** Volibear - Imposing -> chose `"SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"` from `apitcg`
+  - `apitcg`: `"SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"`
   - `riftbound_tools`: `"[Shield 3] (+3 might while I'm a defender.) [Tank] (I must be assigned combat damage first.) When an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefield.)"`
-- **OGN-158A** Volibear - Imposing (Alternate Art) -> chose `"SHIELD 3 (+3 Might while I'm a defender.)\n\n\n\nTANK (I must be assigned combat damage first.)\n\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"` from `apitcg`
-  - `apitcg`: `"SHIELD 3 (+3 Might while I'm a defender.)\n\n\n\nTANK (I must be assigned combat damage first.)\n\n\n\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"`
+- **OGN-158A** Volibear - Imposing (Alternate Art) -> chose `"SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"` from `apitcg`
+  - `apitcg`: `"SHIELD 3 (+3 Might while I'm a defender.)\nTANK (I must be assigned combat damage first.)\nWhen an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefields.)"`
   - `riftbound_tools`: `"[Shield 3] (+3 might while I'm a defender.) [Tank] (I must be assigned combat damage first.) When an opponent moves to a battlefield other than mine, draw 1. (Bases are not battlefield.)"`
-- **OGN-159** Warwick - Hunter -> chose `'I enter ready.\n\n\nWhen I attack, kill all damaged enemy units here.'` from `apitcg`
-  - `apitcg`: `'I enter ready.\n\n\nWhen I attack, kill all damaged enemy units here.'`
+- **OGN-159** Warwick - Hunter -> chose `'I enter ready.\nWhen I attack, kill all damaged enemy units here.'` from `apitcg`
+  - `apitcg`: `'I enter ready.\nWhen I attack, kill all damaged enemy units here.'`
   - `riftbound_tools`: `'I enter ready. When I attack, kill all damaged enemy units here.'`
 - **OGN-160** Dazzling Aurora -> chose `'At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit. Play it, ignoring its cost, and recycle the rest.'` from `apitcg`
   - `apitcg`: `'At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit. Play it, ignoring its cost, and recycle the rest.'`
   - `riftbound_tools`: `'At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit and banish it. Play it, ignoring its cost, and recycle the rest.'`
-- **OGN-161** Deadbloom Predator -> chose `'DEFLECT (Opponents must play rune to choose me with a spell or effect.)\n\n\nYou may play me to an occupied enemy battlefield.'` from `apitcg`
-  - `apitcg`: `'DEFLECT (Opponents must play rune to choose me with a spell or effect.)\n\n\nYou may play me to an occupied enemy battlefield.'`
+- **OGN-161** Deadbloom Predator -> chose `'DEFLECT (Opponents must play rune to choose me with a spell or effect.)\nYou may play me to an occupied enemy battlefield.'` from `apitcg`
+  - `apitcg`: `'DEFLECT (Opponents must play rune to choose me with a spell or effect.)\nYou may play me to an occupied enemy battlefield.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) You may play me to an occupied enemy battlefield.'`
-- **OGN-162** Miss Fortune - Captain -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\nThe first time I move each turn, you may ready something else that's exhausted."` from `apitcg`
-  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\nThe first time I move each turn, you may ready something else that's exhausted."`
+- **OGN-162** Miss Fortune - Captain -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted."` from `apitcg`
+  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) [Ganking] (I can move from battlefield to battlefield.) The first time I move each turn, you may ready something else that's exhausted."`
-- **OGN-162A** Miss Fortune - Captain (Alternate Art) -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\n\nThe first time I move each turn, you may ready something else that's exhausted."` from `apitcg`
-  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\n\n\n\nGANKING (I can move from battlefield to battlefield.)\n\n\n\nThe first time I move each turn, you may ready something else that's exhausted."`
+- **OGN-162A** Miss Fortune - Captain (Alternate Art) -> chose `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted."` from `apitcg`
+  - `apitcg`: `"ACCELERATE (You may pay 1 body as an additional cost to have me enter ready.)\nGANKING (I can move from battlefield to battlefield.)\nThe first time I move each turn, you may ready something else that's exhausted."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) [Ganking] (I can move from battlefield to battlefield.) The first time I move each turn, you may ready something else that's exhausted."`
 - **OGN-163** Seal of Strength -> chose `"Exhaust: REACTION - ADD body. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD body. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 body rune. (Abilities that add resources can't be reacted to.)"`
-- **OGN-164** Sett - Brawler -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
-  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn."`
+- **OGN-164** Sett - Brawler -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
+  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."`
   - `riftbound_tools`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 might buff.) Spend my buff: Give me +4 might this turn."`
-- **OGN-164A** Sett - Brawler (Alternate Art) -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\n\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
-  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\n\nSpend my buff: Give me +4 Might this turn."`
+- **OGN-164A** Sett - Brawler (Alternate Art) -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
+  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."`
   - `riftbound_tools`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 might buff.) Spend my buff: Give me +4 might this turn."`
 - **OGN-167** Ember Monk -> chose `'When you play a card from HIDDEN, give me +2 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you play a card from HIDDEN, give me +2 Might this turn.'`
   - `riftbound_tools`: `'When you play a card from [Hidden], give me +2 might this turn.'`
-- **OGN-168** Fight or Flight -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nMove a unit from a battlefield to its base.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nMove a unit from a battlefield to its base.'`
+- **OGN-168** Fight or Flight -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nMove a unit from a battlefield to its base.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nMove a unit from a battlefield to its base.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Move a unit from a battlefield to its base.'`
-- **OGN-169** Gust -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a unit at a battlefield with 3 Might or less to its owner's hand."` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nReturn a unit at a battlefield with 3 Might or less to its owner's hand."`
+- **OGN-169** Gust -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\nReturn a unit at a battlefield with 3 Might or less to its owner's hand."` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\nReturn a unit at a battlefield with 3 Might or less to its owner's hand."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) Return a unit at a battlefield with 3 might or less to its owner's hand."`
-- **OGN-170** Morbid Return -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit from your trash to your hand.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit from your trash to your hand.'`
+- **OGN-170** Morbid Return -> chose `'ACTION (Play on your turn or in showdowns.)\nReturn a unit from your trash to your hand.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nReturn a unit from your trash to your hand.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Return a unit from your trash to your hand.'`
 - **OGN-171** Mystic Poro -> chose `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)'` from `apitcg`
   - `apitcg`: `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)'`
   - `riftbound_tools`: `'[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.)'`
-- **OGN-172** Rebuke -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit at a battlefield to its owner's hand."` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nReturn a unit at a battlefield to its owner's hand."`
+- **OGN-172** Rebuke -> chose `"ACTION (Play on your turn or in showdowns.)\nReturn a unit at a battlefield to its owner's hand."` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nReturn a unit at a battlefield to its owner's hand."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Return a unit at a battlefield to its owner's hand."`
-- **OGN-173** Ride The Wind -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nMove a friendly unit and ready it.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nMove a friendly unit and ready it.'`
+- **OGN-173** Ride The Wind -> chose `'ACTION (Play on your turn or in showdowns.)\nMove a friendly unit and ready it.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nMove a friendly unit and ready it.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Move a friendly unit and ready it.'`
-- **OGN-174** Sai Scout -> chose `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nYou may play me to an open battlefield.'` from `apitcg`
-  - `apitcg`: `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nYou may play me to an open battlefield.'`
+- **OGN-174** Sai Scout -> chose `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nYou may play me to an open battlefield.'` from `apitcg`
+  - `apitcg`: `'VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nYou may play me to an open battlefield.'`
   - `riftbound_tools`: `'[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.) You may play me to an open battlefield.'`
 - **OGN-178** Undercover Agent -> chose `'DEATHKNELL - Discard 2, then draw 2. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'DEATHKNELL - Discard 2, then draw 2. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Deathknell] — Discard 2, then draw 2. (When I die, get the effect.)'`
-- **OGN-179** Acceptable Losses -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nEach player kills one of their gear.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nEach player kills one of their gear.'`
+- **OGN-179** Acceptable Losses -> chose `'ACTION (Play on your turn or in showdowns.)\nEach player kills one of their gear.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nEach player kills one of their gear.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Each player kills one of their gear.'`
 - **OGN-180** Fading Memories -> chose `"Give a unit at a battlefield or a gear TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before.)"` from `apitcg`
   - `apitcg`: `"Give a unit at a battlefield or a gear TEMPORARY. (Kill it at the start of its controller's Beginning Phase, before.)"`
@@ -1720,8 +1720,8 @@ Missing field counts across incomplete cards:
 - **OGN-181** Pack of Wonders -> chose `"Exhaust: Return another friendly gear, unit, or HIDDEN card to its owner's hand."` from `apitcg`
   - `apitcg`: `"Exhaust: Return another friendly gear, unit, or HIDDEN card to its owner's hand."`
   - `riftbound_tools`: `"exhaust: Return another friendly gear, unit, or facedown card to its owner's hand."`
-- **OGN-183** Stacked Deck -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.'`
+- **OGN-183** Stacked Deck -> chose `'ACTION (Play on your turn or in showdowns.)\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nLook at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Look at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest.'`
 - **OGN-184** The Syren -> chose `'1, Exhaust: Move a friendly unit at a battlefield to your base.'` from `apitcg`
   - `apitcg`: `'1, Exhaust: Move a friendly unit at a battlefield to your base.'`
@@ -1729,20 +1729,20 @@ Missing field counts across incomplete cards:
 - **OGN-186** Treasure Trove -> chose `'When this leaves the board, draw 1 and channel 1 rune exhausted.'` from `apitcg`
   - `apitcg`: `'When this leaves the board, draw 1 and channel 1 rune exhausted.'`
   - `riftbound_tools`: `'When this leaves the board, draw 1 and channel 1 rune exhausted. 1 chaos rune, exhaust: Kill this.'`
-- **OGN-189** Kayn - Unleashed -> chose `"GANKING (I can move from battlefield to battlefield.)\n\n\nIf I have moved twice this turn, I don't take damage."` from `apitcg`
-  - `apitcg`: `"GANKING (I can move from battlefield to battlefield.)\n\n\nIf I have moved twice this turn, I don't take damage."`
+- **OGN-189** Kayn - Unleashed -> chose `"GANKING (I can move from battlefield to battlefield.)\nIf I have moved twice this turn, I don't take damage."` from `apitcg`
+  - `apitcg`: `"GANKING (I can move from battlefield to battlefield.)\nIf I have moved twice this turn, I don't take damage."`
   - `riftbound_tools`: `"[Ganking] (I can move from battlefield to battlefield.) If I have moved twice this turn, I don't take damage."`
 - **OGN-190** Kog'Maw - Caustic -> chose `'DEATHKNELL - Deal 4 to all units at my battlefield. (When I die, get the effect)'` from `apitcg`
   - `apitcg`: `'DEATHKNELL - Deal 4 to all units at my battlefield. (When I die, get the effect)'`
   - `riftbound_tools`: `'[Deathknell] — Deal 4 to all units at my battlefield. (When I die, get the effect.)'`
-- **OGN-191** Maddened Marauder -> chose `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, move a unit from a battlefield to its base.'` from `apitcg`
-  - `apitcg`: `'TANK (I must be assigned combat damage first.)\n\n\nWhen you play me, move a unit from a battlefield to its base.'`
+- **OGN-191** Maddened Marauder -> chose `'TANK (I must be assigned combat damage first.)\nWhen you play me, move a unit from a battlefield to its base.'` from `apitcg`
+  - `apitcg`: `'TANK (I must be assigned combat damage first.)\nWhen you play me, move a unit from a battlefield to its base.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) When you play me, move a unit from a battlefield to its base.'`
-- **OGN-193** Miss Fortune - Buccaneer -> chose `'You may play me to an open battlefield.\n\n\nFriendly units may be played to open battlefields.'` from `apitcg`
-  - `apitcg`: `'You may play me to an open battlefield.\n\n\nFriendly units may be played to open battlefields.'`
+- **OGN-193** Miss Fortune - Buccaneer -> chose `'You may play me to an open battlefield.\nFriendly units may be played to open battlefields.'` from `apitcg`
+  - `apitcg`: `'You may play me to an open battlefield.\nFriendly units may be played to open battlefields.'`
   - `riftbound_tools`: `'You may play me to an open battlefield. Friendly units may be played to open battlefields.'`
-- **OGN-193A** Miss Fortune - Buccaneer (Alternate Art) -> chose `'You may play me to an open battlefield.\n\n\n\nFriendly units may be played to open battlefields.'` from `apitcg`
-  - `apitcg`: `'You may play me to an open battlefield.\n\n\n\nFriendly units may be played to open battlefields.'`
+- **OGN-193A** Miss Fortune - Buccaneer (Alternate Art) -> chose `'You may play me to an open battlefield.\nFriendly units may be played to open battlefields.'` from `apitcg`
+  - `apitcg`: `'You may play me to an open battlefield.\nFriendly units may be played to open battlefields.'`
   - `riftbound_tools`: `'You may play me to an open battlefield. Friendly units may be played to open battlefields.'`
 - **OGN-194** Nocturne - Horrifying -> chose `"GANKING (I can move from battlefield to battlefield.) When you look at cards from the top of your deck (and don't draw them) and see me, you may play me for [Power]."` from `apitcg`
   - `apitcg`: `"GANKING (I can move from battlefield to battlefield.) When you look at cards from the top of your deck (and don't draw them) and see me, you may play me for [Power]."`
@@ -1750,17 +1750,17 @@ Missing field counts across incomplete cards:
 - **OGN-195** Rhasa the Sunderer -> chose `'I cost 1 less for each card in your trash.'` from `apitcg`
   - `apitcg`: `'I cost 1 less for each card in your trash.'`
   - `riftbound_tools`: `'I cost 1 energy less for each card in your trash.'`
-- **OGN-197** Teemo - Scout -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give me +3 Might this turn.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, give me +3 Might this turn.'`
+- **OGN-197** Teemo - Scout -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me, give me +3 might this turn.'`
-- **OGN-197A** Teemo - Scout (Alternate Art) -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen you play me, give me +3 Might this turn.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\n\nWhen you play me, give me +3 Might this turn.'`
+- **OGN-197A** Teemo - Scout (Alternate Art) -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, give me +3 Might this turn.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me, give me +3 might this turn.'`
-- **OGN-199** Tideturner -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.'`
+- **OGN-199** Tideturner -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen you play me, you may choose a friendly unit. Move me to its location and it to my original location.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me, you may choose a unit you control at another location. Move me to its location and it to my original location.'`
-- **OGN-200** Twisted Fate - Gambler -> chose `'When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\n\n\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\n\n\nMind - Draw 1.\n\n\nOrder - Stun an enemy unit.'` from `apitcg`
-  - `apitcg`: `'When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\n\n\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\n\n\nMind - Draw 1.\n\n\nOrder - Stun an enemy unit.'`
+- **OGN-200** Twisted Fate - Gambler -> chose `'When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\nMind - Draw 1.\nOrder - Stun an enemy unit.'` from `apitcg`
+  - `apitcg`: `'When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:\nFury - Deal 2 to an enemy unit here and 1 to all other enemy units here.\nMind - Draw 1.\nOrder - Stun an enemy unit.'`
   - `riftbound_tools`: `'When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain:<ul><li>1 fury rune — Deal 2 to an enemy unit here and 1 to all other enemy units here.</li><li>1 mind rune — Draw 1.</li><li>1 order rune — Stun an enemy unit.</li></ul>'`
 - **OGN-202** Jinx - Rebel -> chose `'When you discard one or more cards, ready me and give me +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you discard one or more cards, ready me and give me +1 Might this turn.'`
@@ -1768,23 +1768,23 @@ Missing field counts across incomplete cards:
 - **OGN-202A** Jinx - Rebel (Alternate Art) -> chose `'When you discard one or more cards, ready me and give me +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you discard one or more cards, ready me and give me +1 Might this turn.'`
   - `riftbound_tools`: `'When you discard one or more cards, ready me and give me +1 might this turn.'`
-- **OGN-203** Possession -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)"`
+- **OGN-203** Possession -> chose `"ACTION (Play on your turn or in showdowns.)\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nChoose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Choose an enemy unit at a battlefield. Take control of it and recall it. (Send it to your base. This isn't a move.)"`
 - **OGN-204** Seal of Discord -> chose `"Exhaust: REACTION - ADD chaos. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD chaos. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 chaos rune. (Abilities that add resources can't be reacted to.)"`
-- **OGN-205** Yasuo - Windrider -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.'`
+- **OGN-205** Yasuo - Windrider -> chose `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) The third time I move in a turn, you score 1 point.'`
-- **OGN-205A** Yasuo - Windrider (Alternate Art) -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\n\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\n\nThe third time I move in a turn, you score 1 point.'`
+- **OGN-205A** Yasuo - Windrider (Alternate Art) -> chose `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) The third time I move in a turn, you score 1 point.'`
-- **OGN-206** Back to Back -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive two friendly units each +2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nGive two friendly units each +2 Might this turn.'`
+- **OGN-206** Back to Back -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nGive two friendly units each +2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nGive two friendly units each +2 Might this turn.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give two friendly units each +2 might this turn.'`
-- **OGN-207** Call to Glory -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\n\n\nGive a unit +3 Might this turn."` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\n\n\nGive a unit +3 Might this turn."`
+- **OGN-207** Call to Glory -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\nGive a unit +3 Might this turn."` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\nAs you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost.\nGive a unit +3 Might this turn."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) As you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Give a unit +3 might this turn."`
 - **OGN-210** Daring Poro -> chose `"ASSAULT (+1 Might while I'm an attacker.)"` from `apitcg`
   - `apitcg`: `"ASSAULT (+1 Might while I'm an attacker.)"`
@@ -1792,11 +1792,11 @@ Missing field counts across incomplete cards:
 - **OGN-211** Faithful Manufactor -> chose `'When you play me, play a 1 Might Recruit unit token here.'` from `apitcg`
   - `apitcg`: `'When you play me, play a 1 Might Recruit unit token here.'`
   - `riftbound_tools`: `'When you play me, play a 1 might Recruit unit token here.'`
-- **OGN-212** Forge of the Future -> chose `'When you play this, play a 1 Might Recruit unit token at your base.\n\n\nKill this: Recycle up to 4 cards from trashes.'` from `apitcg`
-  - `apitcg`: `'When you play this, play a 1 Might Recruit unit token at your base.\n\n\nKill this: Recycle up to 4 cards from trashes.'`
+- **OGN-212** Forge of the Future -> chose `'When you play this, play a 1 Might Recruit unit token at your base.\nKill this: Recycle up to 4 cards from trashes.'` from `apitcg`
+  - `apitcg`: `'When you play this, play a 1 Might Recruit unit token at your base.\nKill this: Recycle up to 4 cards from trashes.'`
   - `riftbound_tools`: `'When you play this, play a 1 might Recruit unit token at your base. Kill this: Recycle up to 4 cards from trashes.'`
-- **OGN-213** Hidden Blade -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill a unit at a battlefield. Its controller draws 2.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill a unit at a battlefield. Its controller draws 2.'`
+- **OGN-213** Hidden Blade -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield. Its controller draws 2.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield. Its controller draws 2.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Kill a unit at a battlefield. Its controller draws 2.'`
 - **OGN-215** Petty Officer -> chose `"ASSAULT (+1 Might while I'm an attacker.)"` from `apitcg`
   - `apitcg`: `"ASSAULT (+1 Might while I'm an attacker.)"`
@@ -1810,8 +1810,8 @@ Missing field counts across incomplete cards:
 - **OGN-218** Vanguard Captain -> chose `"LEGION - When you play me, play two 1 Might Recruit unit token here. (Get the effect if you've played another card this turn.)"` from `apitcg`
   - `apitcg`: `"LEGION - When you play me, play two 1 Might Recruit unit token here. (Get the effect if you've played another card this turn.)"`
   - `riftbound_tools`: `"[Legion] — When you play me, play two 1 might Recruit unit tokens here. (Get the effect if you've played another card this turn.)"`
-- **OGN-220** Facebreaker -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)"`
+- **OGN-220** Facebreaker -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nStun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Stun a friendly unit and an enemy unit at the same battlefield. (They don't deal combat damage this turn.)"`
 - **OGN-221** Imperial Decree -> chose `'ACTION (Play on your turn or in showdowns.) When any unit takes damage this turn, kill it.'` from `apitcg`
   - `apitcg`: `'ACTION (Play on your turn or in showdowns.) When any unit takes damage this turn, kill it.'`
@@ -1822,8 +1822,8 @@ Missing field counts across incomplete cards:
 - **OGN-223** Peak Guardian -> chose `"When you play me, buff me. Then, if I am at a battlefield, buff all other friendly units there. (To buff a unit give it a +1 Might if it doesn't already have one.)"` from `apitcg`
   - `apitcg`: `"When you play me, buff me. Then, if I am at a battlefield, buff all other friendly units there. (To buff a unit give it a +1 Might if it doesn't already have one.)"`
   - `riftbound_tools`: `"When you play me, buff me. Then, if I am at a battlefield, buff all other friendly units there. (To buff a unit, give it a +1 might buff if it doesn't already have one.)"`
-- **OGN-224** Salvage -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nYou may kill a gear. Draw 1.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nYou may kill a gear. Draw 1.'`
+- **OGN-224** Salvage -> chose `'ACTION (Play on your turn or in showdowns.)\nYou may kill a gear. Draw 1.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nYou may kill a gear. Draw 1.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) You may kill up to one gear. Draw 1.'`
 - **OGN-226** Spectral Matron -> chose `'When you play me, you may play a unit costing no more than 3 and no more than rune from your trash, ignoring its cost.'` from `apitcg`
   - `apitcg`: `'When you play me, you may play a unit costing no more than 3 and no more than rune from your trash, ignoring its cost.'`
@@ -1831,50 +1831,50 @@ Missing field counts across incomplete cards:
 - **OGN-228** Vanguard Helm -> chose `"When a buffed friendly unit dies, buff another friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When a buffed friendly unit dies, buff another friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"`
   - `riftbound_tools`: `"When a buffed friendly unit dies, buff another friendly unit. (If it doesn't have a buff, it gets a +1 might buff.)"`
-- **OGN-230** Albus Ferros -> chose `'When you play me, spend any number of buffs.\n\n\nFor each buff spent, channel 1 rune exhausted.'` from `apitcg`
-  - `apitcg`: `'When you play me, spend any number of buffs.\n\n\nFor each buff spent, channel 1 rune exhausted.'`
+- **OGN-230** Albus Ferros -> chose `'When you play me, spend any number of buffs.\nFor each buff spent, channel 1 rune exhausted.'` from `apitcg`
+  - `apitcg`: `'When you play me, spend any number of buffs.\nFor each buff spent, channel 1 rune exhausted.'`
   - `riftbound_tools`: `'When you play me, spend any number of buffs. For each buff spent, channel 1 rune exhausted.'`
-- **OGN-231** Commander Ledros -> chose `'As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\n\n\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\n\n\nGANKING (I can move from battlefield to battlefield.)'` from `apitcg`
-  - `apitcg`: `'As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\n\n\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\n\n\nGANKING (I can move from battlefield to battlefield.)'`
+- **OGN-231** Commander Ledros -> chose `'As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\nGANKING (I can move from battlefield to battlefield.)'` from `apitcg`
+  - `apitcg`: `'As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by order for each killed this way.\nDEFLECT (Opponents must pay rune to choose me with a spell or ability.)\nGANKING (I can move from battlefield to battlefield.)'`
   - `riftbound_tools`: `'As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by 1 order rune for each killed this way. [Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) [Ganking] (I can move from battlefield to battlefield.)'`
 - **OGN-232** Fiora - Victorious -> chose `"While I'm MIGHTY, I have DEFLECT, GANKING and SHIELD. (I'm Mighty while I have 5+ Might.)"` from `apitcg`
   - `apitcg`: `"While I'm MIGHTY, I have DEFLECT, GANKING and SHIELD. (I'm Mighty while I have 5+ Might.)"`
   - `riftbound_tools`: `"While I'm [Mighty], I have [Deflect], [Ganking], and [Shield]. (I'm Mighty while I have 5+ might.)"`
-- **OGN-233** Grand Strategem -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nGive friendly units +5 Might this turn.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nGive friendly units +5 Might this turn.'`
+- **OGN-233** Grand Strategem -> chose `'ACTION (Play on your turn or in showdowns.)\nGive friendly units +5 Might this turn.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nGive friendly units +5 Might this turn.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Give friendly units +5 might this turn.'`
-- **OGN-235** Karma - Channeler -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"` from `apitcg`
-  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
+- **OGN-235** Karma - Channeler -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"` from `apitcg`
+  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
   - `riftbound_tools`: `"[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.) When you recycle one or more cards to your Main Deck, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
 - **OGN-236** Karthus - Eternal -> chose `'Your DEATHKNELL trigger an additional time'` from `apitcg`
   - `apitcg`: `'Your DEATHKNELL trigger an additional time'`
   - `riftbound_tools`: `'Your [Deathknell] effects trigger an additional time.'`
-- **OGN-238** Leona - Determined -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\nWhen I attack, stun an enemy unit here.\n\n\n(It doesn't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\nWhen I attack, stun an enemy unit here.\n\n\n(It doesn't deal combat damage this turn.)"`
+- **OGN-238** Leona - Determined -> chose `"SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) When I attack, stun an enemy unit here. (It doesn't deal combat damage this turn.)"`
-- **OGN-238A** Leona - Determined (Alternate Art) -> chose `"SHIELD (+1 Might while I'm a defender.)\n\n\n\nWhen I attack, stun an enemy unit here.\n\n\n\n(It doesn't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\n\n\n\nWhen I attack, stun an enemy unit here.\n\n\n\n(It doesn't deal combat damage this turn.)"`
+- **OGN-238A** Leona - Determined (Alternate Art) -> chose `"SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"SHIELD (+1 Might while I'm a defender.)\nWhen I attack, stun an enemy unit here.\n(It doesn't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Shield] (+1 might while I'm a defender.) When I attack, stun an enemy unit here. (It doesn't deal combat damage this turn.)"`
 - **OGN-239** Machine Evangel -> chose `'DEATHKNELL - Play three 1 might Recruit unit tokens into your base. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'DEATHKNELL - Play three 1 might Recruit unit tokens into your base. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Deathknell] — Play three 1 might Recruit unit tokens into your base. (When I die, get the effect.)'`
-- **OGN-240** Sett - Kingpin -> chose `'TANK (I must be assigned combat damage first.)\n\n\nI get +1 might for each buffed friendly unit at my battlefield.'` from `apitcg`
-  - `apitcg`: `'TANK (I must be assigned combat damage first.)\n\n\nI get +1 might for each buffed friendly unit at my battlefield.'`
+- **OGN-240** Sett - Kingpin -> chose `'TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.'` from `apitcg`
+  - `apitcg`: `'TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) I get +1 might for each buffed friendly unit at my battlefield.'`
-- **OGN-240A** Sett - Kingpin (Alternate Art) -> chose `'TANK (I must be assigned combat damage first.)\n\n\n\nI get +1 might for each buffed friendly unit at my battlefield.'` from `apitcg`
-  - `apitcg`: `'TANK (I must be assigned combat damage first.)\n\n\n\nI get +1 might for each buffed friendly unit at my battlefield.'`
+- **OGN-240A** Sett - Kingpin (Alternate Art) -> chose `'TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.'` from `apitcg`
+  - `apitcg`: `'TANK (I must be assigned combat damage first.)\nI get +1 might for each buffed friendly unit at my battlefield.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) I get +1 might for each buffed friendly unit at my battlefield.'`
-- **OGN-241** Shen - Kinkou -> chose `"REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nSHIELD 2 (+2 might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)"` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nSHIELD 2 (+2 might while I'm a defender.)\n\n\nTANK (I must be assigned combat damage first.)"`
+- **OGN-241** Shen - Kinkou -> chose `"REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nSHIELD 2 (+2 might while I'm a defender.)\nTANK (I must be assigned combat damage first.)"` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nSHIELD 2 (+2 might while I'm a defender.)\nTANK (I must be assigned combat damage first.)"`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve, including to a battlefield you control.) [Shield 2] (+2 might while I'm a defender.) [Tank] (I must be assigned combat damage first.)"`
 - **OGN-242** Baited Hook -> chose `'1 order exhaust: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may play a unit from among them that has Might up to 1 more than the killed unit, ignoring its cost. Then recycle the rest.'` from `apitcg`
   - `apitcg`: `'1 order exhaust: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may play a unit from among them that has Might up to 1 more than the killed unit, ignoring its cost. Then recycle the rest.'`
   - `riftbound_tools`: `'1 energy and 1 order rune, exhaust: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may banish a unit from among them that has Might up to 1 more than the killed unit and play it, ignoring its cost. Then recycle the rest.'`
-- **OGN-243** Darius - Executioner -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here."` from `apitcg`
-  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here."`
+- **OGN-243** Darius - Executioner -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."` from `apitcg`
+  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."`
   - `riftbound_tools`: `"[Legion] — When you play me, ready me. (Get the effect if you've played another card this turn) Other friendly units have +1 might here."`
-- **OGN-243A** Darius - Executioner (Alternate Art) -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\n\nOther friendly units have +1 might here."` from `apitcg`
-  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\n\nOther friendly units have +1 might here."`
+- **OGN-243A** Darius - Executioner (Alternate Art) -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."` from `apitcg`
+  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."`
   - `riftbound_tools`: `"[Legion] — When you play me, ready me. (Get the effect if you've played another card this turn) Other friendly units have +1 might here."`
 - **OGN-245** Seal of Unity -> chose `"Exhaust: REACTION - ADD order. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD order. (Abilities that add resources can't be reacted to.)"`
@@ -1882,8 +1882,8 @@ Missing field counts across incomplete cards:
 - **OGN-247** Kai'Sa - Daughter of the Void -> chose `"Exhaust: REACTION - ADD rune. Use only to play spells. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD rune. Use only to play spells. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 rune of any type. Use only to play spells. (Abilities that add resources can't be reacted to.)"`
-- **OGN-248** Icathian Rain -> chose `'Do this 6 times:\n\n\nDeal 2 to a unit. (You can choose different units.)'` from `apitcg`
-  - `apitcg`: `'Do this 6 times:\n\n\nDeal 2 to a unit. (You can choose different units.)'`
+- **OGN-248** Icathian Rain -> chose `'Do this 6 times:\nDeal 2 to a unit. (You can choose different units.)'` from `apitcg`
+  - `apitcg`: `'Do this 6 times:\nDeal 2 to a unit. (You can choose different units.)'`
   - `riftbound_tools`: `'Deal 2 to a unit. Deal 2 to a unit. Deal 2 to a unit. Deal 2 to a unit. Deal 2 to a unit. Deal 2 to a unit.'`
 - **OGN-249** Volibear - Relentless Storm -> chose `'When you play a MIGHTY unit, you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might)'` from `apitcg`
   - `apitcg`: `'When you play a MIGHTY unit, you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might)'`
@@ -1891,20 +1891,20 @@ Missing field counts across incomplete cards:
 - **OGN-251** Jinx - Loose Cannon -> chose `'At start of your Beginning Phase, draw 1 if you have 1 or fewer cards in your hand.'` from `apitcg`
   - `apitcg`: `'At start of your Beginning Phase, draw 1 if you have 1 or fewer cards in your hand.'`
   - `riftbound_tools`: `'At start of your Beginning Phase, draw 1 if you have one or fewer cards in your hand.'`
-- **OGN-252** Super Mega Death Rocket! -> chose `'Deal 5 to a unit.\n\n\nWhen you conquer, you may discard 1 to return this from your trash to your hand.'` from `apitcg`
-  - `apitcg`: `'Deal 5 to a unit.\n\n\nWhen you conquer, you may discard 1 to return this from your trash to your hand.'`
+- **OGN-252** Super Mega Death Rocket! -> chose `'Deal 5 to a unit.\nWhen you conquer, you may discard 1 to return this from your trash to your hand.'` from `apitcg`
+  - `apitcg`: `'Deal 5 to a unit.\nWhen you conquer, you may discard 1 to return this from your trash to your hand.'`
   - `riftbound_tools`: `'Deal 5 to a unit. When you conquer, you may discard 1 to return this from your trash to your hand.'`
 - **OGN-253** Darius - Hand of Noxus -> chose `"Exhaust REACTION, LEGION - ADD 1 (Abilities that add resources can't be reacted to. Get the effect if you've played a card this turn.)"` from `apitcg`
   - `apitcg`: `"Exhaust REACTION, LEGION - ADD 1 (Abilities that add resources can't be reacted to. Get the effect if you've played a card this turn.)"`
   - `riftbound_tools`: `"exhaust: [Reaction], [Legion] — [Add] 1 energy. (Abilities that add resources can't be reacted to. Get the effect if you've played a card this turn.)"`
-- **OGN-254** Noxian Guillotine -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nChoose a unit. Kill it the next time it takes damage this turn.\n\n\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nChoose a unit. Kill it the next time it takes damage this turn.\n\n\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)"`
+- **OGN-254** Noxian Guillotine -> chose `"ACTION (Play on your turn or in showdowns.)\nChoose a unit. Kill it the next time it takes damage this turn.\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nChoose a unit. Kill it the next time it takes damage this turn.\nLEGION - Kill it now instead. (Get the effect if you've played another card this turn.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Choose a unit. Kill it the next time it takes damage this turn. [Legion] — Kill it now instead. (Get the effect if you've played another card this turn.)"`
 - **OGN-255** Ahri - Nine-Tailed Fox -> chose `'When an enemy unit attacks a battlefield you control, give it -1 Might this turn, to a minimum of 1 Might.'` from `apitcg`
   - `apitcg`: `'When an enemy unit attacks a battlefield you control, give it -1 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'When an enemy unit attacks a battlefield you control, give it -1 might this turn, to a minimum of 1 might.'`
-- **OGN-256** Fox-Fire -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill any number of units at a battlefield with total Might 4 or less.'` from `apitcg`
-  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nACTION (Play on your turn or in showdowns.)\n\n\nKill any number of units at a battlefield with total Might 4 or less.'`
+- **OGN-256** Fox-Fire -> chose `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill any number of units at a battlefield with total Might 4 or less.'` from `apitcg`
+  - `apitcg`: `'HIDDEN (Hide now for 1 Rune to react with later for 0.)\nACTION (Play on your turn or in showdowns.)\nKill any number of units at a battlefield with total Might 4 or less.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Kill any number of units at a battlefield with total Might 4 or less.'`
 - **OGN-257** Lee Sin - Blind Monk -> chose `"1, Exhaust: Buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"1, Exhaust: Buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"`
@@ -1915,17 +1915,17 @@ Missing field counts across incomplete cards:
 - **OGN-259** Yasuo - Unforgiven -> chose `'2, Exhaust: Move a friendly unit to or from your base.'` from `apitcg`
   - `apitcg`: `'2, Exhaust: Move a friendly unit to or from your base.'`
   - `riftbound_tools`: `'2 energy, exhaust: Move a friendly unit to or from its base.'`
-- **OGN-260** Last Breath -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.'`
+- **OGN-260** Last Breath -> chose `'ACTION (Play on your turn or in showdowns.)\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nReady a friendly unit. It deals damage equal to its Might to an enemy at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Ready a friendly unit. It deals damage equal to its Might to an enemy unit at a battlefield.'`
 - **OGN-261** Leona - Radiant Dawn -> chose `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"`
   - `riftbound_tools`: `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff.)"`
-- **OGN-262** Zenith Blade -> chose `"ACTION (Play on your turn or in showdowns.)\n\n\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\n\n\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)"`
+- **OGN-262** Zenith Blade -> chose `"ACTION (Play on your turn or in showdowns.)\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"ACTION (Play on your turn or in showdowns.)\nStun an enemy at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Stun an enemy unit at a battlefield. You may move a friendly unit to that enemy unit's battlefield. (A stunned unit doesn't deal combat damage this turn.)"`
-- **OGN-263** Teemo - Swift Scout -> chose `'You may pay 1 to hide a card with HIDDEN instead of rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'` from `apitcg`
-  - `apitcg`: `'You may pay 1 to hide a card with HIDDEN instead of rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
+- **OGN-263** Teemo - Swift Scout -> chose `'You may pay 1 to hide a card with HIDDEN instead of rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'` from `apitcg`
+  - `apitcg`: `'You may pay 1 to hide a card with HIDDEN instead of rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
   - `riftbound_tools`: `'You may pay 1 energy to hide a card with [Hidden] instead of 1 rune of any type. 1 energy, exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
 - **OGN-264** Guerilla Warfare -> chose `'Return up to two cards with HIDDEN  from your trash to your hand. You can hide ignoring costs this turn.'` from `apitcg`
   - `apitcg`: `'Return up to two cards with HIDDEN  from your trash to your hand. You can hide ignoring costs this turn.'`
@@ -1933,17 +1933,17 @@ Missing field counts across incomplete cards:
 - **OGN-265** Viktor - Herald of the Arcane -> chose `'1, Exhaust: Play a 1 Might Recruit unit token.'` from `apitcg`
   - `apitcg`: `'1, Exhaust: Play a 1 Might Recruit unit token.'`
   - `riftbound_tools`: `'1 energy, exhaust: Play a 1 might Recruit unit token.'`
-- **OGN-266** Siphon Power -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\n\n\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.'`
+- **OGN-266** Siphon Power -> chose `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play any time, even before spells and abilities resolve.)\nChoose a battlefield. Give friendly units there +1 Might this turn and enemy units there -1 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Choose a battlefield. Give friendly units there +1 might this turn and enemy units there -1 might this turn, to a minimum of 1 might.'`
 - **OGN-267** Miss Fortune - Bounty Hunter -> chose `'Exhaust: Give a unit GANKING this turn. (It can move from battlefield to battlefield.)'` from `apitcg`
   - `apitcg`: `'Exhaust: Give a unit GANKING this turn. (It can move from battlefield to battlefield.)'`
   - `riftbound_tools`: `'exhaust: Give a unit [Ganking] this turn. (It can move from battlefield to battlefield.)'`
-- **OGN-268** Bullet Time -> chose `'ACTION (Play on your turn or in showdowns.)\n\n\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\n\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.'`
+- **OGN-268** Bullet Time -> chose `'ACTION (Play on your turn or in showdowns.)\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nPay any amount of rune to deal that much damage to all enemy units at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Pay any amount of 1 rune of any type to deal that much damage to all enemy units at a battlefield.'`
-- **OGN-269** Sett - The Boss -> chose `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me."` from `apitcg`
-  - `apitcg`: `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me."`
+- **OGN-269** Sett - The Boss -> chose `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me."` from `apitcg`
+  - `apitcg`: `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me."`
   - `riftbound_tools`: `"If a buffed unit you control would die, you may pay 1 rune of any type, exhaust me, and spend its buff to heal it, exhaust it, and recall it instead. (Send it to base. This isn't a move.) When you conquer, ready me."`
 - **OGN-270** Showstopper -> chose `"Buff a friendly unit in your base, then move it to a battlefield. (If it doesn't have a buff, it gets a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"Buff a friendly unit in your base, then move it to a battlefield. (If it doesn't have a buff, it gets a +1 Might buff.)"`
@@ -2011,8 +2011,8 @@ Missing field counts across incomplete cards:
 - **OGN-306** Leona - Radiant Dawn (Overnumbered) -> chose `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"` from `apitcg`
   - `apitcg`: `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 Might buff.)"`
   - `riftbound_tools`: `"When you stun one or more enemy units, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff.)"`
-- **OGN-307** Teemo - Swift Scout (Overnumbered) -> chose `'You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'` from `apitcg`
-  - `apitcg`: `'You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n\n\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
+- **OGN-307** Teemo - Swift Scout (Overnumbered) -> chose `'You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'` from `apitcg`
+  - `apitcg`: `'You may pay 1 to hide a card with HIDDEN instead of 1 Rune.\n1, Exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
   - `riftbound_tools`: `'You may pay 1 energy to hide a card with [Hidden] instead of 1 rune of any type. 1 energy, exhaust: Put a Teemo unit you own into your hand from your Champion Zone or the board.'`
 - **OGN-308** Viktor - Herald of the Arcane (Overnumbered) -> chose `'1, Exhaust: Play a 1 Might Recruit unit token.'` from `apitcg`
   - `apitcg`: `'1, Exhaust: Play a 1 Might Recruit unit token.'`
@@ -2020,14 +2020,14 @@ Missing field counts across incomplete cards:
 - **OGN-309** Miss Fortune - Bounty Hunter (Overnumbered) -> chose `'Exhaust: Give a unit GANKING this turn. (It can move from battlefield to battlefield.)'` from `apitcg`
   - `apitcg`: `'Exhaust: Give a unit GANKING this turn. (It can move from battlefield to battlefield.)'`
   - `riftbound_tools`: `'exhaust: Give a unit [Ganking] this turn. (It can move from battlefield to battlefield.)'`
-- **OGN-310** Sett - The Boss (Overnumbered) -> chose `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me."` from `apitcg`
-  - `apitcg`: `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\n\n\nWhen you conquer, ready me."`
+- **OGN-310** Sett - The Boss (Overnumbered) -> chose `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me."` from `apitcg`
+  - `apitcg`: `"When a buffed unit you control would die, you may pay rune and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.)\nWhen you conquer, ready me."`
   - `riftbound_tools`: `"When a buffed unit you control would die, you may pay 1 rune of any type and exhaust me to spend its buff and recall it exhausted instead. (Send it to base. This isn't a move.) When you conquer, ready me."`
-- **OGS-001** Annie - Fiery -> chose `'Your spells and abilities deal 1 Bonus Damage.\n\n(Each instance of damage they deal is increased by 1.)'` from `apitcg`
-  - `apitcg`: `'Your spells and abilities deal 1 Bonus Damage.\n\n(Each instance of damage they deal is increased by 1.)'`
+- **OGS-001** Annie - Fiery -> chose `'Your spells and abilities deal 1 Bonus Damage.\n(Each instance of damage they deal is increased by 1.)'` from `apitcg`
+  - `apitcg`: `'Your spells and abilities deal 1 Bonus Damage.\n(Each instance of damage they deal is increased by 1.)'`
   - `riftbound_tools`: `'Your spells and abilities deal 1 Bonus Damage. (Each instance of damage the spell deals is increased by 1.)'`
-- **OGS-003** Incinerate -> chose `'ACTION (play on your turn or in showdowns.)\n\nDeal 2 to a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'ACTION (play on your turn or in showdowns.)\n\nDeal 2 to a unit at a battlefield.'`
+- **OGS-003** Incinerate -> chose `'ACTION (play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'ACTION (play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 2 to a unit at a battlefield.'`
 - **OGS-004** Master Yi - Meditative -> chose `'While you have 8+ runes, I have +4 Might.'` from `apitcg`
   - `apitcg`: `'While you have 8+ runes, I have +4 Might.'`
@@ -2041,26 +2041,26 @@ Missing field counts across incomplete cards:
 - **OGS-007** Garen - Rugged -> chose `"ASSAULT 2, SHIELD 2 (+2 Might while I'm an attacker or defender.)"` from `apitcg`
   - `apitcg`: `"ASSAULT 2, SHIELD 2 (+2 Might while I'm an attacker or defender.)"`
   - `riftbound_tools`: `"[Assault 2], [Shield 2] (+2 might while I'm an attacker or defender.)"`
-- **OGS-008** Gentlemen's Duel -> chose `'ACTION (Play on your turn or in showdowns.)\n\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.'`
+- **OGS-008** Gentlemen's Duel -> chose `'ACTION (Play on your turn or in showdowns.)\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Give a friendly unit +3 might this turn. Then choose an enemy unit. They deal damage equal to their Mights to each other.'`
-- **OGS-009** Master Yi - Honed -> chose `'GANKING (I can move from battlefield to battlefield.)\n\nI enter ready.'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\nI enter ready.'`
+- **OGS-009** Master Yi - Honed -> chose `'GANKING (I can move from battlefield to battlefield.)\nI enter ready.'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nI enter ready.'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) I enter ready.'`
-- **OGS-011** Flash -> chose `'REACTION (Play at any time, even before spells and abilities resolve.)\n\nMove up to 2 friendly units to base.'` from `apitcg`
-  - `apitcg`: `'REACTION (Play at any time, even before spells and abilities resolve.)\n\nMove up to 2 friendly units to base.'`
+- **OGS-011** Flash -> chose `'REACTION (Play at any time, even before spells and abilities resolve.)\nMove up to 2 friendly units to base.'` from `apitcg`
+  - `apitcg`: `'REACTION (Play at any time, even before spells and abilities resolve.)\nMove up to 2 friendly units to base.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Move up to 2 friendly units to base.'`
-- **OGS-012** Blast of Power -> chose `'ACTION (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield.'`
+- **OGS-012** Blast of Power -> chose `'ACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nKill a unit at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Kill a unit at a battlefield.'`
 - **OGS-013** Garen - Commander -> chose `'Other friendly units have +1 Might here.'` from `apitcg`
   - `apitcg`: `'Other friendly units have +1 Might here.'`
   - `riftbound_tools`: `'Other friendly units have +1 might here.'`
-- **OGS-014** Lux - Crownguard -> chose `"Exhaust: REACTION - ADD 2. Use only to play spells.\n\n(Abilities that add resources can't be reacted to.)"` from `apitcg`
-  - `apitcg`: `"Exhaust: REACTION - ADD 2. Use only to play spells.\n\n(Abilities that add resources can't be reacted to.)"`
+- **OGS-014** Lux - Crownguard -> chose `"Exhaust: REACTION - ADD 2. Use only to play spells.\n(Abilities that add resources can't be reacted to.)"` from `apitcg`
+  - `apitcg`: `"Exhaust: REACTION - ADD 2. Use only to play spells.\n(Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 2 energy. Use only to play spells. (Abilities that add resources can't be reacted to.)"`
-- **OGS-015** Recruit the Vanguard -> chose `'ACTION (Play on your turn or in showdowns.)\n\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)'`
+- **OGS-015** Recruit the Vanguard -> chose `'ACTION (Play on your turn or in showdowns.)\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nPlay four 1 Might Recruit unit tokens. (They can be played to your base or to battlefields you control.)'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Play four 1 might Recruit unit tokens. (They can be played to your base or to battlefields you control.)'`
 - **OGS-017** Annie - Dark Child (Starter) -> chose `'At the end of your turn, ready 2 runes.'` from `apitcg`
   - `apitcg`: `'At the end of your turn, ready 2 runes.'`
@@ -2071,29 +2071,29 @@ Missing field counts across incomplete cards:
 - **OGS-019** Master Yi - Wuju Bladesman (Starter) -> chose `'While a friendly unit defends alone, it gets +2 Might.'` from `apitcg`
   - `apitcg`: `'While a friendly unit defends alone, it gets +2 Might.'`
   - `riftbound_tools`: `'While a friendly unit defends alone, it gets +2 might.'`
-- **OGS-020** Highlander -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)"`
+- **OGS-020** Highlander -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) Choose a friendly unit. The next time it would die this turn, heal it, exhaust it, and recall it instead. (Send it to base. This isn't a move.)"`
 - **OGS-021** Lux - Lady of Luminosity (Starter) -> chose `'When you play a spell that costs 5 or more, draw a 1.'` from `apitcg`
   - `apitcg`: `'When you play a spell that costs 5 or more, draw a 1.'`
   - `riftbound_tools`: `'When you play a spell that costs 5 energy or more, draw 1.'`
-- **OGS-022** Final Spark -> chose `'ACTION (Play on your turn or in showdowns.)\n\nDeal 8 to a unit.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\nDeal 8 to a unit.'`
+- **OGS-022** Final Spark -> chose `'ACTION (Play on your turn or in showdowns.)\nDeal 8 to a unit.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nDeal 8 to a unit.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Deal 8 to a unit.'`
-- **OGS-024** Decisive Strike -> chose `'ACTION (Play on your turn or in showdowns.)\n\nGive friendly units +2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\n\nGive friendly units +2 Might this turn.'`
+- **OGS-024** Decisive Strike -> chose `'ACTION (Play on your turn or in showdowns.)\nGive friendly units +2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'ACTION (Play on your turn or in showdowns.)\nGive friendly units +2 Might this turn.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Give friendly units +2 might this turn.'`
-- **SFD-001** Against the Odds -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.'`
+- **SFD-001** Against the Odds -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a friendly unit at a battlefield +2 Might this turn for each enemy unit there.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a friendly unit at a battlefield +2 might this turn for each enemy unit there.'`
 - **SFD-002** Armed Assailant -> chose `"[ACCELERATE] (You may pay 1 and Fury as an additional cost to have me enter ready.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)"` from `apitcg`
   - `apitcg`: `"[ACCELERATE] (You may pay 1 and Fury as an additional cost to have me enter ready.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)"`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) [Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.)"`
-- **SFD-003** Blood Rush -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)"` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)"`
+- **SFD-003** Blood Rush -> chose `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)"` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1]  (You may pay the additional cost to repeat this spell's effect.)\nGive a unit [ASSAULT 2]. (+2  while it's an attacker.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) [Repeat] 1 energy (You may pay the additional cost to repeat this spell's effect.) Give a unit [Assault 2] this turn. (+2 might while it's an attacker.)"`
-- **SFD-004** Bushwack -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nFriendly units enter ready this turn. Play a Gold gear token exhausted.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nFriendly units enter ready this turn. Play a Gold gear token exhausted.'`
+- **SFD-004** Bushwack -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nFriendly units enter ready this turn. Play a Gold gear token exhausted.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nFriendly units enter ready this turn. Play a Gold gear token exhausted.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) Friendly units enter ready this turn. Play a Gold gear token exhausted.'`
 - **SFD-007** Gem Jammer -> chose `'When you play me, give a unit [GANKING] this turn. (It can move from battlefield to battlefield)'` from `apitcg`
   - `apitcg`: `'When you play me, give a unit [GANKING] this turn. (It can move from battlefield to battlefield)'`
@@ -2101,80 +2101,80 @@ Missing field counts across incomplete cards:
 - **SFD-008** Sentinel Adept -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)"` from `apitcg`
   - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)"`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.)"`
-- **SFD-009** Serrated Dirk -> chose `"[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm attacking.)\n\n\nMight +0"` from `apitcg`
-  - `apitcg`: `"[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm attacking.)\n\n\nMight +0"`
+- **SFD-009** Serrated Dirk -> chose `"[EQUIP Fury] (Fury: Attach this to a unit you control.)\n[ASSAULT 2] (+2 Might while I'm attacking.)\nMight +0"` from `apitcg`
+  - `apitcg`: `"[EQUIP Fury] (Fury: Attach this to a unit you control.)\n[ASSAULT 2] (+2 Might while I'm attacking.)\nMight +0"`
   - `riftbound_tools`: `'[Equip] 1 fury rune (1 fury rune: Attach this to a unit you control.)'`
 - **SFD-010** Void Drone -> chose `'I cost 2 less to play from anywhere other than your hand.'` from `apitcg`
   - `apitcg`: `'I cost 2 less to play from anywhere other than your hand.'`
   - `riftbound_tools`: `'I cost 2 energy less to play from anywhere other than your hand.'`
-- **SFD-011** Angle Shot -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.'`
+- **SFD-011** Angle Shot -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Choose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1.'`
 - **SFD-012** Battering Ram -> chose `"I cost 1 less for each card you've played this turn, to a minimum of 1."` from `apitcg`
   - `apitcg`: `"I cost 1 less for each card you've played this turn, to a minimum of 1."`
   - `riftbound_tools`: `"I cost 1 energy less for each card you've played this turn, to a minimum of 1 energy."`
-- **SFD-013** Blast Corps Cadet -> chose `'You may pay 1 and Fury as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'You may pay 1 and Fury as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.'`
+- **SFD-013** Blast Corps Cadet -> chose `'You may pay 1 and Fury as an additional cost to play me.\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'You may pay 1 and Fury as an additional cost to play me.\nWhen you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.'`
   - `riftbound_tools`: `'You may pay 1 energy and 1 fury rune as an additional cost to play me. When you play me, if you paid the additional cost, deal 2 to a unit at a battlefield.'`
-- **SFD-016** Recurve Bow -> chose `'[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nWhen I attack or defend, deal 2 to an enemy unit here.\n\n\nMight +0'` from `apitcg`
-  - `apitcg`: `'[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nWhen I attack or defend, deal 2 to an enemy unit here.\n\n\nMight +0'`
+- **SFD-016** Recurve Bow -> chose `'[EQUIP Fury] (Fury: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to an enemy unit here.\nMight +0'` from `apitcg`
+  - `apitcg`: `'[EQUIP Fury] (Fury: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to an enemy unit here.\nMight +0'`
   - `riftbound_tools`: `'[Equip] 1 fury rune (1 fury rune: Attach this to a unit you control.)'`
-- **SFD-017** Sudden Storm -> chose `"[HIDDEN] (Hide now for 0 to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead."` from `apitcg`
-  - `apitcg`: `"[HIDDEN] (Hide now for 0 to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead."`
+- **SFD-017** Sudden Storm -> chose `"[HIDDEN] (Hide now for 0 to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead."` from `apitcg`
+  - `apitcg`: `"[HIDDEN] (Hide now for 0 to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead."`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Deal 2 to a unit at a battlefield. If it's attacking, deal 4 to it instead."`
 - **SFD-019** Assembly Rig -> chose `'1, Fury, Recycle a unit from your trash, Exhaust: Play a 3 Might Mech unit token to your base.'` from `apitcg`
   - `apitcg`: `'1, Fury, Recycle a unit from your trash, Exhaust: Play a 3 Might Mech unit token to your base.'`
   - `riftbound_tools`: `'1 energy and 1 fury rune, Recycle a unit from your trash, exhaust: Play a 3 might Mech unit token to your base.'`
-- **SFD-020** Draven - Vanquisher -> chose `'When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'`
+- **SFD-020** Draven - Vanquisher -> chose `'When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'`
   - `riftbound_tools`: `'When I win a combat, play a Gold gear token exhausted. When I attack or defend, you may pay 1 fury rune. If you do, give me +2 might this turn.'`
-- **SFD-020A** Draven - Vanquisher (Alternate Art) -> chose `'When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'When I win a combat, play a Gold gear token exhausted.\n\n\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'`
+- **SFD-020A** Draven - Vanquisher (Alternate Art) -> chose `'When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'When I win a combat, play a Gold gear token exhausted.\nWhen I attack or defend, you may pay Fury. If you do, give me +2 Might this turn.'`
   - `riftbound_tools`: `'When I win a combat, play a Gold gear token exhausted. When I attack or defend, you may pay 1 fury rune. If you do, give me +2 might this turn.'`
 - **SFD-021** Ferrous Forerunner -> chose `'[DEATHKNELL] — Play two 3 Might Mech unit tokens to your base. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'[DEATHKNELL] — Play two 3 Might Mech unit tokens to your base. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Deathknell] — Play two 3 might Mech unit tokens to your base. (When I die, get the effect.)'`
-- **SFD-022** Long Sword -> chose `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nMight +2'` from `apitcg`
-  - `apitcg`: `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\n\n\nMight +2'`
+- **SFD-022** Long Sword -> chose `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\nMight +2'` from `apitcg`
+  - `apitcg`: `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Fury] (Fury: Attach this to a unit you control.)\nMight +2'`
   - `riftbound_tools`: `'[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 fury rune (1 fury rune: Attach this to a unit you control.)'`
-- **SFD-023** Piercing Light -> chose `"[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit."` from `apitcg`
-  - `apitcg`: `"[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit."`
+- **SFD-023** Piercing Light -> chose `"[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit."` from `apitcg`
+  - `apitcg`: `"[REPEAT 2, Fury]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 2 to a unit at a battlefield, then deal 2 to up to one other unit."`
   - `riftbound_tools`: `"[Repeat] 2 energy and 1 fury rune (You may pay the additional cost to repeat this spell's effect.) Deal 2 to a unit at a battlefield, then deal 2 to up to one other unit."`
-- **SFD-024** Rell - Magnetic -> chose `'[TANK] (I must be assigned combat damage first.)\n\n\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.'` from `apitcg`
-  - `apitcg`: `'[TANK] (I must be assigned combat damage first.)\n\n\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.'`
+- **SFD-024** Rell - Magnetic -> chose `'[TANK] (I must be assigned combat damage first.)\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.'` from `apitcg`
+  - `apitcg`: `'[TANK] (I must be assigned combat damage first.)\nWhen I attack, you may play an Equipment with Energy cost no more than 2, ignoring its cost, and attach it to me.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) When I attack, you may play an Equipment with Energy cost no more than 2 energy, ignoring its cost. If you do, then do this: Attach it to me.'`
-- **SFD-025** Rengar - Pouncing -> chose `"[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm an attacker.)\n\n\nI can be played to a battlefield you're attacking."` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\n[ASSAULT 2] (+2 Might while I'm an attacker.)\n\n\nI can be played to a battlefield you're attacking."`
+- **SFD-025** Rengar - Pouncing -> chose `"[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n[ASSAULT 2] (+2 Might while I'm an attacker.)\nI can be played to a battlefield you're attacking."` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n[ASSAULT 2] (+2 Might while I'm an attacker.)\nI can be played to a battlefield you're attacking."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve, including to a battlefield you control.) [Assault 2] (+2 might while I'm an attacker.) I can be played to a battlefield you're attacking."`
-- **SFD-026** Rumble - Hotheaded -> chose `"Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\n\n\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."` from `apitcg`
-  - `apitcg`: `"Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\n\n\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."`
+- **SFD-026** Rumble - Hotheaded -> chose `"Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."` from `apitcg`
+  - `apitcg`: `"Your Mechs each have [ASSAULT]. (+1  while we're attackers.)\nWhen I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."`
   - `riftbound_tools`: `"Your Mechs each have [Assault]. (+1 might while we're attackers.) When I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."`
-- **SFD-027** Dunebreaker -> chose `'If you have two or fewer cards in your hand, I enter ready.\n\n\nWhen I hold, draw 2.'` from `apitcg`
-  - `apitcg`: `'If you have two or fewer cards in your hand, I enter ready.\n\n\nWhen I hold, draw 2.'`
+- **SFD-027** Dunebreaker -> chose `'If you have two or fewer cards in your hand, I enter ready.\nWhen I hold, draw 2.'` from `apitcg`
+  - `apitcg`: `'If you have two or fewer cards in your hand, I enter ready.\nWhen I hold, draw 2.'`
   - `riftbound_tools`: `'If you have two or fewer cards in your hand, I enter ready. When I hold, draw 2.'`
-- **SFD-028** Lucian - Gunslinger -> chose `"[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."` from `apitcg`
-  - `apitcg`: `"[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."`
+- **SFD-028** Lucian - Gunslinger -> chose `"[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."` from `apitcg`
+  - `apitcg`: `"[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."`
   - `riftbound_tools`: `"[Assault] (+1 might while I'm an attacker.) When I attack, deal damage equal to my [Assault] to an enemy unit here."`
-- **SFD-028A** Lucian - Gunslinger (Alternate Art) -> chose `"[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."` from `apitcg`
-  - `apitcg`: `"[ASSAULT] (+1 Might while I'm an attacker.)\n\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."`
+- **SFD-028A** Lucian - Gunslinger (Alternate Art) -> chose `"[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."` from `apitcg`
+  - `apitcg`: `"[ASSAULT] (+1 Might while I'm an attacker.)\nWhen I attack, deal damage equal to my [ASSAULT] to an enemy unit here."`
   - `riftbound_tools`: `"[Assault] (+1 might while I'm an attacker.) When I attack, deal damage equal to my [Assault] to an enemy unit here."`
-- **SFD-029** Rek'Sai - Breacher -> chose `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."` from `apitcg`
-  - `apitcg`: `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."`
+- **SFD-029** Rek'Sai - Breacher -> chose `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."` from `apitcg`
+  - `apitcg`: `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) [Assault] (+1 might while I'm an attacker.) Friendly units played from anywhere other than a player's hand have [Accelerate]."`
-- **SFD-029A** Rek'Sai - Breacher (Alternate Art) -> chose `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."` from `apitcg`
-  - `apitcg`: `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n\n[ASSAULT] (+1 Might while I'm an attacker.)\n\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."`
+- **SFD-029A** Rek'Sai - Breacher (Alternate Art) -> chose `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."` from `apitcg`
+  - `apitcg`: `"[ACCELERATE] (You may pay 1 Fury as an additional cost to have me enter ready.)\n[ASSAULT] (+1 Might while I'm an attacker.)\nFriendly units played from anywhere other than a player's hand have [ACCELERATE]."`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) [Assault] (+1 might while I'm an attacker.) Friendly units played from anywhere other than a player's hand have [Accelerate]."`
-- **SFD-030** Skyfall of Areion -> chose `'[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\n\n\nMy hold effects are also conquer effects, and vice verse.\n\n\nMight +2'` from `apitcg`
-  - `apitcg`: `'[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\n\n\nMy hold effects are also conquer effects, and vice verse.\n\n\nMight +2'`
+- **SFD-030** Skyfall of Areion -> chose `'[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\nMy hold effects are also conquer effects, and vice verse.\nMight +2'` from `apitcg`
+  - `apitcg`: `'[EQUIP 1, Fury] (1, Fury: Attach this to a unit you control.)\nMy hold effects are also conquer effects, and vice verse.\nMight +2'`
   - `riftbound_tools`: `'[Equip] 1 energy and 1 fury rune (1 energy and 1 fury rune: Attach this to a unit you control.)'`
-- **SFD-031** Desert's Call -> chose `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\n\nPlay a 2 Might Sand Soldier unit token."` from `apitcg`
-  - `apitcg`: `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\n\nPlay a 2 Might Sand Soldier unit token."`
+- **SFD-031** Desert's Call -> chose `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\nPlay a 2 Might Sand Soldier unit token."` from `apitcg`
+  - `apitcg`: `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect)\nPlay a 2 Might Sand Soldier unit token."`
   - `riftbound_tools`: `"[Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Play a 2 might Sand Soldier unit token."`
-- **SFD-033** Doran's Shield -> chose `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nTANK (I must be assigned combat damage first.) +1 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nTANK (I must be assigned combat damage first.) +1 Might'`
+- **SFD-033** Doran's Shield -> chose `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\nTANK (I must be assigned combat damage first.) +1 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\nTANK (I must be assigned combat damage first.) +1 Might'`
   - `riftbound_tools`: `'[Equip] 1 calm rune (1 calm rune: Attach this to a unit you control.)'`
-- **SFD-034** Feral Strength -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit +2 Might this turn."` from `apitcg`
-  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit +2 Might this turn."`
+- **SFD-034** Feral Strength -> chose `"REACTION (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit +2 Might this turn."` from `apitcg`
+  - `apitcg`: `"REACTION (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit +2 Might this turn."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) [Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Give a unit +2 might this turn."`
 - **SFD-036** Lonely Poro -> chose `"[DEATHKNELL] — If I died alone, draw 1. (When I die, get the effect. I'm alone if there are no other friendly units here.)"` from `apitcg`
   - `apitcg`: `"[DEATHKNELL] — If I died alone, draw 1. (When I die, get the effect. I'm alone if there are no other friendly units here.)"`
@@ -2185,23 +2185,23 @@ Missing field counts across incomplete cards:
 - **SFD-038** Ribbon Dancer -> chose `'When I move to a battlefield, give another friendly unit +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When I move to a battlefield, give another friendly unit +1 Might this turn.'`
   - `riftbound_tools`: `'When I move to a battlefield, give another friendly unit +1 might this turn.'`
-- **SFD-040** Thwonk! -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nStun an attacking unit. (It doesn't deal combat damage this turn.)"` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nStun an attacking unit. (It doesn't deal combat damage this turn.)"`
+- **SFD-040** Thwonk! -> chose `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\nStun an attacking unit. (It doesn't deal combat damage this turn.)"` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT]  (You may pay the additional cost to repeat this spell's effect.)\nStun an attacking unit. (It doesn't deal combat damage this turn.)"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) [Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Stun an attacking unit. (It doesn't deal combat damage this turn.)"`
-- **SFD-042** Brutalizer -> chose `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nIf this was attached to me this turn, I have an additional +2 Might.\n\n\n+1 Might.'` from `apitcg`
-  - `apitcg`: `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nIf this was attached to me this turn, I have an additional +2 Might.\n\n\n+1 Might.'`
+- **SFD-042** Brutalizer -> chose `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nIf this was attached to me this turn, I have an additional +2 Might.\n+1 Might.'` from `apitcg`
+  - `apitcg`: `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nIf this was attached to me this turn, I have an additional +2 Might.\n+1 Might.'`
   - `riftbound_tools`: `'[Equip] 1 calm rune (1 calm rune: Attach this to a unit you control.)'`
-- **SFD-043** Emperor's Divide -> chose `'[HIDDEN] (Hide for now Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nMove any number of friendly units at a battlefield on their base.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide for now Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nMove any number of friendly units at a battlefield on their base.'`
+- **SFD-043** Emperor's Divide -> chose `'[HIDDEN] (Hide for now Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nMove any number of friendly units at a battlefield on their base.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide for now Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nMove any number of friendly units at a battlefield on their base.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Move any number of friendly units at a battlefield to their base.'`
-- **SFD-045** Not So Fast -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nCounter an enemy spell or ability that chooses a friendly unit or gear.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nCounter an enemy spell or ability that chooses a friendly unit or gear.'`
+- **SFD-045** Not So Fast -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nCounter an enemy spell or ability that chooses a friendly unit or gear.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nCounter an enemy spell or ability that chooses a friendly unit or gear.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Counter an enemy spell or ability that chooses a friendly unit or gear.'`
-- **SFD-046** Poro Snax -> chose `'When you play this, draw 1.\n\n1 Calm, Exhaust, Kill this: Draw 1.'` from `apitcg`
-  - `apitcg`: `'When you play this, draw 1.\n\n1 Calm, Exhaust, Kill this: Draw 1.'`
+- **SFD-046** Poro Snax -> chose `'When you play this, draw 1.\n1 Calm, Exhaust, Kill this: Draw 1.'` from `apitcg`
+  - `apitcg`: `'When you play this, draw 1.\n1 Calm, Exhaust, Kill this: Draw 1.'`
   - `riftbound_tools`: `'When you play this, draw 1. 1 energy and 1 calm rune, exhaust, Kill this: Draw 1.'`
-- **SFD-049** Aphelios - Exalted -> chose `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n\n•Ready 2 runes.\n\n•Channel 1 rune exhausted.\n\n•Buff a friendly unit."` from `apitcg`
-  - `apitcg`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n\n•Ready 2 runes.\n\n•Channel 1 rune exhausted.\n\n•Buff a friendly unit."`
+- **SFD-049** Aphelios - Exalted -> chose `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n•Ready 2 runes.\n•Channel 1 rune exhausted.\n•Buff a friendly unit."` from `apitcg`
+  - `apitcg`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n•Ready 2 runes.\n•Channel 1 rune exhausted.\n•Buff a friendly unit."`
   - `riftbound_tools`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —<ul><li>Ready 2 runes.</li><li>Channel 1 rune exhausted.</li><li>Buff a friendly unit.</li></ul>"`
 - **SFD-050** Azir - Ascendant -> chose `"Calm: [ACTION] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."` from `apitcg`
   - `apitcg`: `"Calm: [ACTION] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."`
@@ -2209,62 +2209,62 @@ Missing field counts across incomplete cards:
 - **SFD-050A** Azir - Ascendant (Alternate Art) -> chose `"Calm: [ACTION] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."` from `apitcg`
   - `apitcg`: `"Calm: [ACTION] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."`
   - `riftbound_tools`: `"1 calm rune: [Action] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."`
-- **SFD-051** Guardian Angel -> chose `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\n\n\nMight +1'` from `apitcg`
-  - `apitcg`: `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\n\n\nMight +1'`
+- **SFD-051** Guardian Angel -> chose `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\nMight +1'` from `apitcg`
+  - `apitcg`: `'[EQUIP Calm] (Calm: Attach this to a unit you control.)\nIf I would die, kill Guardian Angel instead. Heal me, Exhaust me, and recall me.\nMight +1'`
   - `riftbound_tools`: `'[Equip] 1 calm rune (1 calm rune: Attach this to a unit you control.)'`
 - **SFD-052** Heart of Dark Ice -> chose `'Exhaust: Give a unit +3 Might this turn.'` from `apitcg`
   - `apitcg`: `'Exhaust: Give a unit +3 Might this turn.'`
   - `riftbound_tools`: `'exhaust: Give a unit +3 might this turn.'`
-- **SFD-053** Janna - Savior -> chose `'[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nWhen you play me, heal your units here, then move an enemy unit from here to its base.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\n\n\nWhen you play me, heal your units here, then move an enemy unit from here to its base.'`
+- **SFD-053** Janna - Savior -> chose `'[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nWhen you play me, heal your units here, then move an enemy unit from here to its base.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve, including to a battlefield you control.)\nWhen you play me, heal your units here, then move an enemy unit from here to its base.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve, including to a battlefield you control.) When you play me, heal your units here, then move up to one enemy unit from here to its base.'`
-- **SFD-054** Jax - Unmatched -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'` from `apitcg`
-  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'`
+- **SFD-054** Jax - Unmatched -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'` from `apitcg`
+  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) Your Equipment everywhere have [Quick-Draw]. (Each gains [Reaction]. When you play it, attach it to a unit you control.)'`
-- **SFD-054A** Jax - Unmatched (Alternate Art) -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'` from `apitcg`
-  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'`
+- **SFD-054A** Jax - Unmatched (Alternate Art) -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'` from `apitcg`
+  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nEach Equipment in your hand has [QUICK-DRAW]. (It gains [REACTION]. When you play it, attach it to a unit you control.)'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) Your Equipment everywhere have [Quick-Draw]. (Each gains [Reaction]. When you play it, attach it to a unit you control.)'`
-- **SFD-055** Needlessly Large Yordle -> chose `"[SHIELD 5] (+5 Might while I'm a defender.)\n\n\n[TANK] (I must be assigned combat damage first.)\n\n\nI cost 2 and 1 Calm less for each point you scored from holding this turn."` from `apitcg`
-  - `apitcg`: `"[SHIELD 5] (+5 Might while I'm a defender.)\n\n\n[TANK] (I must be assigned combat damage first.)\n\n\nI cost 2 and 1 Calm less for each point you scored from holding this turn."`
+- **SFD-055** Needlessly Large Yordle -> chose `"[SHIELD 5] (+5 Might while I'm a defender.)\n[TANK] (I must be assigned combat damage first.)\nI cost 2 and 1 Calm less for each point you scored from holding this turn."` from `apitcg`
+  - `apitcg`: `"[SHIELD 5] (+5 Might while I'm a defender.)\n[TANK] (I must be assigned combat damage first.)\nI cost 2 and 1 Calm less for each point you scored from holding this turn."`
   - `riftbound_tools`: `"[Shield 5] (+5 might while I'm a defender.) [Tank] (I must be assigned combat damage first.) I cost 2 energy and 1 calm rune less for each point you scored from holding this turn."`
-- **SFD-056** Sterak's Gage -> chose `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nMight +3'` from `apitcg`
-  - `apitcg`: `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\n\n\nMight +3'`
+- **SFD-056** Sterak's Gage -> chose `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\nMight +3'` from `apitcg`
+  - `apitcg`: `'[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP Calm] (Calm: Attach this to a unit you control.)\nMight +3'`
   - `riftbound_tools`: `'[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 calm rune (1 calm rune: Attach this to a unit you control.)'`
-- **SFD-057** Irelia - Fervent -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
-  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'`
+- **SFD-057** Irelia - Fervent -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
+  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When you choose or ready me, give me +1 might this turn.'`
-- **SFD-057A** Irelia - Fervent (Alternate Art) -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
-  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'`
+- **SFD-057A** Irelia - Fervent (Alternate Art) -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
+  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When you choose or ready me, give me +1 might this turn.'`
-- **SFD-059** Svellsongur -> chose `"[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\n\n\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\n\n\nMight +0"` from `apitcg`
-  - `apitcg`: `"[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\n\n\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\n\n\nMight +0"`
+- **SFD-059** Svellsongur -> chose `"[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\nMight +0"` from `apitcg`
+  - `apitcg`: `"[EQUIP1, Calm]  (1, Calm: Attach this to a unit you control.)\nAs this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it.\nMight +0"`
   - `riftbound_tools`: `"[Equip] 1 energy and 1 calm rune (1 energy and 1 calm rune: Attach this to a unit you control.) As this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it."`
-- **SFD-060** Tianna Crownguard -> chose `"[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhile I'm at a battlefield, opponents can't score points."` from `apitcg`
-  - `apitcg`: `"[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nWhile I'm at a battlefield, opponents can't score points."`
+- **SFD-060** Tianna Crownguard -> chose `"[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhile I'm at a battlefield, opponents can't score points."` from `apitcg`
+  - `apitcg`: `"[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nWhile I'm at a battlefield, opponents can't score points."`
   - `riftbound_tools`: `"[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) While I'm at a battlefield, opponents can't gain points."`
-- **SFD-064** Cloth Armor -> chose `"[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\n\n[SHIELD 2] (+2 Might while I'm a defender.)\n\n\nMight +2"` from `apitcg`
-  - `apitcg`: `"[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n\n\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\n\n[SHIELD 2] (+2 Might while I'm a defender.)\n\n\nMight +2"`
+- **SFD-064** Cloth Armor -> chose `"[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n[SHIELD 2] (+2 Might while I'm a defender.)\nMight +2"` from `apitcg`
+  - `apitcg`: `"[QUICK-DRAW] (This has [REACTION]. When you play it, attach it to a unit you control.)\n[EQUIP Mind] (Mind: Attach this to a unit you control.)\n[SHIELD 2] (+2 Might while I'm a defender.)\nMight +2"`
   - `riftbound_tools`: `'[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 mind rune (1 mind rune: Attach this to a unit you control.)'`
 - **SFD-065** Forecaster -> chose `'Your Mechs have [VISION]. (When you play us, look at the top card of your Main Deck. You may recycle it.)'` from `apitcg`
   - `apitcg`: `'Your Mechs have [VISION]. (When you play us, look at the top card of your Main Deck. You may recycle it.)'`
   - `riftbound_tools`: `'Your Mechs have [Vision]. (When you play us, look at the top card of your Main Deck. You may recycle it.)'`
-- **SFD-066** Frigid Touch -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit -2 Might this turn."` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive a unit -2 Might this turn."`
+- **SFD-066** Frigid Touch -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit -2 Might this turn."` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive a unit -2 Might this turn."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) [Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Give a unit -2 might this turn."`
-- **SFD-067** Frostcoat Cub -> chose `'You may pay Mind as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'You may pay Mind as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.'`
+- **SFD-067** Frostcoat Cub -> chose `'You may pay Mind as an additional cost to play me.\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'You may pay Mind as an additional cost to play me.\nWhen you play me, if you paid the additional cost, give a unit -2 Might this turn.'`
   - `riftbound_tools`: `'You may pay 1 mind rune as an additional cost to play me. When you play me, if you paid the additional cost, give a unit -2 might this turn.'`
-- **SFD-068** Gearhead -> chose `'[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\n\n\nEach Equipment attached to me gives double its base Might bonus.'` from `apitcg`
-  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\n\n\nEach Equipment attached to me gives double its base Might bonus.'`
+- **SFD-068** Gearhead -> chose `'[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\nEach Equipment attached to me gives double its base Might bonus.'` from `apitcg`
+  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Mind as an additional cost to have me enter ready.)\nEach Equipment attached to me gives double its base Might bonus.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 mind rune as an additional cost to have me enter ready.) Each Equipment attached to me gives double its base Might bonus.'`
-- **SFD-070** Wages of Pain -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\n[ACTION] (Play on your turn or in showdowns.)\n\n\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.'`
+- **SFD-070** Wages of Pain -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nDeal 3 to a unit at a battlefield. Play a Gold gear token exhausted.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Deal 3 to a unit at a battlefield. Play a Gold gear token exhausted.'`
-- **SFD-071** Breakneck Mech -> chose `'Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\n\n\nI enter ready if you control another Mech.'` from `apitcg`
-  - `apitcg`: `'Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\n\n\nI enter ready if you control another Mech.'`
+- **SFD-071** Breakneck Mech -> chose `'Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\nI enter ready if you control another Mech.'` from `apitcg`
+  - `apitcg`: `'Your Mechs have [DEFLECT] and [GANKING]. (Opponents must pay 1 Rune to choose us with a spell or ability. We can move from battlefield to battlefield.)\nI enter ready if you control another Mech.'`
   - `riftbound_tools`: `'Your Mechs have [Deflect] and [Ganking]. (Opponents must pay 1 rune of any type to choose us with a spell or ability. We can move from battlefield to battlefield.) I enter ready if you control another Mech.'`
-- **SFD-073** Experimental Hexplate -> chose `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nI am a mech.\n\n\n+1 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\n\n\nI am a mech.\n\n\n+1 Might'`
+- **SFD-073** Experimental Hexplate -> chose `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nI am a mech.\n+1 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Calm]  (Calm: Attach this to a unit you control.)\nI am a mech.\n+1 Might'`
   - `riftbound_tools`: `'[Equip] 1 mind rune (1 mind rune: Attach this to a unit you control.)'`
 - **SFD-074** Pickpocket -> chose `'When you play me, you may kill a gear with Energy cost no more than 1. If you do, play a Gold gear token exhausted.'` from `apitcg`
   - `apitcg`: `'When you play me, you may kill a gear with Energy cost no more than 1. If you do, play a Gold gear token exhausted.'`
@@ -2272,26 +2272,26 @@ Missing field counts across incomplete cards:
 - **SFD-075** Prize of Progress -> chose `'When you use an activated ability of a gear, give me +1 Might this turn.'` from `apitcg`
   - `apitcg`: `'When you use an activated ability of a gear, give me +1 Might this turn.'`
   - `riftbound_tools`: `'When you use an activated ability of a gear, give me +1 might this turn.'`
-- **SFD-076** Production Surge -> chose `'This costs 2 less if you control a Mech.\n\nPlay a 3 Might Mech unit token to your base.\n\nDraw 1.'` from `apitcg`
-  - `apitcg`: `'This costs 2 less if you control a Mech.\n\nPlay a 3 Might Mech unit token to your base.\n\nDraw 1.'`
+- **SFD-076** Production Surge -> chose `'This costs 2 less if you control a Mech.\nPlay a 3 Might Mech unit token to your base.\nDraw 1.'` from `apitcg`
+  - `apitcg`: `'This costs 2 less if you control a Mech.\nPlay a 3 Might Mech unit token to your base.\nDraw 1.'`
   - `riftbound_tools`: `'This costs 2 energy less if you control a Mech. Play a 3 might Mech unit token to your base. Draw 1.'`
-- **SFD-077** Rocket Barrage -> chose `"[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\n\nChoose one —\n\n• Deal 4 to a unit in a base.\n\n• Kill a gear."` from `apitcg`
-  - `apitcg`: `"[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\n\nChoose one —\n\n• Deal 4 to a unit in a base.\n\n• Kill a gear."`
+- **SFD-077** Rocket Barrage -> chose `"[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\nChoose one —\n• Deal 4 to a unit in a base.\n• Kill a gear."` from `apitcg`
+  - `apitcg`: `"[REPEAT 4 Mind] (You may pay the additional cost to repeat this spell's effect, and may make different choices.)\nChoose one —\n• Deal 4 to a unit in a base.\n• Kill a gear."`
   - `riftbound_tools`: `"[Repeat] 4 energy and 1 mind rune (You may pay the additional cost to repeat this spell's effect, and may make different choices.) Choose one —<ul><li>Deal 4 to a unit in a base.</li><li>Kill a gear.</li></ul>"`
 - **SFD-078** Temporal Portal -> chose `"1 Rune, Exhaust: Give the next spell you play this turn [REPEAT] equal to its cost. (You may pay the additional cost to repeat the spell's effect.)"` from `apitcg`
   - `apitcg`: `"1 Rune, Exhaust: Give the next spell you play this turn [REPEAT] equal to its cost. (You may pay the additional cost to repeat the spell's effect.)"`
   - `riftbound_tools`: `"1 rune of any type, exhaust: Give the next spell you play this turn [Repeat] equal to its cost. (You may pay the additional cost to repeat the spell's effect.)"`
-- **SFD-079** Bard - Mercurial -> chose `'You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'` from `apitcg`
-  - `apitcg`: `'You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
+- **SFD-079** Bard - Mercurial -> chose `'You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'` from `apitcg`
+  - `apitcg`: `'You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
   - `riftbound_tools`: `'You may exhaust your legend as an additional cost to play me. When you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
-- **SFD-080** Bellows Breath -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 1 to up to three units at the same location."` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nDeal 1 to up to three units at the same location."`
+- **SFD-080** Bellows Breath -> chose `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 1 to up to three units at the same location."` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 1, Mind]  (You may pay the additional cost to repeat this spell's effect.)\nDeal 1 to up to three units at the same location."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) [Repeat] 1 energy and 1 mind rune (You may pay the additional cost to repeat this spell's effect.) Deal 1 to up to three units at the same location."`
-- **SFD-082** Ezreal - Dashing -> chose `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] — Move me to your base."` from `apitcg`
-  - `apitcg`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] — Move me to your base."`
+- **SFD-082** Ezreal - Dashing -> chose `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] — Move me to your base."` from `apitcg`
+  - `apitcg`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] — Move me to your base."`
   - `riftbound_tools`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here. I don't deal combat damage. 1 mind rune: [Action] — Move me to your base."`
-- **SFD-082A** Ezreal - Dashing (Alternate Art) -> chose `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] — Move me to your base."` from `apitcg`
-  - `apitcg`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\n\nI don't deal combat damage.\n\nMind: [ACTION] — Move me to your base."`
+- **SFD-082A** Ezreal - Dashing (Alternate Art) -> chose `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] — Move me to your base."` from `apitcg`
+  - `apitcg`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here.\nI don't deal combat damage.\nMind: [ACTION] — Move me to your base."`
   - `riftbound_tools`: `"When I attack or defend, deal damage equal to my Might to an enemy unit here. I don't deal combat damage. 1 mind rune: [Action] — Move me to your base."`
 - **SFD-083** Hextech Anomaly -> chose `"Exhaust: [REACTION] — Pay any amount of Runes to [ADD] that much Energy. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — Pay any amount of Runes to [ADD] that much Energy. (Abilities that add resources can't be reacted to.)"`
@@ -2299,26 +2299,26 @@ Missing field counts across incomplete cards:
 - **SFD-084** Jayce - Man of Progress -> chose `'When you play me, you may kill a friendly gear. If you do, you may play a gear with Energy cost no more than 7 from hand this turn, ignoring its Energy cost. (You must still pay its Power cost.)'` from `apitcg`
   - `apitcg`: `'When you play me, you may kill a friendly gear. If you do, you may play a gear with Energy cost no more than 7 from hand this turn, ignoring its Energy cost. (You must still pay its Power cost.)'`
   - `riftbound_tools`: `'When you play me, you may kill a friendly gear. If you do, you may play a gear with Energy cost no more than 7 energy from hand this turn, ignoring its Energy cost. (You must still pay its Power cost.)'`
-- **SFD-085** Ornn - Forge God -> chose `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear."` from `apitcg`
-  - `apitcg`: `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear."`
+- **SFD-085** Ornn - Forge God -> chose `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear."` from `apitcg`
+  - `apitcg`: `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear."`
   - `riftbound_tools`: `"[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or ability.) [Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) I have +1 might for each friendly gear."`
-- **SFD-085A** Ornn - Forge God (Alternate Art) -> chose `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear."` from `apitcg`
-  - `apitcg`: `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\n\n\nI have +1 Might for each friendly gear."`
+- **SFD-085A** Ornn - Forge God (Alternate Art) -> chose `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear."` from `apitcg`
+  - `apitcg`: `"[DEFLECT 2] (Opponents must pay 2 Runes to choose me with a spell or ability.)\n[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune  less, even if it's already attached.)\nI have +1 Might for each friendly gear."`
   - `riftbound_tools`: `"[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or ability.) [Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) I have +1 might for each friendly gear."`
-- **SFD-086** World Atlas -> chose `'[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\nWhen I hold, play two Gold gear tokens exhausted. +2 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Mind] (Mind: Attach this to a unit you control.)\n\nWhen I hold, play two Gold gear tokens exhausted. +2 Might'`
+- **SFD-086** World Atlas -> chose `'[EQUIP Mind] (Mind: Attach this to a unit you control.)\nWhen I hold, play two Gold gear tokens exhausted. +2 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Mind] (Mind: Attach this to a unit you control.)\nWhen I hold, play two Gold gear tokens exhausted. +2 Might'`
   - `riftbound_tools`: `'[Equip] 1 mind rune (1 mind rune: Attach this to a unit you control.)'`
-- **SFD-087** Premonition -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nDraw 3.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\nDraw 3.'`
+- **SFD-087** Premonition -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 3.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 3.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Draw 3.'`
-- **SFD-088** Renata Glasc - Mastermind -> chose `"1, Mind: Draw 1.\n\n\n1,4 Mind, Exhaust: Score 1 point.\n\n\nUse my abilities only while I'm at a battlefield."` from `apitcg`
-  - `apitcg`: `"1, Mind: Draw 1.\n\n\n1,4 Mind, Exhaust: Score 1 point.\n\n\nUse my abilities only while I'm at a battlefield."`
+- **SFD-088** Renata Glasc - Mastermind -> chose `"1, Mind: Draw 1.\n1,4 Mind, Exhaust: Score 1 point.\nUse my abilities only while I'm at a battlefield."` from `apitcg`
+  - `apitcg`: `"1, Mind: Draw 1.\n1,4 Mind, Exhaust: Score 1 point.\nUse my abilities only while I'm at a battlefield."`
   - `riftbound_tools`: `"1 energy and 1 mind rune: Draw 1. 4 energy and 1 mind rune1 mind rune1 mind rune1 mind rune, exhaust: Score 1 point. Use my abilities only while I'm at a battlefield."`
-- **SFD-089** Rumble - Scrapper -> chose `'Your Mechs have +1 Might (including me).\n\n\nWhen I hold, play a 3 Might Mech unit token to your base.'` from `apitcg`
-  - `apitcg`: `'Your Mechs have +1 Might (including me).\n\n\nWhen I hold, play a 3 Might Mech unit token to your base.'`
+- **SFD-089** Rumble - Scrapper -> chose `'Your Mechs have +1 Might (including me).\nWhen I hold, play a 3 Might Mech unit token to your base.'` from `apitcg`
+  - `apitcg`: `'Your Mechs have +1 Might (including me).\nWhen I hold, play a 3 Might Mech unit token to your base.'`
   - `riftbound_tools`: `'Your Mechs have +1 might (including me). When I hold, play a 3 might Mech unit token to your base.'`
-- **SFD-090** The Zero Drive -> chose `'[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n\n\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n\n\n[DEATHKNELL] — Banish me. (When I die, get the effect.)\n\n\nMight +2'` from `apitcg`
-  - `apitcg`: `'[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n\n\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n\n\n[DEATHKNELL] — Banish me. (When I die, get the effect.)\n\n\nMight +2'`
+- **SFD-090** The Zero Drive -> chose `'[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n[DEATHKNELL] — Banish me. (When I die, get the effect.)\nMight +2'` from `apitcg`
+  - `apitcg`: `'[EQUIP 1, Calm] (1, Calm: Attach this to a unit you control.)\n3, Calm, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)\n[DEATHKNELL] — Banish me. (When I die, get the effect.)\nMight +2'`
   - `riftbound_tools`: `'[Equip] 1 energy and 1 mind rune (1 energy and 1 mind rune: Attach this to a unit you control.) 3 energy and 1 mind rune, Banish this: Play all units banished with this, ignoring their costs. (Use only if unattached.)'`
 - **SFD-091** Buhru Captain -> chose `"When you play me, you may draw 1 or buff me. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"` from `apitcg`
   - `apitcg`: `"When you play me, you may draw 1 or buff me. (To buff a unit, give it a +1 Might buff if it doesn't already have one.)"`
@@ -2326,17 +2326,17 @@ Missing field counts across incomplete cards:
 - **SFD-092** Combat Chef -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] One of your Equipment to me for Rune less, even if it's already attached.)"` from `apitcg`
   - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] One of your Equipment to me for Rune less, even if it's already attached.)"`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.)"`
-- **SFD-095** Doran's Blade -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n+2 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n+2 Might'`
+- **SFD-095** Doran's Blade -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\n+2 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\n+2 Might'`
   - `riftbound_tools`: `'[Equip] 1 body rune (1 body rune: Attach this to a unit you control.)'`
 - **SFD-096** Laurent Bladekeeper -> chose `'[GANKING] (I can move from battlefield to battlefield.)'` from `apitcg`
   - `apitcg`: `'[GANKING] (I can move from battlefield to battlefield.)'`
   - `riftbound_tools`: `'Ganking (I can move from battlefield to battlefield.)'`
-- **SFD-097** Punch First -> chose `'[ACTION] (Play on your turn or in showdowns.)\n\nGive a unit +5 Might this turn.'` from `apitcg`
-  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\n\nGive a unit +5 Might this turn.'`
+- **SFD-097** Punch First -> chose `'[ACTION] (Play on your turn or in showdowns.)\nGive a unit +5 Might this turn.'` from `apitcg`
+  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\nGive a unit +5 Might this turn.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Give a unit +5 might this turn.'`
-- **SFD-098** Sea Monkey -> chose `"You may pay 1 as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)"` from `apitcg`
-  - `apitcg`: `"You may pay 1 as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)"`
+- **SFD-098** Sea Monkey -> chose `"You may pay 1 as an additional cost to play me.\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)"` from `apitcg`
+  - `apitcg`: `"You may pay 1 as an additional cost to play me.\nWhen you play me, if you paid the additional cost, buff me. (Give me a +1 Might Buff if I don't already have one.)"`
   - `riftbound_tools`: `"You may pay 1 energy as an additional cost to play me. When you play me, if you paid the additional cost, buff me. (Give me a +1 might buff if I don't already have one.)"`
 - **SFD-099** Veteran Poro -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)"` from `apitcg`
   - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)"`
@@ -2344,77 +2344,77 @@ Missing field counts across incomplete cards:
 - **SFD-100** Yordle Explorer -> chose `'When you play a card with Power cost 2 Runes or more, draw 1.'` from `apitcg`
   - `apitcg`: `'When you play a card with Power cost 2 Runes or more, draw 1.'`
   - `riftbound_tools`: `'When you play a card with Power cost 2 runes of any type or more, draw 1.'`
-- **SFD-101** Fae Dragon -> chose `"When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\n\nWhen you spend a buff, play a Gold gear token exhausted."` from `apitcg`
-  - `apitcg`: `"When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\n\nWhen you spend a buff, play a Gold gear token exhausted."`
+- **SFD-101** Fae Dragon -> chose `"When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\nWhen you spend a buff, play a Gold gear token exhausted."` from `apitcg`
+  - `apitcg`: `"When you play me, buff up to four friendly units. (Give each one a +1 Might buff if it doesn't have one.)\nWhen you spend a buff, play a Gold gear token exhausted."`
   - `riftbound_tools`: `"When you play me, buff up to four friendly units. (Give each a +1 might buff if it doesn't have one.) When you spend a buff, play a Gold gear token exhausted."`
-- **SFD-102** Hexdrinker -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might'`
+- **SFD-102** Hexdrinker -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\n[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.) +1 Might'`
   - `riftbound_tools`: `'[Equip] 1 body rune (1 body rune: Attach this to a unit you control.)'`
-- **SFD-103** Jaull-Fish -> chose `'[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\n\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)'` from `apitcg`
-  - `apitcg`: `'[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\n\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)'`
+- **SFD-103** Jaull-Fish -> chose `'[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)'` from `apitcg`
+  - `apitcg`: `'[ACCELERATE] (You may pay 1 Body as an additional cost to have me enter ready.)\nI cost 2 less for each of your [MIGHTY] units. A unit is Mighty while it has 5+ Might.)'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 body rune as an additional cost to have me enter ready.) I cost 2 energy less for each of your [Mighty] units. (A unit is Mighty while it has 5+ might.)'`
-- **SFD-104** Petricite Monument -> chose `"[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\n\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)"` from `apitcg`
-  - `apitcg`: `"[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\n\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)"`
+- **SFD-104** Petricite Monument -> chose `"[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)"` from `apitcg`
+  - `apitcg`: `"[TEMPORARY] (Kill this at the start of its controller's Beginning Phase, before scoring.)\nFriendly units have [DEFLECT]. (Opponents must pay Rune to choose them with a spell or ability.)"`
   - `riftbound_tools`: `"[Temporary] (Kill this at the start of its controller's Beginning Phase, before scoring.) Friendly units have [Deflect]. (Opponents must pay 1 rune of any type to choose them with a spell or ability.)"`
-- **SFD-106** Show of Strength -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)'`
+- **SFD-106** Show of Strength -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nDraw 1 for each of your [MIGHTY] units. (A unit is Mighty while it has 5+ Might)'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Draw 1 for each of your [Mighty] units. (A unit is Mighty while it has 5+ might.)'`
-- **SFD-108** Warmog's Armor -> chose `"[EQUIP Body] (Body: Attach this to a unit you control.)\n\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might"` from `apitcg`
-  - `apitcg`: `"[EQUIP Body] (Body: Attach this to a unit you control.)\n\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might"`
+- **SFD-108** Warmog's Armor -> chose `"[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might"` from `apitcg`
+  - `apitcg`: `"[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)+1 Might"`
   - `riftbound_tools`: `'[Equip] 1 body rune (1 body rune: Attach this to a unit you control.)'`
-- **SFD-109** Akshan - Mischievous -> chose `"[WEAPONMASTER]\n\nYou may pay Body Body as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER]\n\nYou may pay Body Body as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."`
+- **SFD-109** Akshan - Mischievous -> chose `"[WEAPONMASTER]\nYou may pay Body Body as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER]\nYou may pay Body Body as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."`
   - `riftbound_tools`: `"[Weaponmaster] You may pay 1 body rune1 body rune as an additional cost to play me. When you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."`
-- **SFD-111** Here to Help -> chose `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n\n[ACTION] (Play on your turn or in showdowns.)\n\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.'`
+- **SFD-111** Here to Help -> chose `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n[ACTION] (Play on your turn or in showdowns.)\nYou may play a unit from hand to a battlefield you control, reducing its cost by 3.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) You may play a unit from hand to a battlefield you control, reducing its cost by 3 energy.'`
-- **SFD-112** Kato the Arm -> chose `'[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\n\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.'` from `apitcg`
-  - `apitcg`: `'[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\n\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.'`
+- **SFD-112** Kato the Arm -> chose `'[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.'` from `apitcg`
+  - `apitcg`: `'[DEFLECT] (Opponents must pay Rune to choose me with a spell or ability.)\nWhen I move to a battlefield, give a friendly unit my keywords and +Might equal to my Might this turn.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When I move to a battlefield, give another friendly unit my keywords and +might equal to my Might this turn.'`
-- **SFD-113** Lucian - Merciless -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me."`
+- **SFD-113** Lucian - Merciless -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) The first time I conquer each turn, ready me."`
-- **SFD-113A** Lucian - Merciless (Alternate Art) -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nThe first time I conquer each turn, ready me."`
+- **SFD-113A** Lucian - Merciless (Alternate Art) -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nThe first time I conquer each turn, ready me."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) The first time I conquer each turn, ready me."`
-- **SFD-114** Marching Orders -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\n\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\n\n\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."`
+- **SFD-114** Marching Orders -> chose `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT 3]  (You may pay the additional cost to repeat this spell's effect.)\nChoose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) [Repeat] 3 energy (You may pay the additional cost to repeat this spell's effect.) Choose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."`
-- **SFD-115** Trinity Force -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n\nWhen I hold, score 1 point. +2 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\n\n\nWhen I hold, score 1 point. +2 Might'`
+- **SFD-115** Trinity Force -> chose `'[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I hold, score 1 point. +2 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Body] (Body: Attach this to a unit you control.)\nWhen I hold, score 1 point. +2 Might'`
   - `riftbound_tools`: `'[Equip] 1 body rune (1 body rune: Attach this to a unit you control.)'`
-- **SFD-116** Yone - Blademaster -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."`
+- **SFD-116** Yone - Blademaster -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) When I conquer a battlefield that was uncontrolled, deal damage equal to my Might to an enemy unit in a base."`
 - **SFD-117** Ancient Henge -> chose `"Exhaust: [REACTION] — Pay any amount of Energy to [ADD] that much Rune. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — Pay any amount of Energy to [ADD] that much Rune. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — Pay any amount of Energy to [Add] that much 1 rune of any type. (Abilities that add resources can't be reacted to.)"`
-- **SFD-118** Boneshiver -> chose `'[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\n\nWhen I conquer, channel 1 rune exhausted. Might +2.'` from `apitcg`
-  - `apitcg`: `'[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\n\nWhen I conquer, channel 1 rune exhausted. Might +2.'`
+- **SFD-118** Boneshiver -> chose `'[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\nWhen I conquer, channel 1 rune exhausted. Might +2.'` from `apitcg`
+  - `apitcg`: `'[EQUIP 1 Body] (1 Body: Attach this to a unit you control.)\nWhen I conquer, channel 1 rune exhausted. Might +2.'`
   - `riftbound_tools`: `'[Equip] 1 energy and 1 body rune (1 energy and 1 body rune: Attach this to a unit you control.)'`
-- **SFD-119** Jax - Unrelenting -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1."`
+- **SFD-119** Jax - Unrelenting -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) When you attach an Equipment to me, you may pay 1 energy to draw 1."`
-- **SFD-119A** Jax - Unrelenting (Alternate Art) -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\n\n\nWhen you attach an Equipment to me, you may pay 1 to draw 1."`
+- **SFD-119A** Jax - Unrelenting (Alternate Art) -> chose `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [Equip] one of your Equipment to me for 1 Rune less, even if it's already attached.)\nWhen you attach an Equipment to me, you may pay 1 to draw 1."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) When you attach an Equipment to me, you may pay 1 energy to draw 1."`
-- **SFD-120** Sivir - Ambitious -> chose `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'` from `apitcg`
-  - `apitcg`: `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
+- **SFD-120** Sivir - Ambitious -> chose `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'` from `apitcg`
+  - `apitcg`: `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
   - `riftbound_tools`: `'[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or Ability.) When I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
-- **SFD-120A** Sivir - Ambitious (Alternate Art) -> chose `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'` from `apitcg`
-  - `apitcg`: `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\n\n\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
+- **SFD-120A** Sivir - Ambitious (Alternate Art) -> chose `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'` from `apitcg`
+  - `apitcg`: `'[DEFLECT 2] (Opponents must pay  to choose me with a spell or Ability.)\nWhen I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
   - `riftbound_tools`: `'[Deflect 2] (Opponents must pay 2 runes of any type to choose me with a spell or Ability.) When I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you may deal that much to an enemy unit.'`
 - **SFD-121** Black Market Broker -> chose `'When you play a card from face down, play a gold gear token exhausted.'` from `apitcg`
   - `apitcg`: `'When you play a card from face down, play a gold gear token exhausted.'`
   - `riftbound_tools`: `'When you play a card from face down, play a Gold gear token exhausted.'`
-- **SFD-122** Called Shot -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\n\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other."` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\n\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other."`
+- **SFD-122** Called Shot -> chose `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other."` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n[REPEAT Chaos] (You may pay the additional cost to repeat this spell's effect.)\nLook at the top 2 cards of your Main Deck. Draw one and recycle the other."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) [Repeat] 1 chaos rune (You may pay the additional cost to repeat this spell's effect.) Look at the top 2 cards of your Main Deck. Draw one and recycle the other."`
-- **SFD-123** Corrupt Enforcer -> chose `'When I move to a battlefield, discard 1.\n\n\nWhen I win combat, draw 1.'` from `apitcg`
-  - `apitcg`: `'When I move to a battlefield, discard 1.\n\n\nWhen I win combat, draw 1.'`
+- **SFD-123** Corrupt Enforcer -> chose `'When I move to a battlefield, discard 1.\nWhen I win combat, draw 1.'` from `apitcg`
+  - `apitcg`: `'When I move to a battlefield, discard 1.\nWhen I win combat, draw 1.'`
   - `riftbound_tools`: `'When I move to a battlefield, discard 1. When I win a combat, draw 1.'`
-- **SFD-124** Doran's Ring -> chose `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\nWhen I conquer, discard 1, then draw 1. +1 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\nWhen I conquer, discard 1, then draw 1. +1 Might'`
+- **SFD-124** Doran's Ring -> chose `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer, discard 1, then draw 1. +1 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer, discard 1, then draw 1. +1 Might'`
   - `riftbound_tools`: `'[Equip] 1 chaos rune (1 chaos rune: Attach this to a unit you control.)'`
 - **SFD-125** Fae Porter -> chose `'When I move to a battlefield, you may pay Chaos to move a unit you control to the same battlefield.'` from `apitcg`
   - `apitcg`: `'When I move to a battlefield, you may pay Chaos to move a unit you control to the same battlefield.'`
@@ -2422,29 +2422,29 @@ Missing field counts across incomplete cards:
 - **SFD-127** Master Bingwen -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)"` from `apitcg`
   - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for 1 Rune less, even if it's already attached.)"`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.)"`
-- **SFD-129** Temptation -> chose `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nMove an enemy unit to a location where there's a unit with the same controller."` from `apitcg`
-  - `apitcg`: `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nMove an enemy unit to a location where there's a unit with the same controller."`
+- **SFD-129** Temptation -> chose `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nMove an enemy unit to a location where there's a unit with the same controller."` from `apitcg`
+  - `apitcg`: `"[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nMove an enemy unit to a location where there's a unit with the same controller."`
   - `riftbound_tools`: `"[Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Move an enemy unit to a location where there's a unit with the same controller."`
-- **SFD-131** Ancient Warmonger -> chose `"[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\n\n\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)"` from `apitcg`
-  - `apitcg`: `"[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\n\n\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)"`
+- **SFD-131** Ancient Warmonger -> chose `"[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)"` from `apitcg`
+  - `apitcg`: `"[ACCELERATE] (You may pay 1 and Chaos as an additional cost to have me enter ready.)\nI have [ASSAULT] equal to the number of enemy units here. (+1 Might while I'm an attacker for each instance of Assault.)"`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 chaos rune as an additional cost to have me enter ready.) I have [Assault] equal to the number of enemy units here. (+1 might while I'm an attacker for each instance of Assault.)"`
-- **SFD-133** Boots of Swiftness -> chose `'[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n\n\n[GANKING] (I can move from battlefield to battlefield)'` from `apitcg`
-  - `apitcg`: `'[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n\n\n[GANKING] (I can move from battlefield to battlefield)'`
+- **SFD-133** Boots of Swiftness -> chose `'[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n[GANKING] (I can move from battlefield to battlefield)'` from `apitcg`
+  - `apitcg`: `'[EQUIP Chaos]  (Chaos: Attach this to a unit you control.)\n[GANKING] (I can move from battlefield to battlefield)'`
   - `riftbound_tools`: `'[Equip] 1 chaos rune (1 chaos rune: Attach this to a unit you control.)'`
-- **SFD-134** Cull -> chose `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\n\nWhen I conquer play a Gold gear token exhausted.\n\n\nMight +1'` from `apitcg`
-  - `apitcg`: `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\n\n\nWhen I conquer play a Gold gear token exhausted.\n\n\nMight +1'`
+- **SFD-134** Cull -> chose `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer play a Gold gear token exhausted.\nMight +1'` from `apitcg`
+  - `apitcg`: `'[EQUIP Chaos] (Chaos: Attach this to a unit you control.)\nWhen I conquer play a Gold gear token exhausted.\nMight +1'`
   - `riftbound_tools`: `'[Equip] 1 chaos rune (1 chaos rune: Attach this to a unit you control.)'`
-- **SFD-135** Factory Recall -> chose `"[ACTION] (Play on your turn or in showdowns)\n\n\nReturn a gear to its owner's hand."` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns)\n\n\nReturn a gear to its owner's hand."`
+- **SFD-135** Factory Recall -> chose `"[ACTION] (Play on your turn or in showdowns)\nReturn a gear to its owner's hand."` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns)\nReturn a gear to its owner's hand."`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) Return a gear to its owner's hand."`
-- **SFD-136** Hard Bargain -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nCounter a spell unless its controller pays 2."` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nCounter a spell unless its controller pays 2."`
+- **SFD-136** Hard Bargain -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nCounter a spell unless its controller pays 2."` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nCounter a spell unless its controller pays 2."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) [Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Counter a spell unless its controller pays 2 energy."`
-- **SFD-138** Windsinger -> chose `"[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand."` from `apitcg`
-  - `apitcg`: `"[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand."`
+- **SFD-138** Windsinger -> chose `"[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand."` from `apitcg`
+  - `apitcg`: `"[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\nWhen you play me, you may return another unit at a battlefield with 3 Might or less to its owner's hand."`
   - `riftbound_tools`: `"Hidden (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me, you may return another unit at a battlefield with 3 might or less to its owner's hand."`
-- **SFD-139** Edge of Night -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play this from face down, attach it to a unit you control here.\n\n\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n\n\n+2 Might'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen you play this from face down, attach it to a unit you control here.\n\n\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n\n\n+2 Might'`
+- **SFD-139** Edge of Night -> chose `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nWhen you play this from face down, attach it to a unit you control here.\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n+2 Might'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide now for 1 Rune to react with later for 0.)\nWhen you play this from face down, attach it to a unit you control here.\n[Equip Chaos] (Chaos: Attach this to a unit you control.)\n+2 Might'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play this from face down, attach it to a unit you control (here). [Equip] 1 chaos rune (1 chaos rune: Attach this to a unit you control.)'`
 - **SFD-140** Fizz - Trickster -> chose `'When you play me, you may play a spell from your trash with Energy cost no more than 3, ignoring its Energy cost. Recycle that spell after you play it. (You must still pay its Power cost.)'` from `apitcg`
   - `apitcg`: `'When you play me, you may play a spell from your trash with Energy cost no more than 3, ignoring its Energy cost. Recycle that spell after you play it. (You must still pay its Power cost.)'`
@@ -2455,41 +2455,41 @@ Missing field counts across incomplete cards:
 - **SFD-141A** Irelia - Graceful (Alternate Art) -> chose `'Your spells that choose me cost 1 or Rune less.'` from `apitcg`
   - `apitcg`: `'Your spells that choose me cost 1 or Rune less.'`
   - `riftbound_tools`: `'Your spells that choose me cost 1 energy or 1 rune of any type less.'`
-- **SFD-143** Sivir - Mercenary -> chose `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"` from `apitcg`
-  - `apitcg`: `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"`
+- **SFD-143** Sivir - Mercenary -> chose `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"` from `apitcg`
+  - `apitcg`: `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 chaos rune as an additional cost to have me enter ready.) If you've spent at least 2 runes of any type this turn, I have +2 might and [Ganking]. (I can move from battlefield to battlefield.)"`
-- **SFD-143A** Sivir - Mercenary (Alternate Art) -> chose `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"` from `apitcg`
-  - `apitcg`: `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\n\n\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"`
+- **SFD-143A** Sivir - Mercenary (Alternate Art) -> chose `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"` from `apitcg`
+  - `apitcg`: `"[ACCELERATE] (You may pay 1, Chaos as an additional cost to have me enter ready.)\nIf you've spent at least 2 Runes this turn, I have +2 Might and [GANKING]. (I can move from battlefield to battlefield.)"`
   - `riftbound_tools`: `"[Accelerate] (You may pay 1 energy and 1 chaos rune as an additional cost to have me enter ready.) If you've spent at least 2 runes of any type this turn, I have +2 might and [Ganking]. (I can move from battlefield to battlefield.)"`
 - **SFD-144** Spirit Wheel -> chose `'When you choose a friendly unit, you may pay 1 and exhaust this to draw 1.'` from `apitcg`
   - `apitcg`: `'When you choose a friendly unit, you may pay 1 and exhaust this to draw 1.'`
   - `riftbound_tools`: `'When you choose a friendly unit, you may pay 1 energy and exhaust this to draw 1.'`
-- **SFD-145** Switcheroo -> chose `'[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\n[ACTION] {Play on your turn or in showdowns.)\n\n\nSwap the Might of two units at the same battlefield this turn.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n\n\n[ACTION] {Play on your turn or in showdowns.)\n\n\nSwap the Might of two units at the same battlefield this turn.'`
+- **SFD-145** Switcheroo -> chose `'[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n[ACTION] {Play on your turn or in showdowns.)\nSwap the Might of two units at the same battlefield this turn.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN]  (Hide now for 1 Rune to reach later for 0.)\n[ACTION] {Play on your turn or in showdowns.)\nSwap the Might of two units at the same battlefield this turn.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Swap the Might of two units at the same battlefield this turn.'`
 - **SFD-146** Vex - Cheerless -> chose `"While I'm in combat, friendly spells cost 1 Rune less to a minium of 1, and enemy spells cost 1 Rune more."` from `apitcg`
   - `apitcg`: `"While I'm in combat, friendly spells cost 1 Rune less to a minium of 1, and enemy spells cost 1 Rune more."`
   - `riftbound_tools`: `"While I'm in combat, friendly spells cost 1 energy1 rune of any type less to a minimum of 1 energy, and enemy spells cost 1 energy1 rune of any type more."`
-- **SFD-148** Draven - Audacious -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.'` from `apitcg`
-  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.'`
+- **SFD-148** Draven - Audacious -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.'` from `apitcg`
+  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) The first time I win a combat each turn, you score 1 point. When I die in combat, choose an opponent. They score 1 point.'`
-- **SFD-148A** Draven - Audacious (Alternate Art) -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.'` from `apitcg`
-  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\n\n\nThe first time I win a combat each turn, you score 1 point.\n\n\nWhen I die in combat, choose an opponent. They score 1 point.'`
+- **SFD-148A** Draven - Audacious (Alternate Art) -> chose `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.'` from `apitcg`
+  - `apitcg`: `'[DEFLECT] (Opponents must pay 1 Rune to choose me with a spell or ability.)\nThe first time I win a combat each turn, you score 1 point.\nWhen I die in combat, choose an opponent. They score 1 point.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) The first time I win a combat each turn, you score 1 point. When I die in combat, choose an opponent. They score 1 point.'`
-- **SFD-149** Ezreal - Prodigy -> chose `'When you play me, discard 1, then draw 2.\n\n\nOptional additional costs you pay cost 1 or 1 Rune less.'` from `apitcg`
-  - `apitcg`: `'When you play me, discard 1, then draw 2.\n\n\nOptional additional costs you pay cost 1 or 1 Rune less.'`
+- **SFD-149** Ezreal - Prodigy -> chose `'When you play me, discard 1, then draw 2.\nOptional additional costs you pay cost 1 or 1 Rune less.'` from `apitcg`
+  - `apitcg`: `'When you play me, discard 1, then draw 2.\nOptional additional costs you pay cost 1 or 1 Rune less.'`
   - `riftbound_tools`: `'When you play me, discard 1, then draw 2. Optional additional costs you pay cost 1 energy or 1 rune of any type less.'`
-- **SFD-150** Last Rites -> chose `'[EQUIP] — Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\n\n\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)'` from `apitcg`
-  - `apitcg`: `'[EQUIP] — Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\n\n\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)'`
+- **SFD-150** Last Rites -> chose `'[EQUIP] — Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)'` from `apitcg`
+  - `apitcg`: `'[EQUIP] — Chaos, Recycle 2 cards from your trash. (Pay the cost: Attach this to a unit you control.)\nWhen I conquer or hold, you may play a unit from your trash. (You still pay its costs.)'`
   - `riftbound_tools`: `'[Equip] — 1 chaos rune, Recycle 2 cards from your trash (Pay the cost: Attach this to a unit you control.)'`
-- **SFD-151** Bonds of Strength -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive two friendly units each +1 Might this turn."` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\n\n\nGive two friendly units each +1 Might this turn."`
+- **SFD-151** Bonds of Strength -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive two friendly units each +1 Might this turn."` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT 2] (You may pay the additional cost to repeat this spell's effect.)\nGive two friendly units each +1 Might this turn."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) [Repeat] 2 energy (You may pay the additional cost to repeat this spell's effect.) Give two friendly units each +1 might this turn."`
-- **SFD-153** Eye of the Herald -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\nWhen I move, play a 1 Might Recruit unit token here.'` from `apitcg`
-  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\nWhen I move, play a 1 Might Recruit unit token here.'`
+- **SFD-153** Eye of the Herald -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\nWhen I move, play a 1 Might Recruit unit token here.'` from `apitcg`
+  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\nWhen I move, play a 1 Might Recruit unit token here.'`
   - `riftbound_tools`: `'[Equip] 1 order rune (1 order rune: Attach this to a unit you control.)'`
-- **SFD-154** Guards! -> chose `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.'` from `apitcg`
-  - `apitcg`: `'[HIDDEN] (Hide now for Rune to react with later for 0.)\n\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.'`
+- **SFD-154** Guards! -> chose `'[HIDDEN] (Hide now for Rune to react with later for 0.)\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.'` from `apitcg`
+  - `apitcg`: `'[HIDDEN] (Hide now for Rune to react with later for 0.)\nPlay a 2 Might Sand Soldier unit token. You may pay Order to ready it.'`
   - `riftbound_tools`: `'[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) Play a 2 might Sand Soldier unit token. You may pay 1 order rune to ready it.'`
 - **SFD-155** Honest Broker -> chose `'[DEATHKNELL] — Play a gold gear token exhausted. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'[DEATHKNELL] — Play a gold gear token exhausted. (When I die, get the effect.)'`
@@ -2506,26 +2506,26 @@ Missing field counts across incomplete cards:
 - **SFD-159** Trusty Ramhound -> chose `'While you have another unit here, I have +1 Might.'` from `apitcg`
   - `apitcg`: `'While you have another unit here, I have +1 Might.'`
   - `riftbound_tools`: `'While you have another unit here, I have +1 might.'`
-- **SFD-160** Zaun Punk -> chose `'You may kill a friendly gear as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, kill a gear.'` from `apitcg`
-  - `apitcg`: `'You may kill a friendly gear as an additional cost to play me.\n\nWhen you play me, if you paid the additional cost, kill a gear.'`
+- **SFD-160** Zaun Punk -> chose `'You may kill a friendly gear as an additional cost to play me.\nWhen you play me, if you paid the additional cost, kill a gear.'` from `apitcg`
+  - `apitcg`: `'You may kill a friendly gear as an additional cost to play me.\nWhen you play me, if you paid the additional cost, kill a gear.'`
   - `riftbound_tools`: `'You may kill a friendly gear as an additional cost to play me. When you play me, if you paid the additional cost, kill a gear.'`
-- **SFD-161** B.F. Sword -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\n+3 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\n+3 Might'`
+- **SFD-161** B.F. Sword -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\n+3 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\n+3 Might'`
   - `riftbound_tools`: `'[Equip] 1 order rune (1 order rune: Attach this to a unit you control.)'`
-- **SFD-162** Blood Money -> chose `'[ACTION] (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.'` from `apitcg`
-  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\n\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.'`
+- **SFD-162** Blood Money -> chose `'[ACTION] (Play on your turn or in showdowns.)\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.'` from `apitcg`
+  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\nKill a unit at a battlefield with 2 Might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two BGold gear tokens exhausted.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Kill a unit at a battlefield with 2 might or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two Gold gear tokens exhausted.'`
-- **SFD-163** Deathgrip -> chose `'[REACTION] (Play any time, even before spells and abilities resolve)\n\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve)\n\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.'`
+- **SFD-163** Deathgrip -> chose `'[REACTION] (Play any time, even before spells and abilities resolve)\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve)\nKill a friendly unit to give +Might equal to its Might to another friendly unit this turn. Draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Kill a friendly unit. If you do, give +might equal to its Might to another friendly unit this turn. Draw 1.'`
-- **SFD-164** Drag Under -> chose `'[Action] (Play on your turn or in showdowns.)\n\n\nI cost  less to play from anywhere other than your hand.\n\n\nKill a unit at a battlefield.'` from `apitcg`
-  - `apitcg`: `'[Action] (Play on your turn or in showdowns.)\n\n\nI cost  less to play from anywhere other than your hand.\n\n\nKill a unit at a battlefield.'`
+- **SFD-164** Drag Under -> chose `'[Action] (Play on your turn or in showdowns.)\nI cost  less to play from anywhere other than your hand.\nKill a unit at a battlefield.'` from `apitcg`
+  - `apitcg`: `'[Action] (Play on your turn or in showdowns.)\nI cost  less to play from anywhere other than your hand.\nKill a unit at a battlefield.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) I cost 2 energy less to play from anywhere other than your hand. Kill a unit at a battlefield.'`
 - **SFD-165** Glasc Mixologist -> chose `'[DEATHKNELL] — You may play a unit with cost no more than 3 and no more than  from your trash, ignoring its cost. (When I die, get the effect.)'` from `apitcg`
   - `apitcg`: `'[DEATHKNELL] — You may play a unit with cost no more than 3 and no more than  from your trash, ignoring its cost. (When I die, get the effect.)'`
   - `riftbound_tools`: `'[Deathknell] — You may play a unit with cost no more than 3 energy and no more than 1 rune of any type from your trash, ignoring its cost. (When I die, get the effect.)'`
-- **SFD-166** Rally the Troops -> chose `"[ACTION] (Play on your turn or in showdowns.)\n\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\n\nDraw 1"` from `apitcg`
-  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\n\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\n\nDraw 1"`
+- **SFD-166** Rally the Troops -> chose `"[ACTION] (Play on your turn or in showdowns.)\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\nDraw 1"` from `apitcg`
+  - `apitcg`: `"[ACTION] (Play on your turn or in showdowns.)\nWhen a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 Might buff.)\nDraw 1"`
   - `riftbound_tools`: `"[Action] (Play on your turn or in showdowns.) When a friendly unit is played this turn, buff it. (If it doesn't have a buff, it gets a +1 might buff.) Draw 1."`
 - **SFD-167** Unsung Hero -> chose `"[DEATHKNELL] — If I was [MIGHTY], draw 2. (When I die, get the effect. I'm Mighty while I have 5+ Might.)"` from `apitcg`
   - `apitcg`: `"[DEATHKNELL] — If I was [MIGHTY], draw 2. (When I die, get the effect. I'm Mighty while I have 5+ Might.)"`
@@ -2539,29 +2539,29 @@ Missing field counts across incomplete cards:
 - **SFD-170A** Rek'Sai - Swarm Queen (Alternate Art) -> chose `'When I attack, you may reveal the top 2 cards of your Main Deck. You may play one. Then recycle the rest. If the played card is a unit, you may play it here.'` from `apitcg`
   - `apitcg`: `'When I attack, you may reveal the top 2 cards of your Main Deck. You may play one. Then recycle the rest. If the played card is a unit, you may play it here.'`
   - `riftbound_tools`: `'When I attack, you may reveal the top 2 cards of your Main Deck. You may banish one, then play it. If it is a unit, you may play it here. Recycle the rest.'`
-- **SFD-172** Sacred Shears -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\n\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n\n\n+1 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\n\n\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n\n\n+1 Might'`
+- **SFD-172** Sacred Shears -> chose `'[EQUIP Order] (Order: Attach this to a unit you control.)\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n+1 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP Order] (Order: Attach this to a unit you control.)\n[DEATHKNELL] - Draw 1. (When I die, get the effect.)\n+1 Might'`
   - `riftbound_tools`: `'[Equip] 1 order rune (1 order rune: Attach this to a unit you control.)'`
-- **SFD-173** Soraka - Wanderer -> chose `"I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
+- **SFD-173** Soraka - Wanderer -> chose `"I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"I must be assigned combat damage last. If another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
-- **SFD-175** Undertitan -> chose `"When you play me, give your other units +2 Might this turn.\n\n\nAs I'm revealed from your deck, [ADD] 2."` from `apitcg`
-  - `apitcg`: `"When you play me, give your other units +2 Might this turn.\n\n\nAs I'm revealed from your deck, [ADD] 2."`
+- **SFD-175** Undertitan -> chose `"When you play me, give your other units +2 Might this turn.\nAs I'm revealed from your deck, [ADD] 2."` from `apitcg`
+  - `apitcg`: `"When you play me, give your other units +2 Might this turn.\nAs I'm revealed from your deck, [ADD] 2."`
   - `riftbound_tools`: `"When you play me, give your other units +2 might this turn. As I'm revealed from your deck, [Add] 2 energy."`
-- **SFD-176** Xin Zhao - Vigilant -> chose `'[TANK] (I must be assigned combat damage first.)\n\n\nI enter ready if you have two or more other units in your base.'` from `apitcg`
-  - `apitcg`: `'[TANK] (I must be assigned combat damage first.)\n\n\nI enter ready if you have two or more other units in your base.'`
+- **SFD-176** Xin Zhao - Vigilant -> chose `'[TANK] (I must be assigned combat damage first.)\nI enter ready if you have two or more other units in your base.'` from `apitcg`
+  - `apitcg`: `'[TANK] (I must be assigned combat damage first.)\nI enter ready if you have two or more other units in your base.'`
   - `riftbound_tools`: `'[Tank] (I must be assigned combat damage first.) I enter ready if you have two or more other units in your base.'`
-- **SFD-177** Azir - Sovereign -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.'` from `apitcg`
-  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.'`
+- **SFD-177** Azir - Sovereign -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.'` from `apitcg`
+  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 order rune as an additional cost to have me enter ready.) When I attack, you may move any number of your token units to this battlefield.'`
-- **SFD-177A** Azir - Sovereign (Alternate Art) -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.'` from `apitcg`
-  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I attack, you may move any number of your token units to this battlefield.'`
+- **SFD-177A** Azir - Sovereign (Alternate Art) -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.'` from `apitcg`
+  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I attack, you may move any number of your token units to this battlefield.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 order rune as an additional cost to have me enter ready.) When I attack, you may move any number of your token units to this battlefield.'`
-- **SFD-178** Blade of the Ruined King -> chose `'[EQUIP] — Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n\n\n+4 Might'` from `apitcg`
-  - `apitcg`: `'[EQUIP] — Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n\n\n+4 Might'`
+- **SFD-178** Blade of the Ruined King -> chose `'[EQUIP] — Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n+4 Might'` from `apitcg`
+  - `apitcg`: `'[EQUIP] — Order, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)\n+4 Might'`
   - `riftbound_tools`: `'[Equip] — 1 order rune, Kill a friendly unit (Pay the cost: Attach this to a unit you control.)'`
-- **SFD-179** Corina Veraza -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.'` from `apitcg`
-  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\n\n\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.'`
+- **SFD-179** Corina Veraza -> chose `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.'` from `apitcg`
+  - `apitcg`: `'[ACCELERATE] (You may pay 1 and Order as an additional cost to have me enter ready.)\nWhen I move to a battlefield, play three 1 Might Recruit unit tokens here.'`
   - `riftbound_tools`: `'[Accelerate] (You may pay 1 energy and 1 order rune as an additional cost to have me enter ready.) When I move to a battlefield, play three 1 might Recruit unit tokens here.'`
 - **SFD-180** Fiora - Worthy -> chose `'When a unit you control becomes [MIGHTY], you may pay Order to ready it. (A unit is Mighty while it has 5+ Might.)'` from `apitcg`
   - `apitcg`: `'When a unit you control becomes [MIGHTY], you may pay Order to ready it. (A unit is Mighty while it has 5+ Might.)'`
@@ -2572,17 +2572,17 @@ Missing field counts across incomplete cards:
 - **SFD-181** Rumble - Mechanized Menace -> chose `"Your Mechs have [SHIELD]. +1 Might while they're defenders.)"` from `apitcg`
   - `apitcg`: `"Your Mechs have [SHIELD]. +1 Might while they're defenders.)"`
   - `riftbound_tools`: `"Your Mechs have [Shield]. (+1 might while they're defenders.)"`
-- **SFD-182** Danger Zone -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\n\nGive your Mechs +1 Might this turn"` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\n\nGive your Mechs +1 Might this turn"`
+- **SFD-182** Danger Zone -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\nGive your Mechs +1 Might this turn"` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n[REPEAT] 1 Rune (You may pay the additional cost to repeat this spell's effect.)\nGive your Mechs +1 Might this turn"`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) [Repeat] 1 energy1 rune of any type (You may pay the additional cost to repeat this spell's effect.) Give your Mechs +1 might this turn."`
 - **SFD-183** Lucian - Purifier -> chose `'Your Equipment each give [ASSAULT]. (+1 Might while equipped unit is an attacker.)'` from `apitcg`
   - `apitcg`: `'Your Equipment each give [ASSAULT]. (+1 Might while equipped unit is an attacker.)'`
   - `riftbound_tools`: `'Your Equipment each give [Assault]. (+1 might while equipped unit is an attacker.)'`
-- **SFD-184** Relentless Pursuit -> chose `'[ACTION] (Play on your turn or in showdowns.)\n\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has "When I conquer, you may move me to my base."'` from `apitcg`
-  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\n\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has "When I conquer, you may move me to my base."'`
+- **SFD-184** Relentless Pursuit -> chose `'[ACTION] (Play on your turn or in showdowns.)\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has "When I conquer, you may move me to my base."'` from `apitcg`
+  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\nMove a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has "When I conquer, you may move me to my base."'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Move a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has &quot;When I conquer, you may move me to my base.&quot;'`
-- **SFD-186** Spinning Axe -> chose `"[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\n\n\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
-  - `apitcg`: `"[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n\n\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\n\n\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)"`
+- **SFD-186** Spinning Axe -> chose `"[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)"` from `apitcg`
+  - `apitcg`: `"[QUICK-DRAW] (This has REACTION. When you play it, attach it to a unit you control.)\n[EQUIP 1 Rune] (1 Rune: Attach this to a unit you control.)\nTEMPORARY (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)"`
   - `riftbound_tools`: `"[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 rune of any type (1 rune of any type: Attach this to a unit you control.) [Temporary] (If this is unattached, kill it at the start of its controller's Beginning Phase, before scoring.)"`
 - **SFD-187** Rek'sai - Void Burrower -> chose `'When you conquer, you may exhaust me to reveal the top 2 cards of your Main Deck. You may play one. Then recycle the rest.'` from `apitcg`
   - `apitcg`: `'When you conquer, you may exhaust me to reveal the top 2 cards of your Main Deck. You may play one. Then recycle the rest.'`
@@ -2593,29 +2593,29 @@ Missing field counts across incomplete cards:
 - **SFD-189** Ornn - Fire Below the Mountain -> chose `"Exhaust: [REACTION] — [ADD] Rune. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — [ADD] Rune. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 rune of any type. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"`
-- **SFD-190** Forgefire Cape -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.'` from `apitcg`
-  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.'`
+- **SFD-190** Forgefire Cape -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.'` from `apitcg`
+  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen I attack or defend, deal 2 to all enemy units here. +3 Might.'`
   - `riftbound_tools`: `'[Unique] (Your deck can have only 1 card with this name.) [Equip] 1 rune of any type (1 rune of any type: Attach this to a unit you control.)'`
-- **SFD-191** Rabadon's Deathcrown -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might'` from `apitcg`
-  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might'`
+- **SFD-191** Rabadon's Deathcrown -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might'` from `apitcg`
+  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nYour spells and abilities deal 3 Bonus Damage (while this is attached). +3 Might'`
   - `riftbound_tools`: `'[Unique] (Your deck can have only 1 card with this name.) [Equip] 1 rune of any type (1 rune of any type: Attach this to a unit you control.)'`
-- **SFD-192** Shurelya's Requiem -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen you play this, ready your units.\n\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might'` from `apitcg`
-  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\n\nWhen you play this, ready your units.\n\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might'`
+- **SFD-192** Shurelya's Requiem -> chose `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen you play this, ready your units.\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might'` from `apitcg`
+  - `apitcg`: `'[UNIQUE] (Your deck can have only 1 card with this name.)\n[EQUIP Rune] (Rune: Attach this to a unit you control.)\nWhen you play this, ready your units.\nYour units here have [GANKING] (We can move from battlefield to battlefield.). +2 Might'`
   - `riftbound_tools`: `'[Unique] (Your deck can have only 1 card with this name.) [Equip] 1 rune of any type (1 rune of any type: Attach this to a unit you control.) When you play this, ready your units.'`
-- **SFD-193** Jax - Grandmaster At Arms -> chose `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.'` from `apitcg`
-  - `apitcg`: `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.'`
+- **SFD-193** Jax - Grandmaster At Arms -> chose `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.'` from `apitcg`
+  - `apitcg`: `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.'`
   - `riftbound_tools`: `'1 energy, exhaust: Attach a detached Equipment you control to a unit you control. exhaust: Attach an attached Equipment you control to a unit you control.'`
-- **SFD-194** Counter Strike -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.'`
+- **SFD-194** Counter Strike -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Choose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1.'`
-- **SFD-195** Irelia - Blade Dancer -> chose `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.'` from `apitcg`
-  - `apitcg`: `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.'`
+- **SFD-195** Irelia - Blade Dancer -> chose `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.'` from `apitcg`
+  - `apitcg`: `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.'`
   - `riftbound_tools`: `'When you choose a friendly unit, you may exhaust me and pay 1 rune of any type to ready it. When you conquer, you may pay 1 energy to ready me.'`
-- **SFD-196** Defiant Dance -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a unit +2 Might this turn and another unit -2 Might this turn.'` from `apitcg`
-  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\n\nGive a unit +2 Might this turn and another unit -2 Might this turn.'`
+- **SFD-196** Defiant Dance -> chose `'[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn and another unit -2 Might this turn.'` from `apitcg`
+  - `apitcg`: `'[REACTION] (Play any time, even before spells and abilities resolve.)\nGive a unit +2 Might this turn and another unit -2 Might this turn.'`
   - `riftbound_tools`: `'[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit +2 might this turn and another unit -2 might this turn.'`
-- **SFD-197** Azir - Emperor of the Sands -> chose `"Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."` from `apitcg`
-  - `apitcg`: `"Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
+- **SFD-197** Azir - Emperor of the Sands -> chose `"Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."` from `apitcg`
+  - `apitcg`: `"Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
   - `riftbound_tools`: `"Your Sand Soldiers have [Weaponmaster]. 1 energy, exhaust: Play a 2 might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
 - **SFD-198** Arise! -> chose `'Play a 2 Might Sand Soldier unit token for each Equipment you control. Then ready two of them.'` from `apitcg`
   - `apitcg`: `'Play a 2 Might Sand Soldier unit token for each Equipment you control. Then ready two of them.'`
@@ -2623,23 +2623,23 @@ Missing field counts across incomplete cards:
 - **SFD-199** Ezreal - Prodigal Explorer -> chose `"Exhaust: [REACTION] — Draw 1. Use only if you've chosen enemy units and/or gear twice this turn with spells or unit abilities."` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — Draw 1. Use only if you've chosen enemy units and/or gear twice this turn with spells or unit abilities."`
   - `riftbound_tools`: `"exhaust: [Reaction] — Draw 1. Use only if you've chosen enemy units and/or gear twice this turn with spells or unit abilities."`
-- **SFD-200** Arcane Shift -> chose `'[ACTION] (Play on your turn or in showdowns.)\n\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.'` from `apitcg`
-  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\n\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.'`
+- **SFD-200** Arcane Shift -> chose `'[ACTION] (Play on your turn or in showdowns.)\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.'` from `apitcg`
+  - `apitcg`: `'[ACTION] (Play on your turn or in showdowns.)\nBanish a friendly unit, then its owner lays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.'`
   - `riftbound_tools`: `'[Action] (Play on your turn or in showdowns.) Banish a friendly unit, then its owner plays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this.'`
-- **SFD-201** Renata Glasc - Chem-Baroness -> chose `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.'` from `apitcg`
-  - `apitcg`: `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.'`
+- **SFD-201** Renata Glasc - Chem-Baroness -> chose `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.'` from `apitcg`
+  - `apitcg`: `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\nWhile your score is within 3 points of the Victory Score, your Gold ADD an additional 1.'`
   - `riftbound_tools`: `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted. While your score is within 3 points of the Victory Score, your Gold [ADD] an additional 1 energy.'`
-- **SFD-202** Hostile Takeover -> chose `"[Hidden] (Hide now for Rune to react with later for 0)\n\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\n\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"[Hidden] (Hide now for Rune to react with later for 0)\n\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\n\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)"`
+- **SFD-202** Hostile Takeover -> chose `"[Hidden] (Hide now for Rune to react with later for 0)\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"[Hidden] (Hide now for Rune to react with later for 0)\nTake control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.)\nLose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) Take control of an enemy unit at a battlefield. Ready it. (Start a combat if other enemies are there. Otherwise, conquer.) Lose control of that unit and recall it at end of turn. (Send it to base. This isn't a move.)"`
-- **SFD-203** Sivir - Battle Mistress -> chose `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.'` from `apitcg`
-  - `apitcg`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.'`
+- **SFD-203** Sivir - Battle Mistress -> chose `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.'` from `apitcg`
+  - `apitcg`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.'`
   - `riftbound_tools`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted. When one or more enemy units die, ready me.'`
 - **SFD-205** Fiora - Grand Duelist -> chose `'When one of your units becomes [MIGHTY], you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might.)'` from `apitcg`
   - `apitcg`: `'When one of your units becomes [MIGHTY], you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might.)'`
   - `riftbound_tools`: `'When one of your units becomes [Mighty], you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ might.)'`
-- **SFD-206** Riposte -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn."` from `apitcg`
-  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\n\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn."`
+- **SFD-206** Riposte -> chose `"[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn."` from `apitcg`
+  - `apitcg`: `"[REACTION] (Play any time, even before spells and abilities resolve.)\nChoose a friendly unit and a spell. Counter that spell and give that unit + Might equal to that spell's Energy cost this turn."`
   - `riftbound_tools`: `"[Reaction] (Play any time, even before spells and abilities resolve.) Choose a friendly unit and a spell. Counter that spell and give that unit +might equal to that spell's Energy cost this turn."`
 - **SFD-207** Emperor's Dais -> chose `"When you conquer here, you may pay 1 and return a unit you control here to its owner's hand. If you do, play a 2 Might Sand Soldier unit token here."` from `apitcg`
   - `apitcg`: `"When you conquer here, you may pay 1 and return a unit you control here to its owner's hand. If you do, play a 2 Might Sand Soldier unit token here."`
@@ -2668,14 +2668,14 @@ Missing field counts across incomplete cards:
 - **SFD-222** Seal of Rage (Overnumbered) -> chose `"Exhaust: REACTION - ADD 1 Fury. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD 1 Fury. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 fury rune. (Abilities that add resources can't be reacted to.)"`
-- **SFD-223** Vayne - Hunter (Overnumbered) -> chose `"ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand."` from `apitcg`
-  - `apitcg`: `"ASSAULT 3 (+3 Might while I'm an attacker.)\n\n\nIf an opponent controls a battlefield, I enter ready.\n\n\nWhen I conquer, you may pay 1 to return me to my owner's hand."`
+- **SFD-223** Vayne - Hunter (Overnumbered) -> chose `"ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand."` from `apitcg`
+  - `apitcg`: `"ASSAULT 3 (+3 Might while I'm an attacker.)\nIf an opponent controls a battlefield, I enter ready.\nWhen I conquer, you may pay 1 to return me to my owner's hand."`
   - `riftbound_tools`: `"[Assault 3] (+3 might while I'm an attacker.) If an opponent controls a battlefield, I enter ready. When I conquer, you may pay 1 energy to return me to my owner's hand."`
-- **SFD-224** Aphelios - Exalted (Overnumbered) -> chose `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n\n•Ready 2 runes.\n\n•Channel 1 rune exhausted.\n\n•Buff a friendly unit."` from `apitcg`
-  - `apitcg`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n\n•Ready 2 runes.\n\n•Channel 1 rune exhausted.\n\n•Buff a friendly unit."`
+- **SFD-224** Aphelios - Exalted (Overnumbered) -> chose `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n•Ready 2 runes.\n•Channel 1 rune exhausted.\n•Buff a friendly unit."` from `apitcg`
+  - `apitcg`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —\n•Ready 2 runes.\n•Channel 1 rune exhausted.\n•Buff a friendly unit."`
   - `riftbound_tools`: `"When you attach an Equipment to me, choose one that hasn't been chosen this turn —<ul><li>Ready 2 runes.</li><li>Channel 1 rune exhausted.</li><li>Buff a friendly unit.</li></ul>"`
-- **SFD-225** Irelia - Fervent (Overnumbered) -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
-  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\n\nWhen you choose or ready me, give me +1 Might this turn.'`
+- **SFD-225** Irelia - Fervent (Overnumbered) -> chose `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'` from `apitcg`
+  - `apitcg`: `'DEFLECT (Opponents must pay Rune to choose me with a spell or ability)\nWhen you choose or ready me, give me +1 Might this turn.'`
   - `riftbound_tools`: `'[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When you choose or ready me, give me +1 might this turn.'`
 - **SFD-226** Seal of Focus (Overnumbered) -> chose `"Exhaust: REACTION - ADD calm. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD calm. (Abilities that add resources can't be reacted to.)"`
@@ -2683,41 +2683,41 @@ Missing field counts across incomplete cards:
 - **SFD-227** Ahri - Inquisitive (Overnumbered) -> chose `'When I attack or defend, give an enemy unit here -2 Might this turn, to a minimum of 1 Might.'` from `apitcg`
   - `apitcg`: `'When I attack or defend, give an enemy unit here -2 Might this turn, to a minimum of 1 Might.'`
   - `riftbound_tools`: `'When I attack or defend, give an enemy unit here -2 might this turn, to a minimum of 1 might.'`
-- **SFD-228** Bard - Mercurial (Overnumbered) -> chose `'You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'` from `apitcg`
-  - `apitcg`: `'You may exhaust your legend as an additional cost to play me.\n\n\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
+- **SFD-228** Bard - Mercurial (Overnumbered) -> chose `'You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'` from `apitcg`
+  - `apitcg`: `'You may exhaust your legend as an additional cost to play me.\nWhen you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
   - `riftbound_tools`: `'You may exhaust your legend as an additional cost to play me. When you play me, if you paid the additional cost, move any number of your units to an open battlefield.'`
 - **SFD-229** Seal of Insight (Overnumbered) -> chose `"Exhaust: [REACTION] - [ADD] Mind. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] - [ADD] Mind. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 mind rune. (Abilities that add resources can't be reacted to.)"`
-- **SFD-230** Teemo - Strategist (Overnumbered) -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
-  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\n\n\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
+- **SFD-230** Teemo - Strategist (Overnumbered) -> chose `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."` from `apitcg`
+  - `apitcg`: `"HIDDEN (Hide now for 1 Rune to react with later for 0.)\nWhen I defend or I'm played from HIDDEN, reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with , then recycle them."`
   - `riftbound_tools`: `"[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When I defend or I'm played from [Hidden], reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with [Hidden], then recycle them."`
 - **SFD-231** Seal of Strength (Overnumbered) -> chose `"Exhaust: REACTION - ADD body. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD body. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 body rune. (Abilities that add resources can't be reacted to.)"`
-- **SFD-232** Sett - Brawler (Overnumbered) -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
-  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\n\n\nSpend my buff: Give me +4 Might this turn."`
+- **SFD-232** Sett - Brawler (Overnumbered) -> chose `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."` from `apitcg`
+  - `apitcg`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 Might buff.)\nSpend my buff: Give me +4 Might this turn."`
   - `riftbound_tools`: `"When I'm played and when I conquer, buff me. (If I don't have a buff, I get a +1 might buff.) Spend my buff: Give me +4 might this turn."`
-- **SFD-233** Yone - Blademaster (Overnumbered) -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."` from `apitcg`
-  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\n\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."`
+- **SFD-233** Yone - Blademaster (Overnumbered) -> chose `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."` from `apitcg`
+  - `apitcg`: `"[WEAPONMASTER] (When you play me, you may [EQUIP] one of your Equipment to me for Rune less, even if it's already attached.)\nWhen I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."`
   - `riftbound_tools`: `"[Weaponmaster] (When you play me, you may [Equip] one of your Equipment to me for 1 rune of any type less, even if it's already attached.) When I conquer an open battlefield, deal damage equal to my Might to an enemy unit in a base."`
 - **SFD-234** Seal of Discord (Overnumbered) -> chose `"Exhaust: REACTION - ADD chaos. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: REACTION - ADD chaos. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 chaos rune. (Abilities that add resources can't be reacted to.)"`
-- **SFD-235** Yasuo - Windrider (Overnumbered) -> chose `'GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
-  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\n\n\nThe third time I move in a turn, you score 1 point.'`
+- **SFD-235** Yasuo - Windrider (Overnumbered) -> chose `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'` from `apitcg`
+  - `apitcg`: `'GANKING (I can move from battlefield to battlefield.)\nThe third time I move in a turn, you score 1 point.'`
   - `riftbound_tools`: `'[Ganking] (I can move from battlefield to battlefield.) The third time I move in a turn, you score 1 point.'`
-- **SFD-236** Darius - Executioner (Overnumbered) -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here."` from `apitcg`
-  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\n\n\nOther friendly units have +1 might here."`
+- **SFD-236** Darius - Executioner (Overnumbered) -> chose `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."` from `apitcg`
+  - `apitcg`: `"LEGION - When you play me, ready me. (Get the effect if you've played another card this turn)\nOther friendly units have +1 might here."`
   - `riftbound_tools`: `"[Legion] — When you play me, ready me. (Get the effect if you've played another card this turn) Other friendly units have +1 might here."`
-- **SFD-237** Karma - Channeler (Overnumbered) -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"` from `apitcg`
-  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\n\n\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
+- **SFD-237** Karma - Channeler (Overnumbered) -> chose `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"` from `apitcg`
+  - `apitcg`: `"VISION (When you play me, look at the top card of your Main Deck. You may recycle it.)\nWhen you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
   - `riftbound_tools`: `"[Vision] (When you play me, look at the top card of your Main Deck. You may recycle it.) When you recycle one or more cards, buff a friendly unit. (If it doesn't have a buff, it gets a +1 might buff. Runes aren't cards.)"`
 - **SFD-238** Seal of Unity (Overnumbered) -> chose `"Exhaust: [REACTION] - [ADD] Order. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] - [ADD] Order. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 order rune. (Abilities that add resources can't be reacted to.)"`
-- **SFD-239** Soraka - Wanderer (Overnumbered) -> chose `"I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"` from `apitcg`
-  - `apitcg`: `"I must be assigned combat damage last.\n\n\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
+- **SFD-239** Soraka - Wanderer (Overnumbered) -> chose `"I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"` from `apitcg`
+  - `apitcg`: `"I must be assigned combat damage last.\nIf another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
   - `riftbound_tools`: `"I must be assigned combat damage last. If another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it. (Send it to base. This isn't a move.)"`
 - **SFD-240** Rumble - Mechanized Menace (Overnumbered) -> chose `"Your Mechs have [SHIELD]. +1 Might while they're defenders.)"` from `apitcg`
   - `apitcg`: `"Your Mechs have [SHIELD]. +1 Might while they're defenders.)"`
@@ -2728,14 +2728,14 @@ Missing field counts across incomplete cards:
 - **SFD-244** Ornn - Fire Below the Mountain (Overnumbered) -> chose `"Exhaust: [REACTION] — [ADD] Rune. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — [ADD] Rune. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"`
   - `riftbound_tools`: `"exhaust: [Reaction] — [Add] 1 rune of any type. Use only to play gear or use gear abilities. (Abilities that add resources can't be reacted to.)"`
-- **SFD-245** Jax - Grandmaster At Arms (Overnumbered) -> chose `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.'` from `apitcg`
-  - `apitcg`: `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\n\nExhaust: Attach an attached Equipment you control to a unit you control.'`
+- **SFD-245** Jax - Grandmaster At Arms (Overnumbered) -> chose `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.'` from `apitcg`
+  - `apitcg`: `'1, Exhaust: Attach a detached Equipment you control to a unit you control.\nExhaust: Attach an attached Equipment you control to a unit you control.'`
   - `riftbound_tools`: `'1 energy, exhaust: Attach a detached Equipment you control to a unit you control. exhaust: Attach an attached Equipment you control to a unit you control.'`
-- **SFD-246** Irelia - Blade Dancer (Overnumbered) -> chose `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.'` from `apitcg`
-  - `apitcg`: `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\n\n\nWhen you conquer, you may pay 1 to ready me.'`
+- **SFD-246** Irelia - Blade Dancer (Overnumbered) -> chose `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.'` from `apitcg`
+  - `apitcg`: `'When you choose a friendly unit, you may exhaust me and pay 1 Rune to ready it.\nWhen you conquer, you may pay 1 to ready me.'`
   - `riftbound_tools`: `'When you choose a friendly unit, you may exhaust me and pay 1 rune of any type to ready it. When you conquer, you may pay 1 energy to ready me.'`
-- **SFD-247** Azir - Emperor of the Sands (Overnumbered) -> chose `"Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."` from `apitcg`
-  - `apitcg`: `"Your Sand Soldiers have [WEAPONMASTER].\n\n\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
+- **SFD-247** Azir - Emperor of the Sands (Overnumbered) -> chose `"Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."` from `apitcg`
+  - `apitcg`: `"Your Sand Soldiers have [WEAPONMASTER].\n1, Exhaust: Play a 2 Might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
   - `riftbound_tools`: `"Sand Soldiers you play have [Weaponmaster]. (When they're played, you may [Equip] one of your Equipment to them for 1 rune of any type less.) 1 energy, exhaust: Play a 2 might Sand Soldier unit token to your base. Use only if you've played an Equipment this turn."`
 - **SFD-248** Ezreal - Prodigal Explorer (Overnumbered) -> chose `"Exhaust: [REACTION] — Draw 1. Use only if you've chosen enemy units and/or gear twice this turn with spells or unit abilities."` from `apitcg`
   - `apitcg`: `"Exhaust: [REACTION] — Draw 1. Use only if you've chosen enemy units and/or gear twice this turn with spells or unit abilities."`
@@ -2743,8 +2743,8 @@ Missing field counts across incomplete cards:
 - **SFD-249** Renata Glasc - Chem-Baroness (Overnumbered) -> chose `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\nWhile your score is within 3 points of the Victory Score, your Gold [ADD] an additional 1.'` from `apitcg`
   - `apitcg`: `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted.\nWhile your score is within 3 points of the Victory Score, your Gold [ADD] an additional 1.'`
   - `riftbound_tools`: `'When you or an ally hold, you may exhaust me to play a Gold gear token exhausted. While your score is within 3 points of the Victory Score, your Gold [ADD] an additional 1 energy.'`
-- **SFD-250** Sivir - Battle Mistress (Overnumbered) -> chose `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.'` from `apitcg`
-  - `apitcg`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\n\n\nWhen one or more enemy units die, ready me.'`
+- **SFD-250** Sivir - Battle Mistress (Overnumbered) -> chose `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.'` from `apitcg`
+  - `apitcg`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted.\nWhen one or more enemy units die, ready me.'`
   - `riftbound_tools`: `'When you recycle a rune, you may exhaust me to play a Gold gear token exhausted. When one or more enemy units die, ready me.'`
 - **SFD-251** Fiora - Grand Duelist (Overnumbered) -> chose `'When one of your units becomes [MIGHTY], you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might.)'` from `apitcg`
   - `apitcg`: `'When one of your units becomes [MIGHTY], you may exhaust me to channel 1 rune exhausted. (A unit is Mighty while it has 5+ Might.)'`

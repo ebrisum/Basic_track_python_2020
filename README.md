@@ -6,31 +6,40 @@ swap card X for card Y?*
 
 ## Status
 
-Repo scaffolded, data pipeline built, and all **rules-agnostic** Milestone 1
-infrastructure implemented and tested. Everything that depends on card data or
-the rules text is blocked.
+Card data and the official rules are **retrieved and cached**. The
+rules-agnostic engine infrastructure is built and tested. What remains is the
+Riftbound rules engine itself, which needs the two Milestone 1 decklists.
 
 | Session 1 step | State |
 | --- | --- |
 | 1. Scaffold the repo | done |
-| 2. Pull and normalize card data | **blocked** — all four sources refused by the egress proxy |
-| 3. Fetch rules, write `RULES_SUMMARY.md` | **blocked** — rules PDF unreachable |
-| 4. Propose a DSL primitive list | **blocked** — derives from card text, which step 2 would have supplied |
-
-Built since, none of it rules-dependent:
+| 2. Pull and normalize card data | done — 908 cards, 898 logged disagreements |
+| 3. Fetch rules, write `RULES_SUMMARY.md` | done — Core Rules v1.4, fully cited |
+| 4. Propose a DSL primitive list | done — derived from the rules' own Game Actions |
 
 | Component | State |
 | --- | --- |
-| Frozen agent-facing interface (`engine/interface.py`) | done, contract-tested |
-| Replay format + runner (`engine/replay.py`) | done, 3 synthetic replays checked in |
-| Random agent (`agents/random_agent.py`) | done |
-| Batch runner + aggregation (`analysis/batch.py`) | done |
-| Determinism guarantees | done, enforced by tests |
-| `engine/state.py`, `turn.py`, `combat.py`, `cards/` | **blocked** — needs the rules |
+| Frozen agent-facing interface | done, contract-tested |
+| Replay format + runner | done, 3 synthetic replays |
+| Random agent, batch runner, determinism | done |
+| `engine/state.py`, `turn.py`, `combat.py`, `cards/` | **needs the decklists** |
 
-**83 tests passing.** See **BLOCKER-1** in
-[`RULES_QUESTIONS.md`](RULES_QUESTIONS.md) for the evidence and three ways to
-unblock.
+**99 tests passing.** The brief's four data sources remain blocked by the
+egress proxy; reachable equivalents were substituted. See BLOCKER-1 and RQ-1
+in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
+
+## Data
+
+| Source | Via | Content |
+| --- | --- | --- |
+| npm `riftbound-tools` | npm registry | 950 records, OGN/OGS/SFD/UNL |
+| `apitcg/riftbound-tcg-data` | github | 699 records, independent cross-check |
+| `ChristianIvicevic/riftboundfaq` | github | official Core Rules v1.0–v1.4 PDFs |
+
+Merged into `data/cards.json` (908 cards, per-field provenance). Simulation
+coverage by set is in [`data/DISCREPANCIES.md`](data/DISCREPANCIES.md):
+OGN 337/341, OGS 24/24, SFD 184/275, UNL 0/268 — the npm source carries no
+power cost, so UNL has no costs at all (RQ-1).
 
 ## Setup
 
@@ -49,16 +58,17 @@ to `data/raw/`; normalizing is a pure, offline, testable function over that
 cache. Simulation never touches either — it reads only `data/cards.json`.
 
 ```sh
-.venv/bin/python data/fetch.py --all          # cache every source
-.venv/bin/python data/fetch.py --enumerate-tabs   # list spreadsheet tabs
-.venv/bin/python data/normalize.py            # -> cards.json + DISCREPANCIES.md
+.venv/bin/python data/fetch.py --all            # cache every source
+.venv/bin/python data/fetch.py --show-blocked   # the brief's original four
+.venv/bin/python data/normalize.py              # -> cards.json + DISCREPANCIES.md
 ```
 
-`fetch.py` runs today and fails cleanly with a per-source diagnostic.
-`normalize.py`'s merge, precedence, and discrepancy reporting are implemented
-and tested; its three per-source adapters raise `NotImplementedError` until a
-real payload has been seen, because a guessed field mapping fails silently
-rather than loudly.
+Verified reproducible: deleting `data/raw/` and re-running `--all` restores
+every file byte-identically (sha256s in each `_meta.json`).
+
+Adapters are the only source-shape-aware code and were written against the
+real cached bytes, never against documentation. The npm source's numeric
+fields are deliberately not mapped — see RQ-1.
 
 ## Layout
 

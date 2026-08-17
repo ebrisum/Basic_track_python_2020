@@ -67,3 +67,38 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   once the Riftbound state exists and its scoring shape is known.
 - **Runaway games raise rather than hang** -- a `max_steps` ceiling turns a
   rules loop into a named failure instead of a wedged batch.
+
+## Session 3 -- real data and rules
+
+- **Substituted reachable sources for the brief's four blocked ones** -- npm
+  `riftbound-tools`, github `apitcg/riftbound-tcg-data`, and github
+  `ChristianIvicevic/riftboundfaq` (which mirrors the official Core Rules
+  PDFs). The blocked URLs stay recorded in `sources.py` so the substitution is
+  visible and reversible.
+- **Numerics come only from apitcg** -- the npm source's `might` agrees with
+  the real might 0.6% of the time. Not mapped at all rather than mapped
+  wrongly. See RQ-1.
+- **apitcg outranks riftbound_tools** -- it carries power cost and the
+  Champion/Signature/Token distinction, both of which the engine needs and the
+  npm source does not have.
+- **Canonical id is `<SETCODE>-<NUMBER>`, variant suffix preserved** --
+  "OGN-007A" stays distinct from "OGN-007"; alternate arts are distinct
+  printings and must not silently collapse.
+- **Boolean card fields are tri-state (`bool | None`)** -- `None` means "this
+  source has no opinion", `False` means "this source says no". Defaulting to
+  False generated 527 phantom conflicts.
+- **Coverage is computed per card type** -- spells have no Might and Colorless
+  cards no domain, so a flat required-field list reported correct data as
+  missing and buried the real gaps.
+- **The rules PDFs are not committed; the extracted text is** -- they are
+  24-43 MB each and mostly images. `data/raw/core_rules/CR-v1.4.txt` is the
+  citable artefact, with its sha256 in `_meta.json`.
+- **DSL primitives are the game's own Game Actions (rules 413-444), adopted
+  verbatim rather than designed** -- rule 411.4 keys triggers to game actions,
+  so any vocabulary that is not one-to-one with them cannot express "when you
+  move an enemy unit" correctly. The rules define 32; the brief predicted
+  30-40.
+- **pypdf added as a dev-only dependency** -- used once, by `data/fetch.py`,
+  to extract rules text. Nothing in `engine/` or `cards/` imports it and
+  simulation never reads a PDF. Flagged because the brief requires asking
+  before adding dependencies.

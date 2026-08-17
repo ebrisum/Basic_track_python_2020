@@ -1,0 +1,14 @@
+{
+  "CR-v1.4.txt": {
+    "bytes": 391834,
+    "fetched_at": "2026-08-17T19:39:43.582291+00:00",
+    "sha256": "5496484eafefe5d2d30fe91d6fa542e02b59ae0a08ecd4f55d2690056020b9d0",
+    "url": "https://github.com/ChristianIvicevic/riftboundfaq.git#CR-v1.4.pdf"
+  },
+  "rules-manifest.json": {
+    "bytes": 395,
+    "fetched_at": "2026-08-17T19:39:43.583268+00:00",
+    "sha256": "37cfe9f30afca61256639a9da81b5228778c3ccab3d7179b82bb4ae30f7a0abb",
+    "url": "https://github.com/ChristianIvicevic/riftboundfaq.git#sources/rules-manifest.json"
+  }
+}
