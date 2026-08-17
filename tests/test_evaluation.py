@@ -247,3 +247,35 @@ def test_greedy_agent_finishes_a_game_in_reasonable_time(decks):
         state.apply((agent0 if state.current_player == 0 else agent1).act(state))
         steps += 1
     assert time.perf_counter() - started < 120.0
+
+
+# --- promotion discipline ---------------------------------------------------
+
+
+def test_the_shipped_model_is_the_prior_unless_deliberately_promoted():
+    """A fitted candidate must not install itself.
+
+    Measured on this project: a fit that improved held-out Brier (0.1815 ->
+    0.1666) lost head-to-head to the prior 14-26. Prediction quality is not
+    playing strength, so `fit_weights.py` writes `weights.candidate.json` and
+    promotion is a separate, benchmarked decision. See SCORING.md.
+    """
+    from analysis.evaluation import WEIGHTS_PATH
+
+    if WEIGHTS_PATH.exists():
+        pytest.skip("a model has been deliberately promoted")
+    assert load_model().weights == DEFAULT_WEIGHTS
+    assert not load_model().fitted
+
+
+def test_a_candidate_file_is_never_loaded_automatically(tmp_path):
+    """The candidate path is written by the fitter and read by nobody."""
+    from analysis.evaluation import CANDIDATE_PATH, WEIGHTS_PATH
+
+    assert CANDIDATE_PATH != WEIGHTS_PATH
+    if CANDIDATE_PATH.exists():
+        candidate = load_model(CANDIDATE_PATH)
+        assert candidate.fitted
+        # …and it is not what `load_model()` hands out by default.
+        if not WEIGHTS_PATH.exists():
+            assert load_model().weights != candidate.weights

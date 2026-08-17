@@ -187,10 +187,18 @@ asserted, and is measured on held-out games.
 .venv/bin/python analysis/benchmark.py --games 60      # does it cause winning?
 ```
 
-Fitting moved Brier from 0.1815 to 0.1666 and accuracy from 0.687 to 0.727,
-with near-diagonal calibration. The early game remains unpredictable (Brier
-0.258, *above* the 0.25 you get by always guessing 0.5) — a real limit,
-explained in [`SCORING.md`](SCORING.md).
+The greedy agent beats random **0.925 (37-3)** against a 0.525
+random-vs-random baseline, so the heuristic captures something real.
+
+But the headline result is a warning: **fitting improved prediction and made
+play worse.** Brier went 0.1815 → 0.1666 and accuracy 0.687 → 0.727, and the
+fitted model then *lost* to the hand-set prior 14-26 head-to-head (95%
+interval 0.202–0.498). The weights were learned from random self-play, so they
+captured correlations rather than causes — `hand_diff` came out negative
+because random agents hoard cards they cannot play.
+
+So the promotion gate is the benchmark, not Brier: `fit_weights.py` writes a
+candidate and installs nothing. Full write-up in [`SCORING.md`](SCORING.md).
 
 ## Documents
 

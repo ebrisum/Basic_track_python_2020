@@ -64,6 +64,48 @@ why the bias is now pinned to zero.
 Real seat advantage — **485.7** gives the player going second an extra rune —
 belongs in an antisymmetric feature, not in a constant.
 
+## The result that matters: prediction is not control
+
+A fit improved held-out prediction and then **lost when it actually played**.
+
+| | hand-set prior | fitted (220 games) |
+| --- | --- | --- |
+| Brier (lower better) | 0.1815 | **0.1666** |
+| accuracy | 0.687 | **0.727** |
+| **vs random, head-to-head** | **0.925** (37-3) | 0.825 (33-7) |
+| **fitted vs prior, head-to-head** | — | **0.350** (14-26) |
+
+95% interval on that last row is 0.202–0.498, so the loss is real, not noise.
+Both greedy agents crush random (0.925 and 0.825 against a 0.525 random-vs-random
+baseline), so the heuristic is doing real work — but the *better-calibrated*
+model is the *worse player*.
+
+Two causes, both worth remembering:
+
+- **The labels come from random self-play.** The weights learn what correlates
+  with winning among random agents, not what a player should steer toward.
+  `hand_diff` was fitted **negative**, because random agents that cannot play
+  their cards accumulate them. A greedy agent maximising that actively dumps
+  its hand — it optimises the correlation and loses the game. This is the same
+  Goodhart failure that shaping the reward would have caused, arriving through
+  the back door.
+- **Distribution shift.** A greedy agent immediately moves play off the
+  random-play distribution the model was fitted on, into positions it has never
+  scored.
+
+### What changed because of it
+
+The promotion gate moved. `fit_weights.py` now writes
+`weights.candidate.json` and installs nothing; a candidate is promoted only
+after `benchmark.py` shows it beating the incumbent head-to-head. Brier is a
+useful diagnostic and a bad acceptance test.
+
+The hand-set prior is what ships. The fitted candidate is kept in the repo as
+evidence, not as the model.
+
+Closing this properly needs the training data to come from the agents being
+trained — iterated self-play — rather than from random rollouts.
+
 ## The weights are fitted, not asserted
 
 `analysis/fit_weights.py` runs self-play, labels every sampled position with
@@ -89,6 +131,9 @@ Two guards against self-deception:
 | early-game accuracy | 0.511 | 0.550 |
 | late-game Brier | 0.0733 | **0.0502** |
 
+Read this alongside the head-to-head table above: the fitted model wins on
+every prediction metric here and still loses the games.
+
 **The honest headline: the early game is not predictable.** Early Brier is
 *above* 0.25 for both models, meaning that in the opening the heuristic is
 worse than simply saying "50/50". It earns its keep in the mid and late game
@@ -109,7 +154,9 @@ search prior rather than just a ranking.
 `agents/greedy_agent.py` applies each legal action to a clone and keeps the
 best-evaluated result. It exists as a measuring stick: if the heuristic is
 worth anything, this beats random; if not, no amount of search on top will
-save it. `analysis/benchmark.py` runs the head-to-head, swapping seats and
+save it. It does beat random decisively — **0.925 (37-3)** against a
+0.525 random-vs-random baseline — which is the evidence that the heuristic
+captures something real. `analysis/benchmark.py` runs the head-to-head, swapping seats and
 sharing seeds so first-player advantage cannot be mistaken for skill, and
 reports a 95% interval so a 55% result over 40 games is not read as evidence.
 

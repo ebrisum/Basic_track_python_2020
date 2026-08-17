@@ -42,6 +42,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 WEIGHTS_PATH = Path(__file__).resolve().parent / "weights.json"
+# `fit_weights.py` writes here. Nothing loads it automatically: a candidate is
+# only installed at WEIGHTS_PATH after it wins a head-to-head benchmark, since
+# a better Brier score does not imply a better player. See SCORING.md.
+CANDIDATE_PATH = Path(__file__).resolve().parent / "weights.candidate.json"
 
 # Feature order is fixed: weights.json is a plain list and must line up.
 FEATURE_NAMES: tuple[str, ...] = (

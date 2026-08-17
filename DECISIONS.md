@@ -210,6 +210,14 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   a flattering score.
 - **A fit that does not improve held-out Brier is not written** -- `--force`
   exists but says so loudly.
+- **Brier is a diagnostic, not the promotion gate; the benchmark is** -- a fit
+  that improved held-out Brier (0.1815 -> 0.1666) and accuracy (0.687 -> 0.727)
+  then LOST head-to-head to the hand-set prior 14-26, interval 0.202-0.498.
+  Prediction quality is not playing strength. `fit_weights.py` now writes
+  `weights.candidate.json` and installs nothing; promotion requires `--promote`
+  after a benchmark win.
+- **The hand-set prior ships; the fitted candidate is kept as evidence** -- it
+  is in the repo so the finding is reproducible, not because it is used.
 - **`CardDatabase` is shared by reference in clones** (`__deepcopy__` returns
   self) -- it is immutable and nothing mutates it after load, but copying 908
   cards per candidate action dominated search cost. 16.1 ms -> 2.15 ms per

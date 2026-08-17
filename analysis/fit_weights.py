@@ -6,13 +6,38 @@ Logistic regression by gradient descent, pure stdlib -- the label is "did this
 player go on to win", so the weights are learned from what actually correlates
 with winning rather than from anyone's intuition about what should.
 
-Two guards against fooling ourselves:
+Output goes to `weights.candidate.json`. It is NOT installed automatically,
+because a better Brier score does not mean a better player -- see below.
+
+Guards against fooling ourselves:
 
   * **Held-out split.** Weights are fitted on a training slice and scored on
     games the fit never saw. A model that improves on train and not on test has
     memorised noise.
-  * **Nothing is written unless test Brier improves** on the current model.
-    A fit that makes the heuristic worse is discarded, loudly.
+  * **A candidate that does not improve held-out Brier is discarded**, loudly.
+  * **Brier is not the promotion gate.** `analysis/benchmark.py` is. Promote
+    with `--promote` only after the candidate has beaten the incumbent
+    head-to-head.
+
+## Why prediction is not control
+
+Measured on this project: a fit improved held-out Brier from 0.1815 to 0.1666
+and accuracy from 0.687 to 0.727 -- and then *lost* to the hand-set prior
+14-26 when actually playing (95% interval 0.202-0.498, so the loss is real).
+
+Two reasons, both worth remembering:
+
+  * The labels come from **random** self-play, so the weights learn what
+    correlates with winning among random agents, not what a player should steer
+    toward. `hand_diff` came out negative because random agents that cannot
+    play their cards accumulate them -- so a greedy agent maximising it
+    actively dumps its hand.
+  * **Distribution shift.** A greedy agent immediately moves the game off the
+    random-play distribution the model was fitted on, into positions it has
+    never scored.
+
+Fixing this needs the data to come from the agents being trained (iterated
+self-play), not from random rollouts.
 
 The bias term is pinned to zero. Every feature is a difference between the two
 players, so the model is antisymmetric and `evaluate(s, 0) + evaluate(s, 1)`
@@ -38,7 +63,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from agents.random_agent import RandomAgent  # noqa: E402
 from analysis.evaluation import (  # noqa: E402
+    CANDIDATE_PATH,
     FEATURE_NAMES,
+    WEIGHTS_PATH,
     Model,
     features,
     load_model,
@@ -122,7 +149,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--deck0", default="jinx_chaos_fury")
     ap.add_argument("--deck1", default="volibear_body_fury")
     ap.add_argument("--force", action="store_true",
-                    help="write the weights even if they do not improve")
+                    help="write the candidate even if held-out Brier does not improve")
+    ap.add_argument("--promote", action="store_true",
+                    help="install as analysis/weights.json. Only do this after "
+                         "analysis/benchmark.py shows the candidate beating the "
+                         "incumbent head-to-head -- Brier alone is not enough.")
     args = ap.parse_args(argv)
 
     print(f"playing {args.games} self-play games…")
@@ -155,9 +186,22 @@ def main(argv: list[str] | None = None) -> int:
               "Use --force to override, or collect more games.")
         return 1
 
-    save_model(Model(weights=fitted.weights, bias=fitted.bias,
-                     fitted=True, trained_on_games=len(per_game)))
-    print(f"\nwrote analysis/weights.json (trained on {len(per_game)} games)")
+    model = Model(weights=fitted.weights, bias=fitted.bias,
+                  fitted=True, trained_on_games=len(per_game))
+    save_model(model, CANDIDATE_PATH)
+    print(f"\nwrote {CANDIDATE_PATH.name} (trained on {len(per_game)} games)")
+
+    if args.promote:
+        save_model(model, WEIGHTS_PATH)
+        print(f"promoted to {WEIGHTS_PATH.name} -- benchmark it before trusting it")
+    else:
+        print(
+            "\nNOT installed. A better Brier score does not mean a better "
+            "player: on this project a fit that improved Brier lost 14-26 "
+            "head-to-head. Run:\n"
+            "  .venv/bin/python analysis/benchmark.py --games 40\n"
+            "and re-run with --promote only if the candidate actually wins."
+        )
     return 0
 
 
