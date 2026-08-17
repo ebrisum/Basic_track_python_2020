@@ -493,3 +493,49 @@ def test_concede_is_off_by_default_and_on_for_interactive_play(decks):
     assert all(repr(a) != "concede" for a in state.legal_actions())
     state.allow_concede = True
     assert any(repr(a) == "concede" for a in state.legal_actions())
+
+
+# --- observation exposes the zones the table needs (107-108) ---------------
+
+
+def test_observation_exposes_exactly_one_legend_and_champion_per_player(decks):
+    """107.4 / 108.3 -- one Champion Legend, one Chosen Champion, each."""
+    state = fresh(decks)
+    observation = state.observation(0)
+    assert len(observation.legend) == 2
+    assert all(card is not None for card in observation.legend)
+    assert all(card.type == "legend" for card in observation.legend)
+    assert len(observation.champion_zone) == 2
+    assert all(card is not None for card in observation.champion_zone)
+    assert all(card.is_champion for card in observation.champion_zone)
+
+
+def test_both_trashes_are_public(decks):
+    """108.2.d -- trash contents, not just counts."""
+    state = reach_main(decks, 24)
+    state.players[1].trash.append(state.players[1].main_deck.pop(0))
+    observation = state.observation(0)
+    assert len(observation.trash[1]) == len(state.players[1].trash)
+    assert observation.trash_sizes[1] == len(state.players[1].trash)
+
+
+def test_champion_zone_empties_once_the_champion_is_played(decks):
+    """108.3.c -- the Chosen Champion cannot return here by normal means."""
+    state = reach_main(decks, 25)
+    player = state.turn_player
+    champion = state.players[player].champion_zone[0]
+    state.players[player].pool.energy = 20
+    state.players[player].pool.universal_power = 20
+    state._current_player = player
+    state.apply(PlayCard(champion))
+    assert state.players[player].champion_zone == []
+    assert state.observation(player).champion_zone[player] is None
+
+
+def test_observation_carries_card_art_and_current_might(decks):
+    state = reach_main(decks, 26)
+    board = state.observation(0).board
+    assert board, "expected runes on the board by the first main phase"
+    assert any(c.image_url for c in board), "card art must reach the UI"
+    for card in board:
+        assert card.current_might >= 0

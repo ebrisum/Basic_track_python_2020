@@ -11,11 +11,14 @@ ships with a local web frontend, so a full game can be played end to end:
 die roll, deck selection, battlefield selection, mulligan, turns, resources,
 movement, contesting, combat, scoring, win.
 
-**The big caveat:** card *rules text* is not executed. Only 7 of 441 playable
-cards are fully implemented (5 vanilla + 2 keyword-only). Four mechanical
-keywords work (Assault, Tank, Backline, Ganking); every other printed effect
-is inert and visibly marked as such in the UI. Win rates from this engine are
-**not** Riftbound win rates yet. See RQ-5 in
+Card text **executes** for every card in the starter decks: a DSL interpreter
+runs 15 primitives drawn from the game's own Game Actions (413-444), with
+player choices raised through `legal_actions()` rather than a side channel.
+
+**The remaining caveat:** only the 24 cards in the two starter decks are
+scripted. The other ~400 playable cards have no script, so their text is inert
+and every affected card is stamped `inert` in the UI with a tooltip saying
+why. Scripting more is mechanical work, not new architecture. See RQ-5 in
 [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 
 | Area | State |
@@ -25,10 +28,13 @@ is inert and visibly marked as such in the UI. Win rates from this engine are
 | Frozen interface, replay harness, batch runner | done |
 | Engine: setup, turns, resources, movement, combat, scoring | done |
 | Frontend (local web UI) | done |
-| Card effect DSL interpreter | **not started** — the remaining Milestone 1 work |
+| Card effect DSL interpreter | done — 15 primitives, 24 cards scripted |
+| Card art in the UI | done — 907/908 cards carry Riot's own render |
+| Scripting the rest of the card pool | **remaining work** |
 
-**160 tests passing**, including two full Riftbound games in the replay
-harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
+**196 tests passing** — 32 of them one-per-card assertions on constructed
+states — plus two full Riftbound games in the replay harness and HTTP-level
+frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
 ## Play a game
 
@@ -41,6 +47,13 @@ uv pip install --python .venv/bin/python pytest pypdf
 
 Hot-seat: both players share one screen, and the **view as** selector switches
 whose hand is shown. The server never reveals the other player's hand (128).
+
+The table lays out the real zones — Legend and Champion (one each, per 107.4
+and 108.3), base with the rune pool, both battlefields split into each
+player's half, main deck / rune deck / trash stacks, and your hand. Trash is
+public (108.2.d), so clicking a trash stack opens it. Card art loads straight
+from Riot's CDN in your browser; if it is unreachable the card falls back to a
+fully legible text face and the game plays normally.
 
 The UI can only submit moves the engine already listed as legal — actions are
 addressed by the engine's own `repr()`, resolved against `legal_actions()`

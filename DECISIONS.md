@@ -134,3 +134,34 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
 - **Starter decks are generated, not hand-written** -- `decks/build_decks.py`
   builds legal decks from the real pool so the game is playable before the
   Milestone 1 lists arrive. Each deck gets a distinct battlefield trio.
+
+## Session 5 -- DSL interpreter and playfield
+
+- **Effects that need a decision return a `ChoiceRequest` rather than acting**
+  -- the engine parks the effect, offers the options through
+  `legal_actions()`, and resumes on the answer. Keeps every player decision
+  inside the frozen interface instead of becoming a side channel an agent
+  cannot see.
+- **`ChoiceRequest` is skipped when there is exactly one option** -- offering a
+  "choice" of one inflates the action space for no decision.
+- **Card scripts are data, with the printed wording attached** -- `Ability.text`
+  carries the sentence it implements, so a failing test names the card text
+  rather than a class.
+- **Scripts declare `complete`** -- a card whose script covers only part of its
+  text stays flagged as inert in the UI, with `note` saying which part is
+  missing. Partial implementation must not read as full implementation.
+- **The replay state hash is derived from the observation, so enriching the
+  observation invalidates replays even when no rule changed.** That happened
+  twice this session: once for a real rules change (card text started
+  executing) and once for a pure presentation change (exposing trash, legend
+  and champion zones). The harness cannot tell them apart, so the justification
+  has to come from the commit message. Worth revisiting if replay churn becomes
+  noisy -- a hash over game state rather than observation would separate the
+  two, at the cost of no longer proving hidden information is stable.
+- **Card art comes from two different sources on purpose** -- `image_url` from
+  Riot's CDN (the real card face) via the npm source, `image_alt` from
+  TCGPlayer via apitcg. Different fields from different sources means they can
+  never conflict in the merge.
+- **The browser loads card art directly from those CDNs** -- the images are not
+  proxied or cached locally, so the frontend needs internet access to show
+  them and degrades to a text card when a fetch fails.

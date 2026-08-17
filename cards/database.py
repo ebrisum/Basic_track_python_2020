@@ -40,6 +40,8 @@ class CardData:
     rules_text: str
     is_champion: bool
     set: str
+    image_url: str = ""
+    image_alt: str = ""
     # Keywords parsed from the printed text (804-829).
     parsed_keywords: tuple = ()
 
@@ -72,12 +74,21 @@ class CardData:
     def text_implemented(self) -> bool:
         """Whether this card's rules text is fully executed by the engine.
 
-        True for vanilla cards, and for cards whose entire text is keywords the
-        engine implements. Everything else is inert -- visibly so: the UI marks
-        these cards. See RQ-5 in RULES_QUESTIONS.md.
+        True when the card is vanilla, when its whole text is keywords the
+        engine implements, or when a card script covers it (`complete=True`).
+        Anything else is still partly inert -- visibly so: the UI marks it.
+        See RQ-5 in RULES_QUESTIONS.md.
         """
         if not self.has_text:
             return True
+
+        # A script that declares itself complete covers the printed text.
+        from cards.scripts import script_for
+
+        script = script_for(self.card_id)
+        if script is not None and script.complete and script.abilities:
+            return True
+
         residue = kw.strip_reminders(self.rules_text)
         for keyword in self.parsed_keywords:
             residue = residue.replace(keyword.name.upper(), " ")
@@ -87,6 +98,14 @@ class CardData:
         if residue.strip():
             return False
         return not self.unimplemented_keywords
+
+    @property
+    def script_note(self) -> str:
+        """Why a card is only partly implemented, for the UI tooltip."""
+        from cards.scripts import script_for
+
+        script = script_for(self.card_id)
+        return script.note if script is not None else ""
 
     @property
     def power_domains(self) -> list[str]:
@@ -161,6 +180,8 @@ def _coerce(raw: dict) -> CardData | None:
         rules_text=raw.get("rules_text") or "",
         is_champion=bool(raw.get("is_champion")),
         set=raw.get("set") or "",
+        image_url=raw.get("image_url") or "",
+        image_alt=raw.get("image_alt") or "",
         parsed_keywords=kw.parse(raw.get("rules_text") or ""),
     )
 
