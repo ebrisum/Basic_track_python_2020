@@ -1,0 +1,12 @@
+[project]
+name = "riftbound-sim"
+version = "0.1.0"
+description = "Headless deterministic Riftbound rules engine and simulation harness"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
