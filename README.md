@@ -27,8 +27,8 @@ is inert and visibly marked as such in the UI. Win rates from this engine are
 | Frontend (local web UI) | done |
 | Card effect DSL interpreter | **not started** — the remaining Milestone 1 work |
 
-**151 tests passing**, including two full Riftbound games in the replay
-harness. 1,000 random games run in ~41s single-threaded.
+**160 tests passing**, including two full Riftbound games in the replay
+harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
 ## Play a game
 
