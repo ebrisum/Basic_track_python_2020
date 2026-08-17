@@ -206,9 +206,38 @@ takes.
 
 ---
 
-## RQ-10 — Non-Combat Showdowns resolve immediately
+## RQ-10 — Non-Combat Showdowns resolve immediately — RESOLVED
 
-**Status:** open. The most likely place for the engine to be wrong.
+**Status:** closed. The Chain, priority, focus and showdowns are implemented.
+
+`engine/chain.py` holds the Chain, the four-state timing machine (307-310) and
+the timing predicates; `engine/state.py` drives them. Implemented: cards and
+abilities go on the Chain (354), items are Finalized then resolve newest-first
+(340.1), priority passes and all players passing in sequence resolves the top
+item (339), Units/Gear/Add abilities resolve immediately (337.2), Showdowns
+open at a Cleanup on a Contested battlefield (344), the contester gains Focus
+(345), Focus passes when a chain closes (347.1.b) *except* for triggers and Add
+abilities (346.1), and all players passing ends the Showdown (347.2.a). A
+Combat Showdown closes into the Damage Step (464→465).
+
+Timing legality now follows the rules: only Reactions in a Closed state
+(309.1.a), Action or Reaction in a Showdown (308.1.a), and the Standard Move
+is barred from both (144.1.b-c).
+
+Covered by `tests/test_chain_and_showdowns.py` (30 tests), including a
+newest-first ordering test where Gust bounces the unit Hextech Ray was aimed
+at, so the ray finds nothing.
+
+**Still approximated:** the Chain does not model Pending vs Finalized as
+separate visible steps -- an item is finalized the moment it is played, since
+no scripted card interrupts finalization. Simultaneous trigger ordering
+(303.2.a) is by turn order but is not yet exercised by any scripted card.
+
+### Superseded text
+
+The original entry read: "The engine skips both windows: a sole occupant of a
+contested battlefield takes Control immediately, and combat proceeds straight
+to damage assignment." That is no longer true.
 
 344.2: a Contested battlefield with no opposing units present opens a
 Non-Combat Showdown at the next Cleanup, in which players alternate playing

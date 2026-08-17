@@ -67,6 +67,16 @@ class CardData:
         return kw.has(self.parsed_keywords, "Ganking")  # 810
 
     @property
+    def has_action(self) -> bool:
+        """806 Action -- playable on your turn or in showdowns (308.1.a)."""
+        return kw.has(self.parsed_keywords, "Action")
+
+    @property
+    def has_reaction(self) -> bool:
+        """813 Reaction -- playable any time, including a Closed state (309.1.a)."""
+        return kw.has(self.parsed_keywords, "Reaction")
+
+    @property
     def unimplemented_keywords(self) -> tuple[str, ...]:
         return kw.unimplemented(self.parsed_keywords)
 

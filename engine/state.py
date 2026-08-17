@@ -28,6 +28,14 @@ from cards.dsl import (
 )
 from cards.primitives import EffectContext, execute
 from cards.scripts import script_for
+from engine.chain import (
+    ChainItem,
+    Showdown,
+    ability_can_activate,
+    can_play,
+    resolves_immediately,
+    timing_label,
+)
 from engine.actions import (
     Action,
     ActivateAbility,
@@ -43,6 +51,7 @@ from engine.actions import (
     RecycleRuneForPower,
     StandardMove,
 )
+from engine.interface import PLAYERS
 from engine.zones import (
     BASE_LOCATION,
     Battlefield,
@@ -71,6 +80,8 @@ class Phase(str, Enum):
     MAIN = "main"  # 316
     COMBAT_ASSIGN = "combat_assign"  # 465.2.c
     CHOOSING = "choosing"  # 355.2 -- an effect is waiting on a choice
+    CHAIN = "chain"  # 309.1 -- a Chain exists; priority is passing
+    SHOWDOWN = "showdown"  # 341-348 -- Showdown Open; the Focus holder acts
     ENDING = "ending"  # 317
     GAME_OVER = "game_over"
 
@@ -122,6 +133,12 @@ class RiftboundState:
     _current_player: int = 0
     turn_number: int = 0
     combat: CombatState | None = None
+    # 327 The Chain, 311-313 Priority and Focus, 341 Showdowns.
+    chain: list = field(default_factory=list)
+    showdown: Showdown | None = None
+    priority: int | None = None
+    focus: int | None = None
+    chain_passes: int = 0
     winner: int | None = None
     conceded: int | None = None
     log: list[str] = field(default_factory=list)
@@ -200,14 +217,91 @@ class RiftboundState:
             ]
         if self.phase is Phase.SETUP_MULLIGAN:
             return self._mulligan_actions(player)
-        if self.phase is Phase.MAIN:
-            return self._main_phase_actions(player)
         if self.phase is Phase.CHOOSING:
             assert self.awaiting is not None
             return [ChooseTarget(i) for i in self.awaiting.options]
         if self.phase is Phase.COMBAT_ASSIGN:
             return self._assign_actions(player)
+        if self.phase in (Phase.MAIN, Phase.CHAIN, Phase.SHOWDOWN):
+            return self._window_actions(player)
         return [PassPhase()]
+
+    # ---------------------------------------------------------- play windows
+
+    def timing(self) -> str:
+        """The turn's state, one of the four names at 310."""
+        return timing_label(self.chain, self.showdown)
+
+    def _window_actions(self, player: int) -> list[Action]:
+        """Everything legal in the current window (310).
+
+        The same builder serves Main Phase, a Chain, and a Showdown; what
+        differs is which cards pass the timing test and whether board actions
+        (moves, standard plays) are available at all.
+        """
+        state = self.players[player]
+        neutral_open = self.phase is Phase.MAIN
+        actions: list[Action] = [PassPhase()]
+        if self.allow_concede and neutral_open:
+            actions.append(Concede())
+
+        # Play a card from hand or the Champion Zone (108.3.d).
+        for instance_id in state.hand + state.champion_zone:
+            card = self.db[self.cards[instance_id].card_id]
+            if card.type not in ("unit", "spell", "gear"):
+                continue
+            if not can_play(card, player, self.turn_player, self.chain, self.showdown):
+                continue
+            if state.pool.can_pay(card.energy, card.power_domains):
+                actions.append(PlayCard(instance_id))
+
+        # Activated abilities (376, 145.2). Their own printed timing governs,
+        # which is why a rune seal's REACTION ability works inside a chain.
+        for ref in self.cards.values():
+            if ref.controller != player or ref.location is None:
+                continue
+            card = self.db[ref.card_id]
+            script = script_for(ref.card_id)
+            if script is None:
+                continue
+            for index, ability in enumerate(script.of_kind(TriggerKind.ACTIVATED)):
+                if not ability_can_activate(
+                    card, ability, player, self.turn_player, self.chain, self.showdown
+                ):
+                    continue
+                if self._can_pay_ability(ref, ability):
+                    actions.append(ActivateAbility(ref.instance_id, index))
+
+        # Rune abilities (164.2) are both Reactions, so they stay available
+        # inside a chain and during showdowns.
+        for instance_id in state.channeled_runes:
+            ref = self.cards[instance_id]
+            if not ref.exhausted:
+                actions.append(ExhaustRuneForEnergy(instance_id))
+            actions.append(RecycleRuneForPower(instance_id))
+
+        # Board actions are Neutral-Open only: the Standard Move cannot be
+        # performed in a Closed State or during a Showdown (144.1.b-c).
+        if neutral_open and player == self.turn_player:
+            for ref in self.cards.values():
+                if ref.controller != player or ref.exhausted:
+                    continue
+                if self.db[ref.card_id].type != "unit" or ref.location is None:
+                    continue
+                if ref.location == BASE_LOCATION:
+                    for bf in self.battlefields:
+                        actions.append(
+                            StandardMove(ref.instance_id, bf_location(bf.index))
+                        )
+                else:
+                    actions.append(StandardMove(ref.instance_id, BASE_LOCATION))
+                    if self.db[ref.card_id].has_ganking:  # 144.4.c / 810
+                        for bf in self.battlefields:
+                            if bf_location(bf.index) != ref.location:
+                                actions.append(
+                                    StandardMove(ref.instance_id, bf_location(bf.index))
+                                )
+        return actions
 
     # -------------------------------------------------------------- mulligan
 
@@ -225,61 +319,6 @@ class RiftboundState:
         return options
 
     # ------------------------------------------------------------ main phase
-
-    def _main_phase_actions(self, player: int) -> list[Action]:
-        state = self.players[player]
-        actions: list[Action] = [PassPhase()]
-        if self.allow_concede:
-            actions.append(Concede())
-
-        # Play a card from hand or the Champion Zone (108.3.d).
-        for instance_id in state.hand + state.champion_zone:
-            card = self.db[self.cards[instance_id].card_id]
-            if card.type not in ("unit", "spell", "gear"):
-                continue
-            if state.pool.can_pay(card.energy, card.power_domains):
-                actions.append(PlayCard(instance_id))
-
-        # Standard Move (144): exhaust a unit, Base <-> Battlefield.
-        for ref in self.cards.values():
-            if ref.controller != player or ref.exhausted:
-                continue
-            if self.db[ref.card_id].type != "unit" or ref.location is None:
-                continue
-            if ref.location == BASE_LOCATION:
-                # 144.4.a -- Base to a Battlefield.
-                for bf in self.battlefields:
-                    actions.append(StandardMove(ref.instance_id, bf_location(bf.index)))
-            else:
-                # 144.4.b -- Battlefield to Base.
-                actions.append(StandardMove(ref.instance_id, BASE_LOCATION))
-                # 144.4.c / 810 -- Ganking also allows Battlefield to Battlefield.
-                if self.db[ref.card_id].has_ganking:
-                    for bf in self.battlefields:
-                        if bf_location(bf.index) != ref.location:
-                            actions.append(
-                                StandardMove(ref.instance_id, bf_location(bf.index))
-                            )
-
-        # Activated abilities on permanents the player controls (376, 145.2).
-        for ref in self.cards.values():
-            if ref.controller != player or ref.location is None:
-                continue
-            script = script_for(ref.card_id)
-            if script is None:
-                continue
-            for index, ability in enumerate(script.of_kind(TriggerKind.ACTIVATED)):
-                if self._can_pay_ability(ref, ability):
-                    actions.append(ActivateAbility(ref.instance_id, index))
-
-        # Rune abilities (164.2). Both are Reactions, so both are legal here.
-        for instance_id in state.channeled_runes:
-            ref = self.cards[instance_id]
-            if not ref.exhausted:
-                actions.append(ExhaustRuneForEnergy(instance_id))
-            actions.append(RecycleRuneForPower(instance_id))
-
-        return actions
 
     # ---------------------------------------------------------------- combat
 
@@ -447,11 +486,12 @@ class RiftboundState:
         elif isinstance(action, Concede):
             self._apply_concede()
         elif isinstance(action, PassPhase):
-            self._advance_phase()
+            self._apply_pass()
         else:
             raise ValueError(f"unhandled action {action!r}")
 
         self._cleanup()
+        self._normalize_window()
 
     # ------------------------------------------------------------ setup steps
 
@@ -497,6 +537,7 @@ class RiftboundState:
     # ----------------------------------------------------------- main actions
 
     def _apply_play(self, action: PlayCard) -> None:
+        """349-355 -- move the card to the Chain, pay, then finalize."""
         player = self._current_player
         state = self.players[player]
         ref = self.cards[action.instance_id]
@@ -508,20 +549,85 @@ class RiftboundState:
         else:
             state.champion_zone.remove(action.instance_id)
 
-        if card.type == "spell":
-            # 351.2 -- a spell's effects execute, then it goes to the trash.
-            self._emit(f"P{player} plays {card.name} (spell)")
-            self._fire(TriggerKind.ON_RESOLVE, action.instance_id)
-            state.trash.append(action.instance_id)
+        self._emit(f"P{player} plays {card.name}")
+        item = ChainItem(
+            kind="card", instance_id=action.instance_id, controller=player, pending=False
+        )
+        self.chain.append(item)  # 354 -- this Closes the State
+        self.chain_passes = 0
+
+        # 337.2 -- a finalized Unit or Gear resolves immediately.
+        if resolves_immediately(card):
+            self._resolve_top()
         else:
-            # Units and Gear are played to the controller's Base (148.1.a.1);
-            # they resolve immediately off the chain (337.2).
-            ref.location = BASE_LOCATION
-            ref.exhausted = False
-            state.base.append(action.instance_id)
-            self._emit(f"P{player} plays {card.name}")
-            self._fire(TriggerKind.ON_PLAY, action.instance_id)
+            self._open_priority_window(self.opponent(player))
+
+    _last_from_trigger: bool = False
+
+    def _resolve_top(self) -> None:
+        """340.1 -- the newest Finalized item resolves in full."""
+        if not self.chain:
+            # Nothing to resolve: fall through to the window logic rather than
+            # leaving the turn parked in a Closed state with an empty chain.
+            self._after_chain_change()
+            return
+        item = self.chain.pop()
+        self._last_from_trigger = item.from_trigger
+        ref = self.cards[item.instance_id]
+        card = self.db[ref.card_id]
+        state = self.players[item.controller]
+
+        if item.kind == "card":
+            if card.type == "spell":
+                self._fire(TriggerKind.ON_RESOLVE, item.instance_id)
+                state.trash.append(item.instance_id)  # 351.2
+            else:
+                ref.location = BASE_LOCATION  # 148.1.a.1
+                ref.exhausted = item.controller not in self.units_enter_ready
+                if card.type == "gear":
+                    ref.exhausted = False
+                state.base.append(item.instance_id)
+                self._fire(TriggerKind.ON_PLAY, item.instance_id)
+        else:
+            script = script_for(ref.card_id)
+            assert script is not None
+            ability = script.of_kind(TriggerKind.ACTIVATED)[item.ability_index]
+            self._queue(ability, item.controller, item.instance_id)
+
         self._resolve_effects()
+        self._after_chain_change()
+
+    def _open_priority_window(self, player: int) -> None:
+        """338 -- the next player may respond or pass."""
+        self.priority = player
+        self._current_player = player
+        self.phase = Phase.CHAIN
+
+    def _after_chain_change(self) -> None:
+        """340.2-340.4 -- decide where play goes once an item has resolved."""
+        if self.awaiting is not None:
+            return  # a choice is still outstanding
+        if self.chain:
+            # More items remain; the controller of the newest gets priority.
+            self._open_priority_window(self.chain[-1].controller)
+            return
+        # 340.2 -- the chain emptied, so play returns to an Open state.
+        self.chain_passes = 0
+        self.priority = None
+        if self.showdown is not None:
+            # 347.1.b -- when that chain closes, Focus passes. 346.1 excepts a
+            # chain opened by a triggered ability or one that Adds resources,
+            # which is why tapping a rune seal mid-showdown does not hand the
+            # window to the opponent.
+            if self._last_from_trigger:
+                self.priority = self.focus
+                self._current_player = self.focus if self.focus is not None else self.turn_player
+                self.phase = Phase.SHOWDOWN
+            else:
+                self._pass_focus()
+        else:
+            self.phase = Phase.MAIN
+            self._current_player = self.turn_player
 
     def _apply_move(self, action: StandardMove) -> None:
         """144 Standard Move; 190.3.a Contested; 450."""
@@ -576,15 +682,123 @@ class RiftboundState:
             self._finish_assignment()
 
     def _apply_activate(self, action: ActivateAbility) -> None:
-        """376 -- pay the costs, then queue the effects."""
+        """376/398 -- pay the costs, then put the ability on the Chain."""
         ref = self.cards[action.instance_id]
         script = script_for(ref.card_id)
         assert script is not None
         ability = script.of_kind(TriggerKind.ACTIVATED)[action.index]
         self._pay_ability(ref, ability)
         self._emit(f"P{ref.controller} activates {self.db[ref.card_id].name}")
-        self._queue(ability, ref.controller, ref.instance_id)
-        self._resolve_effects()
+
+        adds_resources = resolves_immediately(self.db[ref.card_id], ability)
+        self.chain.append(
+            ChainItem(
+                kind="ability",
+                instance_id=action.instance_id,
+                controller=ref.controller,
+                ability_index=action.index,
+                pending=False,
+                from_trigger=adds_resources,
+            )
+        )
+        self.chain_passes = 0
+        # 337.2 -- an ability that Adds resources resolves immediately, and
+        # 346.1 keeps Focus with its controller.
+        if adds_resources:
+            self._resolve_top()
+        else:
+            self._open_priority_window(self.opponent(ref.controller))
+
+    def _apply_pass(self) -> None:
+        """Pass priority, pass focus, or end the phase, depending on state."""
+        if self.phase is Phase.CHAIN:
+            self._pass_priority()
+        elif self.phase is Phase.SHOWDOWN:
+            self._pass_in_showdown()
+        else:
+            self._advance_phase()
+
+    def _pass_priority(self) -> None:
+        """339 -- when all players pass in sequence, the top item resolves."""
+        self.chain_passes += 1
+        if self.chain_passes >= len(PLAYERS):
+            self.chain_passes = 0
+            self._resolve_top()
+            return
+        self._open_priority_window(self.opponent(self._current_player))
+
+    # ------------------------------------------------------------- showdowns
+
+    def _open_showdown(self, bf_index: int, attacker: int, is_combat: bool) -> None:
+        """344-345 / 464 -- open a Showdown; the contester gains Focus."""
+        defender = self.opponent(attacker)
+        self.showdown = Showdown(
+            battlefield=bf_index, attacker=attacker, defender=defender, is_combat=is_combat
+        )
+        self.focus = attacker  # 345 / 464.2.d
+        self.priority = attacker  # 313.2 -- gaining Focus grants Priority
+        self._current_player = attacker
+        self.phase = Phase.SHOWDOWN
+        kind = "Combat" if is_combat else "Showdown"
+        self._emit(
+            f"{kind} opens at {self.db[self.battlefields[bf_index].card_id].name} "
+            f"— P{attacker} has focus"
+        )
+        if is_combat:
+            # 464.2.c.3 -- units present gain their controller's designation.
+            for ref in self.units_at(bf_location(bf_index)):
+                ref.is_attacker = ref.controller == attacker
+                ref.is_defender = ref.controller == defender
+
+    def _pass_focus(self) -> None:
+        """346 / 347.1.b -- Focus passes to the next player in turn order."""
+        assert self.showdown is not None
+        self.focus = self.opponent(self.focus if self.focus is not None else self.turn_player)
+        self.priority = self.focus
+        self._current_player = self.focus
+        self.phase = Phase.SHOWDOWN
+
+    def _pass_in_showdown(self) -> None:
+        """347.2 -- all players passing in sequence ends the Showdown."""
+        assert self.showdown is not None
+        self.showdown.passes += 1
+        if self.showdown.passes >= len(PLAYERS):
+            self._close_showdown()
+            return
+        self._pass_focus()
+
+    def _close_showdown(self) -> None:
+        """A Showdown ends: combat proceeds to damage, otherwise control settles."""
+        assert self.showdown is not None
+        showdown = self.showdown
+        bf = self.battlefields[showdown.battlefield]
+        self.showdown = None
+        self.focus = None
+        self.priority = None
+        self.phase = Phase.MAIN
+        self._current_player = self.turn_player
+
+        if showdown.is_combat:
+            self._emit("Combat showdown closes — damage step")
+            self.combat = CombatState(
+                battlefield=showdown.battlefield,
+                attacker=showdown.attacker,
+                defender=showdown.defender,
+            )
+            self._begin_damage_step()
+            return
+
+        # 190.3.b -- Contested persists until Control is established.
+        occupants = self.units_at(bf_location(bf.index))
+        holders = {r.controller for r in occupants}
+        bf.contested = False
+        bf.contested_by = None
+        if len(holders) == 1:
+            sole = next(iter(holders))
+            if bf.controller != sole:
+                bf.controller = sole
+                self._score(sole, bf, "Conquer")
+        self._emit(f"Showdown closes at {self.db[bf.card_id].name}")
 
     def _apply_concede(self) -> None:
         player = self._current_player
@@ -714,9 +928,34 @@ class RiftboundState:
                 return
             changed |= self._resolve_lethal_damage()
             changed |= self._resolve_control()
-            changed |= self._maybe_start_combat()
+            changed |= self._maybe_open_showdown()
             if not changed:
                 return
+
+    def _normalize_window(self) -> None:
+        """Keep `phase` consistent with the chain and showdown (307-310).
+
+        Without this, a chain that empties through an unusual path (an effect
+        countering an item, a choice resolving mid-resolution) can leave the
+        turn in a Closed state with nothing on the chain -- a dead position
+        where the only legal action is to pass forever.
+        """
+        if self.phase in (Phase.CHOOSING, Phase.COMBAT_ASSIGN, Phase.GAME_OVER):
+            return
+        if self.phase is Phase.CHAIN and not self.chain:
+            if self.showdown is not None:
+                self.phase = Phase.SHOWDOWN
+                self._current_player = self.focus if self.focus is not None else self.turn_player
+            else:
+                self.phase = Phase.MAIN
+                self.priority = None
+                self.chain_passes = 0
+                self._current_player = self.turn_player
+        elif self.phase is Phase.MAIN and self.chain:
+            self.phase = Phase.CHAIN
+        elif self.phase is Phase.SHOWDOWN and self.showdown is None:
+            self.phase = Phase.MAIN
+            self._current_player = self.turn_player
 
     def _check_victory(self) -> bool:
         """323.1 -- >= Victory Score and strictly more than the opponent."""
@@ -760,67 +999,49 @@ class RiftboundState:
         self._emit(f"{self.db[ref.card_id].name} is killed")
 
     def _resolve_control(self) -> bool:
-        """190.3.b.1 -- clear Contested when the contester has no units there."""
+        """190.3.b.1 -- clear Contested when its author has left and no
+        showdown or combat is running there."""
         changed = False
         for bf in self.battlefields:
-            location = bf_location(bf.index)
-            occupants = self.units_at(location)
-            holders = {r.controller for r in occupants}
-
-            in_combat = self.combat is not None and self.combat.battlefield == bf.index
-
-            if bf.contested and bf.contested_by is not None:
-                still_there = any(r.controller == bf.contested_by for r in occupants)
-                if not still_there and not in_combat:
-                    # 190.3.b.1 -- the contester left; clear at this Cleanup.
-                    bf.contested = False
-                    bf.contested_by = None
-                    changed = True
-
-            # 344.2 -- a Contested battlefield with no opposing units present
-            # opens a Non-Combat Showdown, which resolves into Control being
-            # established (190.3.b: Contested persists "until Control is
-            # established or re-established").
-            #
-            # APPROX: the showdown's spell windows are not simulated, so it
-            # resolves immediately in favour of the sole occupant. With no
-            # scripted card text there is nothing a player could have played
-            # into that window anyway. See RQ-10.
-            if len(holders) == 1 and not in_combat:
-                sole = next(iter(holders))
-                if bf.contested:
-                    bf.contested = False
-                    bf.contested_by = None
-                    changed = True
-                if bf.controller != sole:
-                    bf.controller = sole
-                    changed = True
-                    self._score(sole, bf, "Conquer")
+            if not bf.contested or bf.contested_by is None:
+                continue
+            busy = (
+                (self.showdown is not None and self.showdown.battlefield == bf.index)
+                or (self.combat is not None and self.combat.battlefield == bf.index)
+            )
+            if busy:
+                continue
+            occupants = self.units_at(bf_location(bf.index))
+            if not any(r.controller == bf.contested_by for r in occupants):
+                bf.contested = False
+                bf.contested_by = None
+                changed = True
         return changed
 
-    def _maybe_start_combat(self) -> bool:
-        """460-461 -- opposing units at a contested battlefield stage a combat."""
-        if self.combat is not None or self.phase is Phase.GAME_OVER:
+    def _maybe_open_showdown(self) -> bool:
+        """344 / 460 -- a Contested battlefield opens a Showdown at a Cleanup.
+
+        Requires a Neutral Open state: no chain, no showdown or combat already
+        running (344, 460).
+        """
+        if self.showdown is not None or self.combat is not None:
             return False
+        if self.chain or self.phase is Phase.GAME_OVER:
+            return False
+        if self.phase not in (Phase.MAIN, Phase.CHAIN):
+            return False
+
         for bf in self.battlefields:
-            location = bf_location(bf.index)
-            occupants = self.units_at(location)
-            holders = {r.controller for r in occupants}
-            if len(holders) < 2:
+            if not bf.contested or bf.contested_by is None:
                 continue
-            attacker = bf.contested_by if bf.contested_by is not None else self.turn_player
-            defender = self.opponent(attacker)
-            self.combat = CombatState(
-                battlefield=bf.index, attacker=attacker, defender=defender
-            )
-            for ref in occupants:
-                ref.is_attacker = ref.controller == attacker
-                ref.is_defender = ref.controller == defender
-            self._emit(
-                f"Combat at {self.db[bf.card_id].name}: "
-                f"P{attacker} attacks P{defender}"
-            )
-            self._begin_damage_step()
+            occupants = self.units_at(bf_location(bf.index))
+            holders = {r.controller for r in occupants}
+            if not holders:
+                continue
+            # 344.1 -- units from two players stage a Combat, which opens as a
+            # Combat Showdown. 344.2 -- otherwise a Non-Combat Showdown.
+            is_combat = len(holders) >= 2
+            self._open_showdown(bf.index, bf.contested_by, is_combat)
             return True
         return False
 

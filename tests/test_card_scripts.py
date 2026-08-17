@@ -12,7 +12,7 @@ import pytest
 from cards.database import load as load_db
 from cards.dsl import TriggerKind
 from cards.scripts import registry, script_for
-from engine.actions import ActivateAbility, ChooseTarget, PlayCard
+from engine.actions import ActivateAbility, ChooseTarget, PassPhase, PlayCard
 from engine.setup import build_state, load_deck
 from engine.state import Phase, bf_location
 from engine.zones import BASE_LOCATION
@@ -61,9 +61,29 @@ def put_unit(state, player: int, card_id: str, location: str = BASE_LOCATION) ->
 
 
 def play(state, instance_id: int) -> None:
-    state._current_player = state.cards[instance_id].controller
-    state.turn_player = state.cards[instance_id].controller
+    """Play a card and let it resolve.
+
+    Spells now go on the Chain (354) and only resolve once every player has
+    passed priority in sequence (339-340), so these tests pass priority for
+    both players rather than assuming immediate resolution. Choices raised
+    mid-resolution are left for the caller to answer.
+    """
+    controller = state.cards[instance_id].controller
+    state._current_player = controller
+    state.turn_player = controller
     state.apply(PlayCard(instance_id))
+    pass_until_resolved(state)
+
+
+def pass_until_resolved(state, limit: int = 12) -> None:
+    """Pass priority until the chain drains or a choice is requested."""
+    for _ in range(limit):
+        if state.phase is Phase.CHOOSING or not state.chain:
+            return
+        if PassPhase() in state.legal_actions():
+            state.apply(PassPhase())
+        else:
+            return
 
 
 # --- registry hygiene -------------------------------------------------------
@@ -136,6 +156,7 @@ def test_vi_activated_ability_recycles_and_buffs(decks):
     state._current_player = 0
     state.turn_player = 0
     state.apply(ActivateAbility(instance_id, 0))
+    pass_until_resolved(state)
 
     assert len(state.players[0].trash) == trash_before - 1
     assert state.might_of(state.cards[instance_id]) == DB["OGN-036"].might + 1
@@ -216,6 +237,7 @@ def test_cleave_grants_assault_3_which_only_counts_when_attacking(decks):
     play(state, give(state, 0, "OGN-004"))
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(unit))
+    pass_until_resolved(state)
 
     ref = state.cards[unit]
     base = DB["OGN-142"].might
@@ -231,6 +253,7 @@ def test_gust_returns_a_small_unit_to_hand(decks):
     play(state, give(state, 0, "OGN-169"))
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(small))
+    pass_until_resolved(state)
     assert state.cards[small].location is None
     assert small in state.players[1].hand
 
@@ -262,6 +285,7 @@ def test_stacked_deck_keeps_one_and_recycles_the_rest(decks):
     play(state, give(state, 0, "OGN-183"))
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(top3[1]))
+    pass_until_resolved(state)
     assert top3[1] in state.players[0].hand
     assert len(state.players[0].main_deck) == deck_before - 1
     for other in (top3[0], top3[2]):
@@ -276,6 +300,7 @@ def test_acceptable_losses_makes_each_player_kill_a_gear(decks):
     play(state, give(state, 0, "OGN-179"))
     while state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
+    pass_until_resolved(state)
     assert state.cards[mine].location is None
     assert state.cards[theirs].location is None
 
@@ -320,6 +345,7 @@ def test_warmogs_armor_attaches_to_a_friendly_unit(decks):
     play(state, gear)
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(host))
+    pass_until_resolved(state)
     assert state.cards[gear].attached_to == host
 
 
@@ -332,6 +358,7 @@ def test_attached_gear_adds_its_might_to_the_host(decks):
     play(state, gear)
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(host))
+    pass_until_resolved(state)
     assert state.might_of(state.cards[host]) == base + DB["SFD-124"].might
 
 
@@ -342,6 +369,7 @@ def test_gear_detaches_when_its_host_dies(decks):
     play(state, gear)
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(host))
+    pass_until_resolved(state)
     state._kill(state.cards[host])
     assert state.cards[gear].attached_to is None
 
@@ -354,6 +382,7 @@ def test_warmogs_buffs_permanently_on_conquer(decks):
     play(state, gear)
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(host))
+    pass_until_resolved(state)
 
     bf = state.battlefields[0]
     bf.scored_by.clear()
