@@ -1,0 +1,28 @@
+{
+  "weights": [
+    0.7796558191867435,
+    1.689457618503494,
+    1.2972741310883016,
+    3.1993710074667843,
+    4.220071395098376,
+    -1.0555775813025707,
+    -1.1617457300375014,
+    0.7155051542755271,
+    0.2196554421852954,
+    0.4698511534787804
+  ],
+  "bias": 0.0,
+  "feature_names": [
+    "point_diff",
+    "point_progress",
+    "battlefield_diff",
+    "unit_count_diff",
+    "might_diff",
+    "bf_presence_diff",
+    "hand_diff",
+    "rune_diff",
+    "deck_diff",
+    "tempo"
+  ],
+  "trained_on_games": 220
+}

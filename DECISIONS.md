@@ -190,3 +190,32 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   the battlefield rows meet, as they do on a table. Each mat shows only that
   player's units at the shared battlefields, which is how the physical zones
   actually work.
+
+## Session 7 -- scoring and the value heuristic
+
+- **The reward stays win/loss; the heuristic is a separate module** -- shaping
+  `returns()` would optimise the proxy, and Riftbound has a concrete trap for
+  that: the Final Point rule (471.1.b) makes a greedy conquer strictly worse
+  than passing. See SCORING.md.
+- **Every evaluation feature is a difference between the players** -- that
+  makes the model antisymmetric, so `evaluate(s,0) + evaluate(s,1) == 1`
+  exactly. Search can negate instead of recompute, and the invariant catches
+  one-sided features. It caught two: an absolute `point_progress`, and a
+  learned bias term.
+- **The fitted bias is pinned to zero** -- a constant favouring one seat breaks
+  antisymmetry. Genuine seat advantage (485.7) belongs in an antisymmetric
+  feature instead.
+- **Weight fitting splits by game, never by position** -- positions inside a
+  game share a label, so a position-level split leaks the outcome and reports
+  a flattering score.
+- **A fit that does not improve held-out Brier is not written** -- `--force`
+  exists but says so loudly.
+- **`CardDatabase` is shared by reference in clones** (`__deepcopy__` returns
+  self) -- it is immutable and nothing mutates it after load, but copying 908
+  cards per candidate action dominated search cost. 16.1 ms -> 2.15 ms per
+  clone, which is what makes one-ply search, and later ISMCTS, viable.
+- **The greedy agent breaks ties with a seeded RNG, not list order** --
+  otherwise it inherits a bias from `legal_actions()` sort order and looks
+  stronger than the heuristic has earned.
+- **The benchmark swaps seats and shares seeds across a pairing** -- first-player
+  advantage is real here (485.7), and would otherwise be read as agent skill.

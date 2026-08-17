@@ -138,7 +138,22 @@ class CardData:
 
 @dataclass
 class CardDatabase:
+    """Immutable, shared card definitions.
+
+    `CardData` is frozen and nothing mutates this after load, so a deep copy is
+    pure waste. That matters a lot: search clones the game state once per
+    candidate action, and copying 908 cards each time dominated the cost --
+    16.1 ms per clone before this, and the database was almost all of it.
+    """
+
     cards: dict[str, CardData] = field(default_factory=dict)
+
+    def __deepcopy__(self, memo):
+        # Shared by reference on purpose; see the class docstring.
+        return self
+
+    def __copy__(self):
+        return self
 
     def __getitem__(self, card_id: str) -> CardData:
         return self.cards[card_id]

@@ -30,6 +30,7 @@ why. Scripting more is mechanical work, not new architecture. See RQ-5 in
 | Frontend (local web UI) | done |
 | Card effect DSL interpreter | done — 15 primitives, 24 cards scripted |
 | Chain, priority, focus, showdowns, combat | done — RQ-10 closed |
+| Scoring: fitted value heuristic + calibration | done — see [`SCORING.md`](SCORING.md) |
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
@@ -103,8 +104,8 @@ data/       raw/ cache, fetch.py, sources.py, normalize.py -> cards.json
 engine/     rules: zones, state, actions, setup, combat, replay, interface
 cards/      card database + keyword parsing; knows nothing about search
 decks/      decklists + build_decks.py
-agents/     consume the legal-action API only
-analysis/   batch runs and aggregation
+agents/     consume the legal-action API only (random, greedy)
+analysis/   batch runs, evaluation heuristic, weight fitting, calibration
 frontend/   stdlib HTTP server + single-page client (no rules logic)
 tests/      unit tests; replays/ holds recorded game logs
 ```
@@ -173,8 +174,27 @@ single game reproduces standalone from its own seed.
   test asserting its effect on a constructed state.
 - **No dependency beyond stdlib + pytest** without asking first.
 
+## Scoring the agent
+
+The reward is **winning and nothing else** — `returns()` is win/loss/draw,
+derived from 194.2. The position heuristic that guides search lives separately
+in `analysis/evaluation.py`, is fitted to self-play outcomes rather than
+asserted, and is measured on held-out games.
+
+```sh
+.venv/bin/python analysis/fit_weights.py --games 300   # fit, with a held-out split
+.venv/bin/python analysis/calibrate.py --games 120     # does it predict winning?
+.venv/bin/python analysis/benchmark.py --games 60      # does it cause winning?
+```
+
+Fitting moved Brier from 0.1815 to 0.1666 and accuracy from 0.687 to 0.727,
+with near-diagonal calibration. The early game remains unpredictable (Brier
+0.258, *above* the 0.25 you get by always guessing 0.5) — a real limit,
+explained in [`SCORING.md`](SCORING.md).
+
 ## Documents
 
+- [`SCORING.md`](SCORING.md) — reward vs heuristic, and what the numbers say
 - [`RULES_SUMMARY.md`](RULES_SUMMARY.md) — implementation target for `engine/`
 - [`DSL.md`](DSL.md) — effect primitive spec; the gate before bulk scripting
 - [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md) — open rules decisions and blockers
