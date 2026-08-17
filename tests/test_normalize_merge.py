@@ -23,39 +23,39 @@ def card(**kw) -> CanonicalCard:
 
 
 def test_single_source_passes_through():
-    merged, disc = merge({"riftcodex": [card(cost=3, might=4)]})
+    merged, disc = merge({"apitcg": [card(cost=3, might=4)]})
     assert disc == []
     assert merged["OGN-001"].cost == 3
     assert merged["OGN-001"].might == 4
-    assert merged["OGN-001"].provenance["cost"] == "riftcodex"
+    assert merged["OGN-001"].provenance["cost"] == "apitcg"
 
 
-def test_api_wins_over_sheet_and_conflict_is_logged():
+def test_higher_precedence_source_wins_and_conflict_is_logged():
     merged, disc = merge(
         {
-            "community_sheet": [card(cost=5)],
-            "riftcodex": [card(cost=3)],
+            "riftbound_tools": [card(cost=5)],
+            "apitcg": [card(cost=3)],
         }
     )
     assert merged["OGN-001"].cost == 3
-    assert merged["OGN-001"].provenance["cost"] == "riftcodex"
+    assert merged["OGN-001"].provenance["cost"] == "apitcg"
 
     (d,) = [x for x in disc if x.field_name == "cost"]
     assert d.chosen == 3
-    assert d.chosen_from == "riftcodex"
-    assert d.values == {"riftcodex": 3, "community_sheet": 5}
+    assert d.chosen_from == "apitcg"
+    assert d.values == {"apitcg": 3, "riftbound_tools": 5}
 
 
-def test_riftcodex_outranks_riftscribe():
+def test_unknown_source_never_outranks_a_ranked_one():
     merged, _ = merge(
-        {"riftscribe": [card(might=9)], "riftcodex": [card(might=2)]}
+        {"riftscribe": [card(might=9)], "apitcg": [card(might=2)]}
     )
     assert merged["OGN-001"].might == 2
 
 
 def test_agreement_is_not_a_discrepancy():
     _, disc = merge(
-        {"riftcodex": [card(cost=3)], "community_sheet": [card(cost=3)]}
+        {"apitcg": [card(cost=3)], "riftbound_tools": [card(cost=3)]}
     )
     assert disc == []
 
@@ -64,12 +64,12 @@ def test_missing_field_is_filled_from_lower_precedence_source():
     """Omission is not disagreement: the sheet fills a gap without conflict."""
     merged, disc = merge(
         {
-            "riftcodex": [card(cost=3)],
-            "community_sheet": [card(cost=3, rules_text="Deal 2 damage.")],
+            "apitcg": [card(cost=3)],
+            "riftbound_tools": [card(cost=3, rules_text="Deal 2 damage.")],
         }
     )
     assert merged["OGN-001"].rules_text == "Deal 2 damage."
-    assert merged["OGN-001"].provenance["rules_text"] == "community_sheet"
+    assert merged["OGN-001"].provenance["rules_text"] == "riftbound_tools"
     assert disc == []
 
 
@@ -77,8 +77,8 @@ def test_missing_field_is_filled_from_lower_precedence_source():
 def test_empty_values_never_count_as_conflicts(empty):
     _, disc = merge(
         {
-            "riftcodex": [card(keywords=["Tank"])],
-            "community_sheet": [CanonicalCard(
+            "apitcg": [card(keywords=["Tank"])],
+            "riftbound_tools": [CanonicalCard(
                 riftbound_id="OGN-001", name="Test Card", type="unit", keywords=empty or []
             )],
         }
@@ -89,8 +89,8 @@ def test_empty_values_never_count_as_conflicts(empty):
 def test_list_fields_compare_by_value():
     merged, disc = merge(
         {
-            "riftcodex": [card(keywords=["Tank", "Shield"])],
-            "community_sheet": [card(keywords=["Tank"])],
+            "apitcg": [card(keywords=["Tank", "Shield"])],
+            "riftbound_tools": [card(keywords=["Tank"])],
         }
     )
     assert merged["OGN-001"].keywords == ["Tank", "Shield"]
@@ -100,8 +100,8 @@ def test_list_fields_compare_by_value():
 def test_cards_unique_to_one_source_are_kept():
     merged, _ = merge(
         {
-            "riftcodex": [card()],
-            "community_sheet": [card(riftbound_id="OGN-002", name="Other")],
+            "apitcg": [card()],
+            "riftbound_tools": [card(riftbound_id="OGN-002", name="Other")],
         }
     )
     assert set(merged) == {"OGN-001", "OGN-002"}
@@ -109,20 +109,20 @@ def test_cards_unique_to_one_source_are_kept():
 
 def test_unranked_source_loses_to_ranked_one():
     merged, _ = merge(
-        {"some_future_source": [card(cost=7)], "community_sheet": [card(cost=5)]}
+        {"some_future_source": [card(cost=7)], "riftbound_tools": [card(cost=5)]}
     )
     assert merged["OGN-001"].cost == 5
 
 
 def test_render_discrepancies_is_deterministic():
     _, disc = merge(
-        {"riftcodex": [card(cost=3)], "community_sheet": [card(cost=5)]}
+        {"apitcg": [card(cost=3)], "riftbound_tools": [card(cost=5)]}
     )
-    totals = {"riftcodex": 1, "community_sheet": 1}
+    totals = {"apitcg": 1, "riftbound_tools": 1}
     assert render_discrepancies(disc, totals) == render_discrepancies(disc, totals)
 
 
 def test_render_discrepancies_handles_empty():
-    out = render_discrepancies([], {"riftcodex": 12})
+    out = render_discrepancies([], {"apitcg": 12})
     assert "Disagreements: 0" in out
     assert "None." in out

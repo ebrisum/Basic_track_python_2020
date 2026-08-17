@@ -1,0 +1,818 @@
+[
+  {
+    "id": "origins-proving-grounds-001-024",
+    "number": "001/024",
+    "code": "001/024",
+    "name": "Annie - Fiery",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653136_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653136_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653136,
+      "url": "https://www.tcgplayer.com/product/653136/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-annie-fiery"
+    },
+    "cleanName": "Annie Fiery",
+    "rarity": "Epic",
+    "cardType": "Champion Unit",
+    "domain": "Fury",
+    "energyCost": "5",
+    "powerCost": "1",
+    "might": "4",
+    "description": "Your spells and abilities deal 1 Bonus Damage.<br>\r\n<em>(Each instance of damage they deal is increased by 1.)</em>",
+    "flavorText": "<em>\"I never play with matches.\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:03:03.603"
+  },
+  {
+    "id": "origins-proving-grounds-002-024",
+    "number": "002/024",
+    "code": "002/024",
+    "name": "Firestorm",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653137_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653137_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653137,
+      "url": "https://www.tcgplayer.com/product/653137/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-firestorm"
+    },
+    "cleanName": "Firestorm",
+    "rarity": "Uncommon",
+    "cardType": "Spell",
+    "domain": "Fury",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "0",
+    "description": "Deal 3 to all enemy units at a battlefield.",
+    "flavorText": "<em>\"Eeny, meeny, miny, burn!\" -Annie</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:03:49.583"
+  },
+  {
+    "id": "origins-proving-grounds-003-024",
+    "number": "003/024",
+    "code": "003/024",
+    "name": "Incinerate",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653138_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653138_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653138,
+      "url": "https://www.tcgplayer.com/product/653138/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-incinerate"
+    },
+    "cleanName": "Incinerate",
+    "rarity": "Common",
+    "cardType": "Spell",
+    "domain": "Fury",
+    "energyCost": "2",
+    "powerCost": "0",
+    "might": "0",
+    "description": "ACTION <em>(play on your turn or in showdowns.)</em><br>\r\nDeal 2 to a unit at a battlefield.",
+    "flavorText": "<em>\"You smell like burning!\" -Annie</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:04:38.62"
+  },
+  {
+    "id": "origins-proving-grounds-004-024",
+    "number": "004/024",
+    "code": "004/024",
+    "name": "Master Yi - Meditative",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653139_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653139_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653139,
+      "url": "https://www.tcgplayer.com/product/653139/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-master-yi-meditative"
+    },
+    "cleanName": "Master Yi Meditative",
+    "rarity": "Rare",
+    "cardType": "Champion Unit",
+    "domain": "Calm",
+    "energyCost": "5",
+    "powerCost": "1",
+    "might": "4",
+    "description": "While you have 8+ runes, I have +4 Might.",
+    "flavorText": "<em>\"Anger gives motivation without purpose.\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:05:11.94"
+  },
+  {
+    "id": "origins-proving-grounds-005-024",
+    "number": "005/024",
+    "code": "005/024",
+    "name": "Zephyr Sage",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653140_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653140_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653140,
+      "url": "https://www.tcgplayer.com/product/653140/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-zephyr-sage"
+    },
+    "cleanName": "Zephyr Sage",
+    "rarity": "Uncommon",
+    "cardType": "Unit",
+    "domain": "Calm",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "6",
+    "description": "SHIELD <em>(+1 Might while I'm a defender.)</em>",
+    "flavorText": "<em>\"A true master is an eternal student.\" -Master Yi</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:05:52.897"
+  },
+  {
+    "id": "origins-proving-grounds-006-024",
+    "number": "006/024",
+    "code": "006/024",
+    "name": "Lux - Illuminated",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653141_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653141_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653141,
+      "url": "https://www.tcgplayer.com/product/653141/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-lux-illuminated"
+    },
+    "cleanName": "Lux Illuminated",
+    "rarity": "Rare",
+    "cardType": "Champion Unit",
+    "domain": "Mind",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "5",
+    "description": "When you play a spell that costs 5 or more, give me +3 Might this turn.",
+    "flavorText": "<em>\"No more holding back!\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:06:47.85"
+  },
+  {
+    "id": "origins-proving-grounds-007-024",
+    "number": "007/024",
+    "code": "007/024",
+    "name": "Garen - Rugged",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653142_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653142_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653142,
+      "url": "https://www.tcgplayer.com/product/653142/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-garen-rugged"
+    },
+    "cleanName": "Garen Rugged",
+    "rarity": "Rare",
+    "cardType": "Champion Unit",
+    "domain": "Body",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "5",
+    "description": "ASSAULT 2, SHIELD 2 <em>(+2 Might while I'm an attacker or defender.)</em>",
+    "flavorText": "<em>\"Fear is the first of many foes.\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:07:31.19"
+  },
+  {
+    "id": "origins-proving-grounds-008-024",
+    "number": "008/024",
+    "code": "008/024",
+    "name": "Gentlemen's Duel",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653143_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653143_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653143,
+      "url": "https://www.tcgplayer.com/product/653143/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-gentlemens-duel"
+    },
+    "cleanName": "Gentlemens Duel",
+    "rarity": "Common",
+    "cardType": "Spell",
+    "domain": "Body",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "0",
+    "description": "ACTION <em>(Play on your turn or in showdowns.)</em><br>\r\nGive a friendly unit +3 Might this turn. Then, choose an enemy unit. They deal damage equal to their Mights to each other.",
+    "flavorText": "<em>A proper and formal way to kill your enemies.</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:08:24.227"
+  },
+  {
+    "id": "origins-proving-grounds-009-024",
+    "number": "009/024",
+    "code": "009/024",
+    "name": "Master Yi - Honed",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653144_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653144_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653144,
+      "url": "https://www.tcgplayer.com/product/653144/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-master-yi-honed"
+    },
+    "cleanName": "Master Yi Honed",
+    "rarity": "Epic",
+    "cardType": "Champion Unit",
+    "domain": "Body",
+    "energyCost": "7",
+    "powerCost": "1",
+    "might": "6",
+    "description": "GANKING <em>(I can move from battlefield to battlefield.)</em><br>\r\nI enter ready.",
+    "flavorText": "<em>\"The focused mind can pierce through stone.\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:08:58.527"
+  },
+  {
+    "id": "origins-proving-grounds-010-024",
+    "number": "010/024",
+    "code": "010/024",
+    "name": "Annie - Stubborn",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653145_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653145_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653145,
+      "url": "https://www.tcgplayer.com/product/653145/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-annie-stubborn"
+    },
+    "cleanName": "Annie Stubborn",
+    "rarity": "Rare",
+    "cardType": "Champion Unit",
+    "domain": "Chaos",
+    "energyCost": "4",
+    "powerCost": "1",
+    "might": "3",
+    "description": "When you play me, return a spell from your trash to your hand.",
+    "flavorText": "<em>\"I want a turn!\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:09:38.793"
+  },
+  {
+    "id": "origins-proving-grounds-011-024",
+    "number": "011/024",
+    "code": "011/024",
+    "name": "Flash",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653146_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653146_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653146,
+      "url": "https://www.tcgplayer.com/product/653146/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-flash"
+    },
+    "cleanName": "Flash",
+    "rarity": "Common",
+    "cardType": "Spell",
+    "domain": "Chaos",
+    "energyCost": "2",
+    "powerCost": "0",
+    "might": "0",
+    "description": "REACTION <em>(Play at any time, even before spells and abilities resolve.)</em><br>\r\nMove up to 2 friendly units to base.",
+    "flavorText": "<em>It's not running away. It's strategic positioning.</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:12:10.773"
+  },
+  {
+    "id": "origins-proving-grounds-012-024",
+    "number": "012/024",
+    "code": "012/024",
+    "name": "Blast of Power",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653147_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653147_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653147,
+      "url": "https://www.tcgplayer.com/product/653147/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-blast-of-power"
+    },
+    "cleanName": "Blast of Power",
+    "rarity": "Common",
+    "cardType": "Spell",
+    "domain": "Order",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "0",
+    "description": "ACTION <em>(Play on your turn or in showdowns.)</em><br>\r\nKill a unit at a battlefield.",
+    "flavorText": "<em>\"Illuminate the enemy!\" -Lux</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:12:42.223"
+  },
+  {
+    "id": "origins-proving-grounds-013-024",
+    "number": "013/024",
+    "code": "013/024",
+    "name": "Garen - Commander",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653148_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653148_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653148,
+      "url": "https://www.tcgplayer.com/product/653148/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-garen-commander"
+    },
+    "cleanName": "Garen Commander",
+    "rarity": "Epic",
+    "cardType": "Champion Unit",
+    "domain": "Order",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "5",
+    "description": "Other friendly units have +1 Might here.",
+    "flavorText": "<em>\"For Demacia!\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:13:08.733"
+  },
+  {
+    "id": "origins-proving-grounds-014-024",
+    "number": "014/024",
+    "code": "014/024",
+    "name": "Lux - Crownguard",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653149_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653149_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653149,
+      "url": "https://www.tcgplayer.com/product/653149/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-lux-crownguard"
+    },
+    "cleanName": "Lux Crownguard",
+    "rarity": "Epic",
+    "cardType": "Champion Unit",
+    "domain": "Order",
+    "energyCost": "4",
+    "powerCost": "0",
+    "might": "2",
+    "description": "Exhaust: REACTION - ADD 2. Use only to play spells. <br>\r\n<em>(Abilities that add resources can't be reacted to.)</em>",
+    "flavorText": "<em>\"I've been hiding my light long enough.\"</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:13:36.667"
+  },
+  {
+    "id": "origins-proving-grounds-015-024",
+    "number": "015/024",
+    "code": "015/024",
+    "name": "Recruit the Vanguard",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653150_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653150_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653150,
+      "url": "https://www.tcgplayer.com/product/653150/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-recruit-the-vanguard"
+    },
+    "cleanName": "Recruit the Vanguard",
+    "rarity": "Uncommon",
+    "cardType": "Spell",
+    "domain": "Order",
+    "energyCost": "6",
+    "powerCost": "0",
+    "might": "0",
+    "description": "ACTION <em>(Play on your turn or in showdowns.)</em><br>\r\nPlay four 1 Might Recruit unit tokens. <em>(They can be played to your base or to battlefields you control.)</em>",
+    "flavorText": "<em>\"My heart and sword always for Demacia.\" -Garen</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:14:02.433"
+  },
+  {
+    "id": "origins-proving-grounds-016-024",
+    "number": "016/024",
+    "code": "016/024",
+    "name": "Vanguard Attendant",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653151_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653151_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653151,
+      "url": "https://www.tcgplayer.com/product/653151/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-vanguard-attendant"
+    },
+    "cleanName": "Vanguard Attendant",
+    "rarity": "Common",
+    "cardType": "Unit",
+    "domain": "Order",
+    "energyCost": "6",
+    "powerCost": "1",
+    "might": "5",
+    "description": "I enter ready.",
+    "flavorText": "<em>Even the Vanguard needs a first line of defense.</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:14:46.123"
+  },
+  {
+    "id": "origins-proving-grounds-017-024",
+    "number": "017/024",
+    "code": "017/024",
+    "name": "Annie - Dark Child (Starter)",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653152_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653152_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653152,
+      "url": "https://www.tcgplayer.com/product/653152/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-annie-dark-child-starter"
+    },
+    "cleanName": "Annie Dark Child Starter",
+    "rarity": "Rare",
+    "cardType": "Legend",
+    "domain": "Fury;Chaos",
+    "energyCost": "0",
+    "powerCost": "0",
+    "might": "0",
+    "description": "At the end of your turn, ready 2 runes.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:15:20.09"
+  },
+  {
+    "id": "origins-proving-grounds-018-024",
+    "number": "018/024",
+    "code": "018/024",
+    "name": "Tibbers",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653153_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653153_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653153,
+      "url": "https://www.tcgplayer.com/product/653153/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-tibbers"
+    },
+    "cleanName": "Tibbers",
+    "rarity": "Epic",
+    "cardType": "Signature Unit",
+    "domain": "Fury;Chaos",
+    "energyCost": "8",
+    "powerCost": "2",
+    "might": "7",
+    "description": "When you play me, deal 3 damage to all units at battlefields.",
+    "flavorText": "<em>\"Bear hug!\" -Annie</em>",
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:15:49.643"
+  },
+  {
+    "id": "origins-proving-grounds-019-024",
+    "number": "019/024",
+    "code": "019/024",
+    "name": "Master Yi - Wuju Bladesman (Starter)",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653154_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653154_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653154,
+      "url": "https://www.tcgplayer.com/product/653154/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-master-yi-wuju-bladesman-starter"
+    },
+    "cleanName": "Master Yi Wuju Bladesman Starter",
+    "rarity": "Rare",
+    "cardType": "Legend",
+    "domain": "Calm;Body",
+    "energyCost": "0",
+    "powerCost": "0",
+    "might": "0",
+    "description": "While a friendly unit defends alone, it gets +2 Might.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:16:18.173"
+  },
+  {
+    "id": "origins-proving-grounds-020-024",
+    "number": "020/024",
+    "code": "020/024",
+    "name": "Highlander",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653155_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653155_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653155,
+      "url": "https://www.tcgplayer.com/product/653155/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-highlander"
+    },
+    "cleanName": "Highlander",
+    "rarity": "Epic",
+    "cardType": "Signature Spell",
+    "domain": "Calm;Body",
+    "energyCost": "4",
+    "powerCost": "0",
+    "might": "0",
+    "description": "REACTION <em>(Play any time, even before spells and abilities resolve.)</em><br>\r\nChoose a friendly unit. The next time it dies this turn, recall it exhausted instead. <em>(Send it to base. This isn't a move.)</em>",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:16:49.29"
+  },
+  {
+    "id": "origins-proving-grounds-021-024",
+    "number": "021/024",
+    "code": "021/024",
+    "name": "Lux - Lady of Luminosity (Starter)",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653156_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653156_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653156,
+      "url": "https://www.tcgplayer.com/product/653156/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-lux-lady-of-luminosity-starter"
+    },
+    "cleanName": "Lux Lady of Luminosity Starter",
+    "rarity": "Rare",
+    "cardType": "Legend",
+    "domain": "Mind;Order",
+    "energyCost": "0",
+    "powerCost": "0",
+    "might": "0",
+    "description": "When you play a spell that costs 5 or more, draw a 1.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:18:10.56"
+  },
+  {
+    "id": "origins-proving-grounds-022-024",
+    "number": "022/024",
+    "code": "022/024",
+    "name": "Final Spark",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653157_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653157_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653157,
+      "url": "https://www.tcgplayer.com/product/653157/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-final-spark"
+    },
+    "cleanName": "Final Spark",
+    "rarity": "Epic",
+    "cardType": "Signature Spell",
+    "domain": "Mind;Order",
+    "energyCost": "8",
+    "powerCost": "0",
+    "might": "0",
+    "description": "ACTION <em>(Play on your turn or in showdowns.)</em><br>\r\nDeal 8 to a unit.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:18:32.257"
+  },
+  {
+    "id": "origins-proving-grounds-023-024",
+    "number": "023/024",
+    "code": "023/024",
+    "name": "Garen - Might of Demacia (Starter)",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653158_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653158_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653158,
+      "url": "https://www.tcgplayer.com/product/653158/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-garen-might-of-demacia-starter"
+    },
+    "cleanName": "Garen Might of Demacia Starter",
+    "rarity": "Rare",
+    "cardType": "Legend",
+    "domain": "Body;Order",
+    "energyCost": "0",
+    "powerCost": "0",
+    "might": "0",
+    "description": "When you conquer, if you have 4+ units at that battlefield, draw 2.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:18:56.183"
+  },
+  {
+    "id": "origins-proving-grounds-024-024",
+    "number": "024/024",
+    "code": "024/024",
+    "name": "Decisive Strike",
+    "images": {
+      "small": "https://tcgplayer-cdn.tcgplayer.com/product/653159_400w.jpg",
+      "large": "https://tcgplayer-cdn.tcgplayer.com/product/653159_in_1000x1000.jpg"
+    },
+    "set": {
+      "id": "origins-proving-grounds",
+      "name": "Origins: Proving Grounds",
+      "releaseDate": "2025-10-31"
+    },
+    "tcgplayer": {
+      "id": 653159,
+      "url": "https://www.tcgplayer.com/product/653159/riftbound-league-of-legends-trading-card-game-origins-proving-grounds-decisive-strike"
+    },
+    "cleanName": "Decisive Strike",
+    "rarity": "Epic",
+    "cardType": "Signature Spell",
+    "domain": "Body;Order",
+    "energyCost": "5",
+    "powerCost": "1",
+    "might": "0",
+    "description": "ACTION <em>(Play on your turn or in showdowns.)</em><br>\r\nGive friendly units +2 Might this turn.",
+    "flavorText": null,
+    "presaleInfo": {
+      "isPresale": true,
+      "releasedOn": "2025-10-31T00:00:00",
+      "note": "This product is a Presale item and will ship in October 2025. Orders containing Presale items will ship once all items are available. Release date and product details are subject to change as updated by the publisher."
+    },
+    "modifiedOn": "2025-09-09T18:19:18.69"
+  }
+]

@@ -20,6 +20,7 @@ source is exactly the kind of hidden approximation this project forbids.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
@@ -28,7 +29,7 @@ from typing import Any, Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from sources import PRECEDENCE  # noqa: E402
+from sources import APITCG_SET_CODES, PRECEDENCE  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 RAW = HERE / "raw"
@@ -55,9 +56,13 @@ class CanonicalCard:
     domains: list[str] = field(default_factory=list)
     keywords: list[str] = field(default_factory=list)
     rules_text: str = ""
-    is_champion: bool = False
-    is_battlefield: bool = False
-    is_rune: bool = False
+    # Tri-state on purpose. `None` means "this source has no opinion", which is
+    # different from `False` ("this source says no"). Defaulting these to False
+    # made every source that simply does not model champions look like it was
+    # actively contradicting the one that does -- 146 phantom conflicts.
+    is_champion: bool | None = None
+    is_battlefield: bool | None = None
+    is_rune: bool | None = None
     set: str = ""
     # Provenance: field name -> source key that supplied the winning value.
     provenance: dict[str, str] = field(default_factory=dict)
@@ -84,42 +89,150 @@ class Discrepancy:
 # Adapters
 # --------------------------------------------------------------------------
 # Each adapter takes the source's directory under data/raw/ and yields
-# CanonicalCard records.
+# CanonicalCard records. Adapters are the only source-shape-aware code here.
 #
-# NOT YET IMPLEMENTED. Writing a field mapping without having seen a single
-# real payload would mean guessing at key names, and a wrong guess here is
-# invisible -- it produces a plausible cards.json full of Nones rather than an
-# error. These get written against the actual cached bytes, once data/raw/ is
-# populated by fetch.py.
+# Both were written against the actual cached bytes, not against documentation.
 
 Adapter = Callable[[Path], list[CanonicalCard]]
 
-
-def adapt_riftcodex(raw_dir: Path) -> list[CanonicalCard]:
-    raise NotImplementedError(
-        "No Riftcodex payload has ever been observed; run data/fetch.py "
-        "--source riftcodex first, then map its fields here."
-    )
+# Canonical id is "<SETCODE>-<NUMBER>", e.g. "OGN-001". Variant printings keep
+# their suffix ("OGN-007A"), since alternate arts are distinct printings of the
+# same card and must not silently collapse onto each other.
+ID_RE = re.compile(r"^([A-Z]{3})-(\d+)([A-Z]*)$")
 
 
-def adapt_riftscribe(raw_dir: Path) -> list[CanonicalCard]:
-    raise NotImplementedError(
-        "No RiftScribe payload has ever been observed; run data/fetch.py "
-        "--source riftscribe first, then map its fields here."
-    )
+def canonical_id(set_code: str, number: str) -> str | None:
+    """Build a canonical id, or None if `number` is not a card number.
+
+    apitcg numbers look like "001/298"; the denominator is set size, not part
+    of the identity. Sealed products carry bare sequential numbers ("0", "3")
+    and are rejected by the caller on cardType instead.
+    """
+    head = number.split("/")[0].strip()
+    match = re.match(r"^(\d+)([A-Za-z]*)$", head)
+    if not match:
+        return None
+    digits, suffix = match.groups()
+    return f"{set_code.upper()}-{int(digits):03d}{suffix.upper()}"
 
 
-def adapt_community_sheet(raw_dir: Path) -> list[CanonicalCard]:
-    raise NotImplementedError(
-        "No spreadsheet CSV has ever been observed; run data/fetch.py "
-        "--source community_sheet first, then map its columns here."
-    )
+def _strip_html(text: str) -> str:
+    """apitcg descriptions carry <br>, <em> and CRLF; card text must be plain."""
+    text = re.sub(r"<br\s*/?>", "\n", text, flags=re.I)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = "\n".join(line.strip() for line in text.split("\n"))
+    # A <br> followed by a real newline in the source would otherwise leave a
+    # blank line in the middle of card text.
+    return re.sub(r"\n{2,}", "\n", text).strip()
+
+
+def _int_or_none(value: Any) -> int | None:
+    if value is None or value == "":
+        return None
+    try:
+        return int(str(value).strip())
+    except ValueError:
+        return None
+
+
+def adapt_riftbound_tools(raw_dir: Path) -> list[CanonicalCard]:
+    """npm `riftbound-tools`: ids like "ogn-001", ints already parsed.
+
+    ITS NUMERIC FIELDS ARE DELIBERATELY NOT MAPPED. Measured against apitcg
+    across the 503 comparable overlapping cards:
+
+        npm.might  == apitcg.might              0.6%
+        npm.might  == apitcg.power             52.3%
+        npm.energy == apitcg.energy            31.2%
+        npm.cost   == apitcg.energy            50.5%
+
+    0.6% agreement on `might` is not noise, it is a different quantity wearing
+    the name, and no single hypothesis explains the rest either. Mapping any of
+    them would put confidently-wrong stats into every simulation, so this
+    source contributes only what it is demonstrably good at: coverage (it is
+    the sole source for the UNL set), keyword/tag arrays, names and card text.
+
+    See DISCREPANCIES.md and RULES_QUESTIONS.md RQ-2.
+    """
+    records = json.loads((raw_dir / "cards.json").read_text())
+    out: list[CanonicalCard] = []
+    for rec in records:
+        raw_id = str(rec.get("id", "")).upper()
+        if not ID_RE.match(raw_id):
+            continue
+        card_type = str(rec.get("type") or "").strip().lower()
+        out.append(
+            CanonicalCard(
+                riftbound_id=raw_id,
+                name=str(rec.get("name") or "").strip(),
+                type=card_type,
+                domains=sorted(rec.get("domain") or []),
+                keywords=sorted(set(rec.get("keywords") or []) | set(rec.get("tags") or [])),
+                rules_text=str(rec.get("text") or "").strip(),
+                # This source flattens champions into a bare "Unit", so it has
+                # no opinion on is_champion -- left None, not False.
+                is_battlefield=(card_type == "battlefield"),
+                is_rune=(card_type == "rune"),
+                set=str(rec.get("setCode") or "").upper(),
+            )
+        )
+    return out
+
+
+def adapt_apitcg(raw_dir: Path) -> list[CanonicalCard]:
+    """apitcg: HTML descriptions, string numerics, semicolon-joined domains.
+
+    Sealed products (booster packs, displays, decks) share these files and are
+    identified by a null cardType; they are dropped.
+    """
+    out: list[CanonicalCard] = []
+    for path in sorted(raw_dir.glob("*.json")):
+        if path.name.startswith("_"):
+            continue
+        for rec in json.loads(path.read_text()):
+            card_type = (rec.get("cardType") or "").strip()
+            if not card_type:
+                continue  # sealed product, not a card
+            set_id = (rec.get("set") or {}).get("id", "")
+            set_code = APITCG_SET_CODES.get(set_id)
+            if not set_code:
+                continue
+            card_id = canonical_id(set_code, str(rec.get("number") or ""))
+            if card_id is None:
+                continue
+
+            subtypes = [t.strip() for t in card_type.split(";") if t.strip()]
+            lowered = card_type.lower()
+            out.append(
+                CanonicalCard(
+                    riftbound_id=card_id,
+                    name=str(rec.get("name") or "").strip(),
+                    # "Champion Unit" / "Signature Spell" -> the base type; the
+                    # qualifier is preserved in is_champion and keywords.
+                    type=subtypes[0].split()[-1].lower() if subtypes else "",
+                    energy=_int_or_none(rec.get("energyCost")),
+                    power=_int_or_none(rec.get("powerCost")),
+                    might=_int_or_none(rec.get("might")),
+                    domains=sorted(
+                        d.strip()
+                        for d in str(rec.get("domain") or "").split(";")
+                        if d.strip() and d.strip().lower() != "none"
+                    ),
+                    keywords=sorted({t for t in subtypes if " " in t or "Token" in t}),
+                    rules_text=_strip_html(str(rec.get("description") or "")),
+                    is_champion="champion" in lowered,
+                    is_battlefield="battlefield" in lowered,
+                    is_rune="rune" in lowered,
+                    set=set_code,
+                )
+            )
+    return out
 
 
 ADAPTERS: dict[str, Adapter] = {
-    "riftcodex": adapt_riftcodex,
-    "riftscribe": adapt_riftscribe,
-    "community_sheet": adapt_community_sheet,
+    "apitcg": adapt_apitcg,
+    "riftbound_tools": adapt_riftbound_tools,
 }
 
 
@@ -188,7 +301,92 @@ def merge(
     return merged, discrepancies
 
 
-def render_discrepancies(discrepancies: list[Discrepancy], totals: dict[str, int]) -> str:
+# Fields the engine cannot simulate a card without, per card type. Type-aware
+# on purpose: a spell has no Might and a Colorless card has no domain, so a
+# flat required-field list reports correct data as missing and buries the real
+# gaps. `power` is required on playable cards because Riftbound costs are an
+# (energy, power) pair, not a single scalar -- see RULES_SUMMARY.md.
+REQUIRED_BY_TYPE: dict[str, tuple[str, ...]] = {
+    "unit": ("energy", "power", "might"),
+    "spell": ("energy", "power"),
+    "gear": ("energy", "power"),
+    "battlefield": (),
+    "rune": (),
+    "legend": (),
+    "token": (),
+}
+DEFAULT_REQUIRED: tuple[str, ...] = ("energy", "power")
+
+
+def required_fields(card: "CanonicalCard") -> tuple[str, ...]:
+    return REQUIRED_BY_TYPE.get((card.type or "").lower(), DEFAULT_REQUIRED)
+
+
+def is_complete(card: "CanonicalCard") -> bool:
+    return all(not _is_empty(getattr(card, f)) for f in required_fields(card))
+
+
+def render_coverage(merged: dict[str, CanonicalCard]) -> list[str]:
+    """Which cards are actually simulatable, broken down by set.
+
+    This is the operationally important number: a card missing its costs
+    cannot be played by the engine at all, regardless of how well its text is
+    understood.
+    """
+    by_set: dict[str, list[CanonicalCard]] = defaultdict(list)
+    for card in merged.values():
+        by_set[card.set or "?"].append(card)
+
+    lines = [
+        "## Simulation coverage",
+        "",
+        "A card is *complete* when it has the fields the engine cannot run "
+        "without, which depend on its type:",
+        "",
+    ]
+    lines += [
+        f"- `{t}`: {', '.join(f'`{f}`' for f in fields) if fields else '(none)'}"
+        for t, fields in sorted(REQUIRED_BY_TYPE.items())
+    ]
+    lines += [
+        "",
+        "| set | cards | complete | incomplete |",
+        "| --- | --- | --- | --- |",
+    ]
+    for set_code, cards in sorted(by_set.items()):
+        complete = sum(1 for c in cards if is_complete(c))
+        lines.append(
+            f"| {set_code} | {len(cards)} | {complete} | {len(cards) - complete} |"
+        )
+    total = len(merged)
+    complete_total = sum(1 for c in merged.values() if is_complete(c))
+    lines += [
+        f"| **all** | **{total}** | **{complete_total}** | "
+        f"**{total - complete_total}** |",
+        "",
+    ]
+
+    incomplete = sorted(
+        (c for c in merged.values() if not is_complete(c)),
+        key=lambda c: c.riftbound_id,
+    )
+    if incomplete:
+        gaps: dict[str, int] = defaultdict(int)
+        for card in incomplete:
+            for f in required_fields(card):
+                if _is_empty(getattr(card, f)):
+                    gaps[f] += 1
+        lines += ["Missing field counts across incomplete cards:", ""]
+        lines += [f"- `{f}`: {n}" for f, n in sorted(gaps.items(), key=lambda kv: -kv[1])]
+        lines.append("")
+    return lines
+
+
+def render_discrepancies(
+    discrepancies: list[Discrepancy],
+    totals: dict[str, int],
+    merged: dict[str, CanonicalCard] | None = None,
+) -> str:
     lines = [
         "# Source discrepancies",
         "",
@@ -202,7 +400,10 @@ def render_discrepancies(discrepancies: list[Discrepancy], totals: dict[str, int
         "| --- | --- |",
     ]
     lines += [f"| {k} | {v} |" for k, v in sorted(totals.items())]
-    lines += ["", f"## Disagreements: {len(discrepancies)}", ""]
+    lines.append("")
+    if merged is not None:
+        lines += render_coverage(merged)
+    lines += [f"## Disagreements: {len(discrepancies)}", ""]
 
     if not discrepancies:
         lines.append("None. Every field agreed across all sources that supplied it.")
@@ -258,7 +459,7 @@ def main() -> int:
         )
         + "\n"
     )
-    DISCREPANCIES_MD.write_text(render_discrepancies(discrepancies, totals))
+    DISCREPANCIES_MD.write_text(render_discrepancies(discrepancies, totals, merged))
 
     print(f"{len(merged)} canonical cards -> {CARDS_JSON.name}")
     print(f"{len(discrepancies)} field disagreements -> {DISCREPANCIES_MD.name}")

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "origins",
+    "name": "Origins",
+    "total": 360,
+    "releaseDate": "2025-10-31",
+    "description": "The first set of Riftbound: League of Legends Trading Card Game",
+    "tcgplayer": {
+      "group": 24439
+    }
+  },
+  {
+    "id": "origins-proving-grounds",
+    "name": "Origins: Proving Grounds",
+    "total": 24,
+    "releaseDate": "2025-10-31",
+    "description": "The first set of Riftbound: League of Legends Trading Card Game",
+    "tcgplayer": {
+      "group": 24439
+    }
+  },
+  {
+    "id": "spiritforged",
+    "name": "Spiritforged",
+    "total": 315,
+    "releaseDate": "2026-02-13",
+    "description": "",
+    "tcgplayer": {
+      "group": 24519
+    }
+  }
+]
