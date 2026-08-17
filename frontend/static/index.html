@@ -7,115 +7,110 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2714%27 font-size=%2714%27%3E%E2%9A%94%3C/text%3E%3C/svg%3E">
 <style>
   :root{
-    --bg:#0d0f16; --felt:#131722; --panel:#1a1e2b; --panel2:#222739; --line:#2f3547;
-    --ink:#e9ebf3; --muted:#98a0b8; --accent:#7aa2ff; --warn:#f0a45c;
+    --bg:#0b0d14; --mat:#16233c; --matline:#c8a24a; --panel:#1a1e2b; --panel2:#222739;
+    --line:#2f3547; --ink:#e9ebf3; --muted:#939cb5; --accent:#7aa2ff; --warn:#f0a45c;
     --good:#6dd39a; --bad:#e8697d; --p0:#7aa2ff; --p1:#e8975c;
-    --cw:104px; --ch:145px;           /* card size, 744x1039 ratio */
+    --cw:88px; --ch:123px;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
-       font:13.5px/1.45 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 14px;
-         background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
-  h1{font-size:14px;margin:0;letter-spacing:.02em;white-space:nowrap}
+       font:13px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:7px 12px;
+         background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+  h1{font-size:14px;margin:0;white-space:nowrap}
   .grow{flex:1}
   button,select,input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);
                       border-radius:6px;padding:5px 9px;font:inherit}
-  button{cursor:pointer}
-  button:hover:not(:disabled){border-color:var(--accent)}
-  button:disabled{opacity:.4;cursor:default}
+  button{cursor:pointer} button:hover:not(:disabled){border-color:var(--accent)}
   button.primary{background:var(--accent);color:#0b0e18;border-color:var(--accent);font-weight:650}
-  .pill{padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:11.5px;white-space:nowrap}
+  .pill{padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:11px;white-space:nowrap}
   .pill.turn{border-color:var(--good);color:var(--good)}
   .pill.p0{border-color:var(--p0);color:var(--p0)} .pill.p1{border-color:var(--p1);color:var(--p1)}
+  .pill.timing{border-color:var(--warn);color:var(--warn)}
 
-  main{display:grid;grid-template-columns:1fr 300px;gap:10px;padding:10px;align-items:start}
-  .table{background:var(--felt);border:1px solid var(--line);border-radius:12px;padding:10px;
-         display:flex;flex-direction:column;gap:8px}
+  main{display:grid;grid-template-columns:1fr 292px;gap:10px;padding:10px;align-items:start}
 
-  /* one player's row: identity zones | base | deck zones */
-  .side{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;
-        border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--panel)}
-  .side.me{border-left:3px solid var(--p0)}
-  .side.them{border-left:3px solid var(--p1)}
-  .zonegrp{display:flex;gap:6px;align-items:flex-start}
-  .zone{display:flex;flex-direction:column;align-items:center;gap:3px}
-  .zone .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-  .slot{width:var(--cw);height:var(--ch);border:1px dashed var(--line);border-radius:7px;
-        display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;
-        background:rgba(0,0,0,.18)}
-  .stack{position:relative;width:var(--cw);height:var(--ch);border-radius:7px;
-         border:1px solid var(--line);background:
-           repeating-linear-gradient(135deg,#1d2233 0 7px,#232941 7px 14px);
-         display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px}
-  .stack b{font-size:19px;font-variant-numeric:tabular-nums}
-  .stack span{font-size:9.5px;color:var(--muted)}
-  .stack.clickable{cursor:pointer} .stack.clickable:hover{border-color:var(--accent)}
+  /* The playmat, one per player, mirrored so the battlefield rows meet. */
+  .mat{background:var(--mat);border:2px solid #0d1526;border-radius:14px;padding:8px;
+       display:grid;grid-template-columns:26px 1fr;gap:8px;
+       box-shadow:inset 0 0 60px rgba(0,0,0,.35)}
+  .mat + .mat{margin-top:8px}
+  .track{display:flex;flex-direction:column-reverse;justify-content:space-between;gap:2px}
+  .mat.them .track{flex-direction:column}
+  .tick{width:22px;height:22px;border-radius:50%;border:1px solid var(--matline);
+        display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#c8a24a}
+  .tick.on{background:var(--matline);color:#111a2b;font-weight:750}
+  .rows{display:flex;flex-direction:column;gap:8px}
+  .mat.them .rows{flex-direction:column-reverse}
+  .matrow{display:grid;gap:8px}
+  .r-top{grid-template-columns:1fr 128px 128px}
+  .r-mid{grid-template-columns:1fr 128px}
+  .r-bot{grid-template-columns:128px 1fr 128px}
+  .box{border:1px solid var(--matline);border-radius:9px;padding:6px;
+       background:rgba(6,12,24,.35);min-height:calc(var(--ch) + 24px)}
+  .box > .cap{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#c8a24a;
+              opacity:.85;margin-bottom:4px}
+  .box .items{display:flex;gap:5px;flex-wrap:wrap;align-items:flex-start}
+  .bfgroup{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+  .bfcell{flex:1;min-width:220px;border:1px dashed rgba(200,162,74,.45);border-radius:8px;padding:5px}
+  .bfcell .hd{display:flex;justify-content:space-between;gap:6px;align-items:baseline;margin-bottom:4px}
+  .bfcell .nm{font-size:11.5px;font-weight:650}
+  .bfcell .st{font-size:9.5px;color:var(--muted)}
+  .bfcell.contested{border-color:var(--warn);border-style:solid}
 
-  .lane{display:flex;gap:6px;flex-wrap:wrap;min-height:var(--ch);
-        padding:6px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.15)}
-  .lane .lbl{width:100%;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-
-  /* battlefields strip */
-  .bfrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  .bf{border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--panel);
-      min-width:300px;flex:1;max-width:520px}
-  .bf.contested{border-color:var(--warn);box-shadow:0 0 0 1px rgba(240,164,92,.25)}
-  .bf.mine{border-color:var(--p0)} .bf.theirs{border-color:var(--p1)}
-  .bf .hd{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-  .bf .hd img{width:44px;height:31px;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
-  .bf .hd .nm{font-weight:650;font-size:12.5px}
-  .bf .hd .st{font-size:10.5px;color:var(--muted)}
-  .bf .half{display:flex;gap:6px;flex-wrap:wrap;min-height:52px;
-            padding:5px;border-radius:7px;background:rgba(0,0,0,.18)}
-  .bf .half + .half{margin-top:5px}
-
-  /* cards */
-  .card{width:var(--cw);border-radius:7px;position:relative;background:var(--panel2);
+  .card{width:var(--cw);border-radius:6px;position:relative;background:var(--panel2);
         border:1px solid var(--line);overflow:hidden}
   .card.p0{box-shadow:inset 3px 0 0 var(--p0)} .card.p1{box-shadow:inset 3px 0 0 var(--p1)}
-  .card{position:relative}
-  /* Art starts invisible and is only revealed once it actually loads, so a
-     blocked or slow CDN never hides the legible text face underneath. */
   .card .art{position:absolute;inset:0;width:100%;height:var(--ch);object-fit:cover;
-             display:block;z-index:1;opacity:0;transition:opacity .18s}
+             z-index:1;opacity:0;transition:opacity .18s}
   .card .art.ready{opacity:1}
-  .card .fallback{height:var(--ch);padding:22px 6px 6px;display:flex;flex-direction:column;gap:3px}
-  .card .fallback .nm{font-size:11px;font-weight:650;line-height:1.2}
-  .card .fallback .tx{font-size:9px;color:var(--muted);overflow:hidden}
-  .card.exhausted{transform:rotate(6deg);opacity:.75}
+  .card .fallback{height:var(--ch);padding:20px 5px 5px;display:flex;flex-direction:column;gap:2px}
+  .card .fallback .nm{font-size:10px;font-weight:650;line-height:1.15}
+  .card .fallback .tx{font-size:8.5px;color:var(--muted);overflow:hidden}
+  .card.exhausted{transform:rotate(7deg);opacity:.75}
   .card.attacker{outline:2px solid var(--bad)} .card.defender{outline:2px solid var(--accent)}
-  .badges{position:absolute;left:3px;right:3px;bottom:3px;z-index:3;display:flex;gap:3px;flex-wrap:wrap}
-  .b{font-size:9px;padding:1px 4px;border-radius:4px;background:rgba(8,10,18,.85);
-     border:1px solid var(--line);backdrop-filter:blur(2px)}
+  .badges{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;display:flex;gap:2px;flex-wrap:wrap}
+  .b{font-size:8.5px;padding:0 3px;border-radius:3px;background:rgba(6,9,16,.88);border:1px solid var(--line)}
   .b.might{color:var(--good)} .b.dmg{color:var(--bad)} .b.buff{color:var(--accent)}
   .b.inert{color:var(--warn);border-color:var(--warn)}
-  .cost{position:absolute;top:3px;left:3px;z-index:3;font-size:9.5px;padding:1px 5px;border-radius:4px;
-        background:rgba(8,10,18,.85);border:1px solid var(--line)}
-  .acts{display:flex;flex-direction:column;gap:3px;padding:4px;position:relative;z-index:4;background:var(--panel2)}
-  .acts button{padding:3px 6px;font-size:10px;text-align:left;line-height:1.25}
+  .cost{position:absolute;top:2px;left:2px;z-index:3;font-size:9px;padding:0 4px;border-radius:3px;
+        background:rgba(6,9,16,.88);border:1px solid var(--line)}
+  .acts{display:flex;flex-direction:column;gap:2px;padding:3px;position:relative;z-index:4;
+        background:var(--panel2)}
+  .acts button{padding:2px 5px;font-size:9.5px;text-align:left;line-height:1.2}
   .card.choosable{outline:2px solid var(--warn);cursor:pointer}
+  .slot{width:var(--cw);height:var(--ch);border:1px dashed rgba(200,162,74,.35);border-radius:6px;
+        display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:9px}
+  .stack{width:var(--cw);height:var(--ch);border-radius:6px;border:1px solid var(--matline);
+         background:repeating-linear-gradient(135deg,#1b2942 0 6px,#22314e 6px 12px);
+         display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .stack b{font-size:18px} .stack span{font-size:9px;color:var(--muted)}
+  .stack.clickable{cursor:pointer} .stack.clickable:hover{border-color:var(--accent)}
 
-  .hand{display:flex;gap:6px;flex-wrap:wrap;padding:8px;border:1px solid var(--line);
-        border-radius:10px;background:var(--panel)}
-
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
-  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
-            margin:0 0 7px;font-weight:650}
-  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;color:var(--muted);
-       max-height:320px;overflow:auto;white-space:pre-wrap}
-  .banner{padding:9px 11px;border-radius:8px;margin-bottom:8px;background:rgba(122,162,255,.1);
-          border:1px solid var(--accent);font-size:12.5px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px}
+  .panel h2{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+            margin:0 0 6px;font-weight:650}
+  .chain{display:flex;flex-direction:column-reverse;gap:4px}
+  .citem{border:1px solid var(--line);border-radius:6px;padding:5px 7px;font-size:11px;
+         background:var(--panel2);display:flex;justify-content:space-between;gap:6px}
+  .citem.top{border-color:var(--good)}
+  .citem .who{font-size:9.5px;color:var(--muted)}
+  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:var(--muted);
+       max-height:260px;overflow:auto;white-space:pre-wrap}
+  .banner{padding:8px 10px;border-radius:8px;margin-bottom:8px;background:rgba(122,162,255,.1);
+          border:1px solid var(--accent);font-size:12px}
   .banner.win{background:rgba(109,211,154,.12);border-color:var(--good);color:var(--good)}
   .banner.warn{background:rgba(240,164,92,.1);border-color:var(--warn);color:var(--warn)}
   .muted{color:var(--muted)}
-  .pool{display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-size:11px}
-  .rune{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);display:inline-block}
+  .pool{display:inline-flex;gap:3px;flex-wrap:wrap;align-items:center;font-size:10.5px;
+        text-transform:none;letter-spacing:0}
+  .rune{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.4);display:inline-block}
   .Fury{background:#b4453a}.Calm{background:#3f7fb0}.Mind{background:#8a5bb8}
   .Body{background:#3f8f66}.Chaos{background:#b0568f}.Order{background:#c2a24a}
   .Universal{background:#6d7590}
-  dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;
-         padding:14px;max-width:min(94vw,920px)}
+  .hand{display:flex;gap:5px;flex-wrap:wrap;padding:7px;border:1px solid var(--line);
+        border-radius:10px;background:var(--panel);margin-top:8px}
+  dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px}
   dialog::backdrop{background:rgba(0,0,0,.6)}
 </style>
 </head>
@@ -123,6 +118,7 @@
 <header>
   <h1>Riftbound</h1>
   <span class="pill" id="phase">—</span>
+  <span class="pill timing" id="timing">—</span>
   <span class="pill" id="turn">—</span>
   <span class="pill p0" id="s0">P0 0</span>
   <span class="pill p1" id="s1">P1 0</span>
@@ -138,317 +134,330 @@
 <main>
   <div>
     <div id="banner"></div>
-    <div class="table">
-      <div class="side them" id="sideThem"></div>
-      <div class="bfrow" id="battlefields"></div>
-      <div class="side me" id="sideMe"></div>
-      <div class="hand" id="hand"></div>
-    </div>
+    <div class="mat them" id="matThem"></div>
+    <div class="mat me" id="matMe"></div>
+    <div class="hand" id="hand"></div>
   </div>
-
   <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="panel">
+      <h2>Chain <span class="muted" id="chainState"></span></h2>
+      <div class="chain" id="chain"></div>
+    </div>
     <div class="panel"><h2>Actions</h2><div class="acts" id="globalActions"></div></div>
-    <div class="panel"><h2>Game</h2><div id="meta" class="muted" style="font-size:11.5px"></div></div>
+    <div class="panel"><h2>Game</h2><div id="meta" class="muted" style="font-size:11px"></div></div>
     <div class="panel"><h2>Log</h2><div class="log" id="log"></div></div>
   </div>
 </main>
 
 <dialog id="zoneDlg">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-    <b id="zoneTitle">Zone</b><button onclick="zoneDlg.close()">close</button>
-  </div>
-  <div id="zoneBody" style="display:flex;gap:6px;flex-wrap:wrap;max-height:70vh;overflow:auto"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+    <b id="zoneTitle">Zone</b><button onclick="zoneDlg.close()">close</button></div>
+  <div id="zoneBody" style="display:flex;gap:5px;flex-wrap:wrap;max-height:70vh;overflow:auto"></div>
 </dialog>
 
 <script>
 const $ = id => document.getElementById(id);
 let S = null;
 const viewAs = () => parseInt($("viewAs").value, 10);
-
-async function api(p, o){ return (await fetch(p, o)).json(); }
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function api(p,o){ return (await fetch(p,o)).json(); }
 async function refresh(){ S = await api(`/api/state?player=${viewAs()}`); render(); }
-
-async function act(repr){
-  const r = await api("/api/action", {method:"POST", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({player: viewAs(), action: repr})});
-  if (r.error) banner(r.error, "warn");
+async function act(r){
+  const res = await api("/api/action",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({player:viewAs(),action:r})});
+  if (res.error) banner(res.error,"warn");
   await refresh();
 }
-function banner(t, k){ $("banner").innerHTML = `<div class="banner ${k||""}">${t}</div>`; }
-const legal = p => (S.legal || []).filter(p);
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function banner(t,k){ $("banner").innerHTML = `<div class="banner ${k||""}">${t}</div>`; }
+const legal = p => (S.legal||[]).filter(p);
+const isChoosable = c => S.phase === "choosing" && (S.legal||[]).includes(`choose:${c.instance_id}`);
 
-/* A card. The text face is always rendered; the art is layered on top and
-   removed if it fails to load, so the game stays fully legible offline or
-   when the CDN is unreachable. */
 function cardEl(c, opts = {}){
   const el = document.createElement("div");
-  el.className = `card p${c.controller}`
-    + (c.exhausted ? " exhausted" : "")
-    + (c.is_attacker ? " attacker" : "") + (c.is_defender ? " defender" : "");
-
+  el.className = `card p${c.controller}` + (c.exhausted?" exhausted":"")
+    + (c.is_attacker?" attacker":"") + (c.is_defender?" defender":"");
   const costTxt = ["unit","spell","gear"].includes(c.type)
-    ? `${c.energy}⚡${c.power ? " " + c.power + "◆" : ""}` : "";
+    ? `${c.energy}⚡${c.power?" "+c.power+"◆":""}` : "";
 
   const face = document.createElement("div");
   face.className = "fallback";
-  face.innerHTML = `<div class="nm">${esc(c.name)}</div>
-      <div class="tx">${esc(c.rules_text || c.type)}</div>`;
+  face.innerHTML = `<div class="nm">${esc(c.name)}</div><div class="tx">${esc(c.rules_text||c.type)}</div>`;
   el.appendChild(face);
 
+  /* Art overlays the text face and is revealed only once it loads, so a
+     blocked or slow CDN leaves a legible card rather than a blank one. */
   const src = c.image_url || c.image_alt;
   if (src){
     const img = document.createElement("img");
-    img.className = "art"; img.loading = "lazy"; img.alt = c.name;
+    img.className="art"; img.loading="lazy"; img.alt=c.name;
     img.onload = () => img.classList.add("ready");
     img.onerror = () => {
-      if (c.image_alt && !img.dataset.fellBack){
-        img.dataset.fellBack = "1"; img.src = c.image_alt; return;
-      }
-      img.remove();                       /* reveal the text face beneath */
+      if (c.image_alt && !img.dataset.fb){ img.dataset.fb="1"; img.src=c.image_alt; return; }
+      img.remove();
     };
-    img.src = src;
-    el.appendChild(img);
+    img.src = src; el.appendChild(img);
   }
 
   const badges = [];
   if (c.type === "unit"){
-    const buffed = c.current_might !== c.might;
     badges.push(`<span class="b might">${c.current_might}⚔</span>`);
-    if (buffed) badges.push(`<span class="b buff">base ${c.might}</span>`);
-    if (c.damage) badges.push(`<span class="b dmg">${c.damage} dmg</span>`);
+    if (c.current_might !== c.might) badges.push(`<span class="b buff">base ${c.might}</span>`);
+    if (c.damage) badges.push(`<span class="b dmg">${c.damage}</span>`);
   }
-  (c.granted_keywords || []).forEach(([n, v]) =>
-    badges.push(`<span class="b buff">${esc(n)}${v ? " " + v : ""}</span>`));
+  (c.granted_keywords||[]).forEach(([n,v]) => badges.push(`<span class="b buff">${esc(n)}${v?" "+v:""}</span>`));
   if (c.rules_text && !c.text_implemented)
-    badges.push(`<span class="b inert" title="${esc(c.script_note || "The engine does not execute this card's text. See RQ-5.")}">inert</span>`);
-  if (c.attached_to !== null && c.attached_to !== undefined)
-    badges.push(`<span class="b">equipped</span>`);
-
-  const overlay = document.createElement("div");
-  overlay.className = "badges";
-  overlay.innerHTML = badges.join("");
-  el.appendChild(overlay);
-
-  if (costTxt){
-    const cost = document.createElement("span");
-    cost.className = "cost"; cost.textContent = costTxt;
-    el.appendChild(cost);
-  }
-  el.title = `${c.name}\n${c.type}${costTxt ? " · " + costTxt : ""}\n${c.rules_text || ""}`;
+    badges.push(`<span class="b inert" title="${esc(c.script_note||"Text not executed — RQ-5")}">inert</span>`);
+  const ov = document.createElement("div"); ov.className="badges"; ov.innerHTML = badges.join("");
+  el.appendChild(ov);
+  if (costTxt){ const k=document.createElement("span"); k.className="cost"; k.textContent=costTxt; el.appendChild(k); }
+  el.title = `${c.name}\n${c.type}${costTxt?" · "+costTxt:""}\n${c.rules_text||""}`;
 
   if (opts.choosable){ el.classList.add("choosable"); el.onclick = () => act(`choose:${c.instance_id}`); }
-  if ((opts.actions || []).length){
-    const box = document.createElement("div"); box.className = "acts";
-    opts.actions.forEach(a => {
-      const b = document.createElement("button"); b.textContent = a.label;
-      b.onclick = ev => { ev.stopPropagation(); act(a.repr); };
-      box.appendChild(b);
-    });
-    el.appendChild(box);
+  if ((opts.actions||[]).length){
+    const bx=document.createElement("div"); bx.className="acts";
+    opts.actions.forEach(a=>{ const b=document.createElement("button"); b.textContent=a.label;
+      b.onclick=ev=>{ev.stopPropagation();act(a.repr);}; bx.appendChild(b); });
+    el.appendChild(bx);
   }
   return el;
 }
 
-function slot(label, card, opts){
-  const z = document.createElement("div"); z.className = "zone";
-  z.innerHTML = `<div class="lbl">${label}</div>`;
-  z.appendChild(card ? cardEl(card, opts || {}) :
-    Object.assign(document.createElement("div"), {className:"slot", textContent:"empty"}));
-  return z;
+function box(caption, cls){
+  const d=document.createElement("div"); d.className="box"+(cls?" "+cls:"");
+  d.innerHTML = `<div class="cap">${caption}</div>`;
+  const items=document.createElement("div"); items.className="items"; d.appendChild(items);
+  d._items = items; return d;
 }
-
-function deckStack(label, count, onClick){
-  const z = document.createElement("div"); z.className = "zone";
-  z.innerHTML = `<div class="lbl">${label}</div>`;
-  const s = document.createElement("div");
-  s.className = "stack" + (onClick ? " clickable" : "");
-  s.innerHTML = `<b>${count}</b><span>cards</span>`;
-  if (onClick) s.onclick = onClick;
-  z.appendChild(s); return z;
+function stack(count,label,onClick){
+  const s=document.createElement("div"); s.className="stack"+(onClick?" clickable":"");
+  s.innerHTML=`<b>${count}</b><span>${label}</span>`; if(onClick) s.onclick=onClick; return s;
 }
-
-function showZone(title, cards){
-  $("zoneTitle").textContent = `${title} — ${cards.length} card(s)`;
-  $("zoneBody").innerHTML = "";
-  if (!cards.length) $("zoneBody").innerHTML = `<span class="muted">empty</span>`;
-  cards.forEach(c => $("zoneBody").appendChild(cardEl(c)));
+function emptySlot(text){
+  const d=document.createElement("div"); d.className="slot"; d.textContent=text; return d;
+}
+function showZone(title,cards){
+  $("zoneTitle").textContent=`${title} — ${cards.length} card(s)`;
+  $("zoneBody").innerHTML=cards.length?"":`<span class="muted">empty</span>`;
+  cards.forEach(c=>$("zoneBody").appendChild(cardEl(c)));
   $("zoneDlg").showModal();
 }
-
-function poolHtml([energy, power, universal]){
-  const bits = [`<b>${energy}</b>⚡`];
-  (power || []).forEach(([d, n]) => {
-    for (let i = 0; i < n; i++) bits.push(`<span class="rune ${d}" title="${d} power"></span>`);
-  });
-  for (let i = 0; i < (universal || 0); i++)
-    bits.push(`<span class="rune Universal" title="universal power"></span>`);
-  return bits.join(" ");
+function poolHtml([e,p,u]){
+  const bits=[`${e}⚡`];
+  (p||[]).forEach(([d,n])=>{ for(let i=0;i<n;i++) bits.push(`<span class="rune ${d}" title="${d}"></span>`); });
+  for(let i=0;i<(u||0);i++) bits.push(`<span class="rune Universal" title="universal"></span>`);
+  return `<span class="pool">${bits.join(" ")}</span>`;
 }
 
-/* One player's row: legend + champion | base lane | decks + trash */
-function renderSide(host, pid, isMe){
-  const me = S.player_id, mine = pid === me;
-  host.innerHTML = "";
+/* One playmat, matching the physical layout:
+     Battlefield Zone | Legend | Champion
+     Base: Units + Gears        | Main Deck
+     Rune Deck | Base: Runes    | Trash
+   with the 0-8 score track down the edge. The opponent's mat is mirrored so
+   the two battlefield rows meet in the middle, as they do on a table. */
+function renderMat(host,pid,mine){
+  host.innerHTML="";
+  const track=document.createElement("div"); track.className="track";
+  for(let i=0;i<=8;i++){
+    const t=document.createElement("div");
+    t.className="tick"+(i<=S.points[pid]?" on":"");
+    t.textContent=i; track.appendChild(t);
+  }
+  host.appendChild(track);
 
-  const ident = document.createElement("div"); ident.className = "zonegrp";
-  ident.appendChild(slot("Legend", S.legend[pid]));
-  const champ = S.champion_zone[pid];
-  ident.appendChild(slot("Champion", champ, mine ? {
-    actions: legal(a => a === `play:${champ && champ.instance_id}`).map(r => ({repr:r,label:"play"})),
-  } : {}));
-  host.appendChild(ident);
+  const rows=document.createElement("div"); rows.className="rows";
 
-  const lane = document.createElement("div"); lane.className = "lane";
-  const runes = S.board.filter(c => c.controller === pid && c.type === "rune");
-  const perms = S.board.filter(c => c.controller === pid && c.type !== "rune" && c.location === "base");
-  lane.innerHTML = `<div class="lbl">${mine ? "Your" : "Opponent"} base —
-      <span class="pool">${poolHtml(mine ? S.pool : S.opponent_pool)}</span></div>`;
-  perms.concat(runes).forEach(c => {
-    const acts = [];
-    if (mine){
-      legal(a => a.startsWith(`move:${c.instance_id}->`))
-        .forEach(r => acts.push({repr:r, label:"move → " + r.split("->")[1].replace("bf:", "BF ")}));
-      legal(a => a === `tap_energy:${c.instance_id}`).forEach(r => acts.push({repr:r,label:"tap: +1 ⚡"}));
-      legal(a => a === `recycle_power:${c.instance_id}`).forEach(r => acts.push({repr:r,label:"recycle: +1 ◆"}));
-      legal(a => a.startsWith(`activate:${c.instance_id}#`)).forEach(r => acts.push({repr:r,label:"activate"}));
+  const r1=document.createElement("div"); r1.className="matrow r-top";
+  const bfBox=box("Battlefield Zone");
+  const group=document.createElement("div"); group.className="bfgroup";
+  (S.battlefields||[]).forEach(bf=>{
+    const cell=document.createElement("div");
+    cell.className="bfcell"+(bf.contested?" contested":"");
+    const status = bf.contested?`CONTESTED by P${bf.contested_by}`
+      : bf.controller===null?"uncontrolled":`held by P${bf.controller}`;
+    cell.innerHTML=`<div class="hd"><span class="nm">${esc(bf.name)}</span>
+                    <span class="st">${status}</span></div>`;
+    const row=document.createElement("div"); row.className="items";
+    const units=S.board.filter(c=>c.location===`bf:${bf.index}` && c.controller===pid);
+    if(!units.length) row.innerHTML=`<span class="muted" style="font-size:9px">no units here</span>`;
+    units.forEach(u=>{
+      const acts=[];
+      if(mine) legal(a=>a.startsWith(`move:${u.instance_id}->`))
+        .forEach(r=>acts.push({repr:r,label:"→ "+r.split("->")[1].replace("bf:","BF ")}));
+      legal(a=>a===`assign_damage:${u.instance_id}`).forEach(r=>acts.push({repr:r,label:"assign dmg"}));
+      row.appendChild(cardEl(u,{actions:acts,choosable:isChoosable(u)}));
+    });
+    cell.appendChild(row); group.appendChild(cell);
+  });
+  if(S.phase==="setup_battlefield" && mine){
+    (S.battlefield_choices[pid]||[]).forEach((c,i)=>{
+      const cell=document.createElement("div"); cell.className="bfcell";
+      cell.innerHTML=`<div class="hd"><span class="nm">${esc(c.name)}</span>
+                      <span class="st">candidate ${i+1}/3</span></div>`;
+      const b=document.createElement("button"); b.className="primary"; b.textContent="Select";
+      b.onclick=()=>act(`choose_battlefield:${i}`); cell.appendChild(b); group.appendChild(cell);
+    });
+  }
+  bfBox._items.appendChild(group);
+  r1.appendChild(bfBox);
+
+  const legendBox=box("Legend Zone");
+  legendBox._items.appendChild(S.legend[pid]?cardEl(S.legend[pid]):emptySlot("—"));
+  r1.appendChild(legendBox);
+
+  const champBox=box("Champion Zone");
+  const champ=S.champion_zone[pid];
+  champBox._items.appendChild(champ
+    ? cardEl(champ,{actions: mine ? legal(a=>a===`play:${champ.instance_id}`)
+        .map(r=>({repr:r,label:"play"})) : []})
+    : emptySlot("played"));
+  r1.appendChild(champBox);
+  rows.appendChild(r1);
+
+  const r2=document.createElement("div"); r2.className="matrow r-mid";
+  const unitBox=box(`Base: Units + Gears &nbsp; ${poolHtml(mine?S.pool:S.opponent_pool)}`);
+  const perms=S.board.filter(c=>c.controller===pid && c.location==="base" && c.type!=="rune");
+  if(!perms.length) unitBox._items.innerHTML=`<span class="muted" style="font-size:9.5px">empty</span>`;
+  perms.forEach(c=>{
+    const acts=[];
+    if(mine){
+      legal(a=>a.startsWith(`move:${c.instance_id}->`))
+        .forEach(r=>acts.push({repr:r,label:"→ "+r.split("->")[1].replace("bf:","BF ")}));
+      legal(a=>a.startsWith(`activate:${c.instance_id}#`)).forEach(r=>acts.push({repr:r,label:"activate"}));
     }
-    lane.appendChild(cardEl(c, {actions:acts, choosable: isChoosable(c)}));
+    unitBox._items.appendChild(cardEl(c,{actions:acts,choosable:isChoosable(c)}));
   });
-  if (!perms.length && !runes.length)
-    lane.innerHTML += `<span class="muted" style="align-self:center">— nothing in play —</span>`;
-  host.appendChild(lane);
+  r2.appendChild(unitBox);
+  const deckBox=box("Main Deck");
+  deckBox._items.appendChild(stack(S.deck_sizes[pid],"cards"));
+  r2.appendChild(deckBox);
+  rows.appendChild(r2);
 
-  const decks = document.createElement("div"); decks.className = "zonegrp";
-  decks.appendChild(deckStack("Main deck", S.deck_sizes[pid]));
-  decks.appendChild(deckStack("Rune deck", S.rune_deck_sizes[pid]));
-  decks.appendChild(deckStack("Trash", S.trash_sizes[pid],
-    () => showZone(`Player ${pid} trash`, S.trash[pid])));   /* 108.2.d: public */
-  if (!mine) decks.appendChild(deckStack("Hand", S.opponent_hand_size));
-  host.appendChild(decks);
+  const r3=document.createElement("div"); r3.className="matrow r-bot";
+  const rdBox=box("Rune Deck");
+  rdBox._items.appendChild(stack(S.rune_deck_sizes[pid],"runes"));
+  r3.appendChild(rdBox);
+
+  const runeBox=box("Base: Runes");
+  const runes=S.board.filter(c=>c.controller===pid && c.type==="rune");
+  if(!runes.length) runeBox._items.innerHTML=`<span class="muted" style="font-size:9.5px">none channeled</span>`;
+  runes.forEach(c=>{
+    const acts=[];
+    if(mine){
+      legal(a=>a===`tap_energy:${c.instance_id}`).forEach(r=>acts.push({repr:r,label:"tap +1⚡"}));
+      legal(a=>a===`recycle_power:${c.instance_id}`).forEach(r=>acts.push({repr:r,label:"recycle +1◆"}));
+    }
+    runeBox._items.appendChild(cardEl(c,{actions:acts,choosable:isChoosable(c)}));
+  });
+  r3.appendChild(runeBox);
+
+  const trashBox=box("Trash");
+  trashBox._items.appendChild(stack(S.trash_sizes[pid],"cards",
+    ()=>showZone(`Player ${pid} trash`,S.trash[pid])));   /* 108.2.d -- public */
+  r3.appendChild(trashBox);
+  rows.appendChild(r3);
+
+  host.appendChild(rows);
 }
 
-function isChoosable(c){
-  return S.phase === "choosing" && (S.legal || []).includes(`choose:${c.instance_id}`);
+function renderChain(){
+  const wrap=$("chain"); wrap.innerHTML="";
+  let label = "";
+  if(S.priority !== null && S.priority !== undefined) label += `— priority P${S.priority}`;
+  if(S.focus !== null && S.focus !== undefined) label += ` · focus P${S.focus}`;
+  $("chainState").textContent = label;
+  if(!S.chain || !S.chain.length){
+    wrap.innerHTML=`<span class="muted" style="font-size:11px">empty — the turn is Open</span>`;
+    return;
+  }
+  S.chain.forEach(([kind,name,controller],i)=>{
+    const d=document.createElement("div");
+    d.className="citem"+(i===S.chain.length-1?" top":"");
+    d.innerHTML=`<span>${esc(name)}${kind==="ability"?` <span class="who">(ability)</span>`:""}</span>
+                 <span class="who">P${controller}${i===S.chain.length-1?" · next":""}</span>`;
+    wrap.appendChild(d);
+  });
 }
 
 function render(){
-  if (!S || !S.started){
+  if(!S || !S.started){
     banner("No game in progress — pick decks and press <b>New game</b>.");
-    ["sideThem","sideMe","battlefields","hand","globalActions","log"].forEach(i => $(i).innerHTML = "");
+    ["matThem","matMe","hand","chain","globalActions","log"].forEach(i=>$(i).innerHTML="");
     return;
   }
-  const me = S.player_id, opp = 1 - me;
-  $("phase").textContent = S.phase.replace(/_/g, " ");
-  $("turn").textContent = `turn ${S.turn_number} · P${S.turn_player}`;
-  $("turn").className = "pill turn";
-  $("s0").textContent = `P0 ${S.points[0]}`; $("s1").textContent = `P1 ${S.points[1]}`;
+  const me=S.player_id, opp=1-me;
+  $("phase").textContent=S.phase.replace(/_/g," ");
+  $("timing").textContent=S.timing;
+  $("turn").textContent=`turn ${S.turn_number} · P${S.turn_player}`;
+  $("turn").className="pill turn";
+  $("s0").textContent=`P0 ${S.points[0]}`; $("s1").textContent=`P1 ${S.points[1]}`;
 
-  if (S.is_terminal) banner(S.winner === null ? "Game over — draw."
-        : `Game over — <b>Player ${S.winner} wins</b>.`, "win");
-  else if (S.phase === "choosing" && S.current_player === me)
-    banner(`<b>${esc(S.choice_prompt)}</b> — click a highlighted card.`, "warn");
-  else if (S.current_player !== me)
-    banner(`Waiting on <b>Player ${S.current_player}</b> — switch “view as” to act.`, "warn");
-  else $("banner").innerHTML = "";
+  if(S.is_terminal) banner(S.winner===null?"Game over — draw."
+      :`Game over — <b>Player ${S.winner} wins</b>.`,"win");
+  else if(S.phase==="choosing" && S.current_player===me)
+    banner(`<b>${esc(S.choice_prompt)}</b> — click a highlighted card.`,"warn");
+  else if(S.showdown)
+    banner(`${S.showdown[3]?"<b>Combat</b>":"Showdown"} at battlefield ${S.showdown[0]} — `
+      + `P${S.showdown[1]} attacking, focus P${S.focus}.`,"warn");
+  else if(S.current_player!==me)
+    banner(`Waiting on <b>Player ${S.current_player}</b> — switch “view as” to act.`,"warn");
+  else $("banner").innerHTML="";
 
-  renderSide($("sideThem"), opp, false);
-  renderSide($("sideMe"), me, true);
+  renderMat($("matThem"),opp,false);
+  renderMat($("matMe"),me,true);
+  renderChain();
 
-  /* Battlefields, split into the two players' halves so position reads. */
-  const wrap = $("battlefields"); wrap.innerHTML = "";
-  if (S.phase === "setup_battlefield"){
-    (S.battlefield_choices[me] || []).forEach((c, i) => {
-      const d = document.createElement("div"); d.className = "bf";
-      d.innerHTML = `<div class="hd"><div><div class="nm">${esc(c.name)}</div>
-                     <div class="st">candidate ${i+1} of 3 — 485.4.a</div></div></div>`;
-      const b = document.createElement("button"); b.className = "primary"; b.textContent = "Select";
-      b.disabled = S.current_player !== me;
-      b.onclick = () => act(`choose_battlefield:${i}`);
-      d.appendChild(b); wrap.appendChild(d);
-    });
-  }
-  (S.battlefields || []).forEach(bf => {
-    const d = document.createElement("div");
-    d.className = "bf" + (bf.contested ? " contested"
-      : bf.controller === me ? " mine" : bf.controller === opp ? " theirs" : "");
-    const status = bf.contested ? `CONTESTED by P${bf.contested_by}`
-      : bf.controller === null ? "uncontrolled" : `held by P${bf.controller}`;
-    d.innerHTML = `<div class="hd">
-        ${bf.image_url ? `<img src="${esc(bf.image_url)}" alt="" onerror="this.remove()">` : ""}
-        <div><div class="nm">${esc(bf.name)}</div>
-        <div class="st">${status}${bf.scored_by.length ? " · scored by " + bf.scored_by.map(p=>"P"+p).join(",") : ""}</div></div>
-      </div>`;
-    [opp, me].forEach(pid => {
-      const half = document.createElement("div"); half.className = "half";
-      const units = S.board.filter(c => c.location === `bf:${bf.index}` && c.controller === pid);
-      if (!units.length) half.innerHTML = `<span class="muted" style="align-self:center;font-size:10px">P${pid} — no units</span>`;
-      units.forEach(u => {
-        const acts = [];
-        if (pid === me) legal(a => a.startsWith(`move:${u.instance_id}->`))
-          .forEach(r => acts.push({repr:r, label:"move → " + r.split("->")[1].replace("bf:", "BF ")}));
-        legal(a => a === `assign_damage:${u.instance_id}`)
-          .forEach(r => acts.push({repr:r, label:"assign damage"}));
-        half.appendChild(cardEl(u, {actions:acts, choosable: isChoosable(u)}));
-      });
-      d.appendChild(half);
-    });
-    wrap.appendChild(d);
+  const hand=$("hand");
+  hand.innerHTML=`<div class="muted" style="width:100%;font-size:8.5px;letter-spacing:.1em;
+    text-transform:uppercase">Your hand — ${S.hand.length} · opponent holds ${S.opponent_hand_size}</div>`;
+  (S.hand||[]).forEach(c=>{
+    const acts=legal(a=>a===`play:${c.instance_id}`).map(r=>({repr:r,label:"play"}));
+    hand.appendChild(cardEl(c,{actions:acts,choosable:isChoosable(c)}));
   });
+  if(!S.hand.length) hand.innerHTML+=`<span class="muted">— empty —</span>`;
 
-  /* Hand */
-  const hand = $("hand"); hand.innerHTML = "";
-  hand.innerHTML = `<div class="lbl muted" style="width:100%;font-size:9px;text-transform:uppercase;letter-spacing:.07em">
-      Your hand — ${S.hand.length} cards</div>`;
-  (S.hand || []).forEach(c => {
-    const acts = legal(a => a === `play:${c.instance_id}`).map(r => ({repr:r, label:"play"}));
-    hand.appendChild(cardEl(c, {actions:acts, choosable: isChoosable(c)}));
-  });
-  if (!S.hand.length) hand.innerHTML += `<span class="muted">— empty —</span>`;
-
-  /* Actions not attached to a card */
-  const g = $("globalActions"); g.innerHTML = "";
-  if (S.current_player !== me){ g.innerHTML = `<span class="muted">Player ${S.current_player} to act.</span>`; }
-  else {
-    const generic = (S.legal || []).filter(a => !/^(play|move|tap_energy|recycle_power|assign_damage|choose_battlefield|choose|activate):/.test(a));
-    if (!generic.length) g.innerHTML = `<span class="muted">— act on a card —</span>`;
-    generic.forEach(a => {
-      const b = document.createElement("button");
-      if (a.startsWith("mulligan:")){
-        const ids = a.slice("mulligan:[".length, -1);
-        const names = ids ? ids.split(",").map(i => (S.hand.find(c => c.instance_id == i)||{}).name || i).join(" + ") : null;
-        b.textContent = names ? `mulligan ${names}` : "keep hand (no mulligan)";
-      } else b.textContent = a === "pass" ? "pass / end phase" : a;
-      if (a === "concede") b.style.borderColor = "var(--bad)";
-      b.onclick = () => act(a);
-      g.appendChild(b);
+  const g=$("globalActions"); g.innerHTML="";
+  if(S.current_player!==me) g.innerHTML=`<span class="muted">Player ${S.current_player} to act.</span>`;
+  else{
+    const generic=(S.legal||[]).filter(a=>
+      !/^(play|move|tap_energy|recycle_power|assign_damage|choose_battlefield|choose|activate):/.test(a));
+    if(!generic.length) g.innerHTML=`<span class="muted">— act on a card —</span>`;
+    generic.forEach(a=>{
+      const b=document.createElement("button");
+      if(a.startsWith("mulligan:")){
+        const ids=a.slice("mulligan:[".length,-1);
+        const names=ids?ids.split(",").map(i=>(S.hand.find(c=>c.instance_id==i)||{}).name||i).join(" + "):null;
+        b.textContent=names?`mulligan ${names}`:"keep hand";
+      } else if(a==="pass"){
+        b.textContent = S.chain.length ? "pass priority" : (S.showdown ? "pass focus" : "end phase");
+      } else b.textContent=a;
+      if(a==="concede") b.style.borderColor="var(--bad)";
+      b.onclick=()=>act(a); g.appendChild(b);
     });
   }
 
-  $("meta").innerHTML =
-    `seed <b>${S.seed}</b><br>die roll: P0=${S.die_roll[0]} P1=${S.die_roll[1]} → P${S.first_player} first (115)<br>`
-    + `P0: ${esc(S.deck_names[0])}<br>P1: ${esc(S.deck_names[1])}<br>`
-    + `victory score: 8 (194.3)`;
-  $("log").textContent = (S.log || []).join("\n");
-  $("log").scrollTop = $("log").scrollHeight;
+  $("meta").innerHTML=`seed <b>${S.seed}</b><br>die roll P0=${S.die_roll[0]} P1=${S.die_roll[1]}`
+    + ` → P${S.first_player} first (115)<br>P0: ${esc(S.deck_names[0])}<br>P1: ${esc(S.deck_names[1])}`
+    + `<br>victory score 8 (194.3)`;
+  $("log").textContent=(S.log||[]).join("\n");
+  $("log").scrollTop=$("log").scrollHeight;
 }
 
 async function loadDecks(){
-  const {decks} = await api("/api/decks");
-  ["deck0","deck1"].forEach((id, i) => {
-    $(id).innerHTML = decks.map(d => `<option value="${d}">${d}</option>`).join("");
-    $(id).selectedIndex = Math.min(i, decks.length - 1);
+  const {decks}=await api("/api/decks");
+  ["deck0","deck1"].forEach((id,i)=>{
+    $(id).innerHTML=decks.map(d=>`<option value="${d}">${d}</option>`).join("");
+    $(id).selectedIndex=Math.min(i,decks.length-1);
   });
 }
-$("newGame").onclick = async () => {
-  const r = await api("/api/new", {method:"POST", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({deck0:$("deck0").value, deck1:$("deck1").value, seed:$("seed").value || null})});
-  if (r.error) return banner(r.error, "warn");
+$("newGame").onclick=async()=>{
+  const r=await api("/api/new",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({deck0:$("deck0").value,deck1:$("deck1").value,seed:$("seed").value||null})});
+  if(r.error) return banner(r.error,"warn");
   await refresh();
 };
-$("viewAs").onchange = refresh;
+$("viewAs").onchange=refresh;
 loadDecks().then(refresh);
-setInterval(refresh, 2500);
+setInterval(refresh,2500);
 </script>
 </body>
 </html>

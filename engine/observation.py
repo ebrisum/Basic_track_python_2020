@@ -87,6 +87,12 @@ class RiftboundObservation:
     champion_zone: tuple[VisibleCard | None, VisibleCard | None]
     legend: tuple[VisibleCard | None, VisibleCard | None]
     combat: tuple | None
+    # The Chain, top (newest, resolves first) last (327-340).
+    chain: tuple[tuple[str, str, int, int], ...] = ()
+    timing: str = "Neutral Open"
+    priority: int | None = None
+    focus: int | None = None
+    showdown: tuple[int, int, int, bool] | None = None
     choice_prompt: str = ""
     winner: int | None = None
     log_tail: tuple[str, ...] = field(default_factory=tuple)
@@ -206,6 +212,28 @@ class RiftboundObservation:
                 visible(state.players[1].legend) if state.players[1].legend is not None else None,
             ),
             combat=combat,
+            chain=tuple(
+                (
+                    item.kind,
+                    db[state.cards[item.instance_id].card_id].name,
+                    item.controller,
+                    item.instance_id,
+                )
+                for item in state.chain
+            ),
+            timing=state.timing(),
+            priority=state.priority,
+            focus=state.focus,
+            showdown=(
+                (
+                    state.showdown.battlefield,
+                    state.showdown.attacker,
+                    state.showdown.defender,
+                    state.showdown.is_combat,
+                )
+                if state.showdown is not None
+                else None
+            ),
             choice_prompt=state.awaiting.prompt if state.awaiting else "",
             winner=state.winner,
             log_tail=tuple(state.log[-12:]),

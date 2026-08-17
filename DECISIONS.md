@@ -165,3 +165,28 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
 - **The browser loads card art directly from those CDNs** -- the images are not
   proxied or cached locally, so the frontend needs internet access to show
   them and degrades to a text card when a fetch fails.
+
+## Session 6 -- the Chain and the playmat
+
+- **The Chain lives in `engine/chain.py`, the state machine in `state.py`** --
+  the data structures and the pure timing predicates are separable and
+  unit-testable without a game; only the mutation needs a state.
+- **One `_window_actions` builder serves Main Phase, Chain and Showdown** --
+  the rules make these the same window with different timing filters (310),
+  so three builders would have drifted apart.
+- **An ability's printed timing beats its card's** -- the rune-seal cycle
+  reads "Exhaust: REACTION - ADD ..." so the ability is legal in a Closed
+  state even though the gear itself is not.
+- **`_normalize_window` keeps `phase` consistent with the chain and showdown**
+  -- a chain emptying through an unusual path otherwise left the turn Closed
+  with nothing on it, a dead position whose only action was to pass forever.
+  Random play found it within a dozen turns.
+- **Focus does not pass for triggers or Add abilities (346.1)** -- tracked with
+  `ChainItem.from_trigger`. Without it, tapping a rune seal mid-showdown handed
+  the window to the opponent. Caught by its own test, not by playing.
+- **Conceding stays Neutral-Open only** -- it is a Discretionary Action, not
+  something to offer inside someone else's chain.
+- **The playmat is two mirrored mats** -- the opponent's rows run in reverse so
+  the battlefield rows meet, as they do on a table. Each mat shows only that
+  player's units at the shared battlefields, which is how the physical zones
+  actually work.
