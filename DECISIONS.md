@@ -102,3 +102,35 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   to extract rules text. Nothing in `engine/` or `cards/` imports it and
   simulation never reads a PDF. Flagged because the brief requires asking
   before adding dependencies.
+
+## Session 4 -- playable engine and frontend
+
+- **Engine covers structural rules only; card text is a separate layer** --
+  setup, turns, resources, movement, combat and scoring are implemented and
+  cited; effects wait on the DSL interpreter. Lets the game be played and
+  tested now without pretending card text works. See RQ-5.
+- **Mechanical keywords live in the engine, not the DSL** -- Assault, Tank,
+  Backline and Ganking change movement, damage assignment and stats rather
+  than producing effects, so they need no interpreter.
+- **Keyword parameters are recovered from reminder text when absent** --
+  Chemtech Enforcer prints "ASSAULT (+2 Might...)" with no number on the
+  keyword. 807.1.b says Assault is "Assault [X]", so the value is
+  authoritative wherever it appears.
+- **`allow_concede` defaults off** -- conceding is a real rule (649) but a
+  random policy that concedes makes statistics meaningless. On for interactive
+  play, off for batches. See RQ-9.
+- **Frontend is a thin client over the engine** -- it renders
+  `observation(player)` and posts actions by their `repr()`, resolved against
+  `legal_actions()`. No rules logic in the browser, so the UI physically
+  cannot desync from the engine or submit an illegal move.
+- **stdlib `http.server`, no web framework** -- keeps the no-dependency rule.
+  One game in memory; this is a local play tool, not a service.
+- **Hot-seat rather than two sessions** -- the server still refuses to reveal
+  the other player's hand, so the privacy rules (128) are exercised properly
+  rather than bypassed for convenience.
+- **Cards missing either half of their (energy, power) cost are dropped at
+  load** -- the engine cannot price them, and a card that cannot be paid for
+  cannot be played. 441 of 908 survive; the rest are mostly UNL (RQ-1).
+- **Starter decks are generated, not hand-written** -- `decks/build_decks.py`
+  builds legal decks from the real pool so the game is playable before the
+  Milestone 1 lists arrive. Each deck gets a distinct battlefield trio.

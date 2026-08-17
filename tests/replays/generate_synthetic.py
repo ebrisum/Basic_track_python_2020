@@ -18,7 +18,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from agents.random_agent import RandomAgent  # noqa: E402
+from cards.database import load as load_db  # noqa: E402
 from engine.replay import record_game  # noqa: E402
+from engine.setup import build_state, load_deck  # noqa: E402
 from tests.fixtures.toy_game import build_toy_state  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -32,6 +34,18 @@ SPECS = [
 ]
 
 
+RIFTBOUND_SPECS = [
+    ("riftbound-ogn-001", 11, "Riftbound 1v1, random policy, full game."),
+    ("riftbound-ogn-002", 29, "Riftbound 1v1, random policy, different line."),
+]
+
+
+def build_riftbound(seed: int):
+    db = load_db()
+    d0, d1 = load_deck("jinx_chaos_fury"), load_deck("volibear_body_fury")
+    return build_state(d0, d1, seed=seed, db=db, validate_decks=False)
+
+
 def main() -> int:
     for replay_id, seed, description in SPECS:
         replay = record_game(
@@ -41,6 +55,23 @@ def main() -> int:
             replay_id=replay_id,
             description=description,
             game="toy",
+        )
+        replay.source = "synthetic"
+        path = HERE / f"{replay_id}.json"
+        replay.save(path)
+        print(
+            f"{path.name}: {len(replay.steps)} steps, "
+            f"returns={replay.final_returns}"
+        )
+
+    for replay_id, seed, description in RIFTBOUND_SPECS:
+        replay = record_game(
+            build_riftbound,
+            RandomAgent(seed),
+            seed=seed,
+            replay_id=replay_id,
+            description=description,
+            game="riftbound",
         )
         replay.source = "synthetic"
         path = HERE / f"{replay_id}.json"

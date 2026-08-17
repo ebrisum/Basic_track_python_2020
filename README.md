@@ -6,48 +6,50 @@ swap card X for card Y?*
 
 ## Status
 
-Card data and the official rules are **retrieved and cached**. The
-rules-agnostic engine infrastructure is built and tested. What remains is the
-Riftbound rules engine itself, which needs the two Milestone 1 decklists.
+**Playable.** The engine implements the structural rules of 1v1 Riftbound and
+ships with a local web frontend, so a full game can be played end to end:
+die roll, deck selection, battlefield selection, mulligan, turns, resources,
+movement, contesting, combat, scoring, win.
 
-| Session 1 step | State |
+**The big caveat:** card *rules text* is not executed. Only 7 of 441 playable
+cards are fully implemented (5 vanilla + 2 keyword-only). Four mechanical
+keywords work (Assault, Tank, Backline, Ganking); every other printed effect
+is inert and visibly marked as such in the UI. Win rates from this engine are
+**not** Riftbound win rates yet. See RQ-5 in
+[`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
+
+| Area | State |
 | --- | --- |
-| 1. Scaffold the repo | done |
-| 2. Pull and normalize card data | done — 908 cards, 898 logged disagreements |
-| 3. Fetch rules, write `RULES_SUMMARY.md` | done — Core Rules v1.4, fully cited |
-| 4. Propose a DSL primitive list | done — derived from the rules' own Game Actions |
+| Card data + official rules, cached | done — 908 cards, Core Rules v1.4 |
+| `RULES_SUMMARY.md`, `DSL.md` | done, fully cited |
+| Frozen interface, replay harness, batch runner | done |
+| Engine: setup, turns, resources, movement, combat, scoring | done |
+| Frontend (local web UI) | done |
+| Card effect DSL interpreter | **not started** — the remaining Milestone 1 work |
 
-| Component | State |
-| --- | --- |
-| Frozen agent-facing interface | done, contract-tested |
-| Replay format + runner | done, 3 synthetic replays |
-| Random agent, batch runner, determinism | done |
-| `engine/state.py`, `turn.py`, `combat.py`, `cards/` | **needs the decklists** |
+**151 tests passing**, including two full Riftbound games in the replay
+harness. 1,000 random games run in ~41s single-threaded.
 
-**99 tests passing.** The brief's four data sources remain blocked by the
-egress proxy; reachable equivalents were substituted. See BLOCKER-1 and RQ-1
-in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
-
-## Data
-
-| Source | Via | Content |
-| --- | --- | --- |
-| npm `riftbound-tools` | npm registry | 950 records, OGN/OGS/SFD/UNL |
-| `apitcg/riftbound-tcg-data` | github | 699 records, independent cross-check |
-| `ChristianIvicevic/riftboundfaq` | github | official Core Rules v1.0–v1.4 PDFs |
-
-Merged into `data/cards.json` (908 cards, per-field provenance). Simulation
-coverage by set is in [`data/DISCREPANCIES.md`](data/DISCREPANCIES.md):
-OGN 337/341, OGS 24/24, SFD 184/275, UNL 0/268 — the npm source carries no
-power cost, so UNL has no costs at all (RQ-1).
-
-## Setup
-
-Python 3.12, stdlib only, plus `pytest` for tests.
+## Play a game
 
 ```sh
 uv venv --python 3.12 .venv
-uv pip install --python .venv/bin/python pytest
+uv pip install --python .venv/bin/python pytest pypdf
+.venv/bin/python decks/build_decks.py        # generate legal starter decks
+.venv/bin/python -m frontend.server          # -> http://127.0.0.1:8000
+```
+
+Hot-seat: both players share one screen, and the **view as** selector switches
+whose hand is shown. The server never reveals the other player's hand (128).
+
+The UI can only submit moves the engine already listed as legal — actions are
+addressed by the engine's own `repr()`, resolved against `legal_actions()`
+exactly the way the replay runner does. There is no rules logic in the
+browser.
+
+## Tests
+
+```sh
 .venv/bin/python -m pytest tests/ -q
 ```
 
@@ -74,11 +76,12 @@ fields are deliberately not mapped — see RQ-1.
 
 ```
 data/       raw/ cache, fetch.py, sources.py, normalize.py -> cards.json
-engine/     rules; knows nothing about specific cards
-cards/      data + effect scripts; knows nothing about search or agents
-decks/      decklists
+engine/     rules: zones, state, actions, setup, combat, replay, interface
+cards/      card database + keyword parsing; knows nothing about search
+decks/      decklists + build_decks.py
 agents/     consume the legal-action API only
 analysis/   batch runs and aggregation
+frontend/   stdlib HTTP server + single-page client (no rules logic)
 tests/      unit tests; replays/ holds recorded game logs
 ```
 

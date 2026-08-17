@@ -21,7 +21,21 @@ from engine.replay import (
     run_replay,
     state_hash,
 )
+from cards.database import load as load_db
+from engine.setup import build_state as build_riftbound, load_deck
 from tests.fixtures.toy_game import ToyAction, build_toy_state
+
+
+def build_riftbound_state(seed: int):
+    """Builder for the checked-in Riftbound replays."""
+    db = load_db()
+    return build_riftbound(
+        load_deck("jinx_chaos_fury"),
+        load_deck("volibear_body_fury"),
+        seed=seed,
+        db=db,
+        validate_decks=False,
+    )
 
 REPLAY_DIR = Path(__file__).parent / "replays"
 
@@ -143,7 +157,7 @@ def test_synthetic_replays_are_present():
 @pytest.mark.parametrize("path", committed_replays(), ids=lambda p: p.stem)
 def test_committed_replay_reproduces(path):
     replay = Replay.load(path)
-    builders = {"toy": build_toy_state}
+    builders = {"toy": build_toy_state, "riftbound": build_riftbound_state}
     if replay.game not in builders:
         pytest.skip(f"no state builder registered for game {replay.game!r} yet")
     run_replay(replay, builders[replay.game])

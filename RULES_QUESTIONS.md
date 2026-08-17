@@ -121,6 +121,113 @@ rather than assumed. See `DECISIONS.md`.
 
 ---
 
+## RQ-5 — Card rules text is not executed
+
+**Status:** open. The single largest approximation in the engine.
+
+**Situation.** The engine implements the *structural* rules in full — setup,
+turns, resources, movement, contest/combat, scoring, win condition — but there
+is no effect interpreter yet, so a card's printed text does nothing. Of the
+441 playable cards in `cards.json`, only **7** are fully implemented: 5 have no
+text at all, and 2 more carry nothing but keywords the engine acts on.
+
+**What *is* implemented** are the mechanical keywords, at engine level rather
+than through the DSL:
+
+| Keyword | Rule | Effect |
+| --- | --- | --- |
+| Assault X | 807 | +X Might while an attacker |
+| Tank | 815 | must be assigned lethal damage first |
+| Backline | 826 | must be assigned lethal damage last |
+| Ganking | 810 | Standard Move battlefield → battlefield |
+
+Every other printed keyword is parsed and displayed but inert.
+
+**Not hidden.** `CardData.text_implemented` is false for every affected card,
+and the frontend stamps a `text inert` badge on it. A player can always see
+which cards are not doing what they say.
+
+**Effect on outcomes:** very large. Win rates from the current engine measure
+a game of stats, costs, movement and scoring only. They are **not** usable as
+Riftbound win rates. Fixing this is the DSL interpreter work in `DSL.md`.
+
+---
+
+## RQ-6 — Multi-domain power costs are split evenly
+
+**Status:** open, low impact.
+
+A card's power cost is paid in its own domain (163.2). For a card with two
+domains the split is not stated in the data, so `CardData.power_domains`
+alternates through the listed domains. Single-domain and colourless cards —
+the overwhelming majority — are exact. Multi-domain cards with power > 1 may
+demand the wrong mix.
+
+**Effect:** small; affects payability of a minority of cards.
+
+---
+
+## RQ-7 — Combat damage is assigned one unit at a time
+
+**Status:** open, deliberate.
+
+465.2.c lets the assigner distribute summed Might freely. Enumerating every
+legal distribution is combinatorially large and useless to a search agent, so
+the engine offers "assign to this unit" repeatedly, filling lethal before
+moving on, with Tank forced first and Backline last.
+
+**Effect:** small. It covers the strategically real choices but excludes
+deliberate damage-spreading that kills nothing.
+
+---
+
+## RQ-8 — Burn Out awards the point automatically
+
+**Status:** open.
+
+431 / 194.1.d: when a player Burns Out, a player *picks* someone to gain 1
+point. With two players the engine gives it to the opponent without offering
+the choice.
+
+**Effect:** negligible in 1v1; wrong in multiplayer, which is out of scope.
+
+---
+
+## RQ-9 — Conceding is disabled during simulation
+
+**Status:** decided.
+
+649 makes conceding legal at any time. A random policy that may concede on any
+turn produces meaningless statistics, so `allow_concede` defaults to False and
+is turned on only for interactive play.
+
+**Effect:** none on rules fidelity; it removes an action no rational agent
+takes.
+
+---
+
+## RQ-10 — Non-Combat Showdowns resolve immediately
+
+**Status:** open. The most likely place for the engine to be wrong.
+
+344.2: a Contested battlefield with no opposing units present opens a
+Non-Combat Showdown at the next Cleanup, in which players alternate playing
+spells (342) before Control is established. Combat Showdowns (464) likewise
+have priority windows.
+
+The engine skips both windows: a sole occupant of a contested battlefield
+takes Control immediately, and combat proceeds straight to damage assignment.
+
+**Why this is currently harmless, and when it stops being so.** No card text
+is executed (RQ-5), so there is nothing any player could play into those
+windows. The moment the DSL interpreter lands, this becomes a real divergence
+and must be implemented properly — chains, FEPR, priority and focus are all
+already written up in `RULES_SUMMARY.md`.
+
+**Effect on outcomes:** none today; large once cards work.
+
+---
+
 ## Expected trouble spots — now with rules citations
 
 The brief flagged these in advance. Each now has a starting point:

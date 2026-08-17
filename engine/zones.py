@@ -1,0 +1,198 @@
+"""Zones, locations, and the mutable board objects.
+
+Every zone here traces to Core Rules v1.4 sections 105-108. Nothing in this
+module knows about any specific card -- it deals in `CardRef` (a card id plus
+per-instance state), never in card behaviour.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+# The six domains (164.1). Order is fixed so serialization is deterministic.
+DOMAINS: tuple[str, ...] = ("Fury", "Calm", "Mind", "Body", "Chaos", "Order")
+
+
+class Zone(str, Enum):
+    """Zones a card can occupy (107 The Board, 108 Non-Board Zones)."""
+
+    BASE = "base"  # 107.1
+    BATTLEFIELD = "battlefield"  # 107.2
+    LEGEND = "legend"  # 107.4
+    CHAIN = "chain"  # 108.1
+    TRASH = "trash"  # 108.2
+    CHAMPION = "champion"  # 108.3
+    MAIN_DECK = "main_deck"  # 108.4
+    RUNE_DECK = "rune_deck"  # 108.5
+    BANISHMENT = "banishment"  # 108.6
+    HAND = "hand"
+
+
+# A unit's Location is its Base or a Battlefield (146.1). Bases are per-player;
+# battlefields are indexed. `None` means "not on the board".
+BASE_LOCATION = "base"
+
+
+@dataclass
+class CardRef:
+    """One physical card instance.
+
+    `instance_id` is stable for the life of the game so the UI can address a
+    specific copy when a player holds three of the same card.
+    """
+
+    instance_id: int
+    card_id: str  # riftbound_id into cards.json
+    owner: int
+    controller: int
+    # Board state, meaningful only while on the board.
+    location: str | None = None  # BASE_LOCATION or "bf:<index>"
+    exhausted: bool = False  # 414 / 415
+    damage: int = 0  # 142, marked damage
+    is_attacker: bool = False  # 464.2.c.3
+    is_defender: bool = False
+    # Damage marked this combat is cleared in the Resolution Step (466).
+
+    def clone_key(self) -> tuple:
+        """Canonical tuple for hashing/serialization."""
+        return (
+            self.instance_id,
+            self.card_id,
+            self.owner,
+            self.controller,
+            self.location,
+            self.exhausted,
+            self.damage,
+            self.is_attacker,
+            self.is_defender,
+        )
+
+
+@dataclass
+class Battlefield:
+    """A battlefield in the Battlefield Zone (107.2, 190 Control)."""
+
+    index: int
+    card_id: str
+    provider: int  # which player contributed it
+    controller: int | None = None  # 190.2.b -- None = controlled by no one
+    contested: bool = False  # 190.3.a
+    contested_by: int | None = None
+    # Which players have already Scored this battlefield this turn (470).
+    scored_by: set[int] = field(default_factory=set)
+
+    def clone_key(self) -> tuple:
+        return (
+            self.index,
+            self.card_id,
+            self.provider,
+            self.controller,
+            self.contested,
+            self.contested_by,
+            tuple(sorted(self.scored_by)),
+        )
+
+
+@dataclass
+class RunePool:
+    """A player's rune pool (165). Emptied at Main Phase start (316.3).
+
+    Energy has no domain (163.1.a). Power is domain-associated (163.2.a);
+    Universal power pays any domain (163.2.b) and is tracked separately.
+    """
+
+    energy: int = 0
+    power: dict[str, int] = field(default_factory=dict)  # domain -> count
+    universal_power: int = 0
+
+    def total_power(self) -> int:
+        return sum(self.power.values()) + self.universal_power
+
+    def clear(self) -> None:
+        """316.3 -- unspent Energy and Power are lost."""
+        self.energy = 0
+        self.power = {}
+        self.universal_power = 0
+
+    def add_power(self, domain: str, amount: int = 1) -> None:
+        self.power[domain] = self.power.get(domain, 0) + amount
+
+    def can_pay(self, energy: int, power_domains: list[str]) -> bool:
+        """Can this pool cover an (energy, power) cost? (163)
+
+        Domain-specific power is spent before universal, so a cost is payable
+        whenever any assignment works. Costs in Milestone 1 are small, so the
+        greedy check below is exact: each required domain consumes a matching
+        rune first, and anything unmatched falls back to universal.
+        """
+        if self.energy < energy:
+            return False
+        remaining = dict(self.power)
+        universal = self.universal_power
+        for domain in power_domains:
+            if remaining.get(domain, 0) > 0:
+                remaining[domain] -= 1
+            elif universal > 0:
+                universal -= 1
+            else:
+                return False
+        return True
+
+    def pay(self, energy: int, power_domains: list[str]) -> None:
+        if not self.can_pay(energy, power_domains):
+            raise ValueError("cannot pay cost from this pool")
+        self.energy -= energy
+        for domain in power_domains:
+            if self.power.get(domain, 0) > 0:
+                self.power[domain] -= 1
+                if self.power[domain] == 0:
+                    del self.power[domain]
+            else:
+                self.universal_power -= 1
+
+    def clone_key(self) -> tuple:
+        return (
+            self.energy,
+            tuple(sorted(self.power.items())),
+            self.universal_power,
+        )
+
+
+@dataclass
+class PlayerState:
+    """One player's zones and resources."""
+
+    player_id: int
+    points: int = 0  # 194
+    hand: list[int] = field(default_factory=list)  # instance ids
+    main_deck: list[int] = field(default_factory=list)  # index 0 == top
+    rune_deck: list[int] = field(default_factory=list)
+    trash: list[int] = field(default_factory=list)
+    banishment: list[int] = field(default_factory=list)
+    champion_zone: list[int] = field(default_factory=list)  # 108.3
+    legend: int | None = None  # 107.4
+    # Permanents and runes in this player's Base (107.1.c).
+    base: list[int] = field(default_factory=list)
+    channeled_runes: list[int] = field(default_factory=list)  # runes on board
+    pool: RunePool = field(default_factory=RunePool)
+    # Set once the player has taken their first Channel Phase, for the 1v1
+    # going-second extra rune (485.7).
+    has_channeled: bool = False
+
+    def clone_key(self) -> tuple:
+        return (
+            self.player_id,
+            self.points,
+            tuple(self.hand),
+            tuple(self.main_deck),
+            tuple(self.rune_deck),
+            tuple(sorted(self.trash)),
+            tuple(sorted(self.banishment)),
+            tuple(self.champion_zone),
+            self.legend,
+            tuple(sorted(self.base)),
+            tuple(sorted(self.channeled_runes)),
+            self.pool.clone_key(),
+            self.has_channeled,
+        )

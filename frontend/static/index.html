@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Riftbound — local play</title>
+<style>
+  :root {
+    --bg:#12141c; --panel:#1b1e29; --panel-2:#232735; --line:#333849;
+    --ink:#e8eaf2; --muted:#9aa1b8; --accent:#7aa2ff; --warn:#f0a45c;
+    --good:#6dd39a; --bad:#e8697d; --p0:#7aa2ff; --p1:#e8975c;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:14px/1.45 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  header { display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+           padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
+  h1 { font-size:15px; margin:0; letter-spacing:.02em; }
+  .grow { flex:1; }
+  button, select, input {
+    background:var(--panel-2); color:var(--ink); border:1px solid var(--line);
+    border-radius:6px; padding:6px 10px; font:inherit; }
+  button { cursor:pointer; }
+  button:hover:not(:disabled) { border-color:var(--accent); }
+  button:disabled { opacity:.4; cursor:default; }
+  button.primary { background:var(--accent); color:#0d1020; border-color:var(--accent); font-weight:600; }
+  main { display:grid; grid-template-columns:1fr 320px; gap:12px; padding:12px; align-items:start; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  .panel h2 { font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+              color:var(--muted); margin:0 0 8px; font-weight:600; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .cards { display:flex; gap:8px; flex-wrap:wrap; min-height:40px; }
+  .card { width:132px; border:1px solid var(--line); border-radius:8px; padding:8px;
+          background:var(--panel-2); position:relative; }
+  .card.p0 { border-left:3px solid var(--p0); }
+  .card.p1 { border-left:3px solid var(--p1); }
+  .card .nm { font-weight:600; font-size:12.5px; line-height:1.25; }
+  .card .stats { color:var(--muted); font-size:11px; margin-top:3px; }
+  .card .txt { color:var(--muted); font-size:10.5px; margin-top:5px;
+               max-height:52px; overflow:auto; white-space:pre-wrap; }
+  .card.exhausted { opacity:.55; transform:rotate(1.5deg); }
+  .card .dmg { color:var(--bad); font-weight:700; font-size:11px; }
+  .tag { display:inline-block; font-size:9.5px; padding:1px 5px; border-radius:999px;
+         border:1px solid var(--line); color:var(--muted); margin-top:4px; }
+  .tag.inert { color:var(--warn); border-color:var(--warn); }
+  .acts { display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .acts button { padding:4px 7px; font-size:11px; text-align:left; }
+  .bf { border:1px solid var(--line); border-radius:8px; padding:10px; background:var(--panel-2); }
+  .bf.contested { border-color:var(--warn); }
+  .bf .hd { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .bf .who { font-size:11px; }
+  .log { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px;
+         color:var(--muted); max-height:300px; overflow:auto; white-space:pre-wrap; }
+  .pill { padding:2px 8px; border-radius:999px; border:1px solid var(--line); font-size:11.5px; }
+  .pill.turn { border-color:var(--good); color:var(--good); }
+  .banner { padding:10px 12px; border-radius:8px; margin-bottom:10px;
+            background:rgba(122,162,255,.1); border:1px solid var(--accent); }
+  .banner.win { background:rgba(109,211,154,.12); border-color:var(--good); color:var(--good); }
+  .banner.warn { background:rgba(240,164,92,.1); border-color:var(--warn); color:var(--warn); }
+  .muted { color:var(--muted); }
+  .stat { font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Riftbound — local play</h1>
+  <span class="pill" id="phase">—</span>
+  <span class="pill" id="turn">—</span>
+  <span class="pill" id="score">—</span>
+  <span class="grow"></span>
+  <label class="muted">view as
+    <select id="viewAs"><option value="0">Player 0</option><option value="1">Player 1</option></select>
+  </label>
+  <select id="deck0"></select>
+  <select id="deck1"></select>
+  <input id="seed" placeholder="seed" size="7">
+  <button class="primary" id="newGame">New game</button>
+</header>
+
+<main>
+  <div>
+    <div id="banner"></div>
+
+    <div class="panel" style="margin-bottom:12px">
+      <h2>Battlefields</h2>
+      <div class="row" id="battlefields"></div>
+    </div>
+
+    <div class="panel" style="margin-bottom:12px">
+      <h2>Opponent base</h2>
+      <div class="cards" id="oppBase"></div>
+    </div>
+
+    <div class="panel" style="margin-bottom:12px">
+      <h2>Your base <span class="muted" id="poolLine"></span></h2>
+      <div class="cards" id="myBase"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Your hand <span class="muted" id="handMeta"></span></h2>
+      <div class="cards" id="hand"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel" style="margin-bottom:12px">
+      <h2>Actions</h2>
+      <div class="acts" id="globalActions"></div>
+    </div>
+    <div class="panel" style="margin-bottom:12px">
+      <h2>Game</h2>
+      <div id="meta" class="muted" style="font-size:12px"></div>
+    </div>
+    <div class="panel">
+      <h2>Log</h2>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let S = null;
+
+const viewAs = () => parseInt($("viewAs").value, 10);
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  return r.json();
+}
+
+async function refresh() {
+  S = await api(`/api/state?player=${viewAs()}`);
+  render();
+}
+
+async function act(actionRepr) {
+  const res = await api("/api/action", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({player: viewAs(), action: actionRepr}),
+  });
+  if (res.error) showBanner(res.error, "warn");
+  await refresh();
+}
+
+function showBanner(text, kind) {
+  $("banner").innerHTML = `<div class="banner ${kind || ""}">${text}</div>`;
+}
+
+/* Actions are addressed by the engine's own repr(), so the UI can never
+   submit a move the rules do not allow. */
+function actionsFor(predicate) {
+  return (S.legal || []).filter(predicate);
+}
+
+function cardEl(c, opts = {}) {
+  const el = document.createElement("div");
+  el.className = `card p${c.controller}` + (c.exhausted ? " exhausted" : "");
+  const cost = c.type === "unit" || c.type === "spell" || c.type === "gear"
+    ? `${c.energy}⚡${c.power ? " " + c.power + "◆" : ""}` : "";
+  const might = c.type === "unit" ? ` · ${c.might}⚔` : "";
+  el.innerHTML = `
+    <div class="nm">${c.name}</div>
+    <div class="stats">${c.type}${cost ? " · " + cost : ""}${might}
+      ${c.damage ? `<span class="dmg"> · ${c.damage} dmg</span>` : ""}</div>
+    ${c.rules_text ? `<div class="txt">${c.rules_text}</div>` : ""}
+    ${c.rules_text && !c.text_implemented
+        ? `<span class="tag inert" title="The engine does not execute this card's text. See RQ-5.">text inert</span>`
+        : ""}
+  `;
+  const acts = document.createElement("div");
+  acts.className = "acts";
+  (opts.actions || []).forEach(a => {
+    const b = document.createElement("button");
+    b.textContent = a.label;
+    b.onclick = () => act(a.repr);
+    acts.appendChild(b);
+  });
+  if ((opts.actions || []).length) el.appendChild(acts);
+  return el;
+}
+
+function render() {
+  if (!S || !S.started) {
+    $("banner").innerHTML = `<div class="banner">No game in progress — pick decks and press <b>New game</b>.</div>`;
+    ["battlefields","oppBase","myBase","hand","globalActions","log"].forEach(i => $(i).innerHTML = "");
+    $("meta").textContent = "";
+    return;
+  }
+
+  const me = S.player_id, opp = 1 - me;
+  $("phase").textContent = S.phase.replace(/_/g, " ");
+  $("turn").textContent = `turn ${S.turn_number} · P${S.turn_player}`;
+  $("turn").className = "pill turn";
+  $("score").textContent = `P0 ${S.points[0]} — ${S.points[1]} P1`;
+
+  if (S.is_terminal) {
+    showBanner(S.winner === null ? "Game over — draw."
+      : `Game over — <b>Player ${S.winner} wins</b>.`, "win");
+  } else if (S.current_player !== me) {
+    showBanner(`Waiting on <b>Player ${S.current_player}</b> — switch “view as” to act.`, "warn");
+  } else {
+    $("banner").innerHTML = "";
+  }
+
+  /* Battlefields, with setup choices when in that phase. */
+  const bfWrap = $("battlefields");
+  bfWrap.innerHTML = "";
+  if (S.phase === "setup_battlefield") {
+    const choices = S.battlefield_choices[me] || [];
+    choices.forEach((c, i) => {
+      const d = document.createElement("div");
+      d.className = "bf";
+      d.innerHTML = `<div class="hd"><b>${c.name}</b></div>
+                     <div class="who muted">candidate ${i + 1} of 3</div>`;
+      const b = document.createElement("button");
+      b.className = "primary"; b.textContent = "Select";
+      b.style.marginTop = "8px";
+      b.disabled = S.current_player !== me;
+      b.onclick = () => act(`choose_battlefield:${i}`);
+      d.appendChild(b);
+      bfWrap.appendChild(d);
+    });
+  }
+  (S.battlefields || []).forEach(bf => {
+    const units = (S.board || []).filter(c => c.location === `bf:${bf.index}`);
+    const d = document.createElement("div");
+    d.className = "bf" + (bf.contested ? " contested" : "");
+    const ctrl = bf.controller === null ? "uncontrolled" : `held by P${bf.controller}`;
+    d.innerHTML = `<div class="hd"><b>${bf.name}</b>
+        <span class="who ${bf.contested ? "" : "muted"}">${bf.contested ? "CONTESTED" : ctrl}</span></div>`;
+    const cs = document.createElement("div");
+    cs.className = "cards"; cs.style.marginTop = "8px";
+    units.forEach(u => {
+      const moves = actionsFor(a => a.startsWith(`move:${u.instance_id}->`))
+        .map(r => ({repr: r, label: "→ " + r.split("->")[1]}));
+      const assigns = actionsFor(a => a === `assign_damage:${u.instance_id}`)
+        .map(r => ({repr: r, label: "assign damage"}));
+      cs.appendChild(cardEl(u, {actions: [...moves, ...assigns]}));
+    });
+    if (!units.length) cs.innerHTML = `<span class="muted">— empty —</span>`;
+    d.appendChild(cs);
+    bfWrap.appendChild(d);
+  });
+
+  /* Bases */
+  const mine = (S.board || []).filter(c => c.location === "base" && c.controller === me);
+  const theirs = (S.board || []).filter(c => c.location === "base" && c.controller === opp);
+  $("oppBase").innerHTML = "";
+  theirs.forEach(c => $("oppBase").appendChild(cardEl(c)));
+  if (!theirs.length) $("oppBase").innerHTML = `<span class="muted">— empty —</span>`;
+
+  $("myBase").innerHTML = "";
+  mine.forEach(c => {
+    const acts = [];
+    actionsFor(a => a.startsWith(`move:${c.instance_id}->`))
+      .forEach(r => acts.push({repr: r, label: "move → " + r.split("->")[1]}));
+    actionsFor(a => a === `tap_energy:${c.instance_id}`)
+      .forEach(r => acts.push({repr: r, label: "exhaust: +1 energy"}));
+    actionsFor(a => a === `recycle_power:${c.instance_id}`)
+      .forEach(r => acts.push({repr: r, label: "recycle: +1 power"}));
+    $("myBase").appendChild(cardEl(c, {actions: acts}));
+  });
+  if (!mine.length) $("myBase").innerHTML = `<span class="muted">— empty —</span>`;
+
+  /* Pool line: energy and power are different resources (163). */
+  const [energy, power, universal] = S.pool;
+  const powerBits = (power || []).map(([d, n]) => `${n}×${d}`).join(", ");
+  $("poolLine").textContent =
+    `— pool: ${energy}⚡ energy` +
+    (powerBits ? `, ${powerBits}` : "") +
+    (universal ? `, ${universal} universal` : "") + " ◆";
+
+  /* Hand (own only — the opponent's is a count, per 128 Privacy). */
+  const hand = $("hand");
+  hand.innerHTML = "";
+  $("handMeta").textContent =
+    `— ${S.hand.length} cards · opponent holds ${S.opponent_hand_size} · deck ${S.deck_sizes[me]}`;
+  (S.hand || []).forEach(c => {
+    const acts = actionsFor(a => a === `play:${c.instance_id}`)
+      .map(r => ({repr: r, label: "play"}));
+    hand.appendChild(cardEl(c, {actions: acts}));
+  });
+  (S.champion_zone || []).forEach(c => {
+    const acts = actionsFor(a => a === `play:${c.instance_id}`)
+      .map(r => ({repr: r, label: "play champion"}));
+    const el = cardEl(c, {actions: acts});
+    el.style.outline = "1px dashed var(--accent)";
+    hand.appendChild(el);
+  });
+
+  /* Everything not attached to a specific card. */
+  const g = $("globalActions");
+  g.innerHTML = "";
+  const generic = (S.legal || []).filter(a =>
+    !a.startsWith("play:") && !a.startsWith("move:") &&
+    !a.startsWith("tap_energy:") && !a.startsWith("recycle_power:") &&
+    !a.startsWith("assign_damage:") && !a.startsWith("choose_battlefield:"));
+  if (!generic.length && S.current_player === me) {
+    g.innerHTML = `<span class="muted">— act on a card —</span>`;
+  }
+  generic.forEach(a => {
+    const b = document.createElement("button");
+    if (a.startsWith("mulligan:")) {
+      const ids = a.slice("mulligan:[".length, -1);
+      const names = ids ? ids.split(",").map(i =>
+        (S.hand.find(c => c.instance_id == i) || {}).name || i).join(" + ") : null;
+      b.textContent = names ? `mulligan ${names}` : "keep hand";
+    } else {
+      b.textContent = a === "pass" ? "pass / end phase" : a;
+    }
+    if (a === "concede") b.style.borderColor = "var(--bad)";
+    b.onclick = () => act(a);
+    g.appendChild(b);
+  });
+  if (S.current_player !== me) {
+    g.innerHTML = `<span class="muted">Player ${S.current_player} to act.</span>`;
+  }
+
+  $("meta").innerHTML =
+    `seed <b class="stat">${S.seed}</b><br>` +
+    `die roll: P0=${S.die_roll[0]} P1=${S.die_roll[1]} → P${S.first_player} first (115)<br>` +
+    `decks: ${S.deck_names[0]} vs ${S.deck_names[1]}<br>` +
+    `rune decks: ${S.rune_deck_sizes[0]} / ${S.rune_deck_sizes[1]}<br>` +
+    `trash: ${S.trash_sizes[0]} / ${S.trash_sizes[1]}`;
+
+  $("log").textContent = (S.log || []).join("\n");
+  $("log").scrollTop = $("log").scrollHeight;
+}
+
+async function loadDecks() {
+  const {decks} = await api("/api/decks");
+  ["deck0", "deck1"].forEach((id, i) => {
+    $(id).innerHTML = decks.map(d => `<option value="${d}">${d}</option>`).join("");
+    $(id).selectedIndex = Math.min(i, decks.length - 1);
+  });
+}
+
+$("newGame").onclick = async () => {
+  const res = await api("/api/new", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      deck0: $("deck0").value, deck1: $("deck1").value, seed: $("seed").value || null,
+    }),
+  });
+  if (res.error) { showBanner(res.error, "warn"); return; }
+  await refresh();
+};
+$("viewAs").onchange = refresh;
+
+loadDecks().then(refresh);
+setInterval(refresh, 2000);   /* hot-seat: pick up the other player's moves */
+</script>
+</body>
+</html>
