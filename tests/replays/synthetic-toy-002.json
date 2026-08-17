@@ -1,0 +1,24 @@
+{
+  "replay_id": "synthetic-toy-002",
+  "description": "Toy game, random policy, different branch.",
+  "source": "synthetic",
+  "game": "toy",
+  "seed": 137,
+  "initial_state_hash": "c0b05f9a527c6fd0",
+  "steps": [
+    {
+      "player": 0,
+      "action": "pass",
+      "expected_state_hash": "9cfe8c1af42815da"
+    },
+    {
+      "player": 1,
+      "action": "pass",
+      "expected_state_hash": "ea2abbf0bb03b73a"
+    }
+  ],
+  "final_returns": [
+    0.5,
+    0.5
+  ]
+}

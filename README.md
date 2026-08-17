@@ -6,8 +6,9 @@ swap card X for card Y?*
 
 ## Status
 
-**Session 1, partially complete.** Repo scaffolded and the data pipeline
-built; card data and rules could not be retrieved.
+Repo scaffolded, data pipeline built, and all **rules-agnostic** Milestone 1
+infrastructure implemented and tested. Everything that depends on card data or
+the rules text is blocked.
 
 | Session 1 step | State |
 | --- | --- |
@@ -16,9 +17,20 @@ built; card data and rules could not be retrieved.
 | 3. Fetch rules, write `RULES_SUMMARY.md` | **blocked** — rules PDF unreachable |
 | 4. Propose a DSL primitive list | **blocked** — derives from card text, which step 2 would have supplied |
 
-See **BLOCKER-1** in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md) for the
-evidence and three ways to unblock. No engine code has been written — Session
-1 explicitly ends before that.
+Built since, none of it rules-dependent:
+
+| Component | State |
+| --- | --- |
+| Frozen agent-facing interface (`engine/interface.py`) | done, contract-tested |
+| Replay format + runner (`engine/replay.py`) | done, 3 synthetic replays checked in |
+| Random agent (`agents/random_agent.py`) | done |
+| Batch runner + aggregation (`analysis/batch.py`) | done |
+| Determinism guarantees | done, enforced by tests |
+| `engine/state.py`, `turn.py`, `combat.py`, `cards/` | **blocked** — needs the rules |
+
+**83 tests passing.** See **BLOCKER-1** in
+[`RULES_QUESTIONS.md`](RULES_QUESTIONS.md) for the evidence and three ways to
+unblock.
 
 ## Setup
 
@@ -66,7 +78,7 @@ drop in later without a rewrite.
 ## Agent-facing interface
 
 Frozen, and mirrors OpenSpiel so its ISMCTS implementation can be used
-directly:
+directly. Defined as runtime-checkable protocols in `engine/interface.py`:
 
 ```python
 state.legal_actions() -> list[Action]
@@ -74,7 +86,45 @@ state.apply(action) -> None
 state.observation(player_id) -> Observation   # hidden information stripped
 state.is_terminal() -> bool
 state.returns() -> tuple[float, float]
+state.current_player -> int                   # ADDED — see DECISIONS.md
 ```
+
+`current_player` is one call beyond the five the brief specifies; it is
+needed to verify turn and priority order in replays, and OpenSpiel exposes it
+too. Flagged for approval rather than assumed.
+
+State hashing is deliberately *not* on this interface — `replay.state_hash()`
+derives it from the calls above, so what agents see stays exactly this list.
+
+## Replay harness
+
+`tests/replays/` holds JSON game logs: an ordered list of
+`(player, action, expected_state_hash)` plus an initial hash and final
+returns. The runner fails at the first divergent step and names it.
+
+```sh
+.venv/bin/python tests/replays/generate_synthetic.py   # only when the FORMAT changes
+```
+
+Never regenerate a replay to make it pass. A divergence means the engine
+changed, and that change is what needs justifying — regenerating destroys the
+only signal the harness produces. Real Rift Atlas games drop in as-is and are
+never regenerated.
+
+## Running a batch
+
+```python
+from agents.random_agent import RandomAgent
+from analysis.batch import run_batch
+
+batch = run_batch(build_state, (lambda s: RandomAgent(s),
+                                lambda s: RandomAgent(s + 1000)),
+                  games=1000, base_seed=0)
+print(batch.summary())   # win rate, mean turns, point-differential histogram
+```
+
+Game `i` uses seed `base_seed + i` and agents are rebuilt per game, so any
+single game reproduces standalone from its own seed.
 
 ## Ground rules
 

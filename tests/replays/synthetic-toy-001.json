@@ -1,0 +1,64 @@
+{
+  "replay_id": "synthetic-toy-001",
+  "description": "Toy game, random policy, decisive finish.",
+  "source": "synthetic",
+  "game": "toy",
+  "seed": 21,
+  "initial_state_hash": "058f3108bce2fcb5",
+  "steps": [
+    {
+      "player": 0,
+      "action": "pass",
+      "expected_state_hash": "5d01ad9f388fe967"
+    },
+    {
+      "player": 1,
+      "action": "play:5",
+      "expected_state_hash": "4225d397327b453c"
+    },
+    {
+      "player": 0,
+      "action": "play:7",
+      "expected_state_hash": "4e834e307cbb8649"
+    },
+    {
+      "player": 1,
+      "action": "play:1",
+      "expected_state_hash": "b4048f435eb4974e"
+    },
+    {
+      "player": 0,
+      "action": "play:3",
+      "expected_state_hash": "00d337674a521ff2"
+    },
+    {
+      "player": 1,
+      "action": "play:5",
+      "expected_state_hash": "3fc32ce189881c74"
+    },
+    {
+      "player": 0,
+      "action": "play:1",
+      "expected_state_hash": "65f5ed760e8817af"
+    },
+    {
+      "player": 1,
+      "action": "play:3",
+      "expected_state_hash": "00437f395b49acad"
+    },
+    {
+      "player": 0,
+      "action": "play:2",
+      "expected_state_hash": "c5206a4b76e75a10"
+    },
+    {
+      "player": 1,
+      "action": "play:7",
+      "expected_state_hash": "96a11048c8a76388"
+    }
+  ],
+  "final_returns": [
+    0.0,
+    1.0
+  ]
+}

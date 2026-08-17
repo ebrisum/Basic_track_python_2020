@@ -10,3 +10,6 @@ dev = ["pytest>=8"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
+
+markers = ["perf: performance budget checks"]

@@ -1,0 +1,39 @@
+{
+  "replay_id": "synthetic-toy-003",
+  "description": "Toy game, random policy, long game.",
+  "source": "synthetic",
+  "game": "toy",
+  "seed": 4242,
+  "initial_state_hash": "9c1b3727edd45a9c",
+  "steps": [
+    {
+      "player": 0,
+      "action": "play:9",
+      "expected_state_hash": "1963b2ee9955913d"
+    },
+    {
+      "player": 1,
+      "action": "play:2",
+      "expected_state_hash": "e70617d11decb7a6"
+    },
+    {
+      "player": 0,
+      "action": "pass",
+      "expected_state_hash": "ae30d0cf88157a42"
+    },
+    {
+      "player": 1,
+      "action": "play:9",
+      "expected_state_hash": "6efcb0efc1e2f87f"
+    },
+    {
+      "player": 0,
+      "action": "play:7",
+      "expected_state_hash": "17b6ddae2698edbc"
+    }
+  ],
+  "final_returns": [
+    1.0,
+    0.0
+  ]
+}
