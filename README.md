@@ -42,18 +42,29 @@ architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
-**354 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
-priority, focus and showdowns, 24 covering Equipment, and 18 driving the
-frontend over HTTP — plus two full Riftbound games in the replay
+**385 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+priority, focus and showdowns, 24 covering Equipment, 29 covering battlefield
+takeover and threat forecasting, and 20 driving the frontend over HTTP — plus two full Riftbound games in the replay
 harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
-## Play a game
+## Play a game on your own machine
+
+The engine is **pure standard library**, so there is nothing to install and no
+virtual environment to create. Clone it and run:
 
 ```sh
-uv venv --python 3.12 .venv
-uv pip install --python .venv/bin/python pytest pypdf
-.venv/bin/python decks/build_decks.py        # generate legal starter decks
-.venv/bin/python -m frontend.server          # -> http://127.0.0.1:8000
+git clone <this repo> && cd riftbound-sim
+python3 play.py
+```
+
+That builds the starter decks if they are missing, starts the local server and
+opens <http://127.0.0.1:8000>. Python 3.10+ is enough (verified on 3.11 and
+3.12); `pytest` is needed only to run the tests, not to play.
+
+```sh
+python3 play.py --watch            # two agents play, you watch
+python3 play.py --seat1 ismcts     # you are P0, the search plays P1
+python3 play.py --port 9000 --no-open
 ```
 
 Hot-seat: both players share one screen, and the **view as** selector switches
@@ -93,6 +104,11 @@ clicking a trash stack opens it. The **Chain** panel on the right shows what is
 on the chain, which item resolves next, and who holds priority and focus; the
 header carries the current timing state (Neutral/Showdown × Open/Closed).
 
+Under each battlefield your mat shows a **forecast** — whether you can take it
+this turn, whether you can lose it, the Might each side has committed there,
+what each could still march in, and an upper bound on what they could deploy
+from hand. See [Reading the board](#reading-the-board) below.
+
 Card art loads straight from Riot's CDN in your browser; if it is unreachable
 the card falls back to a fully legible text face and the game plays normally.
 
@@ -100,6 +116,40 @@ The UI can only submit moves the engine already listed as legal — actions are
 addressed by the engine's own `repr()`, resolved against `legal_actions()`
 exactly the way the replay runner does. There is no rules logic in the
 browser.
+
+## Reading the board
+
+Battlefields change hands. Moving a unit onto one you do not control Contests
+it (450); at the next Cleanup that opens a Showdown, and whoever is left
+standing there Establishes Control (466.5) — **including the defender**
+(466.5.e), and nobody at all if both sides wipe out (466.5.b). Control is a
+lease, not a deed.
+
+Whether an attack works is arithmetic, not a guess. **465.2.c** has each side
+assign damage equal to its *summed Might* among the other's units, lethal in
+full before moving on, so a side wipes the other exactly when its Might covers
+what the other still has standing. `engine/threat.py` computes that directly:
+
+```python
+from engine.threat import forecast_all
+for view in forecast_all(state, player):
+    print(view.name, view.can_take, view.can_lose, view.committed)
+```
+
+The board is public (107.1.d), so committed Might and reinforcements are
+**exact** for both sides — including theirs. Only the hand is hidden, and it is
+bounded rather than unknown: **103.1.b.2** fixes a deck's Domain Identity from
+its Champion Legend, and every card in the deck must abide by it (103.1.b.3-4),
+so the worst thing the opponent can be holding is the best card in their
+domains they can currently pay for. That is `hidden_threat`, and because a unit
+played this way enters exhausted (143.4), it is pressure on the *next* turn —
+which is why `can_lose` (this turn, exact) and `can_lose_next_turn` (includes
+the bound) are reported separately.
+
+Might is not just the printed number: **807** gives an attacker +Assault,
+**814** gives a defender +Shield, and attached Equipment adds its Might Bonus
+(718.4). `projected_might` applies a designation a unit does not yet hold, so a
+forecast fights the unit at the Might it *would* have.
 
 ## Tests
 
@@ -243,6 +293,14 @@ because random agents hoard cards they cannot play.
 
 So the promotion gate is the benchmark, not Brier: `fit_weights.py` writes a
 candidate and installs nothing. Full write-up in [`SCORING.md`](SCORING.md).
+
+The same gate applies to new features. `takeover_edge` — battlefields each
+side could take this turn, from the exact combat arithmetic — scores **0.537
+(43-37, interval 0.428–0.647)** against the identical agent with that one
+weight zeroed, so it is *indistinguishable*, not an improvement. It ships
+because the fitter can only learn weights for features it can see, and because
+the same computation drives the board forecast in the UI; it is not claimed to
+make the agent stronger.
 
 ## Scripting cards with an LLM
 

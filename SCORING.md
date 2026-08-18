@@ -264,6 +264,37 @@ Two properties make this honest rather than a treadmill:
 Exploration (`--epsilon`) is on while generating data, because an agent that
 only plays its preferred lines never learns what the alternatives were worth.
 
+## `takeover_edge`: a feature that is not yet earning its weight
+
+Battlefields change hands constantly — 146 direct takeovers across 40
+greedy-vs-greedy games — and a weighted sum of unit counts and Might totals
+cannot see one coming. A 10-Might unit sitting at home and a 10-Might unit
+standing at a contested battlefield are identical to `might_diff` and worth
+entirely different things. So `takeover_edge` counts the battlefields each
+side could take *this turn*, using the exact combat arithmetic from 465.2.c.
+
+It is a sound feature and it did not improve play:
+
+| pairing | score | W-L-D | 95% interval |
+| --- | --- | --- | --- |
+| greedy WITH takeover_edge vs the same greedy WITHOUT | 0.537 | 43-37-0 | 0.428–0.647 |
+
+The interval straddles 0.5, so at 80 games this is **indistinguishable from
+the ablated agent**, not an improvement. The hand-set weight of 0.45 is a
+guess, exactly like the other eleven were before fitting, and the same rule
+applies to it as to everything else here: the benchmark is the gate, and this
+has not passed it.
+
+It ships anyway, for two reasons that are worth separating from the claim that
+it helps. First, the feature vector is what `fit_weights.py` learns over, so a
+feature the fitter can weigh at zero costs nothing and a feature it never sees
+can never be learned. Second, the same computation drives the forecast the UI
+shows a human under each battlefield, which is useful whether or not the agent
+profits from it. What is *not* claimed is that the agent plays better with it.
+
+The honest next step is a self-play fit with the feature present, and a
+re-benchmark — not a bigger hand-set weight.
+
 ## Where this goes next
 
 The heuristic is the value function an ISMCTS agent will need. Two things make

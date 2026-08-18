@@ -62,6 +62,9 @@
   .bfcell .nm{font-size:11.5px;font-weight:650}
   .bfcell .st{font-size:9.5px;color:var(--muted)}
   .bfcell.contested{border-color:var(--warn);border-style:solid}
+  .fc{margin:-1px 0 5px;font-size:9.5px;display:flex;gap:6px;flex-wrap:wrap;align-items:baseline}
+  .fc .take{color:var(--good)} .fc .risk{color:var(--bad)}
+  .fc .fnum{color:var(--muted)}
 
   .card{width:var(--cw);border-radius:6px;position:relative;background:var(--panel2);
         border:1px solid var(--line);overflow:hidden}
@@ -323,6 +326,30 @@ function poolHtml([e,p,u]){
   return `<span class="pool">${bits.join(" ")}</span>`;
 }
 
+/* Can I take this battlefield, and can they take it back?
+
+   465.2.c makes the fight arithmetic -- a side wipes the other exactly when
+   its Might covers what the other still has standing -- and the board is
+   public (107.1.d), so the this-turn answer is exact. Only their hand is
+   hidden, and 103.1.b bounds that: every card they can hold is legal in
+   their Legend's Domain Identity. */
+function forecastHtml(index){
+  const f = (S.forecast||[])[index];
+  if(!f) return "";
+  const me = S.player_id, them = 1 - me;
+  const bits = [];
+  if(f.can_take) bits.push(`<b class="take">⚔ you can take this</b>`);
+  else if(f.can_lose) bits.push(`<b class="risk">⚠ you can lose this now</b>`);
+  else if(f.can_lose_next_turn) bits.push(`<b class="risk">⚠ at risk next turn</b>`);
+  const nums = `you ${f.committed[me]}⚔ here`
+    + (f.reinforcement[me]?` +${f.reinforcement[me]} ready`:"")
+    + ` · them ${f.committed[them]}⚔ here`
+    + (f.reinforcement[them]?` +${f.reinforcement[them]} ready`:"")
+    + (f.hidden_threat[them]?` · up to ${f.hidden_threat[them]}⚔ from hand`:"");
+  bits.push(`<span class="fnum">${nums}</span>`);
+  return `<div class="fc">${bits.join(" ")}</div>`;
+}
+
 /* One playmat, matching the physical layout:
      Battlefield Zone | Legend | Champion
      Base: Units + Gears        | Main Deck
@@ -351,6 +378,7 @@ function renderMat(host,pid,mine){
       : bf.controller===null?"uncontrolled":`held by P${bf.controller}`;
     cell.innerHTML=`<div class="hd"><span class="nm">${esc(bf.name)}</span>
                     <span class="st">${status}</span></div>`;
+    if(mine) cell.insertAdjacentHTML("beforeend", forecastHtml(bf.index));
     const row=document.createElement("div"); row.className="items";
     const units=S.board.filter(c=>c.location===`bf:${bf.index}` && c.controller===pid
                                   && unattached(c));

@@ -61,6 +61,7 @@ FEATURE_NAMES: tuple[str, ...] = (
     "tempo",                # ready (unexhausted) units
     "victory_pressure",     # how close to winning, given the current scoring rate
     "answer_risk",          # expected Reactions held, deduced from public zones
+    "takeover_edge",        # battlefields each side could take right now
 )
 
 # Hand-set starting point, replaced by `fit_weights.py` once self-play data
@@ -79,6 +80,7 @@ DEFAULT_WEIGHTS: tuple[float, ...] = (
     0.04,   # tempo
     0.90,   # victory_pressure
     0.15,   # answer_risk
+    0.45,   # takeover_edge
 )
 DEFAULT_BIAS: float = 0.0
 
@@ -97,6 +99,7 @@ SCALES: dict[str, float] = {
     "tempo": 4.0,
     "victory_pressure": 1.0,
     "answer_risk": 2.0,
+    "takeover_edge": 2.0,
 }
 
 
@@ -172,6 +175,7 @@ def _pressure(points: int, battlefields: int) -> float:
     everything.
     """
     from engine.state import VICTORY_SCORE
+    from engine.threat import takeable_count
 
     needed = max(0, VICTORY_SCORE - points)
     if needed == 0:
@@ -192,6 +196,7 @@ def features(state, player: int) -> dict[str, float]:
     that is entitled to see it.
     """
     from engine.state import VICTORY_SCORE
+    from engine.threat import takeable_count
 
     opponent = 1 - player
     me, them = state.players[player], state.players[opponent]
@@ -249,6 +254,20 @@ def features(state, player: int) -> dict[str, float]:
         # a Reaction is a timing question for search; how likely the opponent
         # is to have one is a property of the position, so it belongs here.
         "answer_risk": _answers_held(state, player) - _answers_held(state, opponent),
+        # Battlefields each side could take *this turn*, from the board alone.
+        #
+        # `battlefield_diff` says who holds what; this says who is about to.
+        # 465.2.c makes the fight arithmetic -- a side wipes the other exactly
+        # when its Might covers what the other has standing -- so "can I take
+        # it" is computable without searching, and a weighted sum cannot
+        # derive it from unit counts and Might totals: a 10-Might unit at home
+        # and a 10-Might unit already at a contested battlefield look the same
+        # to `might_diff` and are worth very different things.
+        #
+        # Written as a difference, like every other feature, so the vector
+        # stays antisymmetric. An uncontrolled battlefield is takeable by both
+        # sides at once, so this must not be phrased as a single signed count.
+        "takeover_edge": takeable_count(state, player) - takeable_count(state, opponent),
     }
     return {name: raw[name] / SCALES[name] for name in FEATURE_NAMES}
 

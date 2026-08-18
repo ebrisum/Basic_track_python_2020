@@ -39,6 +39,7 @@ from cards.gear import equipment_profile
 from cards.scripts import activated_abilities
 from engine.setup import DeckError, available_decks, build_state, load_deck
 from engine.state import Phase, RiftboundState
+from engine.threat import forecast_all
 
 # Agents a seat can be handed to. "human" means the UI drives that seat.
 AGENT_KINDS: tuple[str, ...] = ("human", "random", "greedy", "ismcts")
@@ -198,6 +199,10 @@ class Game:
                         and self.seats[state.current_player] == "human"
                         else []
                     ),
+                    # What each battlefield is worth trying for, and what is
+                    # at risk. Public board facts are exact; the opponent's
+                    # hand is bounded by their Domain Identity (103.1.b).
+                    "forecast": [asdict(f) for f in forecast_all(state, player)],
                     "seats": list(self.seats),
                     "running": self.running,
                     "delay_ms": self.delay_ms,

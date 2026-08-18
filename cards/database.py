@@ -55,6 +55,11 @@ class CardData:
         return kw.value_of(self.parsed_keywords, "Assault")
 
     @property
+    def shield(self) -> int:
+        """814 -- +X Might while a defender. X defaults to 1 (814.1.b.3)."""
+        return kw.value_of(self.parsed_keywords, "Shield")
+
+    @property
     def has_tank(self) -> bool:
         return kw.has(self.parsed_keywords, "Tank")  # 815
 

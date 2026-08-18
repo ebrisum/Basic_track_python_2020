@@ -359,3 +359,47 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   frontend already holds. Putting them on `observation()` widened the frozen
   agent-facing interface and rewrote every replay hash; the replay harness
   caught it on the first run, which is precisely what it is for.
+
+## Session 12 -- taking battlefields, and forecasting whether you can
+
+- **Control is a lease, not a deed** -- 450 lets a unit move onto a
+  battlefield the opponent holds, which Contests it; the Showdown that opens
+  at the next Cleanup hands Control to whoever is left standing. Most of this
+  already worked; three rules did not.
+- **466.5.e: the defender can establish Control too** -- the code only ever
+  handed the battlefield to the attacker. A defender who wipes out an attack
+  on an uncontrolled battlefield takes it, and the rule says so explicitly:
+  "This does not have to be the player that applied Contested."
+- **466.5.b: a mutual wipe leaves it Uncontrolled** -- it used to stay with
+  the previous holder, which quietly rewarded losing a fight you started.
+- **814 Shield was missing** -- Assault (+X while attacking) was implemented
+  and Shield (+X while defending) was not, so five units fought at the wrong
+  Might whenever they defended, and survived or died wrongly as a result.
+- **"Can I take it" is arithmetic, not search** -- 465.2.c has each side
+  assign damage equal to its summed Might, lethal in full before moving on,
+  so a side wipes the other exactly when its Might covers what the other has
+  standing. `engine/threat.py` computes the answer directly rather than
+  rolling out.
+- **The opponent's hand is bounded, not unknown** -- 103.1.b.2 fixes Domain
+  Identity from the Champion Legend and 103.1.b.3-4 constrain every card in
+  the deck to it, so the worst case is "the best card in their domains they
+  can currently pay for". That is an upper bound, deliberately generous; it
+  is not a guess at their hand.
+- **`can_lose` and `can_lose_next_turn` are separate** -- a unit played from
+  hand enters exhausted (143.4) and cannot move that turn, so a hidden card
+  is next-turn pressure. Collapsing the two would have overstated the danger
+  every time.
+- **Search gets a cheaper path than the UI** -- `forecast` scans the card
+  pool for the hidden bound; `takeable_count` uses public information only.
+  Feeding the full forecast to `features()` made `evaluate` nine times
+  slower, since search calls it at every leaf. The pool is also memoized on
+  the database's identity, which is sound because `CardDatabase` is immutable
+  and shared (it returns itself from `__deepcopy__`).
+- **`takeover_edge` is written as a difference, like every other feature** --
+  an uncontrolled battlefield is takeable by *both* players at once, so a
+  single signed count would have broken the antisymmetry that makes
+  `evaluate(s,0) + evaluate(s,1) == 1`. Verified to floating-point epsilon.
+- **Playing locally needs no installation** -- the runtime is pure stdlib, so
+  `python3 play.py` on a fresh clone builds the decks, starts the server and
+  opens a browser. Verified against a fresh clone on bare `python3` 3.11.
+  pytest is a test dependency, not a runtime one.

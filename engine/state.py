@@ -353,10 +353,18 @@ class RiftboundState:
         """
         card = self.db[ref.card_id]
         assault = card.assault
+        shield = card.shield
+        # 807.2 / 814.2 -- granted instances sum with the printed one.
         for name, value, _duration in ref.granted_keywords:
             if name == "Assault":
                 assault += value
-        bonus = assault if ref.is_attacker else 0
+            elif name == "Shield":
+                shield += value
+        # 807.1.c / 814.1.c -- Assault applies while attacking, Shield while
+        # defending. A unit is never both, so these never stack.
+        bonus = (assault if ref.is_attacker else 0) + (
+            shield if ref.is_defender else 0
+        )
         # 718.4 / 137.3 -- an Attached card modulates the Top-Most card's
         # Might by its printed *Might Bonus*, which is not the card's `might`
         # field: B.F. Sword prints "+3 Might" and carries might 0. Using the
@@ -1175,18 +1183,30 @@ class RiftboundState:
         defenders = self.units_at(location, combat.defender)
 
         if attackers and defenders:
-            # 466.2 -- both sides remain, attackers are recalled (454).
+            # 466.1.a.2 (step 3d) -- both sides remain, attackers are Recalled
+            # (454), which makes the result "No Result" (466.3.d).
             for ref in attackers:
                 ref.location = BASE_LOCATION
                 ref.is_attacker = False
             self._emit("Attackers are recalled")
-        elif attackers and not defenders:
-            # 466.3 -- battlefield is Conquered; control changes hands.
-            bf.controller = combat.attacker
-            self._emit(f"P{combat.attacker} conquers {self.db[bf.card_id].name}")
-            self._score(combat.attacker, bf, "Conquer")
+        elif attackers or defenders:
+            # 466.5 -- the player with Units remaining Establishes Control if
+            # they did not already hold this battlefield. 466.5.e is explicit
+            # that this need not be the player who applied Contested: a
+            # defender who wipes out the attack takes the battlefield too.
+            survivor = combat.attacker if attackers else combat.defender
+            if bf.controller != survivor:
+                bf.controller = survivor
+                self._emit(f"P{survivor} conquers {self.db[bf.card_id].name}")
+                self._score(survivor, bf, "Conquer")  # 466.5.d
+        else:
+            # 466.5.b -- nobody is left here, so the battlefield becomes
+            # Uncontrolled rather than staying with its previous holder.
+            if bf.controller is not None:
+                self._emit(f"{self.db[bf.card_id].name} becomes uncontrolled")
+                bf.controller = None
 
-        bf.contested = False  # 466.4
+        bf.contested = False  # 466.5.a
         bf.contested_by = None
         for ref in self.cards.values():  # 466.5 -- clear all marked damage
             ref.damage = 0

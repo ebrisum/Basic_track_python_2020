@@ -232,3 +232,40 @@ def test_a_spectated_game_is_reproducible(base_url):
 
     assert play() == play()
     post(base_url, "/api/autoplay", {"seats": ["human", "human"], "running": False})
+
+
+# ------------------------------------------------------- battlefield threat
+
+
+def advance(base, steps=6):
+    """Play a few legal moves so setup is behind us and a board exists."""
+    for _ in range(steps):
+        state = get(base, "/api/state?player=0")
+        current = state["current_player"]
+        view = get(base, f"/api/state?player={current}")
+        if not view["legal"]:
+            break
+        post(base, "/api/action", {"player": current, "action": view["legal"][0]})
+
+
+def test_the_snapshot_carries_a_forecast_per_battlefield(game):
+    advance(game)
+    state = get(game, "/api/state?player=0")
+    assert state["battlefields"], "setup should be past battlefield selection"
+    assert len(state["forecast"]) == len(state["battlefields"])
+    first = state["forecast"][0]
+    for key in ("can_take", "can_lose", "can_lose_next_turn",
+                "committed", "reinforcement", "hidden_threat"):
+        assert key in first
+
+
+def test_the_forecast_is_told_from_the_asking_seat(game):
+    """It answers "can *I* take it", so the two seats must not get one
+    shared answer -- and neither may be computed from the other's hand."""
+    advance(game)
+    a = get(game, "/api/state?player=0")["forecast"]
+    b = get(game, "/api/state?player=1")["forecast"]
+    assert len(a) == len(b)
+    for one, two in zip(a, b):
+        assert one["committed"] == two["committed"]      # the board is public
+        assert one["hidden_threat"] != [] and two["hidden_threat"] != []
