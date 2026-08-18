@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from agents.greedy_agent import GreedyAgent  # noqa: E402
 from agents.random_agent import RandomAgent  # noqa: E402
-from analysis.benchmark import duel  # noqa: E402
+from analysis.benchmark import duel, mirror_field  # noqa: E402
 from analysis.evaluation import Model, load_model  # noqa: E402
 from analysis.ladder import League, elo_from_score, elo_interval  # noqa: E402
 from cards.database import load as load_db  # noqa: E402
@@ -39,12 +39,23 @@ def make(model: Model | None):
 
 def rate(model: Model, league: League, games: int, base_seed: int, decks, db,
          label: str = "model") -> dict:
-    """Play `model` against every gauntlet entry; return per-opponent results."""
+    """Play `model` against every gauntlet entry; return per-opponent results.
+
+    Mirror matchups: this compares two agents, and the decks are far louder
+    than the agents are -- volibear beats jinx about 85-15 with the same agent
+    on both sides. Rating across mismatched decks measures deck assignment.
+    """
+    field = mirror_field(list(decks))
     rows = []
     for name, opponent in league.gauntlet():
-        score, wins, losses, draws = duel(
-            make(model), make(opponent), games, base_seed, decks, db
-        )
+        wins = losses = draws = 0
+        for i in range(games):
+            pair = field[i % len(field)]
+            _, w, l, d = duel(make(model), make(opponent), 1,
+                              base_seed + i, pair, db, start_index=i)
+            wins, losses, draws = wins + w, losses + l, draws + d
+        played = wins + losses + draws
+        score = (wins + 0.5 * draws) / played if played else float("nan")
         low, high = elo_interval(score, games)
         rows.append({
             "opponent": name,
@@ -85,7 +96,9 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     db = load_db()
-    decks = (load_deck(args.deck0), load_deck(args.deck1))
+    from engine.setup import available_decks
+
+    decks = tuple(load_deck(slug) for slug in available_decks())
     league = League()
 
     if not league.generations():
