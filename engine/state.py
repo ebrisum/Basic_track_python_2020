@@ -454,6 +454,34 @@ class RiftboundState:
                 attached += profile.might_bonus
         return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
 
+    def stun(self, ref: CardRef) -> bool:
+        """423 -- Stun a unit. Returns whether the status actually changed.
+
+        423.1.a.1: a Stunned unit cannot be Stunned again, and the return
+        value is why that matters -- "when you stun an enemy unit" triggers
+        must not fire on a unit that was already stunned.
+        """
+        if ref.stunned or self.db[ref.card_id].type != "unit":
+            return False
+        ref.stunned = True
+        self._emit(f"{self.db[ref.card_id].name} is stunned")
+        return True
+
+    def combat_might(self, player: int, location: str) -> int:
+        """465.2.c -- the Might a side contributes as combat damage.
+
+        423.1.b: "A Stunned Unit does not contribute its might to damage in
+        the combat damage step." Deliberately not folded into `might_of`: the
+        rule is about contributing damage, not about being easier to kill, so
+        a stunned unit still has its full Might when lethal damage is checked
+        against it.
+        """
+        return sum(
+            self.might_of(ref)
+            for ref in self.units_at(location, player)
+            if not ref.stunned
+        )
+
     def _has_lethal(self, ref: CardRef) -> bool:
         """142.4.a -- lethal damage is nonzero damage >= Might."""
         return ref.damage > 0 and ref.damage >= self.might_of(ref)
@@ -1050,6 +1078,9 @@ class RiftboundState:
         """317, then the turn passes (306). Turn-scoped modifiers expire."""
         for ref in self.cards.values():
             ref.might_this_turn = 0
+            # 423.1.a.2 -- Stunned is lost during step 3d, which 317.2.c makes
+            # the same moment every other "this turn" effect expires.
+            ref.stunned = False
             ref.granted_keywords = tuple(
                 g for g in ref.granted_keywords if g[2] != Duration.THIS_TURN.value
             )
@@ -1266,9 +1297,7 @@ class RiftboundState:
         assert self.combat is not None
         combat = self.combat
         location = bf_location(combat.battlefield)
-        attack_might = sum(
-            self.might_of(r) for r in self.units_at(location, combat.attacker)
-        )
+        attack_might = self.combat_might(combat.attacker, location)
         combat.assigning = combat.attacker
         combat.remaining = attack_might
         self.phase = Phase.COMBAT_ASSIGN
@@ -1282,9 +1311,7 @@ class RiftboundState:
         location = bf_location(combat.battlefield)
         if combat.assigning == combat.attacker and not combat.defender_assigned:
             combat.attacker_assigned = True
-            defend_might = sum(
-                self.might_of(r) for r in self.units_at(location, combat.defender)
-            )
+            defend_might = self.combat_might(combat.defender, location)
             combat.assigning = combat.defender
             combat.remaining = defend_might
             self._current_player = combat.defender

@@ -47,6 +47,7 @@ class VisibleCard:
     granted_keywords: tuple[tuple[str, int, str], ...]
     is_attacker: bool
     is_defender: bool
+    stunned: bool          # 423 -- contributes no Might to combat damage
 
 
 @dataclass(frozen=True)
@@ -131,6 +132,7 @@ class RiftboundObservation:
                 granted_keywords=ref.granted_keywords,
                 is_attacker=ref.is_attacker,
                 is_defender=ref.is_defender,
+                stunned=ref.stunned,
             )
 
         # Everything on the board is public (107.1.d, 107.2.c).

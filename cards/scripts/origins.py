@@ -30,6 +30,7 @@ from cards.dsl import (
     RecycleFromTrash,
     ReturnToHand,
     Selector,
+    Stun,
     TriggerKind,
     UnitsEnterReady,
     Who,
@@ -248,6 +249,27 @@ SCRIPTS: tuple[CardScript, ...] = (
                 costs=(ExhaustSelf(),),
                 effects=(AddPower("Chaos", 1),),
                 text="Exhaust: REACTION - ADD chaos.",
+            ),
+        ),
+    ),
+    # --- 423 Stun ----------------------------------------------------------
+    CardScript(
+        card_id="OGN-050",  # Rune Prison
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_RESOLVE,
+                effects=(Stun(),),
+                text="Stun a unit.",
+            ),
+        ),
+    ),
+    CardScript(
+        card_id="OGN-051",  # Solari Shieldbearer
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_PLAY,
+                effects=(Stun(),),
+                text="When you play me, stun a unit.",
             ),
         ),
     ),

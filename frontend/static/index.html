@@ -85,6 +85,7 @@
   .b.might{color:var(--good)} .b.dmg{color:var(--bad)} .b.buff{color:var(--accent)}
   .b.inert{color:var(--warn);border-color:var(--warn)}
   .b.gear{color:var(--matline);border-color:var(--matline)}
+  .b.stun{color:#9fb3ff;border-color:#9fb3ff}
   /* An Attached card rides its host (719.3), so it is drawn tucked behind it
      rather than as a loose card in the base. */
   .host{display:flex;align-items:flex-start}
@@ -294,6 +295,7 @@ function cardEl(c, opts = {}){
   if (c.is_equipment && c.might_bonus !== null && c.might_bonus !== undefined)
     badges.push(`<span class="b buff">${c.might_bonus>=0?"+":""}${c.might_bonus}⚔</span>`);
   if (c.attached_to) badges.push(`<span class="b gear" title="Attached (718)">equipped</span>`);
+  if (c.stunned) badges.push(`<span class="b stun" title="Stunned (423) — deals no combat damage this turn">stunned</span>`);
   (c.granted_keywords||[]).forEach(([n,v]) => badges.push(`<span class="b buff">${esc(n)}${v?" "+v:""}</span>`));
   if (c.rules_text && !c.text_implemented)
     badges.push(`<span class="b inert" title="${esc(c.script_note||"Text not executed — RQ-5")}">inert</span>`);

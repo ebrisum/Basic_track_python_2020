@@ -460,3 +460,42 @@ def test_a_detached_gear_waits_at_the_battlefield_until_cleanup(decks):
     assert state.cards[gear].location == bf_location(0)   # still there
     state._cleanup()
     assert state.cards[gear].location == BASE_LOCATION    # 457.1
+
+
+def test_rune_prison_stuns_a_unit(decks):
+    """OGN-050: "Stun a unit." (423) -- and the reminder text spells out why
+    it matters: "It doesn't deal combat damage this turn."."""
+    state = arena(decks)
+    victim = put_unit(state, 1, "OGN-175", BASE_LOCATION)
+    spell = give(state, 0, "OGN-050")
+    play(state, spell)
+    if state.phase is Phase.CHOOSING:
+        state.apply(ChooseTarget(victim))
+    pass_until_resolved(state)
+    assert state.cards[victim].stunned is True
+
+
+def test_solari_shieldbearer_stuns_when_played(decks):
+    """OGN-051: "When you play me, stun a unit."."""
+    state = arena(decks)
+    victim = put_unit(state, 1, "OGN-175", BASE_LOCATION)
+    unit = give(state, 0, "OGN-051")
+    play(state, unit)
+    if state.phase is Phase.CHOOSING:
+        state.apply(ChooseTarget(victim))
+    pass_until_resolved(state)
+    assert state.cards[victim].stunned is True
+
+
+def test_a_stunned_unit_deals_no_combat_damage(decks):
+    """423.1.b end to end: the stunned unit still stands, but contributes
+    nothing to its side's combat damage."""
+    from engine.state import bf_location
+
+    state = arena(decks)
+    location = bf_location(0)
+    mine = put_unit(state, 0, "OGN-142", location)
+    assert state.combat_might(0, location) > 0
+    state.stun(state.cards[mine])
+    assert state.combat_might(0, location) == 0
+    assert state.cards[mine].location == location    # still there

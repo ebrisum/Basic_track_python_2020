@@ -26,6 +26,7 @@ from cards.dsl import (
     Duration,
     Effect,
     Exhaust,
+    Stun,
     GainPoints,
     GrantKeyword,
     Kill,
@@ -316,6 +317,17 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _stun(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """423 -- Stun each chosen unit. 423.1.a.1 makes it a no-op on a unit
+    that is already stunned."""
+    ids, request = _targets(state, effect.selector, ctx, "Stun")
+    if request:
+        return request
+    for instance_id in ids:
+        state.stun(state.cards[instance_id])
+    return None
+
+
 def _exhaust(state, effect: Exhaust, ctx: EffectContext) -> ChoiceRequest | None:
     ids, request = _targets(state, effect.selector, ctx, "Exhaust")
     if request:
@@ -360,6 +372,7 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    Stun: _stun,
     Exhaust: _exhaust,
     Ready: _ready,
     GainPoints: _gain_points,

@@ -52,6 +52,9 @@ class CardRef:
     damage: int = 0  # 142, marked damage
     is_attacker: bool = False  # 464.2.c.3
     is_defender: bool = False
+    # 423 -- a binary status. A Stunned unit contributes no Might to combat
+    # damage (423.1.b) and loses the status at end of turn (423.1.a.2).
+    stunned: bool = False
     # Damage marked this combat is cleared in the Resolution Step (466).
     # Might modifiers (426 Buff, 701). Turn-scoped ones clear in the Ending
     # Phase; permanent ones persist while the object stays on the board.

@@ -168,3 +168,64 @@ def test_no_player_has_focus_in_a_neutral_state(decks):
     state = arena(decks)
     assert state.showdown is None
     assert state.focus is None
+
+
+# --- 423 Stun --------------------------------------------------------------
+
+
+def put_unit(state, player, card_id, location="base"):
+    from engine.zones import CardRef
+
+    instance_id = max(state.cards) + 1
+    state.cards[instance_id] = CardRef(
+        instance_id=instance_id, card_id=card_id, owner=player,
+        controller=player, location=location,
+    )
+    state.players[player].base.append(instance_id)
+    return instance_id
+
+
+def test_a_stunned_unit_contributes_no_might_to_combat_damage(decks):
+    """423.1.b -- "A Stunned Unit does not contribute its might to damage in
+    the combat damage step." The whole point of the status."""
+    from engine.state import bf_location
+
+    state = arena(decks)
+    attacker = state.turn_player
+    location = bf_location(0)
+    strong = put_unit(state, attacker, "OGN-142", location)   # 10 Might
+
+    assert state.combat_might(attacker, location) == state.might_of(
+        state.cards[strong]
+    )
+    state.cards[strong].stunned = True
+    assert state.combat_might(attacker, location) == 0
+
+
+def test_stun_does_not_change_a_units_might_for_lethal_damage(decks):
+    """423.1.b is about *contributing* damage. It does not say a stunned unit
+    is easier to kill, so its Might is unchanged everywhere else."""
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    before = state.might_of(state.cards[unit])
+    state.cards[unit].stunned = True
+    assert state.might_of(state.cards[unit]) == before
+
+
+def test_a_stunned_unit_cannot_be_stunned_again(decks):
+    """423.1.a.1 -- and the reason it matters: "when you stun an enemy unit"
+    triggers must not fire on a unit that was already stunned."""
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    assert state.stun(state.cards[unit]) is True
+    assert state.stun(state.cards[unit]) is False
+
+
+def test_stun_expires_at_the_end_of_the_turn(decks):
+    """423.1.a.2 -- lost during step 3d of the end of turn cleanup, which
+    317.2.c places alongside every other "this turn" expiry."""
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    state.cards[unit].stunned = True
+    state._phase_ending()
+    assert state.cards[unit].stunned is False

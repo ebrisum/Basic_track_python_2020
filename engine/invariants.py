@@ -113,6 +113,15 @@ def check(state) -> list[str]:
                 f"{ref.location!r}, away from the combat at {location!r} "
                 f"(323.2.c)")
 
+    # --- 423 Stun -----------------------------------------------------------
+    for ref in state.cards.values():
+        if not ref.stunned:
+            continue
+        if ref.location is None:
+            say(f"card {ref.instance_id} is stunned but not on the board (423.1)")
+        elif state.db[ref.card_id].type != "unit":
+            say(f"card {ref.instance_id} is stunned but is not a unit (423.1)")
+
     # --- 190 Control --------------------------------------------------------
     for bf in state.battlefields:
         if bf.controller not in (None, 0, 1):

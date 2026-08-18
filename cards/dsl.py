@@ -172,6 +172,16 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class Stun(Effect):
+    """423 Stun -- a binary status; a stunned unit contributes no Might to
+    combat damage (423.1.b) and loses the status at end of turn (423.1.a.2)."""
+
+    selector: Selector = field(
+        default_factory=lambda: Selector(controller="enemy", type="unit")
+    )
+
+
+@dataclass(frozen=True)
 class Exhaust(Effect):
     """414 Exhaust."""
 
