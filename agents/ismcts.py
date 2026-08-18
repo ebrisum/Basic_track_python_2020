@@ -55,6 +55,9 @@ def value_for(value: float, player: int, scored_for: int) -> float:
     return value if player == scored_for else 1.0 - value
 DEFAULT_EXPLORATION = 1.2
 DEFAULT_DEPTH = 12
+# Virtual visits given to a freshly expanded node, carrying the evaluation of
+# the position it leads to. 0 disables the prior. See `ISMCTSAgent`.
+DEFAULT_PRIOR = 0
 
 
 @dataclass
@@ -112,11 +115,19 @@ class ISMCTSAgent:
         model: Model | None = None,
         exploration: float = DEFAULT_EXPLORATION,
         depth: int = DEFAULT_DEPTH,
+        prior: int = DEFAULT_PRIOR,
     ) -> None:
         self.seed = seed
         self.iterations = iterations
         self.exploration = exploration
         self.depth = depth
+        # `prior` seeds each new node with the evaluation of the position it
+        # leads to, worth this many virtual visits. With a 60-iteration budget
+        # spread over a dozen legal actions, most nodes are decided on one or
+        # two samples of a noisy estimate; a prior starts the search from what
+        # the evaluation already knows and makes it earn any departure. Costs
+        # one extra `evaluate` per expansion, so it is off until measured.
+        self.prior = prior
         self.model = model or load_model()
         self._rng = random.Random(seed)
 
@@ -163,6 +174,7 @@ class ISMCTSAgent:
             for other in legal:                       # availability bookkeeping
                 other_key = repr(other)
                 node.availability[other_key] = node.availability.get(other_key, 0) + 1
+            fresh = key not in node.children
             child = node.children.setdefault(key, Node())
             path.append((child, key, mover))
 
@@ -170,6 +182,13 @@ class ISMCTSAgent:
                 state.apply(action)
             except Exception:
                 break
+            if fresh and self.prior:
+                seed_value = (
+                    state.returns()[me] if state.is_terminal()
+                    else evaluate(state, me, self.model)
+                )
+                child.visits += self.prior
+                child.total_value += self.prior * value_for(seed_value, mover, me)
             node = child
 
         value = (

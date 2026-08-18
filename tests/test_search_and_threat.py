@@ -286,3 +286,36 @@ def test_opponent_nodes_are_scored_from_the_opponents_side(decks, monkeypatch):
         "no node was scored from the opponent's side, so opponent decisions "
         "are still being selected to maximise the searcher's value"
     )
+
+
+def test_a_prior_seeds_a_new_node_with_the_evaluation(decks, monkeypatch):
+    """With a 60-iteration budget spread over a dozen actions, most nodes are
+    decided on one or two samples. A prior starts them from what the
+    evaluation already knows; search then has to earn any departure from it."""
+    import agents.ismcts as ismcts
+
+    monkeypatch.setattr(ismcts, "evaluate", lambda state, player, model: 0.8)
+    state = midgame(decks, seed=4, steps=70)
+    if state.is_terminal():
+        pytest.skip("game ended before a midgame position was reached")
+
+    plain = ismcts.ISMCTSAgent(1, iterations=1, model=load_model(), prior=0)
+    seeded = ismcts.ISMCTSAgent(1, iterations=1, model=load_model(), prior=3)
+
+    def visits(agent):
+        root = ismcts.Node()
+        agent._iterate(root, ismcts.determinize(state, state.current_player,
+                                                agent._rng),
+                       state.current_player)
+        return max(c.visits for c in root.children.values())
+
+    assert visits(seeded) == visits(plain) + 3
+
+
+def test_the_prior_is_off_by_default():
+    """It costs an extra evaluate per expansion, so it ships measured or not
+    at all."""
+    from agents.ismcts import DEFAULT_PRIOR, ISMCTSAgent
+
+    assert DEFAULT_PRIOR == 0
+    assert ISMCTSAgent(1).prior == 0
