@@ -234,12 +234,26 @@ let S = null;
 const viewAs = () => parseInt($("viewAs").value, 10);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 async function api(p,o){ return (await fetch(p,o)).json(); }
-async function refresh(){ S = await api(`/api/state?player=${viewAs()}`); render(); }
+/* Re-render only when something actually changed.
+
+   The page polls, and a full re-render rebuilds every card element -- so a
+   button could vanish from under the cursor between mousedown and mouseup
+   while nothing about the game had moved. Comparing the payload first keeps
+   the DOM still while the game is still. */
+let lastPayload = null;
+async function refresh(force){
+  const next = await api(`/api/state?player=${viewAs()}`);
+  const encoded = JSON.stringify(next);
+  if (!force && encoded === lastPayload) return;
+  lastPayload = encoded;
+  S = next;
+  render();
+}
 async function act(r){
   const res = await api("/api/action",{method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({player:viewAs(),action:r})});
   if (res.error) banner(res.error,"warn");
-  await refresh();
+  await refresh(true);
 }
 function banner(t,k){ $("banner").innerHTML = `<div class="banner ${k||""}">${t}</div>`; }
 const legal = p => (S.legal||[]).filter(p);
@@ -726,7 +740,7 @@ $("newGame").onclick=async()=>{
   if(r.error) return banner(r.error,"warn");
   await refresh();
 };
-$("viewAs").onchange=refresh;
+$("viewAs").onchange=()=>refresh(true);
 
 // ------------------------------------------------------------- spectator
 async function pushConfig(extra){
