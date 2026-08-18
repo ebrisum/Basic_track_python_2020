@@ -1006,15 +1006,39 @@ class RiftboundState:
 
     def _phase_draw(self) -> None:
         """315.4 -- draw 1; an empty deck is a Burn Out (431)."""
-        state = self.players[self.turn_player]
-        if not state.main_deck:
-            # 431 -- Burn Out. APPROX: the opponent gains 1 point (194.1.d)
-            # without the choice the rule implies. See RQ-8.
-            opponent = self.opponent(self.turn_player)
-            self.players[opponent].points += 1
-            self._emit(f"P{self.turn_player} burns out; P{opponent} +1 point")
-            return
-        self._draw(self.turn_player, 1)
+        if not self.players[self.turn_player].main_deck:
+            self._burn_out(self.turn_player)
+        self._draw(self.turn_player, 1)   # 431.2.d / 315.4.b.2
+
+    def _burn_out(self, player: int) -> None:
+        """431.2 -- the four steps, in sequence.
+
+        Only 431.2.c was implemented, so a player whose deck ran out gave up a
+        point and then stayed permanently deckless: the trash was never
+        recycled and the draw that caused it never happened. A burned-out
+        player could not draw again for the rest of the game.
+
+        431.2.a is implicit here -- the caller has already done as much of the
+        prescribed action as it could, which for an empty deck is nothing.
+        """
+        state = self.players[player]
+
+        # 431.2.b -- recycle the trash into the Main Deck, randomized.
+        recycled = len(state.trash)
+        if recycled:
+            returning = list(state.trash)
+            state.trash.clear()
+            self._rng.shuffle(returning)
+            state.main_deck.extend(returning)
+
+        # 431.2.c -- choose an opponent to gain 1 point. With one opponent
+        # there is no choice to make (485 is a two-player mode).
+        opponent = self.opponent(player)
+        self.players[opponent].points += 1
+        self._emit(
+            f"P{player} burns out: recycles {recycled} card(s), "
+            f"P{opponent} +1 point"
+        )
 
     def _phase_main_start(self) -> None:
         """316.3 -- rune pools empty; unspent Energy and Power are lost."""
@@ -1030,6 +1054,12 @@ class RiftboundState:
                 g for g in ref.granted_keywords if g[2] != Duration.THIS_TURN.value
             )
         self.units_enter_ready.clear()
+        # 167 -- "at the start of each player's Main Phase **and the end of
+        # each player's turn**". Only the first half was implemented, so power
+        # survived into the opponent's Awaken, Beginning, Channel and Draw
+        # phases, where Reactions can be played with it.
+        for zones in self.players:
+            zones.pool.clear()
         self.turn_player = self.opponent(self.turn_player)
         self.turn_number += 1
         self._current_player = self.turn_player

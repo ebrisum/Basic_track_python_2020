@@ -229,6 +229,25 @@ changed, and that change is what needs justifying — regenerating destroys the
 only signal the harness produces. Real Rift Atlas games drop in as-is and are
 never regenerated.
 
+There is one narrower case that is not that, and it has its own tool:
+
+```sh
+.venv/bin/python tests/replays/repair.py            # inspect
+.venv/bin/python tests/replays/repair.py --apply    # update moved hashes only
+```
+
+`repair.py` handles a *justified* engine change where the recorded actions are
+all still legal, the game still ends the same way, and only stored hashes
+moved. It refuses everything else — an action that is no longer legal, or an
+outcome that changed, is a real regression and it says so instead of papering
+over it.
+
+Regenerating is worse than it looks in this case. When the rune-pool fix (167)
+changed which actions were legal, regenerating from the seed turned a
+352-step recorded game into a *different* 290-step one, discarding the longer
+fixture; repairing moved exactly one hash in each file and kept both games
+intact.
+
 ## Running a batch
 
 ```python

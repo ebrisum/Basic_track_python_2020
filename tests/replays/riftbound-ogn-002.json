@@ -1764,7 +1764,7 @@
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "c56be311287c2492"
+      "expected_state_hash": "5cba2e5c6395d268"
     }
   ],
   "final_returns": [
