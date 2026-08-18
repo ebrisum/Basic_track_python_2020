@@ -16,7 +16,14 @@ import pytest
 
 from agents.ismcts import ISMCTSAgent, Node, determinize
 from agents.random_agent import RandomAgent
-from analysis.evaluation import FEATURE_NAMES, DEFAULT_WEIGHTS, Model, evaluate, features
+from analysis.evaluation import (
+    DEFAULT_WEIGHTS,
+    FEATURE_NAMES,
+    Model,
+    evaluate,
+    features,
+    load_model,
+)
 from cards.database import load as load_db
 from engine.setup import build_state, load_deck
 from engine.state import VICTORY_SCORE, Phase
@@ -217,3 +224,65 @@ def test_ismcts_takes_the_win_when_it_is_available(decks):
             break
         state.apply(agent.act(state))
     assert state.is_terminal() and state.winner == player
+
+
+# --- MCTS backup perspective ------------------------------------------------
+
+
+def test_value_for_flips_perspective_for_the_other_seat():
+    """`evaluate` is antisymmetric, so the other seat's valuation is 1 - v."""
+    from agents.ismcts import value_for
+
+    assert value_for(0.7, player=0, scored_for=0) == pytest.approx(0.7)
+    assert value_for(0.7, player=1, scored_for=0) == pytest.approx(0.3)
+    assert value_for(0.5, player=1, scored_for=0) == pytest.approx(0.5)
+
+
+def test_opponent_nodes_are_scored_from_the_opponents_side(decks, monkeypatch):
+    """The bug this guards: every node used to be backed up from the
+    searching player's point of view, so nodes where the *opponent* chooses
+    were selected to maximise the searcher's value -- the search assumed the
+    opponent would help it. More iterations then bought a more confidently
+    wrong plan, and ISMCTS(60) scored 0.350 (14-26) against the very greedy
+    agent it is built on.
+
+    Pinned by fixing the leaf value at a lopsided constant and walking the
+    tree: every node must hold a multiple of that value or of its complement,
+    and at least one opponent-move node must hold the complement.
+    """
+    import agents.ismcts as ismcts
+
+    leaf = 0.8
+    monkeypatch.setattr(ismcts, "evaluate", lambda state, player, model: leaf)
+
+    state = midgame(decks, seed=4, steps=70)
+    if state.is_terminal():
+        pytest.skip("game ended before a midgame position was reached")
+
+    agent = ismcts.ISMCTSAgent(1, iterations=120, model=load_model())
+    root = ismcts.Node()
+    for _ in range(agent.iterations):
+        agent._iterate(root, ismcts.determinize(state, state.current_player,
+                                                agent._rng),
+                       state.current_player)
+
+    seen_complement = False
+    stack = list(root.children.values())
+    while stack:
+        node = stack.pop()
+        if node.visits:
+            mine = abs(node.value() - leaf) < 1e-9
+            theirs = abs(node.value() - (1 - leaf)) < 1e-9
+            # A node can mix perspectives only if the same action key is
+            # reached with different players to move, which the engine's
+            # action vocabulary does not do at these depths.
+            assert mine or theirs, (
+                f"node value {node.value():.3f} is neither {leaf} nor "
+                f"{1 - leaf}: the backup is not using a consistent side"
+            )
+            seen_complement |= theirs
+        stack.extend(node.children.values())
+    assert seen_complement, (
+        "no node was scored from the opponent's side, so opponent decisions "
+        "are still being selected to maximise the searcher's value"
+    )
