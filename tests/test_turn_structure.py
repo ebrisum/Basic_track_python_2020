@@ -371,3 +371,76 @@ def test_boneshiver_channels_a_rune_exhausted_on_conquer(decks):
     fresh = state.players[player].channeled_runes[before:]
     assert len(fresh) == 1
     assert state.cards[fresh[0]].exhausted is True
+
+
+# --- 179-187 / 439 Tokens ---------------------------------------------------
+
+
+def test_a_created_token_is_a_token_and_enters_exhausted(decks):
+    """439 / 143.4 -- a unit token enters exhausted like any other unit,
+    unless the creating effect says otherwise (184.1)."""
+    from cards.tokens import RECRUIT
+
+    state = arena(decks)
+    player = state.turn_player
+    token = state.create_token(RECRUIT, player)
+    ref = state.cards[token]
+    assert ref.is_token is True
+    assert ref.owner == player and ref.controller == player   # 182 / 183
+    assert ref.exhausted is True
+    assert state.db[ref.card_id].might == 1
+
+
+def test_a_creating_effect_can_bring_a_token_in_ready(decks):
+    """184.1 -- "The effect may state that the token enters ready"."""
+    from cards.tokens import SPRITE
+
+    state = arena(decks)
+    token = state.create_token(SPRITE, state.turn_player, exhausted=False)
+    assert state.cards[token].exhausted is False
+
+
+def test_a_killed_token_ceases_to_exist_rather_than_going_to_the_trash(decks):
+    """186.1 -- "If a token is put into any Non-Board Zone besides the chain,
+    it ceases to exist immediately after moving to its new zone." """
+    from cards.tokens import RECRUIT
+
+    state = arena(decks)
+    player = state.turn_player
+    token = state.create_token(RECRUIT, player)
+    trash_before = len(state.players[player].trash)
+
+    state._kill(state.cards[token])
+    assert token not in state.cards, "the token instance should be gone"
+    assert len(state.players[player].trash) == trash_before
+    assert token not in state.players[player].base
+
+
+def test_tokens_do_not_break_card_conservation(decks):
+    """A token is created, not dealt, so it must not read as a card that
+    appeared from nowhere."""
+    from cards.tokens import RECRUIT
+
+    from engine.invariants import check
+
+    state = arena(decks)
+    assert check(state) == []
+    state.create_token(RECRUIT, state.turn_player)
+    assert check(state) == []
+
+
+def test_faithful_manufactor_creates_a_recruit_where_it_is_played(decks):
+    """OGN-211 end to end: "play a 1 Might Recruit unit token here"."""
+    from cards.tokens import RECRUIT
+
+    state = arena(decks)
+    player = state.turn_player
+    source = put_unit(state, player, "OGN-211")
+    before = {i for i in state.cards}
+    state._fire(__import__("cards.dsl", fromlist=["TriggerKind"]).TriggerKind.ON_PLAY,
+                source)
+    state._resolve_effects()
+    fresh = [i for i in state.cards if i not in before]
+    assert len(fresh) == 1
+    assert state.cards[fresh[0]].card_id == RECRUIT
+    assert state.cards[fresh[0]].is_token is True

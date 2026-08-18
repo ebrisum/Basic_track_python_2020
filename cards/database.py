@@ -172,9 +172,20 @@ class CardDatabase:
         return self
 
     def __getitem__(self, card_id: str) -> CardData:
+        # 185 -- tokens are not cards, so they are not in cards.json; 187
+        # defines them by characteristics instead. They resolve here so every
+        # caller can treat a token instance like any other game object.
+        from cards.tokens import TOKENS
+
+        if card_id in TOKENS:
+            return TOKENS[card_id]
         return self.cards[card_id]
 
     def get(self, card_id: str) -> CardData | None:
+        from cards.tokens import TOKENS
+
+        if card_id in TOKENS:
+            return TOKENS[card_id]
         return self.cards.get(card_id)
 
     def __contains__(self, card_id: str) -> bool:

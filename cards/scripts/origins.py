@@ -11,6 +11,7 @@ Ganking) are not repeated here; they are parsed from printed text by
 
 from __future__ import annotations
 
+from cards.tokens import RECRUIT, SPRITE
 from cards.dsl import (
     SELF,
     Ability,
@@ -19,6 +20,7 @@ from cards.dsl import (
     Buff,
     CardScript,
     Channel,
+    CreateToken,
     Deal,
     Discard,
     DiscardCost,
@@ -251,6 +253,28 @@ SCRIPTS: tuple[CardScript, ...] = (
                 costs=(ExhaustSelf(),),
                 effects=(AddPower("Chaos", 1),),
                 text="Exhaust: REACTION - ADD chaos.",
+            ),
+        ),
+    ),
+    # --- 439 Tokens ---------------------------------------------------------
+    CardScript(
+        card_id="OGN-211",  # Faithful Manufactor
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_PLAY,
+                effects=(CreateToken(token=RECRUIT, count=1, where="here"),),
+                text="When you play me, play a 1 Might Recruit unit token here.",
+            ),
+        ),
+    ),
+    CardScript(
+        card_id="OGN-106",  # Sprite Mother
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_PLAY,
+                effects=(CreateToken(token=SPRITE, count=1, exhausted=False),),
+                text="When you play me, play a ready 3 Might Sprite unit token "
+                     "with TEMPORARY.",
             ),
         ),
     ),

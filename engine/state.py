@@ -1183,6 +1183,12 @@ class RiftboundState:
         # They are not sent home here: an Equipment whose host died at a
         # battlefield stays there until 457.1 recalls it at the next Cleanup,
         # which is a window other effects can see.
+        if ref.is_token:
+            # 186.1 -- a token put into a non-board zone ceases to exist, so
+            # it never reaches the trash.
+            self._emit(f"{self.db[ref.card_id].name} is killed")
+            self.cease_to_exist(ref)
+            return
         state = self.players[ref.controller]
         if ref.instance_id in state.base:
             state.base.remove(ref.instance_id)
@@ -1190,6 +1196,54 @@ class RiftboundState:
         ref.damage = 0
         self.players[ref.owner].trash.append(ref.instance_id)
         self._emit(f"{self.db[ref.card_id].name} is killed")
+
+    def create_token(self, card_id: str, controller: int,
+                     location: str = BASE_LOCATION,
+                     exhausted: bool | None = None) -> int:
+        """439 -- produce a Game Object that did not exist before.
+
+        182/183: the token's controller and owner are both the controller of
+        the effect that created it. 184.1: the effect may say it enters ready
+        or exhausted; `None` means the default for its type, which for a unit
+        is exhausted (143.4). 184.2: the effect may restrict where it enters.
+        """
+        card = self.db[card_id]
+        instance_id = (max(self.cards) + 1) if self.cards else 1
+        if exhausted is None:
+            exhausted = card.type == "unit"
+        ref = CardRef(
+            instance_id=instance_id,
+            card_id=card_id,
+            owner=controller,
+            controller=controller,
+            location=location,
+            exhausted=exhausted,
+            is_token=True,
+        )
+        self.cards[instance_id] = ref
+        self.players[controller].base.append(instance_id)
+        self._emit(
+            f"P{controller} creates a {card.name} token"
+            + (" exhausted" if exhausted else " ready")
+        )
+        return instance_id
+
+    def cease_to_exist(self, ref) -> None:
+        """186.1 -- a token put into any non-board zone ceases to exist.
+
+        A token does not go to the trash when it dies; it is simply gone. The
+        instance is dropped entirely, so nothing can later refer to it and the
+        card-conservation invariant does not count it as a lost card.
+        """
+        self.leave_board(ref)
+        for zones in self.players:
+            for contents in (zones.base, zones.channeled_runes, zones.hand,
+                             zones.trash, zones.main_deck, zones.rune_deck,
+                             zones.banishment, zones.champion_zone):
+                if ref.instance_id in contents:
+                    contents.remove(ref.instance_id)
+        self.cards.pop(ref.instance_id, None)
+        self._emit(f"the {self.db[ref.card_id].name} token ceases to exist")
 
     def leave_board(self, ref) -> None:
         """719.5 -- a card changing from a board zone to a non-board zone.

@@ -172,6 +172,21 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class CreateToken(Effect):
+    """439 Create -- produce a token (179-187).
+
+    `where` is "base" or "here" (the battlefield the source is at, 184.2).
+    `exhausted` is 184.1: the effect may say the token enters ready or
+    exhausted, contrary to the default for its type. None means the default.
+    """
+
+    token: str = ""
+    count: int = 1
+    where: str = "base"
+    exhausted: bool | None = None
+
+
+@dataclass(frozen=True)
 class Channel(Effect):
     """430 -- take runes from the top of the Rune Deck onto the board.
 

@@ -55,6 +55,9 @@ class CardRef:
     # 423 -- a binary status. A Stunned unit contributes no Might to combat
     # damage (423.1.b) and loses the status at end of turn (423.1.a.2).
     stunned: bool = False
+    # 185 -- a token can never become a card and a card can never become a
+    # token (185.1.a/b), so this is fixed for the life of the instance.
+    is_token: bool = False
     # Damage marked this combat is cleared in the Resolution Step (466).
     # Might modifiers (426 Buff, 701). Turn-scoped ones clear in the Ending
     # Phase; permanent ones persist while the object stays on the board.

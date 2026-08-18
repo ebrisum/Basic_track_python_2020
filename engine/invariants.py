@@ -113,6 +113,21 @@ def check(state) -> list[str]:
                 f"{ref.location!r}, away from the combat at {location!r} "
                 f"(323.2.c)")
 
+    # --- 179-187 Tokens -----------------------------------------------------
+    for ref in state.cards.values():
+        if not ref.is_token:
+            continue
+        if ref.location is None:
+            say(f"token {ref.instance_id} exists off the board; 186.1 says it "
+                f"ceases to exist instead")
+        for player in (0, 1):
+            zones = _zones_of(state, player)
+            for name in ("hand", "trash", "main_deck", "rune_deck",
+                         "banishment", "champion_zone"):
+                if ref.instance_id in zones[name]:
+                    say(f"token {ref.instance_id} is in {name}; tokens cannot "
+                        f"exist in a non-board zone (186)")
+
     # --- 423 Stun -----------------------------------------------------------
     for ref in state.cards.values():
         if not ref.stunned:
@@ -161,17 +176,25 @@ def check(state) -> list[str]:
     # --- card conservation: nothing is created or destroyed -----------------
     for player in (0, 1):
         zones = _zones_of(state, player)
-        located = sum(len(contents) for contents in zones.values())
-        owned = sum(1 for ref in state.cards.values() if ref.owner == player)
+        located = sum(
+            1
+            for contents in zones.values()
+            for instance_id in contents
+            if not state.cards[instance_id].is_token
+        )
+        # 439 -- tokens are created during play, so they are not part of the
+        # dealt card count and must be excluded from both sides of it.
+        owned = sum(1 for ref in state.cards.values()
+                    if ref.owner == player and not ref.is_token)
         # A card whose controller is the opponent sits in *their* zones, so
         # counting by owner needs the ones on loan added back.
         on_loan = sum(
             1 for ref in state.cards.values()
-            if ref.owner == player and ref.controller != player
+            if ref.owner == player and ref.controller != player and not ref.is_token
         )
         borrowed = sum(
             1 for ref in state.cards.values()
-            if ref.controller == player and ref.owner != player
+            if ref.controller == player and ref.owner != player and not ref.is_token
         )
         expected = owned - on_loan + borrowed
         in_chain = sum(1 for item in state.chain

@@ -26,6 +26,7 @@ from cards.dsl import (
     Duration,
     Effect,
     Channel,
+    CreateToken,
     Exhaust,
     Stun,
     GainPoints,
@@ -318,6 +319,23 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _create_token(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """439 -- create `count` tokens for the effect's controller (182/183)."""
+    from engine.zones import BASE_LOCATION
+
+    location = BASE_LOCATION
+    if effect.where == "here" and ctx.source is not None:
+        source = state.cards.get(ctx.source)
+        # 184.2 -- "here" means where the creating card is; a card in the base
+        # creates at the base, which is the same default.
+        if source is not None and source.location:
+            location = source.location
+    for _ in range(effect.count):
+        state.create_token(effect.token, ctx.controller, location,
+                           effect.exhausted)
+    return None
+
+
 def _channel(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """430 -- channel runes, as many as the Rune Deck allows (430.3)."""
     for player in _resolve_player(effect.who, ctx.controller):
@@ -384,6 +402,7 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    CreateToken: _create_token,
     Channel: _channel,
     Stun: _stun,
     Exhaust: _exhaust,
