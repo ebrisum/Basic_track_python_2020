@@ -691,3 +691,55 @@ def test_revealing_from_an_empty_zone_does_nothing(decks):
     execute(state, Reveal(who=Who.YOU, count=1, zone="hand"),
             EffectContext(controller=player))
     assert len(state.log) == before
+
+
+# --- 416 Recycle ------------------------------------------------------------
+
+
+def test_recycling_puts_cards_on_the_bottom_of_the_main_deck(decks):
+    """416.1 / 416.1.a -- to the *bottom* of the corresponding deck."""
+    from cards.dsl import Recycle, Who
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    player = state.turn_player
+    zones = state.players[player]
+    card = zones.hand[0]
+    zones.hand.remove(card)
+    zones.trash.append(card)
+    deck_before = list(zones.main_deck)
+
+    execute(state, Recycle(count=1, zone="trash", who=Who.YOU),
+            EffectContext(controller=player))
+    assert card not in zones.trash
+    assert zones.main_deck == deck_before + [card], "bottom, not top"
+
+
+def test_recycling_sends_a_rune_to_the_rune_deck(decks):
+    """416.1.b -- runes are Recycled to the Rune Deck, not the Main Deck."""
+    from cards.dsl import Recycle, Who
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    player = state.turn_player
+    zones = state.players[player]
+    rune = zones.rune_deck.pop(0)
+    zones.trash.append(rune)
+
+    execute(state, Recycle(count=1, zone="trash", who=Who.YOU),
+            EffectContext(controller=player))
+    assert rune in zones.rune_deck
+    assert rune not in zones.main_deck
+
+
+def test_recycling_more_than_is_there_takes_what_there_is(decks):
+    """055 -- do as much as you can, ignoring impossible instructions."""
+    from cards.dsl import Recycle, Who
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    player = state.turn_player
+    state.players[player].trash.clear()
+    execute(state, Recycle(count=3, zone="trash", who=Who.YOU),
+            EffectContext(controller=player))
+    assert state.players[player].trash == []

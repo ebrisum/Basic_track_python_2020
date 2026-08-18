@@ -31,6 +31,7 @@ from cards.dsl import (
     CreateToken,
     Detach,
     Heal,
+    Recycle,
     Reveal,
     Exhaust,
     Stun,
@@ -324,6 +325,27 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _recycle(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """416 -- to the bottom of the corresponding deck (416.1.a/b), and always
+    to the card owner's own deck (416.1.c)."""
+    for player in _resolve_player(effect.who, ctx.controller):
+        zones = state.players[player]
+        source = zones.trash if effect.zone == "trash" else zones.hand
+        moving = list(source[: effect.count])
+        for instance_id in moving:
+            source.remove(instance_id)
+            ref = state.cards[instance_id]
+            owner = state.players[ref.owner]
+            if state.db[ref.card_id].type == "rune":
+                owner.rune_deck.append(instance_id)      # 416.1.b
+            else:
+                owner.main_deck.append(instance_id)      # 416.1.a
+        if moving:
+            state._emit(f"P{player} recycles {len(moving)} card(s) from "
+                        f"{effect.zone}")
+    return None
+
+
 def _reveal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """424 -- announce cards publicly. The cards do not change zones."""
     for player in _resolve_player(effect.who, ctx.controller):
@@ -502,6 +524,7 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    Recycle: _recycle,
     Reveal: _reveal,
     Heal: _heal,
     Banish: _banish,

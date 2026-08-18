@@ -172,6 +172,21 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class Recycle(Effect):
+    """416 -- put cards on the bottom of the corresponding deck.
+
+    416.1.a Main Deck cards go to the Main Deck and 416.1.b runes to the Rune
+    Deck, so the destination follows the card, not the instruction.
+    416.1.c: each player recycles to their *own* decks regardless of which
+    player was told to do the recycling.
+    """
+
+    count: int = 1
+    zone: str = "trash"         # trash | hand
+    who: Who = Who.YOU
+
+
+@dataclass(frozen=True)
 class Reveal(Effect):
     """424 -- present a card to all players from a zone they cannot see.
 
