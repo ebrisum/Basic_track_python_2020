@@ -128,3 +128,107 @@ def test_a_legal_action_advances_the_game(game):
 def test_unknown_deck_is_rejected(base_url):
     result = post(base_url, "/api/new", {"deck0": "nope", "deck1": "nope"})
     assert "error" in result
+
+
+# --------------------------------------------------------------- spectator
+
+
+@pytest.fixture
+def spectated(base_url):
+    """A game with both seats handed to agents, restored to hot-seat after."""
+    post(base_url, "/api/autoplay", {
+        "seats": ["greedy", "random"], "running": False, "delay_ms": 0,
+    })
+    post(base_url, "/api/new", {
+        "deck0": "jinx_chaos_fury", "deck1": "volibear_body_fury", "seed": 7,
+    })
+    yield base_url
+    post(base_url, "/api/autoplay", {"seats": ["human", "human"], "running": False})
+
+
+def test_stepping_advances_an_agent_seat(spectated):
+    before = get(spectated, "/api/state?player=0")
+    assert post(spectated, "/api/step", {"n": 3})["stepped"] == 3
+    after = get(spectated, "/api/state?player=0")
+    assert after["log"] != before["log"]
+
+
+def test_an_agent_seat_is_never_offered_actions_by_the_ui(spectated):
+    """The UI drives human seats only; an agent seat must not be clickable."""
+    post(spectated, "/api/step", {"n": 2})
+    state = get(spectated, "/api/state?player=0")
+    current = state["current_player"]
+    assert state["seats"][current] != "human"
+    assert get(spectated, f"/api/state?player={current}")["legal"] == []
+
+
+def test_last_decision_reports_what_the_agent_did(spectated):
+    post(spectated, "/api/step", {"n": 1})
+    decision = get(spectated, "/api/state?player=0")["last_decision"]
+    assert decision["kind"] in ("greedy", "random")
+    assert decision["considered"] >= 1
+    assert 0.0 <= decision["evaluation"] <= 1.0
+    assert decision["seconds"] >= 0.0
+
+
+def test_a_spectated_game_is_never_offered_concede(spectated):
+    """649 -- a random policy would concede at once if it were on the menu."""
+    post(spectated, "/api/step", {"n": 4})
+    for player in (0, 1):
+        assert "concede" not in get(spectated, f"/api/state?player={player}")["legal"]
+
+
+def test_stepping_stops_at_a_human_seat(base_url):
+    post(base_url, "/api/autoplay", {"seats": ["greedy", "human"], "running": False})
+    post(base_url, "/api/new", {
+        "deck0": "jinx_chaos_fury", "deck1": "volibear_body_fury", "seed": 7,
+    })
+    post(base_url, "/api/step", {"n": 200})
+    state = get(base_url, "/api/state?player=0")
+    assert state["seats"][state["current_player"]] == "human"
+    assert not state["is_terminal"]
+    post(base_url, "/api/autoplay", {"seats": ["human", "human"], "running": False})
+
+
+def test_an_unknown_agent_kind_falls_back_to_human(base_url):
+    post(base_url, "/api/autoplay", {"seats": ["wizard", "human"], "running": False})
+    assert get(base_url, "/api/state?player=0")["seats"] == ["human", "human"]
+
+
+def test_settings_persist_across_a_new_game(base_url):
+    post(base_url, "/api/autoplay", {
+        "seats": ["ismcts", "greedy"], "delay_ms": 120, "iterations": 25,
+    })
+    post(base_url, "/api/new", {
+        "deck0": "jinx_chaos_fury", "deck1": "volibear_body_fury", "seed": 7,
+    })
+    state = get(base_url, "/api/state?player=0")
+    assert state["seats"] == ["ismcts", "greedy"]
+    assert state["delay_ms"] == 120 and state["iterations"] == 25
+    post(base_url, "/api/autoplay", {"seats": ["human", "human"], "running": False})
+
+
+def test_the_controls_are_configurable_before_a_game_exists():
+    """The UI mirrors server settings, so they must be readable with no state."""
+    fresh = fe.Game()
+    fresh.configure(seats=["greedy", "ismcts"], delay_ms=120, iterations=25)
+    snapshot = fresh.snapshot(0)
+    assert snapshot["started"] is False
+    assert snapshot["seats"] == ["greedy", "ismcts"]
+    assert snapshot["delay_ms"] == 120 and snapshot["iterations"] == 25
+    assert snapshot["agent_kinds"] == list(fe.AGENT_KINDS)
+    assert fresh.step(1) == 0          # nothing to step -- there is no game
+
+
+def test_a_spectated_game_is_reproducible(base_url):
+    """Determinism is the whole point: same seed + same seats = same game."""
+    def play() -> list[str]:
+        post(base_url, "/api/autoplay", {"seats": ["greedy", "greedy"]})
+        post(base_url, "/api/new", {
+            "deck0": "jinx_chaos_fury", "deck1": "volibear_body_fury", "seed": 3,
+        })
+        post(base_url, "/api/step", {"n": 12})
+        return get(base_url, "/api/state?player=0")["log"]
+
+    assert play() == play()
+    post(base_url, "/api/autoplay", {"seats": ["human", "human"], "running": False})

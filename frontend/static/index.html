@@ -51,9 +51,11 @@
   .box > .cap{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#c8a24a;
               opacity:.85;margin-bottom:4px}
   .box .items{display:flex;gap:5px;flex-wrap:wrap;align-items:flex-start}
-  /* room for a 90-degree rotation without overlapping neighbours */
-  .box .items > .card.exhausted{margin:calc((var(--ch) - var(--cw)) / 2)
-                                       calc((var(--cw) - var(--ch)) / 2)}
+  /* Room for a 90-degree rotation without overlapping neighbours. Applies to
+     every `.items` row, including the ones nested inside battlefield cells --
+     a rotated unit there used to overflow its cell. */
+  .items > .card.exhausted{margin:calc((var(--cw) - var(--ch)) / 2)
+                                  calc((var(--ch) - var(--cw)) / 2)}
   .bfgroup{display:flex;gap:8px;flex-wrap:wrap;width:100%}
   .bfcell{flex:1;min-width:220px;border:1px dashed rgba(200,162,74,.45);border-radius:8px;padding:5px}
   .bfcell .hd{display:flex;justify-content:space-between;gap:6px;align-items:baseline;margin-bottom:4px}
@@ -118,6 +120,23 @@
         border-radius:10px;background:var(--panel);margin-top:8px}
   dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px}
   dialog::backdrop{background:rgba(0,0,0,.6)}
+
+  /* Spectator bar: attach an agent to a seat and watch it play. */
+  .subbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:6px 12px;
+          background:var(--panel2);border-bottom:1px solid var(--line);font-size:11.5px}
+  .subbar label{display:flex;gap:5px;align-items:center;color:var(--muted)}
+  .subbar select,.subbar input{padding:3px 6px;font-size:11.5px}
+  .subbar input[type=range]{padding:0;width:110px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block}
+  .dot.live{background:var(--good);animation:pulse 1.1s infinite}
+  @keyframes pulse{50%{opacity:.25}}
+  .kv{display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:1px 0}
+  .kv b{font-weight:650}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .meter{height:8px;border-radius:4px;background:var(--panel2);border:1px solid var(--line);
+         overflow:hidden;margin:5px 0 3px;position:relative}
+  .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p0))}
+  .meter::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)}
 </style>
 </head>
 <body>
@@ -137,6 +156,20 @@
   <button class="primary" id="newGame">New game</button>
 </header>
 
+<div class="subbar">
+  <span class="dot" id="live"></span>
+  <b>Spectate</b>
+  <label>P0 <select id="seat0"></select></label>
+  <label>P1 <select id="seat1"></select></label>
+  <button id="play">▶ Play</button>
+  <button id="stepBtn">Step</button>
+  <label>speed <input id="delay" type="range" min="0" max="1500" step="50"></label>
+  <span class="muted mono" id="delayTxt">—</span>
+  <label>ISMCTS iters <input id="iters" type="number" min="1" max="2000" step="10" size="5" style="width:66px"></label>
+  <span class="grow" style="flex:1"></span>
+  <span class="muted" id="seatHint"></span>
+</div>
+
 <main>
   <div>
     <div id="banner"></div>
@@ -149,6 +182,7 @@
       <h2>Chain <span class="muted" id="chainState"></span></h2>
       <div class="chain" id="chain"></div>
     </div>
+    <div class="panel"><h2>Agent</h2><div id="agentPanel"></div></div>
     <div class="panel"><h2>Actions</h2><div class="acts" id="globalActions"></div></div>
     <div class="panel"><h2>Game</h2><div id="meta" class="muted" style="font-size:11px"></div></div>
     <div class="panel"><h2>Log</h2><div class="log" id="log"></div></div>
@@ -388,6 +422,8 @@ function render(){
   if(!S || !S.started){
     banner("No game in progress — pick decks and press <b>New game</b>.");
     ["matThem","matMe","hand","chain","globalActions","log"].forEach(i=>$(i).innerHTML="");
+    $("agentPanel").innerHTML=`<span class="muted">no game</span>`;
+    syncControls();
     return;
   }
   const me=S.player_id, opp=1-me;
@@ -405,7 +441,9 @@ function render(){
     banner(`${S.showdown[3]?"<b>Combat</b>":"Showdown"} at battlefield ${S.showdown[0]} — `
       + `P${S.showdown[1]} attacking, focus P${S.focus}.`,"warn");
   else if(S.current_player!==me)
-    banner(`Waiting on <b>Player ${S.current_player}</b> — switch “view as” to act.`,"warn");
+    banner(S.seats[S.current_player]==="human"
+      ? `Waiting on <b>Player ${S.current_player}</b> — switch “view as” to act.`
+      : `<b>Player ${S.current_player}</b> (${esc(S.seats[S.current_player])}) is thinking…`,"warn");
   else $("banner").innerHTML="";
 
   renderMat($("matThem"),opp,false);
@@ -422,7 +460,8 @@ function render(){
   if(!S.hand.length) hand.innerHTML+=`<span class="muted">— empty —</span>`;
 
   const g=$("globalActions"); g.innerHTML="";
-  if(S.current_player!==me) g.innerHTML=`<span class="muted">Player ${S.current_player} to act.</span>`;
+  if(S.current_player!==me) g.innerHTML=`<span class="muted">Player ${S.current_player}`
+    + `${S.seats[S.current_player]==="human"?"":" ("+esc(S.seats[S.current_player])+")"} to act.</span>`;
   else{
     const generic=(S.legal||[]).filter(a=>
       !/^(play|move|tap_energy|recycle_power|assign_damage|choose_battlefield|choose|activate):/.test(a));
@@ -446,6 +485,71 @@ function render(){
     + `<br>victory score 8 (194.3)`;
   $("log").textContent=(S.log||[]).join("\n");
   $("log").scrollTop=$("log").scrollHeight;
+
+  renderAgent();
+  syncControls();
+}
+
+/* What the agent just did, and how it reads the position it created.
+   `evaluation` is P(win) for the seat that moved, so watching it move is
+   watching the search change its mind. */
+function renderAgent(){
+  const host=$("agentPanel"); host.innerHTML="";
+  const rows=[];
+  const seatOf=i=>`P${i} <b>${esc(S.seats[i])}</b>`;
+  rows.push(`<div class="kv"><span>${seatOf(0)}</span><span>${seatOf(1)}</span></div>`);
+
+  const ev=S.evaluation;
+  if(ev!==null && ev!==undefined){
+    const pct=Math.max(0,Math.min(1,ev))*100;
+    rows.push(`<div class="meter"><i style="width:${pct.toFixed(1)}%"></i></div>`);
+    rows.push(`<div class="kv"><span class="muted">P${S.player_id} win estimate</span>`
+      + `<b>${(ev*100).toFixed(1)}%</b></div>`);
+  }
+
+  const d=S.last_decision;
+  if(d){
+    rows.push(`<div class="kv" style="margin-top:6px"><span class="muted">last move</span>`
+      + `<span class="pill p${d.seat}">P${d.seat} ${esc(d.kind)}</span></div>`);
+    rows.push(`<div class="kv"><span class="muted">action</span>`
+      + `<b class="mono">${esc(d.action)}</b></div>`);
+    rows.push(`<div class="kv"><span class="muted">legal options</span><b>${d.considered}</b></div>`);
+    rows.push(`<div class="kv"><span class="muted">think time</span><b>${d.seconds}s</b></div>`);
+    rows.push(`<div class="kv"><span class="muted">its own read</span>`
+      + `<b>${(d.evaluation*100).toFixed(1)}%</b></div>`);
+  } else {
+    rows.push(`<div class="muted" style="margin-top:6px">no agent move yet</div>`);
+  }
+  host.innerHTML=rows.join("");
+}
+
+/* The server owns the seat/speed settings; the controls only mirror them,
+   and never while the user is mid-edit. */
+function syncControls(){
+  if(!S) return;
+  const kinds=S.agent_kinds||["human","random","greedy","ismcts"];
+  [0,1].forEach(i=>{
+    const sel=$("seat"+i);
+    if(!sel.options.length)
+      sel.innerHTML=kinds.map(k=>`<option value="${k}">${k}</option>`).join("");
+    if(document.activeElement!==sel) sel.value=(S.seats||["human","human"])[i];
+  });
+  if(document.activeElement!==$("delay")) $("delay").value=S.delay_ms ?? 400;
+  if(document.activeElement!==$("iters")) $("iters").value=S.iterations ?? 60;
+  $("delayTxt").textContent=`${$("delay").value}ms/move`;
+  $("play").textContent=S.running?"⏸ Pause":"▶ Play";
+  $("live").className="dot"+(S.running?" live":"");
+
+  const seats=S.seats||["human","human"];
+  const bothAgents=seats.every(k=>k!=="human");
+  $("stepBtn").disabled=!S.started||S.is_terminal
+    || seats[S.current_player]==="human";
+  $("play").disabled=$("stepBtn").disabled && !S.running;
+  $("seatHint").textContent=!S.started?"start a game to spectate"
+    : S.is_terminal?"game over"
+    : bothAgents?"agents are playing both seats"
+    : seats[S.current_player]==="human"?`waiting on the human at P${S.current_player}`
+    : `P${S.current_player} (${seats[S.current_player]}) to move`;
 }
 
 async function loadDecks(){
@@ -462,8 +566,37 @@ $("newGame").onclick=async()=>{
   await refresh();
 };
 $("viewAs").onchange=refresh;
-loadDecks().then(refresh);
-setInterval(refresh,2500);
+
+// ------------------------------------------------------------- spectator
+async function pushConfig(extra){
+  const body=Object.assign({
+    seats:[$("seat0").value,$("seat1").value],
+    delay_ms:parseInt($("delay").value,10),
+    iterations:parseInt($("iters").value,10),
+  },extra||{});
+  await api("/api/autoplay",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)});
+  await refresh();
+}
+["seat0","seat1","iters"].forEach(id=>$(id).onchange=()=>pushConfig());
+$("delay").oninput=()=>{ $("delayTxt").textContent=`${$("delay").value}ms/move`; };
+$("delay").onchange=()=>pushConfig();
+$("play").onclick=()=>pushConfig({running:!(S&&S.running)});
+$("stepBtn").onclick=async()=>{
+  await api("/api/step",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({n:1})});
+  await refresh();
+};
+
+/* Poll fast enough to see each agent move land, slow when nothing moves.
+   setTimeout rather than setInterval so a slow ISMCTS search cannot stack
+   requests on top of each other. */
+async function poll(){
+  try{ await refresh(); } catch(e){ /* server restarting */ }
+  const fast=S&&S.running;
+  setTimeout(poll, fast?Math.max(150,Math.min(700,(S.delay_ms||400)/2)):2500);
+}
+loadDecks().then(poll);
 </script>
 </body>
 </html>

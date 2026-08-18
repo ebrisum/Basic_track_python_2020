@@ -34,8 +34,8 @@ why. Scripting more is mechanical work, not new architecture. See RQ-5 in
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
-**226 tests passing** — 32 one-per-card assertions and 30 covering the Chain,
-priority, focus and showdowns — plus two full Riftbound games in the replay
+**319 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+priority, focus and showdowns, and 18 driving the frontend over HTTP — plus two full Riftbound games in the replay
 harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
 ## Play a game
@@ -49,6 +49,26 @@ uv pip install --python .venv/bin/python pytest pypdf
 
 Hot-seat: both players share one screen, and the **view as** selector switches
 whose hand is shown. The server never reveals the other player's hand (128).
+
+### Watching the agents play
+
+Hand either seat to an agent and watch it move on the same board a human
+plays on:
+
+```sh
+.venv/bin/python -m frontend.server --seat0 greedy --seat1 ismcts --watch
+```
+
+or set it live from the **Spectate** bar: pick an agent per seat, **Play** /
+**Pause**, **Step** one decision at a time, and drag the speed slider. The
+Agent panel reports what the agent just played, how many legal options it had,
+how long it thought, and its own win estimate for the position it created —
+so the search can be watched changing its mind.
+
+Deliberately the *same* UI, not a separate viewer: if the agent's move and the
+rendered board ever disagreed, the UI would be lying. An agent seat is never
+offered clickable actions, and `concede` is withheld unless both seats are
+human (649) — otherwise a random policy resigns on turn one.
 
 The table is laid out like the physical playmat, one per player, mirrored so
 the two battlefield rows meet in the middle:
@@ -197,6 +217,13 @@ opponent's hand.
 
 The greedy agent beats random **0.925 (37-3)** against a 0.525
 random-vs-random baseline, so the heuristic captures something real.
+
+**Search does not yet beat the heuristic it searches with.** ISMCTS at 60
+iterations beats random **0.917 (22-2)** but scores **0.458 (11-13)** against
+greedy — an interval of 0.259–0.658, which straddles even. So the honest
+reading is *indistinguishable from greedy at this budget*, not stronger. 60
+iterations is roughly 0.12s per decision; whether the gap closes with budget
+is a measurement not yet run, and until it wins the claim is not made.
 
 But the headline result is a warning: **fitting improved prediction and made
 play worse.** Brier went 0.1815 → 0.1666 and accuracy 0.687 → 0.727, and the

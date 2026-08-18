@@ -278,6 +278,10 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   the board (0.400) now outranks 7 without it (0.333).
 - **Exhausted cards rotate 90 degrees** (414.1.a), not the 7 degrees the first
   UI used; the slot reserves room so a rotated card does not overlap.
+  (Corrected in Session 10 -- the reserving margins were on the wrong axes,
+  narrowing the footprint instead of widening it, and the rule only matched
+  cards directly under `.box .items`, so units on a battlefield overflowed
+  their cell by 30px. Caught by measuring rects in the browser, not by eye.)
 - **ABCD is Awaken/Beginning/Channel/Draw (315.1-315.4)** -- already
   implemented in that order; verified rather than rebuilt.
 - **The hand-set features are generation 0, not the design** --
@@ -285,3 +289,26 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   own games, gated on winning a head-to-head whose 95% interval clears even.
   Fitting on random play produced a negative `hand_diff` (random agents hoard
   unplayable cards); self-play data does not contain that artefact.
+
+## Session 10 -- watching the games run
+
+- **Spectator mode reuses the play UI rather than adding a viewer** -- a
+  separate renderer could drift from the one humans play on, and a divergence
+  between the agent's move and the drawn board is exactly the bug worth
+  catching. Agents drive the same `legal_actions()`/`apply()` path.
+- **A daemon thread steps the game; the client only polls** -- keeping the
+  loop server-side means playback survives a page reload and the browser
+  holds no game state. The thread stops itself when a human seat is to move
+  or the game ends, rather than spinning.
+- **`concede` is offered only when both seats are human (649)** -- a random
+  policy picks it uniformly, so a spectated game would end on turn one.
+- **`legal` is returned only for human seats** -- the UI must not be able to
+  play an agent's turn for it, or what is on screen stops being what the
+  agent decided.
+- **Each decision reports the agent's own evaluation** -- watching the number
+  move is the cheapest available window into whether search is reasoning or
+  drifting; it is the same `evaluate()` the agent scores leaves with.
+- **ISMCTS(60) is not yet better than greedy: 0.458, 11-13, interval
+  0.259-0.658** -- recorded as a null result rather than filed away. It does
+  beat random 0.917 (22-2), so the search works; it just has not paid for
+  itself against the heuristic at this budget.
