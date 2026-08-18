@@ -60,6 +60,7 @@ FEATURE_NAMES: tuple[str, ...] = (
     "deck_diff",            # main deck remaining (burn-out risk)
     "tempo",                # ready (unexhausted) units
     "victory_pressure",     # how close to winning, given the current scoring rate
+    "answer_risk",          # expected Reactions held, deduced from public zones
 )
 
 # Hand-set starting point, replaced by `fit_weights.py` once self-play data
@@ -77,6 +78,7 @@ DEFAULT_WEIGHTS: tuple[float, ...] = (
     0.02,   # deck_diff
     0.04,   # tempo
     0.90,   # victory_pressure
+    0.15,   # answer_risk
 )
 DEFAULT_BIAS: float = 0.0
 
@@ -94,6 +96,7 @@ SCALES: dict[str, float] = {
     "deck_diff": 20.0,
     "tempo": 4.0,
     "victory_pressure": 1.0,
+    "answer_risk": 2.0,
 }
 
 
@@ -140,6 +143,19 @@ def save_model(model: Model, path: Path | None = None) -> None:
             indent=2,
         )
         + "\n"
+    )
+
+
+def _answers_held(state, player: int) -> float:
+    """Expected Reaction cards in `player`'s hand, from public information."""
+    from engine.knowledge import deduce
+
+    knowledge = deduce(state, player, player)
+    if player != knowledge.subject:
+        return 0.0
+    db = state.db
+    return knowledge.expected_in_hand(
+        lambda card_id: card_id in db and db[card_id].has_reaction
     )
 
 
@@ -227,6 +243,12 @@ def features(state, player: int) -> dict[str, float]:
         # is actually moving, and control is the rate -- a held battlefield
         # scores once per turn in the Beginning Phase (469.2).
         "victory_pressure": _pressure(me.points, my_bfs) - _pressure(them.points, their_bfs),
+        # How many answers each side is likely holding, deduced rather than
+        # peeked at: a 40-card deck minus everything publicly visible bounds
+        # the hidden hand exactly (see engine/knowledge.py). Whether to *hold*
+        # a Reaction is a timing question for search; how likely the opponent
+        # is to have one is a property of the position, so it belongs here.
+        "answer_risk": _answers_held(state, player) - _answers_held(state, opponent),
     }
     return {name: raw[name] / SCALES[name] for name in FEATURE_NAMES}
 

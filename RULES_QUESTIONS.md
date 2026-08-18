@@ -101,6 +101,43 @@ it if egress ever allows.
 
 ---
 
+## RQ-12 — Deduction assumes both decklists are known
+
+**Status:** decided, switchable, and it matters which way it is set.
+
+Riftbound is a closed system: a Main Deck is exactly 40 cards fixed before the
+game (103.2), and trash (108.2.d), board (107.1.d), Champion Zone (108.3.e) and
+Legend Zone (107.4) are all public. So a player does not guess at the
+opponent's hand — they subtract:
+
+    unseen(P) = decklist(P) − everything of P's that is publicly visible
+
+`engine/knowledge.py` does that arithmetic exactly: the unseen pool equals
+hand + deck on every seed tested, and ISMCTS samples its determinizations from
+precisely that pool.
+
+**The assumption.** Subtracting needs the decklist. That is true for this
+project's actual goal — a matchup matrix against a database of *known*
+tournament decks — and false in game one against an unknown opponent.
+
+`KnownDecklists.BOTH` (the default) grants it. `KnownDecklists.OWN_ONLY`
+models real game-one uncertainty: only sizes are public, and the deducer
+returns an empty pool rather than a confident wrong one.
+
+**Effect on outcomes:** an agent under `BOTH` plays with information a real
+player would not have in game one, so win rates measured that way are an upper
+bound on real play. For the field-weighted matrix the assumption is correct
+and the numbers are the ones wanted. For "how would this deck do blind", set
+`OWN_ONLY` — and note ISMCTS determinization would then need a prior over
+plausible decklists, which does not exist yet.
+
+**Bug this surfaced:** channeled runes were being counted as Main Deck cards,
+inflating the deduced 40-card list every time one was channeled. Runes come
+from the Rune Deck and are not Main Deck cards (161.1, 052). Caught by a test
+asserting the decklist total stays constant across a whole game.
+
+---
+
 ## RQ-2 — Which source is authoritative where they conflict
 
 **Status:** decided, low confidence, revisit when Riftcodex is reachable.

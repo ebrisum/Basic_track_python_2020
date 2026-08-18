@@ -203,6 +203,28 @@ Hold scores one per controlled battlefield per turn (469.2).
 Five points with the board is more urgent than seven without it, which is the
 correct reading and is what a score-only threshold got wrong.
 
+## The arithmetic the closed system allows
+
+A 40-card deck fixed before the game, with trash, board, Champion Zone and
+Legend Zone all public, means the opponent's hand is *bounded*, not guessed:
+
+    unseen(opponent) = their decklist − everything of theirs publicly visible
+
+`engine/knowledge.py` computes it, and the identity holds exactly — the unseen
+pool equals their hand plus their deck on every position tested. From there:
+
+- **`answer_risk`** — expected Reactions in each hand, deduced. Whether to
+  *hold* a Reaction is a timing question for search; how likely the opponent is
+  to *have* one is a property of the position, so it is a feature.
+- **Draw odds** — hypergeometric, exact rather than estimated, because the
+  population is a known 40 and the sample is a known number of draws.
+- **Determinization** samples from exactly this pool, and a test asserts every
+  sampled world is consistent with public information.
+
+The assumption underneath is that both decklists are known. True for the
+field-weighted matrix this project is built for; false in game one against an
+unknown opponent. `KnownDecklists.OWN_ONLY` models the latter. See RQ-12.
+
 ## Hidden information: ISMCTS
 
 Plain search would cheat by reading the opponent's hand. `agents/ismcts.py`
