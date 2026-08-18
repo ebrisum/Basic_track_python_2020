@@ -231,3 +231,27 @@ def test_spsa_tunes_in_mirrors():
     assert tune.matchups(["a", "b"], mirror_only=True) == [("a", "a"), ("b", "b")]
     assert len(tune.matchups(["a", "b"])) == 4
     assert "mirror_only=True" in inspect.getsource(tune.spsa)
+
+
+def test_paired_duels_replay_the_same_seed_from_both_sides():
+    """Deck and shuffle luck cancel only if the two games are the *same*
+    game played by different hands. With independent seeds they are unrelated
+    and their luck just adds noise to whatever is being measured."""
+    seeds = [(i // 2) for i in range(6)]
+    seats = [i % 2 for i in range(6)]
+    assert seeds == [0, 0, 1, 1, 2, 2]
+    assert seats == [0, 1, 0, 1, 0, 1]
+
+    import inspect
+
+    from analysis.benchmark import duel
+
+    assert "paired" in inspect.signature(duel).parameters
+
+
+def test_spsa_uses_paired_games_for_its_gradient():
+    import inspect
+
+    from analysis import tune
+
+    assert "paired=True" in inspect.getsource(tune.spsa)

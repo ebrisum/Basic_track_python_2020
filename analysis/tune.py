@@ -143,10 +143,15 @@ def spsa(
         minus = Model(weights=tuple(t - perturb * d for t, d in zip(theta, delta)))
 
         pair = field[k % len(field)]
+        # Paired: each seed is played twice with the perturbations swapped,
+        # so the gradient reads the difference in *play* rather than which
+        # side drew the better shuffle. One SPSA step is a single noisy
+        # measurement to begin with; letting shuffle luck into it as well is
+        # what a 1,600-game run had been averaging over.
         score, wins, losses, draws = duel(
             lambda s: GreedyAgent(s, plus),
             lambda s: GreedyAgent(s, minus),
-            games, seed + 50_000 + k * games, pair, db, start_index=k,
+            games, seed + 50_000 + k * games, pair, db, paired=True,
         )
         if wins + losses + draws == 0:
             continue

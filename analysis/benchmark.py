@@ -51,8 +51,13 @@ def mirror_field(decks):
 
 
 def duel(make_a, make_b, games: int, base_seed: int, decks, db,
-         start_index: int = 0) -> tuple[float, int, int, int]:
+         start_index: int = 0, paired: bool = False) -> tuple[float, int, int, int]:
     """Play `games`, alternating seats. Returns (score_a, wins, losses, draws).
+
+    `paired` plays each seed twice with the sides swapped, so deck and
+    shuffle luck cancel within the pair. Use it whenever the games are
+    consumed as one measurement -- an SPSA gradient step, say -- rather than
+    accumulated independently.
 
     `start_index` offsets the seat rotation. A sequential test calls this one
     game at a time, and with the rotation keyed only on the loop index every
@@ -63,8 +68,18 @@ def duel(make_a, make_b, games: int, base_seed: int, decks, db,
     d0, d1 = decks
     wins = losses = draws = 0
     for i in range(games):
-        seed = base_seed + i
-        a_seat = (start_index + i) % 2       # swap seats every other game
+        if paired:
+            # Consecutive games share a seed and swap sides, so the pair is
+            # the *same* game played by different hands: identical decks,
+            # identical shuffles, identical opening hands. Deck and shuffle
+            # luck are common to the pair and cancel, leaving the difference
+            # in play. Without it the two games are unrelated and their luck
+            # simply adds noise.
+            seed = base_seed + i // 2
+            a_seat = i % 2
+        else:
+            seed = base_seed + i
+            a_seat = (start_index + i) % 2   # swap seats every other game
         state = build_state(d0, d1, seed=seed, db=db, validate_decks=False)
         agents = [None, None]
         agents[a_seat] = make_a(seed)
