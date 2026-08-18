@@ -269,3 +269,64 @@ def test_the_forecast_is_told_from_the_asking_seat(game):
     for one, two in zip(a, b):
         assert one["committed"] == two["committed"]      # the board is public
         assert one["hidden_threat"] != [] and two["hidden_threat"] != []
+
+
+# ------------------------------------------------------- the decision trace
+
+
+def test_the_trace_records_every_option_not_just_the_choice(spectated):
+    """The point of the trace is to check the *rules* offered the right
+    choices at that moment, which a count cannot show."""
+    post(spectated, "/api/step", {"n": 6})
+    trace = get(spectated, "/api/state?player=0")["decisions"]
+    assert trace
+    entry = trace[-1]
+    assert entry["chosen"] in entry["options"]
+    assert entry["option_count"] >= len(entry["options"])
+    for key in ("turn", "phase", "seat", "kind", "log", "names"):
+        assert key in entry
+
+
+def test_the_trace_attributes_rule_effects_to_the_decision(spectated):
+    """`log` holds only the lines this action produced, so a triggered
+    ability or an opened showdown is attributed to what caused it."""
+    post(spectated, "/api/step", {"n": 30})
+    trace = get(spectated, "/api/state?player=0")["decisions"]
+    assert any(entry["log"] for entry in trace), "no decision produced any log"
+    # The trace slices the game log rather than keeping a running copy: the
+    # lines attributed to consecutive decisions appear in the log in that
+    # same order, contiguously.
+    game_log = get(spectated, "/api/state?player=0")["log"]
+    attributed = [line for entry in trace for line in entry["log"]]
+    assert attributed, "no decision produced any log"
+    joined = "\n".join(game_log)
+    assert "\n".join(attributed[-6:]) in joined
+
+
+def test_the_trace_names_cards_that_have_since_left_play(spectated):
+    """Names are resolved when the decision is made, not when it is read.
+    A recycled rune or a dead unit is gone from the board by then, and those
+    are exactly the decisions worth auditing."""
+    post(spectated, "/api/step", {"n": 40})
+    trace = get(spectated, "/api/state?player=0")["decisions"]
+    named = [e for e in trace if e["names"]]
+    assert named, "no decision resolved any card name"
+    for entry in named:
+        for key in entry["names"]:
+            assert key.isdigit(), f"{key!r} is not an instance id"
+
+
+def test_human_moves_join_the_same_trace(game):
+    """A hot-seat game has to be as auditable as a spectated one."""
+    advance(game, steps=3)
+    trace = get(game, "/api/state?player=0")["decisions"]
+    assert trace and all(e["kind"] == "human" for e in trace)
+
+
+def test_pending_options_are_shown_for_an_agent_seat_but_not_submittable(spectated):
+    """`pending_options` exists to be read; `legal` is the list the UI may
+    submit from, and it stays human-only."""
+    post(spectated, "/api/step", {"n": 4})
+    state = get(spectated, "/api/state?player=0")
+    assert state["pending_options"]
+    assert state["legal"] == []

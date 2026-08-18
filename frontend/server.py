@@ -72,6 +72,11 @@ class Game:
         self.iterations = 60
         self._agents: list[object | None] = [None, None]
         self.last_decision: dict | None = None
+        # A rolling trace of decisions, so the turn can be audited after the
+        # fact: what phase it was, every option that existed at that moment,
+        # which one was taken, and what the rules did in response.
+        self.decisions: list[dict] = []
+        self.step_number = 0
         self._stepper = threading.Thread(target=self._run_loop, daemon=True)
         self._stepper.start()
 
@@ -86,6 +91,8 @@ class Game:
             self.state = state
             self.deck_names = (d0.name, d1.name)
             self.last_decision = None
+            self.decisions = []
+            self.step_number = 0
             self._agents = [
                 make_agent(kind, seed + 1000 * i, self.iterations)
                 for i, kind in enumerate(self.seats)
@@ -119,6 +126,68 @@ class Game:
             taken += 1
         return taken
 
+    MAX_TRACE = 60          # decisions kept; older ones fall off the end
+    MAX_OPTIONS = 60        # options recorded per decision
+
+    def _names_for(self, state, actions) -> dict[str, str]:
+        """Card names for every instance id an action refers to.
+
+        Matched by field *name*, not by type: `isinstance(False, int)` is True
+        in Python, so a `PlayCard(accelerate=False)` flag resolved to card 0,
+        and so did an ability index of 0.
+        """
+        names: dict[str, str] = {}
+
+        def add(instance_id) -> None:
+            if type(instance_id) is not int or instance_id not in state.cards:
+                return
+            names[str(instance_id)] = self.db[state.cards[instance_id].card_id].name
+
+        for action in actions:
+            add(getattr(action, "instance_id", None))
+            for one in getattr(action, "instance_ids", ()) or ():
+                add(one)
+        return names
+
+    def _record(self, state, seat, kind, action, legal, before_log,
+                elapsed=0.0) -> dict:
+        """Append one decision to the trace and return it.
+
+        `options` is every legal action at that moment, not just a count --
+        the point of the trace is to check that the rules offered the right
+        choices, which a count cannot show. `log` is only the lines this
+        action produced, so a triggered ability or an opened showdown is
+        attributed to the decision that caused it.
+        """
+        # Resolve instance ids to card names *now*, while the cards are still
+        # where they were. Doing it in the browser from the current board
+        # fails for exactly the decisions worth auditing: a rune that was
+        # recycled, a unit that died, a card that was discarded. Those are
+        # gone by the time anyone reads the trace.
+        names = self._names_for(state, list(legal) + [action])
+
+        entry = {
+            "names": names,
+            "n": self.step_number,
+            "turn": state.turn_number,
+            "phase": state.phase.value,
+            "seat": seat,
+            "kind": kind,
+            "chosen": repr(action),
+            "options": [repr(a) for a in legal][: self.MAX_OPTIONS],
+            "option_count": len(legal),
+            "seconds": round(elapsed, 3),
+            "log": state.log[before_log:],
+            "evaluation": (
+                round(evaluate(state, seat), 4) if not state.is_terminal()
+                else state.returns()[seat]
+            ),
+        }
+        self.step_number += 1
+        self.decisions.append(entry)
+        del self.decisions[: max(0, len(self.decisions) - self.MAX_TRACE)]
+        return entry
+
     def _step_once(self) -> bool:
         with self._lock:
             state = self.state
@@ -134,16 +203,18 @@ class Game:
             started = time.perf_counter()
             action = agent.act(state)
             elapsed = time.perf_counter() - started
+            before_log = len(state.log)
             state.apply(action)
+            entry = self._record(state, seat, self.seats[seat], action, legal,
+                                 before_log, elapsed)
             self.last_decision = {
                 "seat": seat,
                 "kind": self.seats[seat],
-                "action": repr(action),
-                "considered": len(legal),
-                "seconds": round(elapsed, 3),
+                "action": entry["chosen"],
+                "considered": entry["option_count"],
+                "seconds": entry["seconds"],
                 # The agent's own read of the position it just created.
-                "evaluation": round(evaluate(state, seat), 4)
-                if not state.is_terminal() else state.returns()[seat],
+                "evaluation": entry["evaluation"],
             }
             return True
 
@@ -209,6 +280,14 @@ class Game:
                     "iterations": self.iterations,
                     "agent_kinds": list(AGENT_KINDS),
                     "last_decision": self.last_decision,
+                    "decisions": self.decisions[-30:],
+                    # Read-only: every action available to whoever is to move,
+                    # including an agent seat. `legal` above stays
+                    # human-only, because that is the list the UI may submit
+                    # from; this one exists to be looked at.
+                    "pending_options": [repr(a) for a in state.legal_actions()][:60],
+                    "pending_names": self._names_for(state, state.legal_actions()),
+                    "pending_player": state.current_player,
                     "evaluation": (
                         round(evaluate(state, player), 4)
                         if not state.is_terminal() else state.returns()[player]
@@ -266,7 +345,9 @@ class Game:
             matches = [a for a in legal if repr(a) == action_repr]
             if not matches:
                 return {"error": f"illegal action: {action_repr}"}
+            before_log = len(state.log)
             state.apply(matches[0])
+            self._record(state, player, "human", matches[0], legal, before_log)
             return {"ok": True}
 
 

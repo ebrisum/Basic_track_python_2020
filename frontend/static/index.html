@@ -147,6 +147,24 @@
          overflow:hidden;margin:5px 0 3px;position:relative}
   .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p0))}
   .meter::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)}
+
+  /* Decision trace: what the rules offered and what was taken. */
+  .trace{display:flex;flex-direction:column-reverse;gap:3px;max-height:340px;overflow:auto}
+  .dec{border:1px solid var(--line);border-radius:6px;background:var(--panel2);font-size:10.5px}
+  .dec > summary{padding:4px 6px;cursor:pointer;display:flex;gap:6px;align-items:baseline;
+                 list-style:none}
+  .dec > summary::-webkit-details-marker{display:none}
+  .dec .ph{font-size:9px;color:var(--warn);text-transform:uppercase;letter-spacing:.06em}
+  .dec .who{font-size:9px}
+  .dec .act{font-weight:650;margin-left:auto;text-align:right}
+  .dec .body{padding:2px 7px 6px;border-top:1px solid var(--line)}
+  .opt{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;color:var(--muted);
+       padding:1px 0 1px 8px;border-left:2px solid transparent}
+  .opt.taken{color:var(--good);border-left-color:var(--good);font-weight:650}
+  .dec .fx{font-size:9.5px;color:var(--accent);padding:2px 0 0 8px}
+  .pending{border:1px dashed var(--accent);border-radius:6px;padding:5px 7px;
+           margin-bottom:6px;font-size:10.5px}
+  .pending .opt{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -193,6 +211,11 @@
       <div class="chain" id="chain"></div>
     </div>
     <div class="panel"><h2>Agent</h2><div id="agentPanel"></div></div>
+    <div class="panel">
+      <h2>Decisions <span class="muted" id="decCount"></span></h2>
+      <div id="pending"></div>
+      <div class="trace" id="trace"></div>
+    </div>
     <div class="panel"><h2>Actions</h2><div class="acts" id="globalActions"></div></div>
     <div class="panel"><h2>Game</h2><div id="meta" class="muted" style="font-size:11px"></div></div>
     <div class="panel"><h2>Log</h2><div class="log" id="log"></div></div>
@@ -324,6 +347,76 @@ function poolHtml([e,p,u]){
   (p||[]).forEach(([d,n])=>{ for(let i=0;i<n;i++) bits.push(`<span class="rune ${d}" title="${d}"></span>`); });
   for(let i=0;i<(u||0);i++) bits.push(`<span class="rune Universal" title="universal"></span>`);
   return `<span class="pool">${bits.join(" ")}</span>`;
+}
+
+/* The decision trace: what the rules offered, and what was taken.
+
+   Actions arrive as the engine's own `repr()` -- `play:25`, `move:47->bf:0`,
+   `activate:73#0`. Legible enough to submit, not legible enough to audit, so
+   instance ids are swapped for card names wherever the card is visible from
+   this seat. Anything not visible keeps its raw id rather than being guessed
+   at. */
+/* Names come with each decision, resolved server-side at the moment it was
+   made. Reading them off the current board fails for exactly the decisions
+   worth auditing -- a recycled rune, a dead unit, a discarded card are all
+   gone by the time anyone looks. */
+
+const VERBS = {
+  play:"play", move:"move", activate:"activate", choose:"choose",
+  tap_energy:"tap", recycle_power:"recycle", assign_damage:"damage",
+  choose_battlefield:"battlefield", mulligan:"mulligan",
+};
+
+function describe(repr, names){
+  names = names || {};
+  if (repr === "pass") return "pass";
+  if (repr === "concede") return "concede";
+  if (repr === "channel") return "channel a rune";
+  const m = /^([a-z_]+):(.*)$/.exec(repr);
+  if (!m) return repr;
+  const verb = VERBS[m[1]] || m[1];
+  // Only the leading id is a card; `#0` is an ability index and `+accel` a
+  // cost flag, so neither is looked up.
+  const rest = m[2].replace(/^(\d+)/, (id) => names[id] || id);
+  return `${verb} ${rest}`;
+}
+
+function renderTrace(){
+  const host = $("trace"), pend = $("pending");
+  const list = S.decisions || [];
+  $("decCount").textContent = list.length ? `last ${list.length}` : "";
+
+  const options = S.pending_options || [];
+  pend.innerHTML = S.is_terminal || !options.length ? "" :
+    `<div class="pending"><b>P${S.pending_player} to act</b> — `
+    + `${options.length} option${options.length===1?"":"s"} right now`
+    + options.slice(0, 12).map(o =>
+        `<div class="opt">${esc(describe(o, S.pending_names))}</div>`).join("")
+    + (options.length > 12 ? `<div class="opt">… ${options.length-12} more</div>` : "")
+    + `</div>`;
+
+  host.innerHTML = "";
+  list.forEach(d => {
+    const el = document.createElement("details");
+    el.className = "dec";
+    const effects = (d.log||[]).map(l =>
+      `<div class="fx">→ ${esc(l)}</div>`).join("");
+    const opts = (d.options||[]).map(o =>
+      `<div class="opt${o===d.chosen?" taken":""}">${esc(describe(o, d.names))}</div>`
+    ).join("");
+    const more = d.option_count > (d.options||[]).length
+      ? `<div class="opt">… ${d.option_count - d.options.length} more</div>` : "";
+    el.innerHTML =
+      `<summary><span class="ph">t${d.turn} ${esc(d.phase)}</span>`
+      + `<span class="who pill p${d.seat}">P${d.seat} ${esc(d.kind)}</span>`
+      + `<span class="act">${esc(describe(d.chosen, d.names))}</span></summary>`
+      + `<div class="body"><div class="muted" style="font-size:9px">`
+      + `${d.option_count} legal option${d.option_count===1?"":"s"}`
+      + (d.seconds ? ` · ${d.seconds}s` : "")
+      + (d.evaluation != null ? ` · read ${(d.evaluation*100).toFixed(0)}%` : "")
+      + `</div>${opts}${more}${effects}</div>`;
+    host.appendChild(el);
+  });
 }
 
 /* Can I take this battlefield, and can they take it back?
@@ -489,6 +582,7 @@ function render(){
     banner("No game in progress — pick decks and press <b>New game</b>.");
     ["matThem","matMe","hand","chain","globalActions","log"].forEach(i=>$(i).innerHTML="");
     $("agentPanel").innerHTML=`<span class="muted">no game</span>`;
+    $("trace").innerHTML=""; $("pending").innerHTML=""; $("decCount").textContent="";
     syncControls();
     return;
   }
@@ -553,6 +647,7 @@ function render(){
   $("log").scrollTop=$("log").scrollHeight;
 
   renderAgent();
+  renderTrace();
   syncControls();
 }
 
