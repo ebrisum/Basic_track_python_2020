@@ -46,6 +46,10 @@ def check(state) -> list[str]:
     """Every invariant violation in `state`, as readable strings."""
     problems: list[str] = []
     say = problems.append
+    # 323.1 -- a cleanup that wins the game stops at step 1, so the later
+    # cleanup steps legitimately do not run in a finished position.
+    finished = getattr(state.phase, "value", state.phase) == "game_over"
+
 
     # --- 107-108: a card is in exactly one zone -----------------------------
     for player in (0, 1):
@@ -140,12 +144,19 @@ def check(state) -> list[str]:
         if not (0 <= ref.hidden_at < len(state.battlefields)):
             say(f"card {ref.instance_id} is hidden at battlefield "
                 f"{ref.hidden_at}, which does not exist")
-        elif state.battlefields[ref.hidden_at].controller != ref.controller:
+        elif (state.battlefields[ref.hidden_at].controller != ref.controller
+              and not finished):
             # 107.3.c -- a card may occupy a Facedown Zone only while its
             # controller also controls the associated battlefield; 107.3.d and
             # 323.7 remove it at the next Cleanup when that stops being true.
             # Cleanup runs to fixpoint inside `apply`, so between actions this
             # must never be observable.
+            #
+            # Except once the game is over. Removal is cleanup *step 5* (323.7)
+            # and winning is *step 1* (323.1): the winning cleanup stops at
+            # step 1 and the later steps never run. A stranded facedown card in
+            # a finished game is the rules working, not a leak -- found by this
+            # check firing on the last action of a 299-step game.
             say(f"card {ref.instance_id} is hidden at battlefield "
                 f"{ref.hidden_at}, which P{ref.controller} does not control "
                 f"(107.3.c / 323.7)")

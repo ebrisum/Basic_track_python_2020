@@ -92,3 +92,44 @@ def test_the_checker_catches_an_attachment_to_a_card_off_the_board(decks):
     state.cards[gear].attached_to = host
     state.cards[host].location = None
     assert any("not on the board" in problem for problem in check(state))
+
+
+def test_a_finished_game_may_leave_a_facedown_card_stranded(decks):
+    """323.1 vs 323.7 -- removing a stranded Hidden card is cleanup *step 5*,
+    and winning is *step 1*. The cleanup that ends the game stops at step 1, so
+    the later steps never run and a finished position can legitimately show a
+    facedown card at a battlefield its controller has lost.
+
+    Found by the checker firing on the last action of a 299-step game. The
+    engine was right; the invariant was over-broad.
+    """
+    from engine.actions import HideCard
+    from engine.state import Phase
+    from engine.zones import CardRef
+
+    state = build_state(decks[0], decks[1], seed=3, db=DB)
+    agent = RandomAgent(3)
+    while state.phase is not Phase.MAIN and not state.is_terminal():
+        state.apply(agent.act(state))
+
+    player = state.turn_player
+    card_id = next(c.card_id for c in DB.cards.values()
+                   if c.type in ("unit", "spell", "gear") and c.has_hidden)
+    instance_id = max(state.cards) + 1
+    state.cards[instance_id] = CardRef(
+        instance_id=instance_id, card_id=card_id, owner=player, controller=player
+    )
+    state.players[player].hand.append(instance_id)
+    state.players[player].pool.universal_power += 1
+    state.battlefields[0].controller = player
+    state.apply(HideCard(instance_id, 0))
+
+    state.battlefields[0].controller = state.opponent(player)
+    assert any("does not control" in p for p in check(state)), (
+        "mid-game, a stranded facedown card is a violation"
+    )
+
+    state.phase = Phase.GAME_OVER
+    assert not any("does not control" in p for p in check(state)), (
+        "once the game is over, step 5 never runs (323.1)"
+    )

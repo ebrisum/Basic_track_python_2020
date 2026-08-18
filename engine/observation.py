@@ -56,6 +56,11 @@ class VisibleBattlefield:
     # 421.1 / 128 -- whether a card is hidden facedown here, and whose it is.
     # *That* a card is there is public; what it is never leaves its owner.
     facedown_by: int | None
+    # 128.4 -- "If a player controls a facedown card at a battlefield, that
+    # player and only that player may read or look at that card's face." Filled
+    # in only when the viewer is that player; None for everyone else, which is
+    # what the no-cheating suite pins from both sides.
+    facedown_card: "VisibleCard | None"
     card_id: str
     name: str
     image_url: str
@@ -206,6 +211,14 @@ class RiftboundObservation:
                     facedown_by=next(
                         (r.controller for r in state.cards.values()
                          if r.hidden_at == bf.index),
+                        None,
+                    ),
+                    # 128.4 -- its controller, and only its controller, reads
+                    # the face. An agent that hid a card must be able to plan
+                    # around what it hid.
+                    facedown_card=next(
+                        (visible(r.instance_id) for r in state.cards.values()
+                         if r.hidden_at == bf.index and r.controller == player_id),
                         None,
                     ),
                     card_id=bf.card_id,
