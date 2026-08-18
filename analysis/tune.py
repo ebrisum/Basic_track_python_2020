@@ -116,7 +116,13 @@ def spsa(
     theta = list(start.weights)
     target_norm = _norm(theta)
     rng = random.Random(seed)
-    field = matchups(decks)
+    # Mirrors. Each iteration's gradient signal is a two-game match between
+    # two perturbations of the same weights -- an agent-vs-agent comparison,
+    # and the decks are far louder than the agents: volibear beats jinx about
+    # 85-15 with identical agents. Tuning across mismatched decks feeds SPSA a
+    # gradient made mostly of deck luck, which is how a 1,600-game run moved
+    # almost nothing.
+    field = matchups(decks, mirror_only=True)
     trace: list[dict] = []
     started = time.perf_counter()
 

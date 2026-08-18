@@ -212,3 +212,16 @@ def test_the_loop_can_restrict_itself_to_mirrors():
     decks = ["a", "b"]
     assert len(matchups(decks)) == 4
     assert matchups(decks, mirror_only=True) == [("a", "a"), ("b", "b")]
+
+
+def test_spsa_tunes_in_mirrors():
+    """Each SPSA iteration is an agent-vs-agent match, so it inherits the
+    deck-noise problem: a gradient computed across mismatched decks is mostly
+    deck luck. Pinned because it is invisible from the output — the run still
+    completes, it just learns nothing."""
+    import inspect
+
+    from analysis import tune
+
+    source = inspect.getsource(tune.spsa)
+    assert "mirror_only=True" in source
