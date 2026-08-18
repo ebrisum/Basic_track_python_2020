@@ -42,7 +42,7 @@ architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
-**401 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+**422 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
 priority, focus and showdowns, 24 covering Equipment, 29 covering battlefield
 takeover and threat forecasting, 15 covering Elo/SPRT/the league, and 20
 driving the frontend over HTTP — plus two full Riftbound games in the replay
@@ -284,15 +284,22 @@ something worth answering. Search plays the consequences out; the evaluation
 only scores leaves. It determinizes hidden information rather than reading the
 opponent's hand.
 
-The greedy agent beats random **0.925 (37-3)** against a 0.525
-random-vs-random baseline, so the heuristic captures something real.
+The greedy agent beats random **0.967 (116-4)** — about +585 Elo — so the
+heuristic captures something real.
 
-**Search does not yet beat the heuristic it searches with.** ISMCTS at 60
-iterations beats random **0.917 (22-2)** but scores **0.458 (11-13)** against
-greedy — an interval of 0.259–0.658, which straddles even. So the honest
-reading is *indistinguishable from greedy at this budget*, not stronger. 60
-iterations is roughly 0.12s per decision; whether the gap closes with budget
-is a measurement not yet run, and until it wins the claim is not made.
+**Read every cross-deck number here with the decks in mind.** With identical
+agents on both sides, `volibear_body_fury` beats `jinx_chaos_fury` about
+**85-15**. A better agent is worth 0.52–0.55; a luckier deck is worth 0.85. So
+agent-vs-agent comparisons run in **mirrors** — each deck against itself — and
+the deck cancels exactly. See [`TRAINING.md`](TRAINING.md).
+
+**Search was worse than the evaluation it wraps, because of a bug.** Every
+node was backed up from the *searching* player's point of view, so at nodes
+where the opponent chooses, the search picked whatever helped the searcher —
+it planned against a cooperating opponent, and more iterations bought a more
+confident wrong plan. ISMCTS(60) measured **0.350 (14-26)** against the greedy
+agent it is built on; with the perspective fixed it went to **0.433 (26-34)**.
+Full account in [`SCORING.md`](SCORING.md).
 
 But the headline result is a warning: **fitting improved prediction and made
 play worse.** Brier went 0.1815 → 0.1666 and accuracy 0.687 → 0.727, and the
