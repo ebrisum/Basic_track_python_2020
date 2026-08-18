@@ -200,6 +200,28 @@ because random agents hoard cards they cannot play.
 So the promotion gate is the benchmark, not Brier: `fit_weights.py` writes a
 candidate and installs nothing. Full write-up in [`SCORING.md`](SCORING.md).
 
+## Scripting cards with an LLM
+
+Hand-scripting ~900 cards is the bottleneck. `cards/extract.py` asks Claude to
+read a card's printed text and emit a `CardScript` as **data**, constrained by
+a JSON schema whose enums are the DSL primitives.
+
+```sh
+.venv/bin/python cards/extract.py --card OGN-003 --dry-run   # inspect prompts, no API call
+.venv/bin/python cards/extract.py --set OGN --limit 25        # extract a slice
+.venv/bin/python cards/extract.py --set OGN --batch           # Batches API, 50% cost
+```
+
+The safety property is unchanged from the brief: **the model never emits
+code.** It fills a fixed schema, and `validate()` rejects anything outside the
+vocabulary, so a hallucinated primitive fails loudly instead of executing.
+Extractions land in `cards/scripts/generated/` with provenance (model, prompt
+version, sha256 of the card text) and are **not loaded by the engine** —
+promotion is a human decision and every card still needs a test.
+
+Needs the `anthropic` package and credentials; neither is required to run the
+engine or the tests.
+
 ## Documents
 
 - [`SCORING.md`](SCORING.md) — reward vs heuristic, and what the numbers say

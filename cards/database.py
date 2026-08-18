@@ -67,6 +67,17 @@ class CardData:
         return kw.has(self.parsed_keywords, "Ganking")  # 810
 
     @property
+    def has_accelerate(self) -> bool:
+        """805 -- an optional additional cost to enter ready."""
+        return kw.has(self.parsed_keywords, "Accelerate")
+
+    @property
+    def accelerate_power_domains(self) -> list[str]:
+        """805.1.a.1-2 -- the Power must match one of the unit's domains, or
+        any domain if the unit has none."""
+        return [self.domains[0]] if self.domains else ["Universal"]
+
+    @property
     def has_action(self) -> bool:
         """806 Action -- playable on your turn or in showdowns (308.1.a)."""
         return kw.has(self.parsed_keywords, "Action")

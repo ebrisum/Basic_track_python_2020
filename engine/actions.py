@@ -58,12 +58,19 @@ class Mulligan(Action):
 
 @dataclass(frozen=True, order=False)
 class PlayCard(Action):
-    """419 Play. Units and Gear go to the controller's Base (148.1.a.1)."""
+    """419 Play. Units and Gear go to the controller's Base (148.1.a.1).
+
+    `accelerate` pays ACCELERATE's optional additional cost (805.2): 1 energy
+    plus 1 power of one of the unit's domains, in exchange for entering ready
+    instead of exhausted (143.4). It is a separate action rather than a
+    follow-up prompt so an agent sees both lines as distinct choices.
+    """
 
     instance_id: int
+    accelerate: bool = False
 
     def __repr__(self) -> str:
-        return f"play:{self.instance_id}"
+        return f"play:{self.instance_id}" + ("+accel" if self.accelerate else "")
 
 
 @dataclass(frozen=True, order=False)

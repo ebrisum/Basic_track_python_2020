@@ -368,3 +368,95 @@ def test_games_still_finish_with_the_chain_in_place(decks, seed):
         state.apply(agent.act(state))
         steps += 1
     assert sum(state.returns()) == pytest.approx(1.0)
+
+
+# --- ACCELERATE (805) and entry state (143.4) -------------------------------
+
+
+def test_units_enter_the_board_exhausted(decks):
+    """143.4 -- the default, which is what makes ACCELERATE worth paying."""
+    state = arena(decks)
+    player = state.turn_player
+    state._current_player = player
+    unit = give(state, player, "OGN-142")   # Mountain Drake, no Accelerate
+    state.apply(PlayCard(unit))
+    assert state.cards[unit].exhausted
+
+
+def test_accelerate_is_offered_as_a_separate_line(decks):
+    """805.2 -- an optional additional cost, so both lines are legal."""
+    state = arena(decks)
+    player = state.turn_player
+    state._current_player = player
+    unit = give(state, player, "OGN-010")   # Legion Rearguard, ACCELERATE
+    legal = state.legal_actions()
+    assert PlayCard(unit) in legal
+    assert PlayCard(unit, accelerate=True) in legal
+
+
+def test_paying_accelerate_makes_the_unit_enter_ready(decks):
+    """805.1.a -- 'If you do, I enter ready.'"""
+    state = arena(decks)
+    player = state.turn_player
+    state._current_player = player
+    unit = give(state, player, "OGN-010")
+    state.apply(PlayCard(unit, accelerate=True))
+    assert not state.cards[unit].exhausted
+
+
+def test_accelerate_costs_one_more_energy_and_one_power(decks):
+    """805.1.a -- [1][C] on top of the printed cost."""
+    state = arena(decks)
+    player = state.turn_player
+    state._current_player = player
+    card = DB["OGN-010"]
+    pool = state.players[player].pool
+    before_energy = pool.energy
+    before_power = pool.total_power()
+    state.apply(PlayCard(give(state, player, "OGN-010"), accelerate=True))
+    assert pool.energy == before_energy - (card.energy + 1)
+    assert pool.total_power() == before_power - (card.power + 1)
+
+
+def test_accelerate_is_not_offered_when_the_extra_cost_is_unaffordable(decks):
+    """201-204 -- an unpayable cost makes the line illegal, not a trap."""
+    state = arena(decks)
+    player = state.turn_player
+    state._current_player = player
+    unit = give(state, player, "OGN-010")
+    card = DB["OGN-010"]
+    # Exactly the printed cost, nothing spare for the [1][C].
+    state.players[player].pool.clear()
+    state.players[player].pool.energy = card.energy
+    for _ in range(card.power):
+        state.players[player].pool.universal_power += 1
+    legal = state.legal_actions()
+    assert PlayCard(unit) in legal
+    assert PlayCard(unit, accelerate=True) not in legal
+
+
+def test_accelerate_power_must_match_a_domain_of_the_unit(decks):
+    """805.1.a.1 -- Fury unit needs Fury power, not just any power."""
+    card = DB["OGN-010"]
+    assert card.domains, "this test needs a domained unit"
+    assert card.accelerate_power_domains == [card.domains[0]]
+
+
+def test_a_reaction_can_answer_a_reaction(decks):
+    """309.1.a -- the chain can stack Reactions while resources allow."""
+    state = arena(decks)
+    caster = state.turn_player
+    other = state.opponent(caster)
+    put_unit(state, other, "OGN-142", bf_location(0))
+
+    state.apply(PlayCard(give(state, caster, "OGN-009")))   # Hextech Ray
+    if state.phase is Phase.CHOOSING:
+        state.apply(state.legal_actions()[0])
+    first = give(state, other, "OGN-133")                   # Flurry, REACTION
+    state.apply(PlayCard(first))
+    if state.phase is Phase.CHOOSING:
+        state.apply(state.legal_actions()[0])
+    second = give(state, caster, "OGN-169")                 # Gust, REACTION
+    assert PlayCard(second) in state.legal_actions(), "a Reaction answers a Reaction"
+    state.apply(PlayCard(second))
+    assert len(state.chain) >= 3, "three items stacked on the chain"

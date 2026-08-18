@@ -155,6 +155,8 @@ class RiftboundState:
     awaiting: ChoiceRequest | None = None
     # Which players' units enter ready this turn (Confront).
     units_enter_ready: set = field(default_factory=set)
+    # Instances whose ACCELERATE cost was paid while being played (805.2.b).
+    accelerated: set = field(default_factory=set)
     # Phase to return to once the effect queue drains.
     _resume_phase: "Phase | None" = None
     _rng: random.Random = field(default_factory=random.Random)
@@ -254,6 +256,14 @@ class RiftboundState:
                 continue
             if state.pool.can_pay(card.energy, card.power_domains):
                 actions.append(PlayCard(instance_id))
+                # 805.2 -- ACCELERATE is an optional additional cost paid as
+                # part of playing the unit, never once it is on the board.
+                if card.type == "unit" and card.has_accelerate:
+                    if state.pool.can_pay(
+                        card.energy + 1,
+                        card.power_domains + card.accelerate_power_domains,
+                    ):
+                        actions.append(PlayCard(instance_id, accelerate=True))
 
         # Activated abilities (376, 145.2). Their own printed timing governs,
         # which is why a rune seal's REACTION ability works inside a chain.
@@ -543,13 +553,26 @@ class RiftboundState:
         ref = self.cards[action.instance_id]
         card = self.db[ref.card_id]
 
-        state.pool.pay(card.energy, card.power_domains)  # 444 Pay
+        if action.accelerate:
+            # 805.1.a -- pay [1][C] on top of the printed cost.
+            state.pool.pay(
+                card.energy + 1, card.power_domains + card.accelerate_power_domains
+            )
+        else:
+            state.pool.pay(card.energy, card.power_domains)  # 444 Pay
         if action.instance_id in state.hand:
             state.hand.remove(action.instance_id)
         else:
             state.champion_zone.remove(action.instance_id)
 
-        self._emit(f"P{player} plays {card.name}")
+        self._emit(
+            f"P{player} plays {card.name}" + (" (accelerated)" if action.accelerate else "")
+        )
+        if action.accelerate:
+            # 805.2.b -- paying the cost generates a delayed replacement
+            # effect, so the unit enters ready even if it loses the keyword
+            # during finalization. Recorded per instance, not per card.
+            self.accelerated.add(action.instance_id)
         item = ChainItem(
             kind="card", instance_id=action.instance_id, controller=player, pending=False
         )
@@ -583,7 +606,13 @@ class RiftboundState:
                 state.trash.append(item.instance_id)  # 351.2
             else:
                 ref.location = BASE_LOCATION  # 148.1.a.1
-                ref.exhausted = item.controller not in self.units_enter_ready
+                # 143.4 -- units enter exhausted, unless ACCELERATE was paid
+                # (805.1.a) or an effect says otherwise this turn.
+                ref.exhausted = not (
+                    item.instance_id in self.accelerated
+                    or item.controller in self.units_enter_ready
+                )
+                self.accelerated.discard(item.instance_id)
                 if card.type == "gear":
                     ref.exhausted = False
                 state.base.append(item.instance_id)

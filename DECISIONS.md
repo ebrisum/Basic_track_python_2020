@@ -227,3 +227,34 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   stronger than the heuristic has earned.
 - **The benchmark swaps seats and shares seeds across a pairing** -- first-player
   advantage is real here (485.7), and would otherwise be read as agent skill.
+
+## Session 8 -- the community sheet and LLM extraction
+
+- **The sheet's "Might" column is the power cost** -- 99.3% match with
+  apitcg's powerCost where filled, blank meaning zero (98.3%), 98.9% combined,
+  against 1.1% agreement with actual might. Mapped as power; that is what
+  filled SFD and raised complete cards from 584 to 697. It also explains RQ-1:
+  the npm source derives from this sheet, so the mislabelling propagated.
+- **The sheet's `Energy` is mapped but ranked below apitcg** -- only ~60%
+  agreement, scattered at +/-1 rather than a systematic offset, so neither
+  source is obviously right. For UNL and VEN it is the only source, and that
+  doubt is unresolved (RQ-11).
+- **Source `kind="manual"`** for the sheet -- `fetch.py` cannot refresh it
+  because docs.google.com is blocked; it is cached from a supplied xlsx with
+  sha256s, so the pipeline stays reproducible from `data/raw/`.
+- **ACCELERATE is a separate action, not a follow-up prompt** -- `play:N` and
+  `play:N+accel` are both offered when affordable, so an agent sees two
+  distinct lines rather than a hidden sub-decision.
+- **Accelerate is tracked per instance, not per card** (`state.accelerated`) --
+  805.2.b makes it a delayed replacement effect that survives the unit losing
+  the keyword during finalization.
+- **The LLM extractor emits data, never code** -- a JSON schema whose enums are
+  the DSL primitives, plus a `validate()` gate that re-checks on disk. The
+  schema constrains the model; the validator constrains the file after a human
+  edits it. This keeps the brief's "no arbitrary Python per card" rule intact
+  even though a model now writes the scripts.
+- **Generated scripts are candidates, not scripts** -- written to
+  `cards/scripts/generated/` with provenance and never loaded by the registry.
+  A test asserts the registry cannot auto-load them.
+- **Extraction records a sha256 of the card text** -- if a card is errata'd the
+  hash stops matching and the extraction is known to be stale.
