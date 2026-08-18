@@ -90,9 +90,13 @@ away. Run the null test whenever the harness changes:
 .venv/bin/python analysis/nulltest.py --games 400
 ```
 
-Measured: **0.480 (192-208-0) over 400 games, 95% interval 0.431–0.529.**
-The interval contains 0.500, so the harness is unbiased at this resolution and
-the numbers above can be trusted.
+Measured: **0.480 (192-208-0) over 400 games, 95% interval 0.431–0.529**, and
+again after the engine was rewritten for speed: **0.480 (144-156) over 300**.
+Both intervals contain 0.500, so the harness is unbiased at this resolution.
+
+Note what this test does *not* catch: it swaps seats, so it is blind to the
+deck imbalance below. An unbiased harness and a low-variance one are different
+properties, and this project had the first without the second.
 
 ---
 
@@ -156,33 +160,62 @@ Still available: parallelism across cores (games are independent), and the
 `_window_actions` loop, which still scans every card in the game rather than
 only the ones on the board.
 
-### 3. Patience — one bad generation is not the end of the run
+### 3. Measure in mirrors — the decks are louder than the agents
+
+This is the one that had been quietly ruining every comparison.
+
+Run identical greedy agents against each other with agent A pinned to seat 0
+and it scores **0.142 (17-103)**. Flip which deck sits in seat 0 and the score
+flips with it — 0.087 one way, 0.787 the other. It is not a seat effect. It is
+the decks: **volibear_body_fury beats jinx_chaos_fury about 85-15 with the
+same agent on both sides.**
+
+Now compare the sizes. A genuinely better agent is worth 0.52–0.55. A luckier
+deck assignment is worth 0.85. Any test that lets deck assignment vary is
+measuring mostly decks, and needs an enormous sample before the agent signal
+rises out of it — which is a large part of why every comparison in this
+project has come back "the interval straddles 0.5".
+
+**So agent-vs-agent comparisons run in mirrors**: each deck against itself,
+both sides. The deck cancels exactly and what is left is how the two agents
+play. It is the same move as fixing the opening book in engine testing —
+delete the variance you are not trying to measure.
+
+Cross-deck play is still right for *generating* training data, where variety
+is the point. It is only the comparisons that go to mirrors.
+
+Two smaller measurement bugs found alongside it, both now fixed and tested:
+sequential (one-game-at-a-time) tests were not swapping seats at all, because
+the rotation was keyed on a loop index that was always 0; and `duel` now takes
+a `start_index` so those callers can rotate properly.
+
+### 4. Patience — one bad generation is not the end of the run
 
 Training is noisy. The loop used to stop on the first non-promotion, which is
 why it never got past generation 1. `--patience 3` lets it retry with fresh
 data before giving up.
 
-### 4. Report what moved, not just whether it moved
+### 5. Report what moved, not just whether it moved
 
 Each promotion now records its largest weight changes. A number with no story
 is unauditable; a feature flipping sign is visible immediately, which is how
 the `hand_diff` artefact was caught the first time (random agents hoard cards
 they cannot play, so fitting on random data made holding cards look bad).
 
-### 5. The model's ceiling is low, and that is fine for now
+### 6. The model's ceiling is low, and that is fine for now
 
 The evaluation is logistic regression over 13 features. It will plateau, and
 no amount of iteration gets past that. When it does plateau, the options are
 more features, feature crosses, or a small non-linear model — but the plateau
 should be *measured* first, not assumed.
 
-### 6. Discarded games bias the data
+### 7. Discarded games bias the data
 
 `play_and_sample` throws away any game that hits `MAX_STEPS`. Those are the
 grindy, stalled positions — exactly the ones where evaluation matters most.
 Worth labelling them as draws instead of dropping them.
 
-### 7. Exploration is already there — keep it
+### 8. Exploration is already there — keep it
 
 `--epsilon 0.15` while generating data. Without it the agent only ever sees
 the lines it already prefers, and learns nothing about the alternatives.
