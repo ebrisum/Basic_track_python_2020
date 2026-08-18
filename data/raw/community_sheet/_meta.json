@@ -1,0 +1,23 @@
+{
+  "all_card_data.csv": {
+    "bytes": 380575,
+    "fetched_at": "2026-08-18T07:18:50.370919+00:00",
+    "sha256": "7be4d9a3fa1c9dfb1f4134054ace27a1da619d2ea2fa0be7ab54ede3816e53d6",
+    "sheet": "All Card Data",
+    "source": "user-supplied xlsx: Riftbound - All Card Info"
+  },
+  "card_counts.csv": {
+    "bytes": 24896,
+    "fetched_at": "2026-08-18T07:18:50.605391+00:00",
+    "sha256": "2cb1f7cd1f84df422af3e59088cab7ffa49693ef449f16b028a6aff8a3d822b0",
+    "sheet": "Card Counts",
+    "source": "user-supplied xlsx: Riftbound - All Card Info"
+  },
+  "summary.csv": {
+    "bytes": 113874,
+    "fetched_at": "2026-08-18T07:18:50.559604+00:00",
+    "sha256": "bea28f320d84920477a477cefbb066a97d05490f7cdadc725422d7aec5858295",
+    "sheet": "Summary",
+    "source": "user-supplied xlsx: Riftbound - All Card Info"
+  }
+}

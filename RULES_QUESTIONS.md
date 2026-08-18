@@ -69,6 +69,38 @@ is unaffected if the two decks are Origins-based.
 
 ---
 
+## RQ-11 — The community sheet's `Energy` is only ~60% reliable
+
+**Status:** open. It is the sole source for two whole sets.
+
+The repo owner supplied the brief's original source #3 as an xlsx. Two
+findings from measuring it against apitcg over 529 comparable cards:
+
+**Resolved:** its column headed **"Might" is the power cost**, not Might —
+99.3% agreement where filled, and a blank means zero (98.3%), for 98.9%
+combined. Agreement with the field it is *named* after is 1.1%. This also
+explains RQ-1: the npm source derives from this sheet, which is why its
+`might` matched apitcg's `power` 52% of the time. Mapping it filled SFD's
+power gap and took complete cards from 584 to 697.
+
+**Open:** its `Energy` column agrees with apitcg on only ~60% of shared
+cards. The mismatches scatter at ±1 (75 at −1, 21 at +1) rather than showing a
+systematic offset, so this is errata drift or transcription noise and *neither
+source is obviously right*.
+
+Where apitcg covers a card, apitcg wins on precedence. For **UNL and VEN the
+sheet is the only source**, so their energy costs carry that unquantified ~40%
+doubt — and their Might is missing entirely, since no source carries it.
+That is why UNL (39/268) and VEN (28/215) remain mostly unsimulatable.
+
+**Effect on outcomes:** any future simulation using UNL or VEN cards inherits
+it. OGN, OGS and SFD are unaffected — apitcg covers them.
+
+**To resolve:** a source with verified UNL/VEN stats. Riftcodex would settle
+it if egress ever allows.
+
+---
+
 ## RQ-2 — Which source is authoritative where they conflict
 
 **Status:** decided, low confidence, revisit when Riftcodex is reachable.

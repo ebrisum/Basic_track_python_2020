@@ -238,8 +238,84 @@ def adapt_apitcg(raw_dir: Path) -> list[CanonicalCard]:
     return out
 
 
+def adapt_community_sheet(raw_dir: Path) -> list[CanonicalCard]:
+    """The community "All Card Info" sheet, supplied as an xlsx and cached as CSV.
+
+    THE COLUMN HEADED "Might" IS THE POWER COST, not Might. Measured against
+    apitcg over 529 comparable cards:
+
+        sheet.Might == apitcg.power        99.3% (where filled)
+        sheet.Might blank -> power == 0    98.3%
+        combined                           98.9%
+        sheet.Might == apitcg.might         1.1%
+
+    1.1% agreement with the field it is named after is conclusive. This also
+    explains RQ-1: the npm source derives from this sheet, which is why its
+    `might` matched apitcg's `power` 52% of the time.
+
+    `Energy` is mapped but agrees with apitcg on only ~60% of shared cards
+    (scattered at +/-1, so neither source is obviously right). apitcg outranks
+    it everywhere they overlap; for UNL and VEN this sheet is the only source
+    and that uncertainty is unresolved. See RQ-11.
+
+    Might itself is NOT mapped -- this sheet does not carry it under any
+    column, and inventing it would repeat the RQ-1 mistake.
+    """
+    import csv
+
+    path = raw_dir / "all_card_data.csv"
+    if not path.exists():
+        return []
+    with path.open(newline="") as fh:
+        rows = list(csv.reader(fh))
+    if not rows:
+        return []
+    header = rows[0]
+    col = {name: i for i, name in enumerate(header) if name}
+    required = {"ID", "Name", "Card Type", "Domain", "Energy", "Might", "Ability"}
+    if not required <= set(col):
+        raise ValueError(f"community sheet is missing columns: {required - set(col)}")
+
+    def cell(row: list[str], name: str) -> str:
+        index = col.get(name)
+        return (row[index].strip() if index is not None and index < len(row) else "")
+
+    out: list[CanonicalCard] = []
+    for row in rows[1:]:
+        raw_id = cell(row, "ID").upper()
+        if not ID_RE.match(raw_id):
+            continue  # tokens like "UNL-T01" are not Main Deck cards
+        card_type = cell(row, "Card Type").lower()
+        domains = [
+            d.strip()
+            for d in cell(row, "Domain").replace(";", ",").split(",")
+            if d.strip() and d.strip().lower() not in ("none", "colorless")
+        ]
+        tags = [t.strip() for t in cell(row, "Tags").split(",") if t.strip()]
+        out.append(
+            CanonicalCard(
+                riftbound_id=raw_id,
+                name=cell(row, "Name"),
+                type=card_type,
+                energy=_int_or_none(cell(row, "Energy")),
+                # See the docstring: this column is the power cost, and a blank
+                # means zero rather than unknown.
+                power=_int_or_none(cell(row, "Might")) or 0,
+                domains=sorted(domains),
+                keywords=sorted(tags),
+                rules_text=cell(row, "Ability"),
+                image_url=cell(row, "Image URL"),
+                is_battlefield=(card_type == "battlefield"),
+                is_rune=(card_type == "rune"),
+                set=raw_id.split("-")[0],
+            )
+        )
+    return out
+
+
 ADAPTERS: dict[str, Adapter] = {
     "apitcg": adapt_apitcg,
+    "community_sheet": adapt_community_sheet,
     "riftbound_tools": adapt_riftbound_tools,
 }
 
