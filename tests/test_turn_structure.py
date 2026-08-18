@@ -319,3 +319,55 @@ def test_a_conquer_trigger_elsewhere_does_not_fire(decks):
     # ...and it does fire when its own battlefield is the one scored.
     state._score(player, state.battlefields[1], "Conquer")
     assert state.cards[gear].might_permanent > before
+
+
+# --- 430 Channel ------------------------------------------------------------
+
+
+def test_channel_puts_runes_on_the_board_ready_by_default(decks):
+    """430.2.a -- "By default, runes are channeled readied"."""
+    state = arena(decks)
+    player = state.turn_player
+    before = len(state.players[player].channeled_runes)
+    assert state.channel(player, 2) == 2
+    fresh = state.players[player].channeled_runes[before:]
+    assert len(fresh) == 2
+    assert all(not state.cards[i].exhausted for i in fresh)
+
+
+def test_channel_can_bring_runes_in_exhausted(decks):
+    """430.2 -- "Channel 1 rune exhausted."."""
+    state = arena(decks)
+    player = state.turn_player
+    before = len(state.players[player].channeled_runes)
+    state.channel(player, 1, exhausted=True)
+    fresh = state.players[player].channeled_runes[before:]
+    assert state.cards[fresh[0]].exhausted is True
+
+
+def test_channel_takes_as_many_as_the_rune_deck_allows(decks):
+    """430.3 -- "If there aren't sufficient runes, channel as many as
+    possible." The return value is what "if you couldn't channel 2 runes this
+    way" needs to test."""
+    state = arena(decks)
+    player = state.turn_player
+    state.players[player].rune_deck[:] = state.players[player].rune_deck[:1]
+    assert state.channel(player, 2) == 1
+    assert not state.players[player].rune_deck
+
+
+def test_boneshiver_channels_a_rune_exhausted_on_conquer(decks):
+    """SFD-118 end to end, through the Conquer trigger."""
+    from engine.state import bf_location
+
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175", bf_location(0))
+    gear = put_unit(state, player, "SFD-118", bf_location(0))
+    state.cards[gear].attached_to = host
+    before = len(state.players[player].channeled_runes)
+
+    state._score(player, state.battlefields[0], "Conquer")
+    fresh = state.players[player].channeled_runes[before:]
+    assert len(fresh) == 1
+    assert state.cards[fresh[0]].exhausted is True

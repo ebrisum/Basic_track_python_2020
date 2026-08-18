@@ -25,6 +25,7 @@ from cards.dsl import (
     Draw,
     Duration,
     Effect,
+    Channel,
     Exhaust,
     Stun,
     GainPoints,
@@ -317,6 +318,17 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _channel(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """430 -- channel runes, as many as the Rune Deck allows (430.3)."""
+    for player in _resolve_player(effect.who, ctx.controller):
+        got = state.channel(player, effect.count, effect.exhausted)
+        state._emit(
+            f"P{player} channels {got} rune(s)"
+            + (" exhausted" if effect.exhausted else "")
+        )
+    return None
+
+
 def _stun(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """423 -- Stun each chosen unit. 423.1.a.1 makes it a no-op on a unit
     that is already stunned."""
@@ -372,6 +384,7 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    Channel: _channel,
     Stun: _stun,
     Exhaust: _exhaust,
     Ready: _ready,

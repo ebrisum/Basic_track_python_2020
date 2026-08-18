@@ -18,6 +18,7 @@ from cards.dsl import (
     Attach,
     Buff,
     CardScript,
+    Channel,
     Deal,
     Discard,
     DiscardCost,
@@ -252,6 +253,19 @@ SCRIPTS: tuple[CardScript, ...] = (
                 text="Exhaust: REACTION - ADD chaos.",
             ),
         ),
+    ),
+    # --- 430 Channel as an effect -------------------------------------------
+    CardScript(
+        card_id="SFD-118",  # Boneshiver
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_CONQUER,
+                effects=(Channel(1, exhausted=True),),
+                text="When I conquer, channel 1 rune exhausted.",
+            ),
+        ),
+        complete=False,
+        note="Might +2 is the printed Might Bonus, applied by cards/gear.py",
     ),
     # --- 471.2.b Hold triggers ---------------------------------------------
     CardScript(

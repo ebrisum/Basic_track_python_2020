@@ -1014,6 +1014,28 @@ class RiftboundState:
             if bf.controller == self.turn_player:
                 self._score(self.turn_player, bf, "Hold")
 
+    def channel(self, player: int, count: int = 1, exhausted: bool = False) -> int:
+        """430 -- take runes from the top of the Rune Deck onto the board.
+
+        430.2.a: runes are channeled ready by default; 430.2 lets an effect
+        specify otherwise ("Channel 1 rune exhausted").
+        430.3: if there are not enough runes, channel as many as possible.
+
+        Returns how many were actually channeled, which is what 430.5's
+        "If you couldn't channel 2 runes this way" needs.
+        """
+        state = self.players[player]
+        channeled = 0
+        for _ in range(count):
+            if not state.rune_deck:
+                break
+            instance_id = state.rune_deck.pop(0)
+            state.channeled_runes.append(instance_id)
+            self.cards[instance_id].location = BASE_LOCATION
+            self.cards[instance_id].exhausted = exhausted
+            channeled += 1
+        return channeled
+
     def _phase_channel(self) -> None:
         """315.3 -- channel 2 runes; the player going second gets +1 once (485.7)."""
         state = self.players[self.turn_player]
@@ -1021,15 +1043,7 @@ class RiftboundState:
         if not state.has_channeled and self.turn_player != self.first_player:
             count += 1
         state.has_channeled = True
-        channeled = 0
-        for _ in range(count):
-            if not state.rune_deck:
-                break  # 315.3.b.1 -- channel as many as possible
-            instance_id = state.rune_deck.pop(0)
-            state.channeled_runes.append(instance_id)
-            self.cards[instance_id].location = BASE_LOCATION
-            self.cards[instance_id].exhausted = False
-            channeled += 1
+        channeled = self.channel(self.turn_player, count)
         self._emit(f"P{self.turn_player} channels {channeled}")
 
     def _phase_draw(self) -> None:

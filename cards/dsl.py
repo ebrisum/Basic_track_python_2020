@@ -172,6 +172,19 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class Channel(Effect):
+    """430 -- take runes from the top of the Rune Deck onto the board.
+
+    `exhausted` covers 430.2: "Channel 1 rune exhausted." Runes arrive ready
+    unless an effect says otherwise (430.2.a).
+    """
+
+    count: int = 1
+    exhausted: bool = False
+    who: Who = Who.YOU
+
+
+@dataclass(frozen=True)
 class Stun(Effect):
     """423 Stun -- a binary status; a stunned unit contributes no Might to
     combat damage (423.1.b) and loses the status at end of turn (423.1.a.2)."""
