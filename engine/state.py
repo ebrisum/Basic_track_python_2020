@@ -46,6 +46,7 @@ from engine.actions import (
     ChooseTarget,
     Concede,
     ExhaustRuneForEnergy,
+    HideCard,
     Mulligan,
     PassPhase,
     PlayCard,
@@ -54,6 +55,7 @@ from engine.actions import (
 )
 from engine.interface import PLAYERS
 from engine.zones import (
+    ANY_DOMAIN,
     BASE_LOCATION,
     Battlefield,
     CardRef,
@@ -163,6 +165,9 @@ class RiftboundState:
     accelerated: set = field(default_factory=set)
     # Phase to return to once the effect queue drains.
     _resume_phase: "Phase | None" = None
+    # 811.1.d.1 -- set while a card played from Hidden is on the chain, so it
+    # enters at that battlefield rather than the Base.
+    _playing_from_hidden: int | None = None
     _rng: random.Random = field(default_factory=random.Random)
 
     # ------------------------------------------------------------- cloning
@@ -223,6 +228,7 @@ class RiftboundState:
         clone.units_enter_ready = set(self.units_enter_ready)
         clone.accelerated = set(self.accelerated)
         clone._resume_phase = self._resume_phase
+        clone._playing_from_hidden = self._playing_from_hidden
         clone._last_from_trigger = self._last_from_trigger
 
         # A clone must not share a random stream with its original, or one
@@ -356,6 +362,35 @@ class RiftboundState:
                 if self._can_pay_ability(ref, ability):
                     actions.append(ActivateAbility(ref.instance_id, index))
 
+        # 421 / 811.1.b -- Hide. On your turn in an Open State, pay one power
+        # of any domain to put a HIDDEN card facedown at a battlefield you
+        # control that has no facedown card already.
+        if neutral_open and player == self.turn_player:
+            for instance_id in state.hand + state.champion_zone:
+                card = self.db[self.cards[instance_id].card_id]
+                if not card.has_hidden:
+                    continue
+                if not state.pool.can_pay(0, [ANY_DOMAIN]):   # [A]: any one power
+                    continue
+                for bf in self.battlefields:
+                    if bf.controller != player:
+                        continue
+                    if self._facedown_at(bf.index) is not None:
+                        continue
+                    actions.append(HideCard(instance_id, bf.index))
+
+        # 811.1.b -- "Beginning on the next turn, this gains [Reaction] and
+        # you may play this, ignoring its base cost."
+        for ref in self.cards.values():
+            if ref.hidden_at is None or ref.controller != player:
+                continue
+            if self.turn_number <= ref.hidden_on_turn:
+                continue          # not until the next turn
+            if not can_play(self.db[ref.card_id], player, self.turn_player,
+                            self.chain, self.showdown, reaction_override=True):
+                continue
+            actions.append(PlayCard(ref.instance_id))
+
         # Rune abilities (164.2) are both Reactions, so they stay available
         # inside a chain and during showdowns.
         for instance_id in state.channeled_runes:
@@ -453,6 +488,13 @@ class RiftboundState:
             if profile is not None and profile.might_bonus is not None:
                 attached += profile.might_bonus
         return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
+
+    def _facedown_at(self, index: int) -> CardRef | None:
+        """811.1.b -- at most one facedown card per battlefield."""
+        for ref in self.cards.values():
+            if ref.hidden_at == index:
+                return ref
+        return None
 
     def stun(self, ref: CardRef) -> bool:
         """423 -- Stun a unit. Returns whether the status actually changed.
@@ -605,6 +647,8 @@ class RiftboundState:
             self._apply_choice(action)
         elif isinstance(action, AssignDamageTo):
             self._apply_assign(action)
+        elif isinstance(action, HideCard):
+            self._apply_hide(action)
         elif isinstance(action, Concede):
             self._apply_concede()
         elif isinstance(action, PassPhase):
@@ -665,20 +709,35 @@ class RiftboundState:
         ref = self.cards[action.instance_id]
         card = self.db[ref.card_id]
 
-        if action.accelerate:
+        from_hidden = ref.hidden_at
+        if from_hidden is not None:
+            # 811.1.b -- played from Hidden, "ignoring its base cost". The
+            # card is already off the hand, so there is nothing to remove.
+            ref.hidden_at = None
+        elif action.accelerate:
             # 805.1.a -- pay [1][C] on top of the printed cost.
             state.pool.pay(
                 card.energy + 1, card.power_domains + card.accelerate_power_domains
             )
+            if action.instance_id in state.hand:
+                state.hand.remove(action.instance_id)
+            else:
+                state.champion_zone.remove(action.instance_id)
         else:
             state.pool.pay(card.energy, card.power_domains)  # 444 Pay
-        if action.instance_id in state.hand:
-            state.hand.remove(action.instance_id)
-        else:
-            state.champion_zone.remove(action.instance_id)
+            if action.instance_id in state.hand:
+                state.hand.remove(action.instance_id)
+            else:
+                state.champion_zone.remove(action.instance_id)
+
+        # 811.1.d.1 -- a hidden permanent must be played to that battlefield,
+        # which overrides the normal restriction that gear go to base.
+        self._playing_from_hidden = from_hidden
 
         self._emit(
-            f"P{player} plays {card.name}" + (" (accelerated)" if action.accelerate else "")
+            f"P{player} plays {card.name}"
+            + (" (accelerated)" if action.accelerate else "")
+            + (" from hidden" if from_hidden is not None else "")
         )
         if action.accelerate:
             # 805.2.b -- paying the cost generates a delayed replacement
@@ -717,7 +776,13 @@ class RiftboundState:
                 self._fire(TriggerKind.ON_RESOLVE, item.instance_id)
                 state.trash.append(item.instance_id)  # 351.2
             else:
-                ref.location = BASE_LOCATION  # 148.1.a.1
+                # 148.1.a.1 -- permanents enter the Base, unless 811.1.d.1
+                # sends a card played from Hidden to its battlefield instead.
+                hidden_bf = getattr(self, "_playing_from_hidden", None)
+                ref.location = (
+                    bf_location(hidden_bf) if hidden_bf is not None
+                    else BASE_LOCATION
+                )
                 # 143.4 -- units enter exhausted, unless ACCELERATE was paid
                 # (805.1.a) or an effect says otherwise this turn.
                 ref.exhausted = not (
@@ -728,6 +793,7 @@ class RiftboundState:
                 if card.type == "gear":
                     ref.exhausted = False
                 state.base.append(item.instance_id)
+                self._playing_from_hidden = None
                 self._fire(TriggerKind.ON_PLAY, item.instance_id)
         else:
             ability = activated_abilities(card)[item.ability_index]
@@ -944,6 +1010,29 @@ class RiftboundState:
                 bf.controller = sole
                 self._score(sole, bf, "Conquer")
         self._emit(f"Showdown closes at {self.db[bf.card_id].name}")
+
+    def _apply_hide(self, action: HideCard) -> None:
+        """421 / 811.1.b -- put the card facedown at a battlefield you control.
+
+        Hide is not a subset of Play (811.1.c.1) and does not open a chain
+        (811.1.c.2), so this neither pays a card cost nor touches the chain.
+        The cost is [A]: one power of any domain (135.2.e.5).
+        """
+        player = self._current_player
+        state = self.players[player]
+        ref = self.cards[action.instance_id]
+
+        state.pool.pay(0, [ANY_DOMAIN])
+        if action.instance_id in state.hand:
+            state.hand.remove(action.instance_id)
+        elif action.instance_id in state.champion_zone:
+            state.champion_zone.remove(action.instance_id)
+        ref.hidden_at = action.battlefield
+        ref.hidden_on_turn = self.turn_number
+        self._emit(
+            f"P{player} hides a card at "
+            f"{self.db[self.battlefields[action.battlefield].card_id].name}"
+        )
 
     def _apply_concede(self) -> None:
         player = self._current_player

@@ -12,6 +12,8 @@ from enum import Enum
 
 # The six domains (164.1). Order is fixed so serialization is deterministic.
 DOMAINS: tuple[str, ...] = ("Fury", "Calm", "Mind", "Body", "Chaos", "Order")
+# 135.2.e.5 -- "[A]", power of any Domain, as a cost symbol.
+ANY_DOMAIN = "*"
 
 
 class Zone(str, Enum):
@@ -58,6 +60,11 @@ class CardRef:
     # 185 -- a token can never become a card and a card can never become a
     # token (185.1.a/b), so this is fixed for the life of the instance.
     is_token: bool = False
+    # 421 / 811 -- facedown at a battlefield. `hidden_at` is the battlefield
+    # index; `hidden_on_turn` is when it was hidden, because 811.1.b only
+    # allows playing it "beginning on the next turn".
+    hidden_at: int | None = None
+    hidden_on_turn: int = -1
     # Damage marked this combat is cleared in the Resolution Step (466).
     # Might modifiers (426 Buff, 701). Turn-scoped ones clear in the Ending
     # Phase; permanent ones persist while the object stays on the board.
@@ -171,7 +178,17 @@ class RunePool:
         remaining = dict(self.power)
         universal = self.universal_power
         for domain in power_domains:
-            if remaining.get(domain, 0) > 0:
+            # 135.2.e.5.a -- "[A]" is power of *any* domain, so it is paid by
+            # whatever is available rather than by a matching rune.
+            if domain == ANY_DOMAIN:
+                if universal > 0:
+                    universal -= 1
+                elif any(count > 0 for count in remaining.values()):
+                    pick = next(d for d, c in remaining.items() if c > 0)
+                    remaining[pick] -= 1
+                else:
+                    return False
+            elif remaining.get(domain, 0) > 0:
                 remaining[domain] -= 1
             elif universal > 0:
                 universal -= 1
@@ -184,7 +201,15 @@ class RunePool:
             raise ValueError("cannot pay cost from this pool")
         self.energy -= energy
         for domain in power_domains:
-            if self.power.get(domain, 0) > 0:
+            if domain == ANY_DOMAIN:
+                if self.universal_power > 0:
+                    self.universal_power -= 1
+                else:
+                    pick = next(d for d, c in self.power.items() if c > 0)
+                    self.power[pick] -= 1
+                    if self.power[pick] == 0:
+                        del self.power[pick]
+            elif self.power.get(domain, 0) > 0:
                 self.power[domain] -= 1
                 if self.power[domain] == 0:
                     del self.power[domain]

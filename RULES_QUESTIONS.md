@@ -190,6 +190,57 @@ rather than assumed. See `DECISIONS.md`.
 
 ---
 
+## RQ-14 — A hidden card's targeting is not restricted to its battlefield
+
+**Status:** open. Implemented in part; the missing part is named here rather
+than left to be discovered.
+
+**Situation.** 811.1.d restricts what a card played from Hidden may choose:
+
+* **811.1.d.1** — a hidden permanent must be played *to that battlefield*,
+  overriding the rule that gear go to base. **Implemented.**
+* **811.1.d.2** — if a hidden spell or a hidden permanent's play effect
+  chooses targets, those targets must come from that battlefield. **Not
+  implemented.** A card played from Hidden currently targets as freely as one
+  played from hand.
+* **811.1.d.2's exception** — "unless the ability explicitly restricts
+  targeting in a way that makes this impossible". Deciding that needs
+  per-effect analysis of whether a selector *can* be satisfied at one
+  battlefield, which the DSL's `Selector` cannot currently answer.
+* **811.1.d.3** — if a hidden card causes you to play a unit, that unit must
+  be played at that battlefield. **Not implemented.**
+
+**Effect on outcomes.** A hidden spell can currently hit targets anywhere,
+which is strictly more permissive than the rules allow. It affects only cards
+played from Hidden, which needs both a HIDDEN card and a battlefield held
+across two turns.
+
+**What it needs.** `Selector` gaining a location constraint, plus a way to ask
+whether a selector is satisfiable at a given battlefield — which is also what
+811.1.d.2's exception requires. Worth doing together.
+
+---
+
+## RQ-15 — What happens to a hidden card when you lose the battlefield
+
+**Status:** open, unanswerable from the text I have.
+
+**Situation.** 811.1.b says a card is hidden "at a battlefield you control
+that doesn't already have a facedown card hidden there **for as long as you
+control that battlefield**". The rules do not then say what becomes of the
+card when that control ends. Plausible readings: it returns to hand, it is
+revealed, it stays facedown but unplayable, or it ceases to be hidden and
+goes to the trash.
+
+**Decision.** The engine leaves the card hidden and playable, and the state
+invariant *reports* rather than enforces the controller check, so the
+situation is visible instead of silently resolved one way.
+
+**Effect on outcomes.** Small and one-directional: a player who loses a
+battlefield keeps access to a card some readings would take away.
+
+---
+
 ## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
 
 **Status:** open, bounded, four cards.

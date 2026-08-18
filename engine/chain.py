@@ -93,13 +93,32 @@ def timing_label(chain: list[ChainItem], showdown: Showdown | None) -> str:
     return f"{axis1} {axis2}"
 
 
+class _WithReaction:
+    """A card view that has Reaction, for 811.1.b's grant."""
+
+    def __init__(self, card):
+        self._card = card
+
+    def __getattr__(self, name):
+        return getattr(self._card, name)
+
+    @property
+    def has_reaction(self) -> bool:
+        return True
+
+
 def can_play(
     card,
     player: int,
     turn_player: int,
     chain: list[ChainItem],
     showdown: Showdown | None,
+    reaction_override: bool = False,
 ) -> bool:
+    """`reaction_override` grants Reaction timing regardless of the printed
+    card, which is what 811.1.b does to a card played from Hidden."""
+    if reaction_override:
+        card = _WithReaction(card)
     """Whether `card` may be played right now, by timing alone (308-310).
 
     * Closed (a chain exists): only Reaction (309.1.a).

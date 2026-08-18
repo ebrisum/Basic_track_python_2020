@@ -53,6 +53,9 @@ class VisibleCard:
 @dataclass(frozen=True)
 class VisibleBattlefield:
     index: int
+    # 421.1 / 128 -- whether a card is hidden facedown here, and whose it is.
+    # *That* a card is there is public; what it is never leaves its owner.
+    facedown_by: int | None
     card_id: str
     name: str
     image_url: str
@@ -192,6 +195,11 @@ class RiftboundObservation:
             battlefields=tuple(
                 VisibleBattlefield(
                     index=bf.index,
+                    facedown_by=next(
+                        (r.controller for r in state.cards.values()
+                         if r.hidden_at == bf.index),
+                        None,
+                    ),
                     card_id=bf.card_id,
                     name=db[bf.card_id].name,
                     image_url=db[bf.card_id].image_url,

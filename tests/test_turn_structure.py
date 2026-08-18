@@ -444,3 +444,127 @@ def test_faithful_manufactor_creates_a_recruit_where_it_is_played(decks):
     assert len(fresh) == 1
     assert state.cards[fresh[0]].card_id == RECRUIT
     assert state.cards[fresh[0]].is_token is True
+
+
+# --- 421 Hide / 811 Hidden --------------------------------------------------
+
+
+def hidable(state, player):
+    """Put a HIDDEN card in `player`'s hand and give them a power to pay [A]."""
+    from engine.zones import CardRef
+
+    card_id = next(
+        c.card_id for c in DB.cards.values()
+        if c.type in ("unit", "spell", "gear") and c.has_hidden
+    )
+    instance_id = max(state.cards) + 1
+    state.cards[instance_id] = CardRef(
+        instance_id=instance_id, card_id=card_id, owner=player, controller=player
+    )
+    state.players[player].hand.append(instance_id)
+    state.players[player].pool.universal_power += 1
+    return instance_id
+
+
+def test_hide_puts_a_card_facedown_at_a_battlefield_you_control(decks):
+    """421.1 / 811.1.b."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+
+    assert HideCard(card, 0) in state.legal_actions()
+    state.apply(HideCard(card, 0))
+    assert state.cards[card].hidden_at == 0
+    assert card not in state.players[player].hand
+    assert state.cards[card].location is None      # not a permanent
+
+
+def test_hide_is_not_offered_at_a_battlefield_you_do_not_control(decks):
+    """811.1.b -- "at a battlefield you control"."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = state.opponent(player)
+    card = hidable(state, player)
+    assert HideCard(card, 0) not in state.legal_actions()
+
+
+def test_only_one_card_can_be_hidden_at_a_battlefield(decks):
+    """811.1.b -- "that doesn't already have a facedown card hidden there"."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    first, second = hidable(state, player), hidable(state, player)
+    state.apply(HideCard(first, 0))
+    assert HideCard(second, 0) not in state.legal_actions()
+
+
+def test_a_hidden_card_cannot_be_played_on_the_turn_it_was_hidden(decks):
+    """811.1.b -- "**Beginning on the next turn**, this gains [Reaction]"."""
+    from engine.actions import HideCard, PlayCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+    assert PlayCard(card) not in state.legal_actions()
+
+
+def test_a_hidden_card_can_be_played_for_free_from_the_next_turn(decks):
+    """811.1.b -- "you may play this, ignoring its base cost"."""
+    from engine.actions import HideCard, PlayCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+
+    state.turn_number += 1
+    state.players[player].pool.clear()          # nothing left to pay with
+    assert PlayCard(card) in state.legal_actions(), (
+        "a hidden card is played ignoring its base cost"
+    )
+
+
+def test_the_opponent_sees_that_a_card_is_hidden_but_not_which(decks):
+    """128 Privacy -- *that* a facedown card is there is public; what it is
+    is not."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    other = state.opponent(player)
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+
+    view = state.observation(other)
+    assert view.battlefields[0].facedown_by == player
+    identities = {c.instance_id for c in view.board} | {
+        c.instance_id for c in view.hand
+    }
+    assert card not in identities, "the hidden card's identity leaked"
+
+
+def test_hiding_pays_one_power_of_any_domain(decks):
+    """811.1.b's cost is [A] (135.2.e.5) -- any domain, not a matching one."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.players[player].pool.universal_power = 0
+    state.players[player].pool.power = {"Fury": 1}       # a mismatched domain
+
+    assert HideCard(card, 0) in state.legal_actions()
+    state.apply(HideCard(card, 0))
+    assert state.players[player].pool.total_power() == 0

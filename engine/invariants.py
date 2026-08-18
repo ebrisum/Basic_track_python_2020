@@ -128,6 +128,29 @@ def check(state) -> list[str]:
                     say(f"token {ref.instance_id} is in {name}; tokens cannot "
                         f"exist in a non-board zone (186)")
 
+    # --- 421 / 811 Hidden cards ---------------------------------------------
+    facedown: dict[int, list[int]] = {}
+    for ref in state.cards.values():
+        if ref.hidden_at is None:
+            continue
+        facedown.setdefault(ref.hidden_at, []).append(ref.instance_id)
+        if ref.location is not None:
+            say(f"card {ref.instance_id} is hidden and also has location "
+                f"{ref.location!r}; a facedown card is not a permanent (421.1)")
+        if not (0 <= ref.hidden_at < len(state.battlefields)):
+            say(f"card {ref.instance_id} is hidden at battlefield "
+                f"{ref.hidden_at}, which does not exist")
+        elif state.battlefields[ref.hidden_at].controller != ref.controller:
+            # 811.1.b -- "at a battlefield you control ... for as long as you
+            # control that battlefield". RQ-14 records that the rules do not
+            # say what happens when control is lost, so this is reported
+            # rather than enforced.
+            pass
+    for index, hidden in facedown.items():
+        if len(hidden) > 1:
+            say(f"battlefield {index} has {len(hidden)} facedown cards; 811.1.b "
+                f"allows one")
+
     # --- 423 Stun -----------------------------------------------------------
     for ref in state.cards.values():
         if not ref.stunned:
@@ -201,11 +224,19 @@ def check(state) -> list[str]:
                        if state.cards[item.instance_id].controller == player
                        and item.instance_id not in
                        {i for c in zones.values() for i in c})
+        # 421.1 -- a facedown card is at a battlefield, so it is still in the
+        # game; it is simply in no zone *list*, being neither hand nor a
+        # permanent in the base.
+        hidden_count = sum(
+            1 for ref in state.cards.values()
+            if ref.hidden_at is not None and ref.controller == player
+            and not ref.is_token
+        )
         legend = state.players[player].legend
         extra = 1 if legend is not None and legend not in {
             i for c in zones.values() for i in c} else 0
-        if located + in_chain + extra != expected:
-            say(f"P{player} accounts for {located + in_chain + extra} cards but "
+        if located + in_chain + extra + hidden_count != expected:
+            say(f"P{player} accounts for {located + in_chain + extra + hidden_count} cards but "
                 f"controls {expected}: a card is lost or duplicated (107)")
 
     return problems

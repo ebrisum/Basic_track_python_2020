@@ -60,6 +60,11 @@ class CardData:
         return kw.value_of(self.parsed_keywords, "Shield")
 
     @property
+    def has_hidden(self) -> bool:
+        """811 -- lets the card be Hidden facedown at a battlefield."""
+        return kw.has(self.parsed_keywords, "Hidden")
+
+    @property
     def has_tank(self) -> bool:
         return kw.has(self.parsed_keywords, "Tank")  # 815
 

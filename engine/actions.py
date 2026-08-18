@@ -161,6 +161,22 @@ class ActivateAbility(Action):
 
 
 @dataclass(frozen=True, order=False)
+class HideCard(Action):
+    """421 / 811.1.c -- place a card facedown at a battlefield you control.
+
+    Hide is a Discretionary Action, not a subset of Play (811.1.c.1), and it
+    does not open a chain (811.1.c.2). Playing the card back *from* hidden
+    does open one (811.1.c.3).
+    """
+
+    instance_id: int
+    battlefield: int
+
+    def __repr__(self) -> str:
+        return f"hide:{self.instance_id}@bf:{self.battlefield}"
+
+
+@dataclass(frozen=True, order=False)
 class Concede(Action):
     """649 -- leave the game; the opponent is the only player remaining (195)."""
 

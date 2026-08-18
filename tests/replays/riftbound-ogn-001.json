@@ -9,687 +9,687 @@
     {
       "player": 0,
       "action": "choose_battlefield:1",
-      "expected_state_hash": "c6f49d4459b17b6b"
+      "expected_state_hash": "066f823ce2c295a2"
     },
     {
       "player": 1,
       "action": "choose_battlefield:2",
-      "expected_state_hash": "3ce62fba5e14b56d"
+      "expected_state_hash": "684c372c510a16cc"
     },
     {
       "player": 0,
       "action": "mulligan:[9,18]",
-      "expected_state_hash": "22a2557ca3f9f59e"
+      "expected_state_hash": "4bceb760fade74db"
     },
     {
       "player": 1,
       "action": "mulligan:[64]",
-      "expected_state_hash": "bdd41e2ca1dbaa32"
+      "expected_state_hash": "778f6720e8fc3bad"
     },
     {
       "player": 0,
       "action": "recycle_power:51",
-      "expected_state_hash": "75d3e054df1421b9"
+      "expected_state_hash": "da5bb216f8cf947d"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "2386dec5ba394d59"
+      "expected_state_hash": "5d95d6a01ae2812a"
     },
     {
       "player": 1,
       "action": "tap_energy:104",
-      "expected_state_hash": "4194680dd8971d8a"
+      "expected_state_hash": "0d3541462feeb3a7"
     },
     {
       "player": 1,
       "action": "recycle_power:98",
-      "expected_state_hash": "6805234a4a6db4c3"
+      "expected_state_hash": "b70f2303b88a33ec"
     },
     {
       "player": 1,
       "action": "recycle_power:101",
-      "expected_state_hash": "74455cbaa45a7eb7"
+      "expected_state_hash": "5f3d92e504f08d4b"
     },
     {
       "player": 1,
       "action": "play:79",
-      "expected_state_hash": "4977fb5760689726"
+      "expected_state_hash": "77f1a717710a33c5"
     },
     {
       "player": 1,
       "action": "recycle_power:104",
-      "expected_state_hash": "5f08fc6a9ec62f92"
+      "expected_state_hash": "602fb53c0304c9b6"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "b1b2887cff8611d6"
+      "expected_state_hash": "7ad0ea394c70e4d6"
     },
     {
       "player": 0,
       "action": "tap_energy:43",
-      "expected_state_hash": "5f95f6d15ee86f63"
+      "expected_state_hash": "ab9ee6fbc4f8d772"
     },
     {
       "player": 0,
       "action": "play:12",
-      "expected_state_hash": "701d2cb5bf5189f7"
+      "expected_state_hash": "ad086d71ab81e4ed"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "9c11bdfa92a7fa5e"
+      "expected_state_hash": "a4ae9913704d341e"
     },
     {
       "player": 0,
       "action": "tap_energy:48",
-      "expected_state_hash": "52320bb02ee507cc"
+      "expected_state_hash": "eb6c2bc427c53a9e"
     },
     {
       "player": 0,
       "action": "tap_energy:44",
-      "expected_state_hash": "b1d235c424196702"
+      "expected_state_hash": "69554dadc559f46b"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "d29293943bd36925"
+      "expected_state_hash": "eb1e634f2a3aa2a3"
     },
     {
       "player": 0,
       "action": "recycle_power:48",
-      "expected_state_hash": "c4f50207dbc948fd"
+      "expected_state_hash": "9b921425d8254bac"
     },
     {
       "player": 0,
       "action": "recycle_power:43",
-      "expected_state_hash": "cf724ba45cdc48a2"
+      "expected_state_hash": "c172a7c37261dc2f"
     },
     {
       "player": 0,
       "action": "recycle_power:44",
-      "expected_state_hash": "ecd45d9efffe644c"
+      "expected_state_hash": "9fb88ce4831c864c"
     },
     {
       "player": 0,
       "action": "play:25",
-      "expected_state_hash": "04c094c741a78889"
+      "expected_state_hash": "a72780f926e15ce2"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "55485ca747f8f11d"
+      "expected_state_hash": "e3b77bf4aff1f1d1"
     },
     {
       "player": 0,
       "action": "play:8",
-      "expected_state_hash": "5d1df2ac446ffb6a"
+      "expected_state_hash": "92ea365141b2ff55"
     },
     {
       "player": 0,
       "action": "activate:8#0",
-      "expected_state_hash": "39090b1ce4e39538"
+      "expected_state_hash": "0a258e50cae601cf"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "66bdd09eb9bbc015"
+      "expected_state_hash": "d35cfc3031544f01"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "e60ca3c349ae0590"
+      "expected_state_hash": "65f40e8f4c24a430"
     },
     {
       "player": 0,
       "action": "choose:26",
-      "expected_state_hash": "8c7ee8b1b851024c"
+      "expected_state_hash": "e62f0cd8cfde3329"
     },
     {
       "player": 0,
       "action": "play:1",
-      "expected_state_hash": "72698b50d284b372"
+      "expected_state_hash": "6a76ef7a791add6c"
     },
     {
       "player": 0,
       "action": "play:20",
-      "expected_state_hash": "f60cf86965c74d8a"
+      "expected_state_hash": "cbd1361b765b6384"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "92658528e0ca5e91"
+      "expected_state_hash": "f91133c150300ac8"
     },
     {
       "player": 0,
       "action": "play:23",
-      "expected_state_hash": "f213a5919fe8048c"
+      "expected_state_hash": "f63f0249f5257717"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "40ab89592af8e9c7"
+      "expected_state_hash": "503dfedef7673691"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "53fb5ba947993180"
+      "expected_state_hash": "4357cadfef494412"
     },
     {
       "player": 0,
       "action": "choose:17",
-      "expected_state_hash": "75f333831a381049"
+      "expected_state_hash": "466a467ae316604d"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "bd4535e1126a036f"
+      "expected_state_hash": "0ffaacc106008300"
     },
     {
       "player": 1,
       "action": "recycle_power:106",
-      "expected_state_hash": "9d85c3f551bb2dcd"
+      "expected_state_hash": "a085e2c19b0c8e92"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "990422d3c2ca5006"
+      "expected_state_hash": "79b57f24dfb843e6"
     },
     {
       "player": 0,
       "action": "move:1->bf:0",
-      "expected_state_hash": "c778f86feee5c8f3"
+      "expected_state_hash": "3c6e6688defa10b7"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "89c9e9418d9a6c18"
+      "expected_state_hash": "c4c1f935b6ae94d0"
     },
     {
       "player": 0,
       "action": "recycle_power:52",
-      "expected_state_hash": "1ccb0ea1f6037306"
+      "expected_state_hash": "b0114549f7e38b77"
     },
     {
       "player": 0,
       "action": "activate:8#0",
-      "expected_state_hash": "d3dc5241d0111b2c"
+      "expected_state_hash": "c996a60eb9b92a54"
     },
     {
       "player": 0,
       "action": "recycle_power:53",
-      "expected_state_hash": "dbeacdabd119fcfc"
+      "expected_state_hash": "d054850b4d8fe1c0"
     },
     {
       "player": 0,
       "action": "play:24",
-      "expected_state_hash": "4962fa69b724a40b"
+      "expected_state_hash": "fd07a7313c6cba94"
     },
     {
       "player": 1,
       "action": "recycle_power:100",
-      "expected_state_hash": "666b101cbdb8a492"
+      "expected_state_hash": "e812205eba91d2de"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "cfe57525969b0308"
+      "expected_state_hash": "cafb7ee250dd2c2f"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "510a17f8ab7e4128"
+      "expected_state_hash": "24937ea1db88762e"
     },
     {
       "player": 1,
       "action": "play:63",
-      "expected_state_hash": "e69a76bc7b342d2d"
+      "expected_state_hash": "5e14b3111a530884"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "7c59b48fa1b0a03c"
+      "expected_state_hash": "75915454e7c8d386"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "2f6ddf38e1f5886e"
+      "expected_state_hash": "ba23445e1ffa5df4"
     },
     {
       "player": 0,
       "action": "choose:10",
-      "expected_state_hash": "31692ba57a08e33e"
+      "expected_state_hash": "429619b656a73300"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "1fdcab93e9061a9b"
+      "expected_state_hash": "147e641228a105a5"
     },
     {
       "player": 1,
       "action": "activate:63#0",
-      "expected_state_hash": "558db0a31d53ce3a"
+      "expected_state_hash": "bf9890c49edfc6b2"
     },
     {
       "player": 1,
       "action": "play:75",
-      "expected_state_hash": "4d3dbd5003fadf23"
+      "expected_state_hash": "2f333ef592dcf44a"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "92bcc48ff6aaa8a5"
+      "expected_state_hash": "cec6539722666038"
     },
     {
       "player": 0,
       "action": "play:10",
-      "expected_state_hash": "0c0a530bfe54f24d"
+      "expected_state_hash": "daffe0c90aa092fb"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "a9a505131f34b9c8"
+      "expected_state_hash": "03d8e18db3589acc"
     },
     {
       "player": 1,
       "action": "activate:75#0",
-      "expected_state_hash": "a2b41d5349b28aa8"
+      "expected_state_hash": "8f51095c6b7c161f"
     },
     {
       "player": 1,
       "action": "activate:63#0",
-      "expected_state_hash": "ee069d004284abd4"
+      "expected_state_hash": "6b6fa7a7a192aa74"
     },
     {
       "player": 1,
       "action": "recycle_power:99",
-      "expected_state_hash": "79428e979b7631aa"
+      "expected_state_hash": "9f2c6bc1ba395c7f"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "91c56e7c0e7dd9be"
+      "expected_state_hash": "2ce2067b743829a1"
     },
     {
       "player": 1,
       "action": "tap_energy:102",
-      "expected_state_hash": "01e685b6b5930851"
+      "expected_state_hash": "da130696b2397205"
     },
     {
       "player": 1,
       "action": "play:67",
-      "expected_state_hash": "5b43307f18d8f608"
+      "expected_state_hash": "e63c4c79f428b45e"
     },
     {
       "player": 0,
       "action": "activate:10#0",
-      "expected_state_hash": "45c7fba82930cac8"
+      "expected_state_hash": "5882979de8fbdb0d"
     },
     {
       "player": 1,
       "action": "recycle_power:102",
-      "expected_state_hash": "38e8e24ae0c55294"
+      "expected_state_hash": "ec25b15e97fa3927"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "98c4dd8a079ee242"
+      "expected_state_hash": "2287ac8831b26dda"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "b5b5d364d7737fd1"
+      "expected_state_hash": "d69da36a5f2c4ebe"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "19127fb566a38d3a"
+      "expected_state_hash": "c672a14181a5bb62"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "84e02759321088f1"
+      "expected_state_hash": "5362c350fe06e9ca"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "0b570c25fb592954"
+      "expected_state_hash": "29ef2aaa0e5ddda0"
     },
     {
       "player": 1,
       "action": "tap_energy:103",
-      "expected_state_hash": "b71e3bb1fce2fa81"
+      "expected_state_hash": "58c9017cd88f8776"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "a438525a65083205"
+      "expected_state_hash": "11a5e89f161c887c"
     },
     {
       "player": 0,
       "action": "tap_energy:47",
-      "expected_state_hash": "8e73d2c1bbf355e9"
+      "expected_state_hash": "ca5d1140c51f6ff6"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "29c6264f3deb401f"
+      "expected_state_hash": "f49036d872dfe07b"
     },
     {
       "player": 0,
       "action": "tap_energy:49",
-      "expected_state_hash": "4817a9b55101897c"
+      "expected_state_hash": "b850168918b2c9e6"
     },
     {
       "player": 0,
       "action": "play:17",
-      "expected_state_hash": "39e9fd35d58606dc"
+      "expected_state_hash": "fb4f52475a09f202"
     },
     {
       "player": 1,
       "action": "activate:63#0",
-      "expected_state_hash": "f645b0115133a75c"
+      "expected_state_hash": "c730149bda769e58"
     },
     {
       "player": 0,
       "action": "recycle_power:46",
-      "expected_state_hash": "ee0aea43966e2b16"
+      "expected_state_hash": "6a0b5734c38dcfea"
     },
     {
       "player": 0,
       "action": "activate:8#0",
-      "expected_state_hash": "b997dab1860e9069"
+      "expected_state_hash": "fc7b8c2c97827bfe"
     },
     {
       "player": 0,
       "action": "tap_energy:42",
-      "expected_state_hash": "06ef93c1c6c8a5a0"
+      "expected_state_hash": "406282bcb12f0f7b"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "3a73014267e096e0"
+      "expected_state_hash": "0f5f29165b766893"
     },
     {
       "player": 1,
       "action": "recycle_power:105",
-      "expected_state_hash": "9ce0f0723a7ac0f1"
+      "expected_state_hash": "f5ccc74bb8794bbb"
     },
     {
       "player": 1,
       "action": "activate:75#0",
-      "expected_state_hash": "9d6a4c9394fa525e"
+      "expected_state_hash": "4319df6b255b8c18"
     },
     {
       "player": 0,
       "action": "activate:10#0",
-      "expected_state_hash": "bd5b0f9b3d21632e"
+      "expected_state_hash": "3a905f154dc8632d"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "7e79f8e57ffb8309"
+      "expected_state_hash": "a544fa6c2331a976"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "b7556c7423201a8c"
+      "expected_state_hash": "84d647e190e421e2"
     },
     {
       "player": 0,
       "action": "choose:36",
-      "expected_state_hash": "1658793b7938e1c5"
+      "expected_state_hash": "ab65dedabc8d9c3d"
     },
     {
       "player": 0,
       "action": "play:29",
-      "expected_state_hash": "a2e970a65ca12e2d"
+      "expected_state_hash": "fc6e8e6d80c05d16"
     },
     {
       "player": 0,
       "action": "play:36",
-      "expected_state_hash": "457220db7e147c06"
+      "expected_state_hash": "095e7ebb56bcd160"
     },
     {
       "player": 0,
       "action": "choose:26",
-      "expected_state_hash": "4d41ddceae559da3"
+      "expected_state_hash": "87059cb3361b51ff"
     },
     {
       "player": 0,
       "action": "recycle_power:49",
-      "expected_state_hash": "191981e30d9e514d"
+      "expected_state_hash": "5f740c4d4d308705"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "c4b7c4d774b5d1b5"
+      "expected_state_hash": "b550bbe02c5d319d"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "155fca752b4a8305"
+      "expected_state_hash": "4f39533e902de946"
     },
     {
       "player": 1,
       "action": "recycle_power:103",
-      "expected_state_hash": "5deb3670d2f9801e"
+      "expected_state_hash": "2d019761813acfed"
     },
     {
       "player": 1,
       "action": "recycle_power:96",
-      "expected_state_hash": "8a8a13b09ea5398c"
+      "expected_state_hash": "db7c4fd3ed3f09d8"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "9c08136cbd6b8ba5"
+      "expected_state_hash": "33e63a0fdf12101a"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "1cc963bdb8025444"
+      "expected_state_hash": "cd542a4bcc1a538a"
     },
     {
       "player": 0,
       "action": "tap_energy:50",
-      "expected_state_hash": "9ab3d96777643c1a"
+      "expected_state_hash": "8ea2ff1459da408a"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "56a6c62a4e880152"
+      "expected_state_hash": "1e2edaab40c5d500"
     },
     {
       "player": 1,
       "action": "tap_energy:107",
-      "expected_state_hash": "b19a13512e1a344a"
+      "expected_state_hash": "f1a8502adf0e72bc"
     },
     {
       "player": 1,
       "action": "activate:63#0",
-      "expected_state_hash": "9dbdf0c3082da817"
+      "expected_state_hash": "34dd3d42235f52d8"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "a12601359db24b57"
+      "expected_state_hash": "5828458a2c272da0"
     },
     {
       "player": 0,
       "action": "move:36->bf:1",
-      "expected_state_hash": "aa82a0900ce9d485"
+      "expected_state_hash": "027484fb83038d3c"
     },
     {
       "player": 0,
       "action": "tap_energy:51",
-      "expected_state_hash": "aa36aaa7c004f821"
+      "expected_state_hash": "e232e1c8ae2a7d7e"
     },
     {
       "player": 0,
       "action": "activate:10#0",
-      "expected_state_hash": "e8722aefa3465907"
+      "expected_state_hash": "971b0f2578bff5b8"
     },
     {
       "player": 0,
       "action": "tap_energy:48",
-      "expected_state_hash": "abd153cdb47caf62"
+      "expected_state_hash": "62556529a8ac974f"
     },
     {
       "player": 0,
       "action": "tap_energy:47",
-      "expected_state_hash": "7ee2c9933d9355e1"
+      "expected_state_hash": "abfabfedeabfc032"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "06ced39c83293772"
+      "expected_state_hash": "06998bbb4d500358"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "4a688f87cdb6da29"
+      "expected_state_hash": "2787728ea873fc76"
     },
     {
       "player": 1,
       "action": "activate:75#0",
-      "expected_state_hash": "915117e9e75047b6"
+      "expected_state_hash": "1dc5b8de746c1ec3"
     },
     {
       "player": 1,
       "action": "tap_energy:98",
-      "expected_state_hash": "bb5f821687a3e312"
+      "expected_state_hash": "7bc4b838cf034bc6"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "cdbf0596d55060be"
+      "expected_state_hash": "1dddb35be8dca659"
     },
     {
       "player": 0,
       "action": "recycle_power:50",
-      "expected_state_hash": "fb96cff9732e7668"
+      "expected_state_hash": "02995fb1f51a6a1d"
     },
     {
       "player": 0,
       "action": "tap_energy:45",
-      "expected_state_hash": "54708beeb0e62e9d"
+      "expected_state_hash": "68cfe300ec5cd83a"
     },
     {
       "player": 0,
       "action": "activate:20#0",
-      "expected_state_hash": "32d014b7efc990ef"
+      "expected_state_hash": "d5ba420b7a7e6bb5"
     },
     {
       "player": 0,
       "action": "recycle_power:51",
-      "expected_state_hash": "f65fdb4ef3499698"
+      "expected_state_hash": "2ec90b2965079ce4"
     },
     {
       "player": 0,
       "action": "recycle_power:45",
-      "expected_state_hash": "144c9a513d13c0a3"
+      "expected_state_hash": "07eae6facdcdaada"
     },
     {
       "player": 0,
       "action": "play:2",
-      "expected_state_hash": "d08f752fe4373555"
+      "expected_state_hash": "96213973f6d5884f"
     },
     {
       "player": 0,
       "action": "play:19",
-      "expected_state_hash": "23f9353606b727ed"
+      "expected_state_hash": "c818f0d517c249f4"
     },
     {
       "player": 1,
       "action": "recycle_power:97",
-      "expected_state_hash": "0f8298841d98d8cb"
+      "expected_state_hash": "bad2cdbf07928aa7"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "986d7e23183b4c28"
+      "expected_state_hash": "77916999362e3863"
     },
     {
       "player": 0,
       "action": "activate:8#0",
-      "expected_state_hash": "2daceeb17e2285fe"
+      "expected_state_hash": "6256ecb0c6a1bd58"
     },
     {
       "player": 0,
       "action": "activate:29#0",
-      "expected_state_hash": "e4715ca3c87f7c10"
+      "expected_state_hash": "8cbd33fa9fbb323a"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "0c839090ceab10f1"
+      "expected_state_hash": "afcbc2ced5e9c4b3"
     },
     {
       "player": 1,
       "action": "recycle_power:98",
-      "expected_state_hash": "dcfe94e9ceeb29c0"
+      "expected_state_hash": "10bd7566ef839853"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "a95b18d238f08423"
+      "expected_state_hash": "0a1e36ae9fb25c0f"
     },
     {
       "player": 0,
       "action": "choose:11",
-      "expected_state_hash": "7cf3704a571f35eb"
+      "expected_state_hash": "e19e03fe21765cb2"
     },
     {
       "player": 0,
       "action": "recycle_power:47",
-      "expected_state_hash": "0c0c2de4e55b175b"
+      "expected_state_hash": "4c312acc295be3ba"
     },
     {
       "player": 0,
       "action": "play:33",
-      "expected_state_hash": "522b1eefc2d509ad"
+      "expected_state_hash": "401387449e4c9713"
     },
     {
       "player": 0,
       "action": "pass",
-      "expected_state_hash": "529ad36b1026cf39"
+      "expected_state_hash": "014bb173cf106798"
     },
     {
       "player": 1,
       "action": "recycle_power:107",
-      "expected_state_hash": "3632cfff689b31c4"
+      "expected_state_hash": "004edfdb777bb6cd"
     },
     {
       "player": 1,
       "action": "recycle_power:104",
-      "expected_state_hash": "ccb2b0f9b1d1ef50"
+      "expected_state_hash": "0db9acc9eef97482"
     },
     {
       "player": 1,
       "action": "activate:75#0",
-      "expected_state_hash": "3a2da4fe3d84bb1a"
+      "expected_state_hash": "49bb597a1ccbd801"
     },
     {
       "player": 1,
       "action": "recycle_power:101",
-      "expected_state_hash": "b0c8ee2d525e09eb"
+      "expected_state_hash": "c917553e7302c078"
     },
     {
       "player": 1,
       "action": "activate:79#0",
-      "expected_state_hash": "ab398c7744e4d1fe"
+      "expected_state_hash": "b3943fc547fa5eb5"
     },
     {
       "player": 1,
       "action": "activate:63#0",
-      "expected_state_hash": "fad77be9beb0fcd7"
+      "expected_state_hash": "1572d54792860a5c"
     },
     {
       "player": 1,
       "action": "pass",
-      "expected_state_hash": "539ed84f4512d7a4"
+      "expected_state_hash": "6fe4284ccf10bb8a"
     }
   ],
   "final_returns": [
