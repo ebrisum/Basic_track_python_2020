@@ -39,6 +39,7 @@ than the agents -- see `analysis/benchmark.mirror_field`.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -108,6 +109,8 @@ def main(argv: list[str] | None = None) -> int:
                          "distance -- flipping a weight puts the target 2|w| "
                          "away -- so too small a step reports a learning "
                          "failure that is really a step-size failure.")
+    ap.add_argument("--out", default="analysis/weights.recovered.json",
+                    help="where to write the weights training produced")
     ap.add_argument("--seed", type=int, default=7_000_000)
     args = ap.parse_args(argv)
 
@@ -123,7 +126,18 @@ def main(argv: list[str] | None = None) -> int:
           f"x {args.tune_games} games…")
     trained, _ = spsa(broken, decks, db, args.iterations, args.tune_games,
                       args.seed, a=args.a, report_every=50)
-    print()
+    # Keep what it produced. This is a diagnostic, but a diagnostic that
+    # throws away its own result is one you cannot act on -- and a recovery
+    # run can land somewhere better than where it started, which is exactly
+    # the case worth keeping.
+    Path(args.out).write_text(
+        json.dumps({"weights": list(trained.weights), "bias": trained.bias,
+                    "fitted": True, "source": "learning_check recovery",
+                    "damaged": args.feature, "how": args.how,
+                    "iterations": args.iterations, "seed": args.seed},
+                   indent=2) + "\n"
+    )
+    print(f"\nrecovered weights written to {args.out}")
 
     print("| match | score | W-L-D | Elo | 95% interval |")
     print("| --- | --- | --- | --- | --- |")
