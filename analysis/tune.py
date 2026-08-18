@@ -67,6 +67,8 @@ from engine.setup import available_decks, load_deck  # noqa: E402
 
 
 def matchups(decks):
+    if mirror_only:
+        return [(deck, deck) for deck in decks]
     return [(a, b) for a in decks for b in decks]
 
 
@@ -133,7 +135,7 @@ def spsa(
         score, wins, losses, draws = duel(
             lambda s: GreedyAgent(s, plus),
             lambda s: GreedyAgent(s, minus),
-            games, seed + 50_000 + k * games, pair, db,
+            games, seed + 50_000 + k * games, pair, db, start_index=k,
         )
         if wins + losses + draws == 0:
             continue
@@ -164,14 +166,14 @@ def validate(candidate: Model, incumbent: Model, decks, db, max_games: int,
              seed: int, elo0: float, elo1: float):
     """SPRT the candidate against the incumbent on seeds tuning never saw."""
     test = SPRT(elo0=elo0, elo1=elo1)
-    field = matchups(decks)
+    field = matchups(decks, mirror_only=True)   # see benchmark.mirror_field
     wins = losses = draws = 0
     for i in range(max_games):
         pair = field[i % len(field)]
         score, w, l, d = duel(
             lambda s: GreedyAgent(s, candidate),
             lambda s: GreedyAgent(s, incumbent),
-            1, seed + i, pair, db,
+            1, seed + i, pair, db, start_index=i,
         )
         if w + l + d == 0:
             continue

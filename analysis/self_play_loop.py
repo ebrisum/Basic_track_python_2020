@@ -85,8 +85,11 @@ HISTORY = Path(__file__).resolve().parent / "generations.json"
 MAX_STEPS = 40_000
 
 
-def matchups(decks):
+def matchups(decks, mirror_only: bool = False):
     """Every ordered pair of decks in the field, including mirrors.
+
+    `mirror_only` restricts to same-deck matchups, which removes deck
+    imbalance from the comparison entirely -- see `benchmark.mirror_field`.
 
     Training on a single matchup teaches the matchup. The weights have no way
     to separate "this is strong in Riftbound" from "this is strong against
@@ -94,6 +97,8 @@ def matchups(decks):
     is the cheapest available fix; the field itself is limited by how many
     decks can be built entirely from cards whose text executes.
     """
+    if mirror_only:
+        return [(deck, deck) for deck in decks]
     return [(a, b) for a in decks for b in decks]
 
 
@@ -123,11 +128,14 @@ def sprt_duel(make_a, make_b, max_games, base_seed, decks, db,
     consulted on even game counts.
     """
     test = SPRT(elo0=elo0, elo1=elo1)
-    field = matchups(decks)
+    # Mirrors: a promotion test compares two agents, and deck imbalance is
+    # noise it does not need to fight through.
+    field = matchups(decks, mirror_only=True)
     wins = losses = draws = 0
     for i in range(max_games):
         pair = field[i % len(field)]
-        score, w, l, d = duel(make_a, make_b, 1, base_seed + i, pair, db)
+        score, w, l, d = duel(make_a, make_b, 1, base_seed + i, pair, db,
+                              start_index=i)
         if w + l + d == 0:
             continue
         wins += w

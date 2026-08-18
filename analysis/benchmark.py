@@ -33,13 +33,38 @@ from engine.setup import build_state, load_deck  # noqa: E402
 MAX_STEPS = 40_000
 
 
-def duel(make_a, make_b, games: int, base_seed: int, decks, db) -> tuple[float, int, int, int]:
-    """Play `games`, alternating seats. Returns (score_a, wins, losses, draws)."""
+def mirror_field(decks):
+    """Each deck against itself.
+
+    Measuring one agent against another across *different* decks measures the
+    decks far more loudly than the agents: with identical agents on both
+    sides, volibear_body_fury beats jinx_chaos_fury about 85-15. That deck
+    edge swamps the 0.52-0.55 an agent improvement is worth, so a cross-deck
+    test needs enormous samples to see anything.
+
+    In a mirror both sides play the same deck against the same deck, so the
+    deck cancels exactly and what is left is how the two agents play. It is
+    the standard trick for the same reason engine testing fixes the opening
+    book: remove the variance you are not trying to measure.
+    """
+    return [(deck, deck) for deck in decks]
+
+
+def duel(make_a, make_b, games: int, base_seed: int, decks, db,
+         start_index: int = 0) -> tuple[float, int, int, int]:
+    """Play `games`, alternating seats. Returns (score_a, wins, losses, draws).
+
+    `start_index` offsets the seat rotation. A sequential test calls this one
+    game at a time, and with the rotation keyed only on the loop index every
+    such call would seat agent A first -- turning any first-player advantage
+    into apparent agent strength. Callers that drive the games themselves pass
+    their own index here.
+    """
     d0, d1 = decks
     wins = losses = draws = 0
     for i in range(games):
         seed = base_seed + i
-        a_seat = i % 2                      # swap seats every other game
+        a_seat = (start_index + i) % 2       # swap seats every other game
         state = build_state(d0, d1, seed=seed, db=db, validate_decks=False)
         agents = [None, None]
         agents[a_seat] = make_a(seed)

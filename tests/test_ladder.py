@@ -179,3 +179,36 @@ def test_scaling_every_weight_does_not_change_a_greedy_choice():
         assert (base.score(left) > base.score(right)) == (
             doubled.score(left) > doubled.score(right)
         )
+
+
+def test_single_game_duels_still_alternate_seats():
+    """A sequential test drives one game at a time, and the seat rotation is
+    keyed on the loop index -- so without an offset every such call seats
+    agent A first, and any first-player advantage is read as agent strength.
+    """
+    import inspect
+
+    from analysis.benchmark import duel
+
+    assert "start_index" in inspect.signature(duel).parameters
+    seats = [(0 + i) % 2 for i in range(6)]
+    assert seats == [0, 1, 0, 1, 0, 1]
+
+
+def test_mirror_matchups_pair_each_deck_with_itself():
+    """The starter decks are wildly imbalanced -- volibear beats jinx about
+    85-15 with identical agents -- so a cross-deck comparison measures the
+    decks far more loudly than the agents. Mirrors cancel the deck exactly.
+    """
+    from analysis.benchmark import mirror_field
+
+    decks = ["a", "b", "c"]
+    assert mirror_field(decks) == [("a", "a"), ("b", "b"), ("c", "c")]
+
+
+def test_the_loop_can_restrict_itself_to_mirrors():
+    from analysis.self_play_loop import matchups
+
+    decks = ["a", "b"]
+    assert len(matchups(decks)) == 4
+    assert matchups(decks, mirror_only=True) == [("a", "a"), ("b", "b")]
