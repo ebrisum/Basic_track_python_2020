@@ -229,3 +229,93 @@ def test_stun_expires_at_the_end_of_the_turn(decks):
     state.cards[unit].stunned = True
     state._phase_ending()
     assert state.cards[unit].stunned is False
+
+
+# --- 471.2 Score triggers ---------------------------------------------------
+
+
+def test_hold_abilities_trigger_when_a_battlefield_is_held(decks):
+    """471.2.b -- "Hold abilities trigger at a Battlefield that was Held."
+
+    There was no Hold trigger at all, so ten cards' printed text did nothing:
+    Ahri - Alluring reads "When I hold, you score 1 point" and never scored.
+    """
+    from cards.dsl import TriggerKind
+
+    assert hasattr(TriggerKind, "ON_HOLD")
+
+    from engine.state import bf_location
+
+    state = arena(decks)
+    player = state.turn_player
+    bf = state.battlefields[0]
+    bf.controller = player
+    unit = put_unit(state, player, "OGN-066", bf_location(0))   # Ahri - Alluring
+    before = state.players[player].points
+
+    state._phase_beginning()
+    # One point for the Hold itself, one from Ahri's triggered ability.
+    assert state.players[player].points == before + 2, state.log[-4:]
+    assert state.cards[unit].location == bf_location(0)
+
+
+def test_score_triggers_only_fire_at_the_battlefield_that_scored(decks):
+    """471.2 -- "Trigger Score abilities **at the Battlefield that Scored**".
+
+    Conquer triggers used to fire for every card the player controlled
+    anywhere, so a unit sitting at battlefield 1 triggered when its owner
+    conquered battlefield 0.
+    """
+    from engine.state import bf_location
+
+    state = arena(decks)
+    player = state.turn_player
+    elsewhere = put_unit(state, player, "OGN-066", bf_location(1))
+    state.battlefields[1].controller = player
+    before = state.players[player].points
+
+    # Score battlefield 0, where that unit is not.
+    state._score(player, state.battlefields[0], "Hold")
+    assert state.players[player].points == before + 1, (
+        "a unit at another battlefield triggered on a score it was not part of"
+    )
+    assert state.cards[elsewhere].location == bf_location(1)
+
+
+def test_a_hold_trigger_does_not_fire_on_a_conquer(decks):
+    """471.2.a/b keep the two apart -- a Hold ability is not a Conquer one."""
+    from engine.state import bf_location
+
+    state = arena(decks)
+    player = state.turn_player
+    put_unit(state, player, "OGN-066", bf_location(0))
+    before = state.players[player].points
+    state._score(player, state.battlefields[0], "Conquer")
+    assert state.players[player].points == before + 1
+
+
+def test_a_conquer_trigger_elsewhere_does_not_fire(decks):
+    """471.2 with a scripted card, so the test can actually fail.
+
+    Warmog's Armor reads "When I conquer, buff me". Attached to a unit at
+    battlefield 1, it used to buff itself every time its controller conquered
+    battlefield 0 — because Conquer triggers fired for every card the player
+    controlled, anywhere.
+    """
+    from engine.state import bf_location
+
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175", bf_location(1))
+    gear = put_unit(state, player, "SFD-108", bf_location(1))   # Warmog's Armor
+    state.cards[gear].attached_to = host
+    before = state.cards[gear].might_permanent
+
+    state._score(player, state.battlefields[0], "Conquer")
+    assert state.cards[gear].might_permanent == before, (
+        "a Conquer trigger at battlefield 1 fired on a Conquer at battlefield 0"
+    )
+
+    # ...and it does fire when its own battlefield is the one scored.
+    state._score(player, state.battlefields[1], "Conquer")
+    assert state.cards[gear].might_permanent > before

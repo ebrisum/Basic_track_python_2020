@@ -417,14 +417,21 @@ def test_gear_detaches_when_its_host_dies(decks):
 
 
 def test_warmogs_buffs_permanently_on_conquer(decks):
-    """SFD-108: When I conquer, buff me. The buff must survive the turn."""
+    """SFD-108: When I conquer, buff me. The buff must survive the turn.
+
+    The host stands *at the battlefield being conquered*. This test used to
+    leave it in the base and still expect the trigger, which only worked
+    because Conquer abilities fired for every card a player controlled
+    anywhere; 471.2 triggers them at the battlefield that scored, and a unit
+    in the base has not conquered anything.
+    """
+    from engine.state import bf_location
+
     state = arena(decks)
-    host = put_unit(state, 0, "OGN-142", BASE_LOCATION)
+    host = put_unit(state, 0, "OGN-142", bf_location(0))
     gear = give(state, 0, "SFD-108")
-    play(state, gear)
-    if state.phase is Phase.CHOOSING:
-        state.apply(ChooseTarget(host))
-    pass_until_resolved(state)
+    equip(state, gear, host)          # 818.1 -- Equip is a paid ability
+    assert state.cards[gear].attached_to == host
 
     bf = state.battlefields[0]
     bf.scored_by.clear()

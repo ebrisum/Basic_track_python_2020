@@ -24,6 +24,7 @@ from cards.dsl import (
     Draw,
     Duration,
     ExhaustSelf,
+    GainPoints,
     GrantKeyword,
     Kill,
     LookAtTop,
@@ -249,6 +250,17 @@ SCRIPTS: tuple[CardScript, ...] = (
                 costs=(ExhaustSelf(),),
                 effects=(AddPower("Chaos", 1),),
                 text="Exhaust: REACTION - ADD chaos.",
+            ),
+        ),
+    ),
+    # --- 471.2.b Hold triggers ---------------------------------------------
+    CardScript(
+        card_id="OGN-066",  # Ahri - Alluring
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_HOLD,
+                effects=(GainPoints(1),),
+                text="When I hold, you score 1 point.",
             ),
         ),
     ),

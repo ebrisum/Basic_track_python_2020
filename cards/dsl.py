@@ -260,6 +260,7 @@ class PayEnergy(Cost):
 class TriggerKind(str, Enum):
     ON_PLAY = "on_play"  # 382, "When you play me"
     ON_CONQUER = "on_conquer"  # 471.2.a
+    ON_HOLD = "on_hold"  # 471.2.b
     ON_DEATH = "on_death"  # 808 Deathknell
     ACTIVATED = "activated"  # 376, "Cost: effect"
     ON_RESOLVE = "on_resolve"  # a spell's own effect (351.2)

@@ -1389,13 +1389,27 @@ class RiftboundState:
 
         state.points += 1
         self._emit(f"P{player} scores by {how} ({state.points} points)")
-        if how == "Conquer":
-            # 471.2.a -- Conquer abilities trigger. Gear attached to that
-            # player's units carries the "When I conquer" abilities here.
-            for ref in sorted(self.cards.values(), key=lambda r: r.instance_id):
-                if ref.controller == player and ref.location is not None:
-                    self._fire(TriggerKind.ON_CONQUER, ref.instance_id)
-            self._resolve_effects()
+        self._fire_score_triggers(player, bf, how)
+
+    def _fire_score_triggers(self, player: int, bf: Battlefield, how: str) -> None:
+        """471.2 -- "Trigger Score abilities at the Battlefield that Scored."
+
+        Two things were wrong here. Conquer abilities fired for every card the
+        player controlled *anywhere*, so a unit standing at one battlefield
+        triggered on a score at another. And Hold abilities did not exist at
+        all -- ten cards' printed text simply did nothing, including
+        Ahri - Alluring, whose whole rules text is "When I hold, you score 1
+        point."
+
+        Gear attached to a unit shares its location (719.3), so scoping by
+        location covers "When I conquer" printed on Equipment too.
+        """
+        kind = TriggerKind.ON_CONQUER if how == "Conquer" else TriggerKind.ON_HOLD
+        location = bf_location(bf.index)
+        for ref in sorted(self.cards.values(), key=lambda r: r.instance_id):
+            if ref.controller == player and ref.location == location:
+                self._fire(kind, ref.instance_id)
+        self._resolve_effects()
 
     # ----------------------------------------------------------------- draw
 
