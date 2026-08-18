@@ -219,3 +219,106 @@ def test_determinization_keeps_public_zones_identical(decks):
     before = public_counts(state, 1)
     world = determinize(state, 0, random.Random(3))
     assert public_counts(world, 1) == before
+
+
+# --- 424 Reveal: what you were shown, you remember (RQ-16) -------------------
+
+
+def reveal_a_hand_card(state, subject: int):
+    """424 -- announce the first card of `subject`'s hand to all players."""
+    from cards.dsl import Reveal, Who
+    from cards.primitives import EffectContext, execute
+
+    instance_id = state.players[subject].hand[0]
+    execute(state, Reveal(who=Who.YOU, count=1, zone="hand"),
+            EffectContext(controller=subject))
+    return instance_id
+
+
+def test_a_revealed_hand_card_stops_being_unseen(decks):
+    """424.1 -- revealing "presents a card to all players". The observer knows
+    exactly where that card is, so it is located, not part of the pool a
+    determinization samples from."""
+    state = midgame(decks, 8)
+    subject, observer = 1, 0
+    card = state.cards[state.players[subject].hand[0]].card_id
+
+    before = deduce(state, observer, subject)
+    reveal_a_hand_card(state, subject)
+    after = deduce(state, observer, subject)
+
+    assert after.unseen[card] == before.unseen[card] - 1
+    assert after.located[card] == before.located[card] + 1
+    assert after.known_in_hand[card] == 1
+
+
+def test_a_revealed_card_is_known_to_be_in_hand_with_certainty(decks):
+    state = midgame(decks, 8)
+    subject, observer = 1, 0
+    card = state.cards[state.players[subject].hand[0]].card_id
+    reveal_a_hand_card(state, subject)
+
+    knowledge = deduce(state, observer, subject)
+    assert knowledge.probability_in_hand(card) == 1.0
+
+
+def test_the_memory_expires_when_the_card_leaves_the_hand(decks):
+    """424.1.a -- Revealed is a *temporary state*, not a zone. The knowledge is
+    about where the card was; once it moves, it is no longer in the hand and
+    the deduction must not keep claiming it is."""
+    state = midgame(decks, 8)
+    subject, observer = 1, 0
+    instance_id = reveal_a_hand_card(state, subject)
+    card = state.cards[instance_id].card_id
+    assert deduce(state, observer, subject).known_in_hand[card] == 1
+
+    state.players[subject].hand.remove(instance_id)
+    state.players[subject].main_deck.append(instance_id)
+
+    assert deduce(state, observer, subject).known_in_hand[card] == 0
+
+
+def test_revealing_never_reveals_more_than_was_shown(decks):
+    """Only the announced card becomes known -- not the rest of the hand."""
+    state = midgame(decks, 8)
+    subject, observer = 1, 0
+    reveal_a_hand_card(state, subject)
+
+    knowledge = deduce(state, observer, subject)
+    assert sum(knowledge.known_in_hand.values()) == 1
+    assert knowledge.hidden_hand_size == len(state.players[subject].hand) - 1
+
+
+def test_a_determinization_keeps_a_revealed_card_in_the_hand(decks):
+    """The search must not sample worlds it has already been shown are false.
+
+    Without this, ISMCTS shuffles a revealed card back into the deck on most
+    iterations and plans as though it had never seen it.
+    """
+    state = midgame(decks, 8)
+    observer = 0
+    instance_id = reveal_a_hand_card(state, 1)
+
+    rng = random.Random(4)
+    for _ in range(20):
+        world = determinize(state, observer, rng)
+        assert instance_id in world.players[1].hand
+        assert len(world.players[1].hand) == len(state.players[1].hand)
+
+
+def test_the_observer_sees_the_revealed_card_in_the_observation(decks):
+    """The observation is the agent's whole legal view; public information the
+    agent is entitled to belongs in it."""
+    state = midgame(decks, 8)
+    instance_id = reveal_a_hand_card(state, 1)
+
+    view = state.observation(0)
+    assert instance_id in {c.instance_id for c in view.revealed_opponent_hand}
+    assert instance_id not in {c.instance_id for c in view.hand}
+
+
+def test_an_unrevealed_hand_stays_out_of_the_observation(decks):
+    """The no-leak direction of the same test."""
+    state = midgame(decks, 8)
+    view = state.observation(0)
+    assert view.revealed_opponent_hand == ()

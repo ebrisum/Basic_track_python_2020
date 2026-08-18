@@ -39,6 +39,7 @@ import random
 from dataclasses import dataclass, field
 
 from analysis.evaluation import Model, evaluate, load_model
+from engine import knowledge
 from engine.interface import Action, GameState
 
 DEFAULT_ITERATIONS = 120
@@ -82,16 +83,22 @@ def determinize(state: GameState, player: int, rng: random.Random) -> GameState:
     The searching player knows their own hand and everything on the board, but
     not the opponent's hand or either deck order. Both decks are shuffled, and
     the opponent's hand is redealt from their shuffled deck -- keeping its
-    size, which *is* public.
+    size, which *is* public, and keeping any card 424 revealed to us in place.
     """
     clone = copy.deepcopy(state)
     opponent = 1 - player
 
     them = clone.players[opponent]
-    pool = list(them.hand) + list(them.main_deck)
+    # 424 -- a card we were shown in their hand stays in their hand. Sampling
+    # worlds we have already been shown are false is not uncertainty, it is
+    # forgetting.
+    pinned = knowledge.revealed_in_hand(clone, opponent)
+    hand_size = len(them.hand)
+    pool = [i for i in list(them.hand) + list(them.main_deck) if i not in pinned]
     rng.shuffle(pool)
-    them.hand = pool[: len(them.hand)]
-    them.main_deck = pool[len(them.hand):]
+    free = hand_size - len(pinned)
+    them.hand = list(pinned) + pool[:free]
+    them.main_deck = pool[free:]
 
     # Our own deck order is unknown to us too.
     rng.shuffle(clone.players[player].main_deck)

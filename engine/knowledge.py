@@ -33,7 +33,7 @@ than baking an information advantage in silently. See RQ-12.
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 
@@ -58,9 +58,23 @@ class Knowledge:
     hand_size: int
     deck_size: int
     decklist_known: bool
+    # 424 Reveal -- cards the observer was *shown* in the subject's hand and
+    # that are still there. Certain, not inferred, and already counted in
+    # `located` rather than `unseen`.
+    known_in_hand: Counter = field(default_factory=Counter)
 
     def unseen_total(self) -> int:
         return sum(self.unseen.values())
+
+    @property
+    def hidden_hand_size(self) -> int:
+        """Hand slots still to be filled from `unseen`.
+
+        A revealed card occupies a hand slot the deducer no longer has to guess
+        at, so the remaining unseen pool spreads over fewer slots -- which
+        makes every other estimate *sharper*, not just the revealed one.
+        """
+        return max(0, self.hand_size - sum(self.known_in_hand.values()))
 
     def probability_in_hand(self, card_id: str) -> float:
         """P(a specific copy is in hand), assuming hand is a uniform subset.
@@ -68,19 +82,25 @@ class Knowledge:
         With `n` unseen cards of which `h` are in hand, any particular unseen
         card is in hand with probability h/n. Exact when the observer has no
         further information, which is the case here -- deck order is secret.
+        A copy the observer was shown is not an estimate at all: it is 1.
         """
+        if self.known_in_hand.get(card_id, 0):
+            return 1.0
         total = self.unseen_total()
-        if total <= 0 or self.hand_size <= 0:
+        slots = self.hidden_hand_size
+        if total <= 0 or slots <= 0:
             return 0.0
-        return min(1.0, self.unseen.get(card_id, 0) * self.hand_size / total)
+        return min(1.0, self.unseen.get(card_id, 0) * slots / total)
 
     def expected_in_hand(self, predicate) -> float:
         """Expected number of cards in hand satisfying `predicate(card_id)`."""
+        known = sum(n for cid, n in self.known_in_hand.items() if predicate(cid))
         total = self.unseen_total()
-        if total <= 0 or self.hand_size <= 0:
-            return 0.0
+        slots = self.hidden_hand_size
+        if total <= 0 or slots <= 0:
+            return float(known)
         matching = sum(n for cid, n in self.unseen.items() if predicate(cid))
-        return matching * self.hand_size / total
+        return known + matching * slots / total
 
 
 # 052 / 161.1 -- runes, legends and battlefields are not Main Deck cards, so
@@ -144,6 +164,20 @@ def decklist_counts(state, subject: int) -> Counter:
     return counts
 
 
+def revealed_in_hand(state, subject: int) -> list[int]:
+    """424 -- instances of `subject`'s that were revealed from hand and are
+    still in it.
+
+    The record of revelations is never pruned, so the "still in it" test is
+    done here, against where the instance actually is now. A card that was
+    shown and then played, discarded or recycled is no longer in the hand and
+    stops being known -- 424.1.a: Revealed is a temporary state, not a zone.
+    """
+    hand = state.players[subject].hand
+    shown = getattr(state, "revealed_in_hand", ())
+    return [i for i in hand if i in shown]
+
+
 def deduce(state, observer: int, subject: int,
            mode: KnownDecklists = KnownDecklists.BOTH) -> Knowledge:
     """What `observer` can work out about `subject`'s hidden cards."""
@@ -151,6 +185,10 @@ def deduce(state, observer: int, subject: int,
     own = observer == subject
     decklist_known = own or mode is KnownDecklists.BOTH
 
+    known = Counter(
+        state.cards[i].card_id for i in revealed_in_hand(state, subject)
+        if _is_main_deck(state, i)
+    )
     located = public_counts(state, subject)
     if own:
         # You know your own hand exactly, so it is located, not unseen; what
@@ -161,10 +199,13 @@ def deduce(state, observer: int, subject: int,
         for instance_id in player.main_deck:
             unseen[state.cards[instance_id].card_id] += 1
     elif decklist_known:
+        # A card the observer was shown is located, not unseen (424).
+        located = located + known
         # Subtract the public from the list: what is left is hand + deck.
         unseen = decklist_counts(state, subject) - located
     else:
         # No list to subtract from; only the sizes are public.
+        located = located + known
         unseen = Counter()
 
     return Knowledge(
@@ -175,6 +216,7 @@ def deduce(state, observer: int, subject: int,
         hand_size=len(player.hand),
         deck_size=len(player.main_deck),
         decklist_known=decklist_known,
+        known_in_hand=known if not own else Counter(),
     )
 
 

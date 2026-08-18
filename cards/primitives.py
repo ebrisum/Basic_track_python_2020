@@ -381,7 +381,17 @@ def _recycle(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
 
 
 def _reveal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
-    """424 -- announce cards publicly. The cards do not change zones."""
+    """424 -- announce cards publicly. The cards do not change zones.
+
+    Announcing in the shared log is what makes the information public, but a
+    player also *remembers* what they were shown. A card revealed from a hand
+    is recorded so `engine.knowledge` can stop treating it as unseen: an agent
+    that forgets a revelation plays strictly worse than the rules allow.
+
+    Only hand reveals are recorded. A card shown from the top of a deck is
+    already inside the pool the deducer subtracts to, and nothing pins it
+    there afterwards -- claiming to know where it went would be an invention.
+    """
     for player in _resolve_player(effect.who, ctx.controller):
         zones = state.players[player]
         source = zones.hand if effect.zone == "hand" else zones.main_deck
@@ -390,6 +400,8 @@ def _reveal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
             continue
         names = ", ".join(state.db[state.cards[i].card_id].name for i in shown)
         state._emit(f"P{player} reveals {names} (from {effect.zone})")
+        if effect.zone == "hand":
+            state.revealed_in_hand.update(shown)
     return None
 
 

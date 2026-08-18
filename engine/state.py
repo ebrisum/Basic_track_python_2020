@@ -165,8 +165,12 @@ class RiftboundState:
     accelerated: set = field(default_factory=set)
     # Phase to return to once the effect queue drains.
     _resume_phase: "Phase | None" = None
-    # 811.1.d.1 -- set while a card played from Hidden is on the chain, so it
-    # enters at that battlefield rather than the Base.
+    # 424 Reveal -- instances shown to all players while in their owner's hand.
+    # Revealing does not move the card (424.1.a), so this is a record of what
+    # was *seen*, not a zone. It is deliberately never pruned: `knowledge` and
+    # the observation both re-check where the instance actually is now, which
+    # cannot go stale, where a pruning hook on every zone move could.
+    revealed_in_hand: set = field(default_factory=set)
     _rng: random.Random = field(default_factory=random.Random)
 
     # ------------------------------------------------------------- cloning
@@ -226,6 +230,7 @@ class RiftboundState:
         clone.awaiting = replace(self.awaiting) if self.awaiting is not None else None
         clone.units_enter_ready = set(self.units_enter_ready)
         clone.accelerated = set(self.accelerated)
+        clone.revealed_in_hand = set(self.revealed_in_hand)
         clone._resume_phase = self._resume_phase
         clone._last_from_trigger = self._last_from_trigger
 

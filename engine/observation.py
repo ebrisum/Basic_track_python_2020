@@ -98,6 +98,10 @@ class RiftboundObservation:
     focus: int | None = None
     showdown: tuple[int, int, int, bool] | None = None
     choice_prompt: str = ""
+    # 424 -- cards of the opponent's that were revealed from their hand and are
+    # still there. Public information the observer was actually shown, so it
+    # belongs in their legal view; everything else in that hand stays a count.
+    revealed_opponent_hand: tuple[VisibleCard, ...] = ()
     winner: int | None = None
     log_tail: tuple[str, ...] = field(default_factory=tuple)
 
@@ -175,6 +179,10 @@ class RiftboundObservation:
             points=(state.players[0].points, state.players[1].points),
             hand=tuple(visible(i) for i in state.players[player_id].hand),
             opponent_hand_size=len(state.players[opponent].hand),
+            revealed_opponent_hand=tuple(
+                visible(i) for i in state.players[opponent].hand
+                if i in getattr(state, "revealed_in_hand", ())
+            ),
             deck_sizes=(
                 len(state.players[0].main_deck),
                 len(state.players[1].main_deck),

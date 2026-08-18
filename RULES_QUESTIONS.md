@@ -190,80 +190,122 @@ rather than assumed. See `DECISIONS.md`.
 
 ---
 
-## RQ-16 — A revealed card is announced but not remembered
+## RQ-16 — A revealed card is announced but not remembered — RESOLVED
 
-**Status:** open, deliberate, and one-directional.
+**Status:** closed.
 
-**Situation.** 424 Reveal is implemented as a public announcement in the
-shared log, which is faithful to 424.1 ("presenting a card to all players")
-and to 424.1.a ("Revealed is a temporary state and is not a zone" -- the card
-does not move). Both players read the same log, so the information really is
-made public.
+424 Reveal now records which instances were shown from a hand
+(`state.revealed_in_hand`), and three consumers read it:
 
-What the engine does *not* do is feed that back into `engine/knowledge.py`.
-The deduction there bounds an opponent's hand by subtracting everything
-publicly located from a known 40-card decklist; a card revealed from a hand
-and then hidden again is not recorded, so the deducer does not narrow its
-estimate the way a human player's memory would.
+* `engine/knowledge.py` counts a revealed card as **located**, not unseen, and
+  exposes it as `Knowledge.known_in_hand`. `probability_in_hand` returns 1.0
+  for it, and `hidden_hand_size` spreads the remaining pool over one fewer
+  slot -- so a revelation sharpens *every* estimate, not just its own.
+* `agents/ismcts.py` pins the card in the opponent's hand across
+  determinizations. Sampling worlds you have already been shown are false is
+  not uncertainty; it is forgetting.
+* `RiftboundObservation.revealed_opponent_hand` puts it in the agent's legal
+  view, so nothing has to reach past the frozen interface to use it.
 
-**Effect on outcomes.** An agent forgets what it was shown. That makes it
-strictly *less* informed than the rules allow, never more -- so it cannot
-produce illegal play, only weaker play, and only on the 16 cards that reveal.
+The record is never pruned. Every consumer re-checks where the instance
+actually is *now*, which cannot go stale; a pruning hook on every zone move
+could. 424.1.a says Revealed is a temporary state and not a zone, and this is
+what that means in practice: a card shown and then played, discarded or
+recycled stops being known.
 
-**What it needs.** A per-player record of revelations that `deduce()` reads,
-which is also what would let the evaluation price "I know they hold an
-answer". Worth doing with RQ-14's selector work rather than alone.
+Only **hand** reveals are recorded. A card shown from the top of a deck is
+already inside the pool the deducer subtracts to, and nothing pins it there
+afterwards; claiming to know where it went would be an invention.
 
----
+### Superseded text
 
-## RQ-14 — A hidden card's targeting is not restricted to its battlefield
-
-**Status:** open. Implemented in part; the missing part is named here rather
-than left to be discovered.
-
-**Situation.** 811.1.d restricts what a card played from Hidden may choose:
-
-* **811.1.d.1** — a hidden permanent must be played *to that battlefield*,
-  overriding the rule that gear go to base. **Implemented.**
-* **811.1.d.2** — if a hidden spell or a hidden permanent's play effect
-  chooses targets, those targets must come from that battlefield. **Not
-  implemented.** A card played from Hidden currently targets as freely as one
-  played from hand.
-* **811.1.d.2's exception** — "unless the ability explicitly restricts
-  targeting in a way that makes this impossible". Deciding that needs
-  per-effect analysis of whether a selector *can* be satisfied at one
-  battlefield, which the DSL's `Selector` cannot currently answer.
-* **811.1.d.3** — if a hidden card causes you to play a unit, that unit must
-  be played at that battlefield. **Not implemented.**
-
-**Effect on outcomes.** A hidden spell can currently hit targets anywhere,
-which is strictly more permissive than the rules allow. It affects only cards
-played from Hidden, which needs both a HIDDEN card and a battlefield held
-across two turns.
-
-**What it needs.** `Selector` gaining a location constraint, plus a way to ask
-whether a selector is satisfiable at a given battlefield — which is also what
-811.1.d.2's exception requires. Worth doing together.
+The original entry read: "What the engine does *not* do is feed that back into
+`engine/knowledge.py` ... An agent forgets what it was shown."
 
 ---
 
-## RQ-15 — What happens to a hidden card when you lose the battlefield
+## RQ-14 — A hidden card's targeting is not restricted to its battlefield — RESOLVED
 
-**Status:** open, unanswerable from the text I have.
+**Status:** closed, except for one construction the DSL cannot express, named
+below rather than left to be discovered.
 
-**Situation.** 811.1.b says a card is hidden "at a battlefield you control
-that doesn't already have a facedown card hidden there **for as long as you
-control that battlefield**". The rules do not then say what becomes of the
-card when that control ends. Plausible readings: it returns to hand, it is
-revealed, it stays facedown but unplayable, or it ceases to be hidden and
-goes to the trash.
+811.1.d restricts what a card played from Hidden may choose:
 
-**Decision.** The engine leaves the card hidden and playable, and the state
-invariant *reports* rather than enforces the controller check, so the
-situation is visible instead of silently resolved one way.
+| Rule | Requirement | Now |
+| --- | --- | --- |
+| 811.1.d | a hidden **spell** with no valid target there can't be played from Hidden | `_hidden_play_has_targets` |
+| 811.1.d.1 | a hidden permanent is played **to that battlefield** | already done; the placement bug below fixed |
+| 811.1.d.2 | a hidden card's targets come **from that battlefield** | `EffectContext.restrict_location` |
+| 811.1.d.2's exception | ...unless the card's own restriction makes that impossible | `restriction_binds` |
+| 811.1.d.3 | a hidden card that makes you **play a unit** plays it there | vacuous: no DSL effect plays a unit |
+| 811.3 | played normally, no restriction at all | untouched by the above |
 
-**Effect on outcomes.** Small and one-directional: a player who loses a
-battlefield keeps access to a card some readings would take away.
+The exception is a *static* property of the selector, not of the board -- the
+FAQ's Rebuttal entry is explicit that the restriction survives even a change
+of controller, and 811.1.d handles the empty-board case separately by barring
+the play. The only selector the DSL can currently express that is impossible
+to satisfy at a battlefield is one restricted to a base. Riftbound's own
+example of the exception -- Tideturner's "a unit you control at *another*
+location" -- needs a relative-location constraint `Selector` does not have.
+No scripted card uses one; when one is scripted, `restriction_binds` is the
+single place that changes.
+
+**A real bug fell out of this.** "Played from Hidden" was one slot on the
+state, but the chain holds several cards at once, so any card played in
+response overwrote it: the hidden spell then resolved with no restriction at
+all, and a hidden permanent entered the base instead of its battlefield
+(811.1.d.1). It now lives on the `ChainItem`. `tests/test_hidden_targeting.py`
+fails on both counts if the fix is reverted -- verified by injecting it.
+
+**Tested with synthetic scripts.** 34 cards have HIDDEN, exactly one is
+scripted, and its play effect targets itself. A rule tested only by the cards
+that happen to be scripted today is a rule tested by accident, so the tests
+build their own.
+
+**Still an approximation.** The DSL has no "you *may* choose" flag, so an
+optional target would be treated as required by the 811.1.d gate. No scripted
+card has one.
+
+---
+
+## RQ-15 — What happens to a hidden card when you lose the battlefield — RESOLVED
+
+**Status:** closed. The rules do answer it; I had looked in the wrong place.
+
+The original entry said this was "unanswerable from the text I have", having
+read only 811.1.b's "for as long as you control that battlefield". The answer
+is in the zone rules and the cleanup steps:
+
+* **107.3.c** — "Cards can only be placed in or occupy the Facedown Zone if
+  the controller of the card also controls the associated Battlefield."
+* **107.3.d** — "If a player loses Control of a Battlefield, any cards in the
+  Facedown Zone associated with that Battlefield are removed during the next
+  Cleanup."
+* **323.7** — cleanup step 5, which says where to: "Remove all Hidden cards
+  from all Battlefields that are not controlled by the same player and place
+  them in their owner's Trash."
+* **421.4** — the card is revealed to all players as it changes zones. It
+  lands in the trash, whose contents are public (108.2.d), so the deduction
+  in `engine/knowledge.py` picks the identity up with no extra bookkeeping.
+
+`_remove_stranded_hidden` implements this as part of the cleanup fixpoint, and
+the state invariant now **enforces** the controller check rather than
+reporting it. 60 random games, 15,824 actions, zero violations.
+
+An uncontrolled battlefield strands the card too: 107.3.c requires that the
+controller of the card *also control* the battlefield, and nobody controlling
+it does not satisfy that.
+
+**The lesson worth keeping.** The original entry listed four plausible
+readings and picked the most permissive. All four were guesses about a rule
+that was written down. "The rules do not say" needs to survive a search of the
+rules for the *mechanism* (Facedown Zones, Cleanup steps), not only for the
+keyword.
+
+### Superseded text
+
+"**Status:** open, unanswerable from the text I have. ... **Decision.** The
+engine leaves the card hidden and playable."
 
 ---
 
