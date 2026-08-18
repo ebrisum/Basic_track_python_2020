@@ -228,9 +228,9 @@ playable cards with printed text, which is what decides the order.
 | 416 Recycle | 36 | implemented (was a cost only) |
 | 426 Buff | 35 | implemented |
 | 439 Create / tokens | 34 | implemented |
-| 421 Hide / 811 Hidden | 32 | implemented, see RQ-14 and RQ-15 |
+| 421 Hide / 811 Hidden | 32 | implemented; RQ-14 and RQ-15 now closed |
 | 422 Discard | 20 | implemented |
-| 424 Reveal | 16 | implemented, see RQ-16 |
+| 424 Reveal | 16 | implemented; RQ-16 now closed |
 | 423 Stun | 14 | implemented |
 | 430 Channel | 13 | implemented (was phase-only) |
 | 425 Counter | 5 | implemented |

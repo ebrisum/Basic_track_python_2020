@@ -89,3 +89,30 @@ def test_harness_overhead_is_far_under_the_budget():
         f"harness alone took {batch.elapsed_seconds:.1f}s for 1,000 games; "
         f"that is already a sixth of the Milestone 1 budget."
     )
+
+
+# --- the large-scale validation runner (BUILD.md section 10) ----------------
+
+
+def test_validate_reports_a_clean_short_run():
+    """A small run of the acceptance harness must come back clean and exit 0.
+
+    The real run is 10,000 games and far too slow for a test; this pins that
+    the harness itself works -- that it counts decisions, checks invariants,
+    and returns the exit code the acceptance criterion depends on.
+    """
+    from analysis.validate import main
+
+    assert main(["--games", "6", "--check-every", "2", "--deep",
+                 "--progress", "0"]) == 0
+
+
+def test_validate_fails_loudly_on_a_broken_engine(monkeypatch):
+    """The counterweight: a harness that cannot fail proves nothing."""
+    import analysis.validate as validate
+
+    def broken(*args, **kwargs):
+        raise RuntimeError("engine is broken")
+
+    monkeypatch.setattr(validate, "build_state", broken)
+    assert validate.main(["--games", "2", "--progress", "0"]) == 1
