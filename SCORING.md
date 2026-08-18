@@ -299,6 +299,30 @@ profits from it. What is *not* claimed is that the agent plays better with it.
 The honest next step is a self-play fit with the feature present, and a
 re-benchmark — not a bigger hand-set weight.
 
+## Search was worse than no search, and why
+
+`agents/ismcts.py` scored **0.350 (14-26, interval 0.202-0.498)**
+against the very greedy agent it is built on. The upper bound sits below 0.5,
+so this was not "the budget is too small" — a correct MCTS with a working
+value function should never be *worse* than the evaluation it wraps.
+
+The cause was the backup. Every node on the search path was credited with the
+leaf value from the **searching player's** point of view. But a child's
+statistics are read by `_select` when the player at its *parent* is choosing,
+and that parent is frequently the opponent. So at opponent nodes the search
+chose whatever maximised the searcher's own value: it planned against an
+opponent who cooperates, and every extra iteration made that plan more
+confident.
+
+The fix records who was to move when each action was chosen and backs the
+value up from that player's side. `evaluate` is antisymmetric by construction,
+so the other seat's number is `1 - v` and nothing has to be recomputed.
+
+Worth noting why this is not the textbook "negate at alternating depths":
+Riftbound lets one player take many actions in a row — measured at a mean of
+3.4 consecutive plies, up to 20 — so depth parity carries no information
+about who is choosing. The player has to be recorded, not inferred.
+
 ## Where this goes next
 
 The heuristic is the value function an ISMCTS agent will need. Two things make
