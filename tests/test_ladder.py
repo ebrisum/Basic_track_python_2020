@@ -141,3 +141,41 @@ def test_the_gauntlet_is_a_fixed_reference_not_the_latest_model(tmp_path):
     assert [name for name, _ in league.gauntlet()][: len(first)] == [
         name for name, _ in first
     ]
+
+
+# --- SPSA tuning ------------------------------------------------------------
+
+
+def test_renormalise_preserves_direction_and_fixes_length():
+    """A greedy argmax agent is invariant to the weight vector's scale, so
+    SPSA must not be allowed to wander along it."""
+    from analysis.tune import _norm, renormalise
+
+    theta = [3.0, 4.0, 0.0]
+    scaled = renormalise(theta, 1.0)
+    assert _norm(scaled) == pytest.approx(1.0)
+    # same direction: every component in the same proportion
+    assert scaled[0] / scaled[1] == pytest.approx(theta[0] / theta[1])
+
+
+def test_renormalise_survives_a_zero_vector():
+    from analysis.tune import renormalise
+
+    assert renormalise([0.0, 0.0], 1.0) == [0.0, 0.0]
+
+
+def test_scaling_every_weight_does_not_change_a_greedy_choice():
+    """The invariance the normalisation is built on, asserted rather than
+    assumed: if this were false, pinning the norm would throw away signal."""
+    from analysis.evaluation import DEFAULT_WEIGHTS, FEATURE_NAMES, Model
+
+    base = Model(weights=DEFAULT_WEIGHTS, bias=0.0)
+    doubled = Model(weights=tuple(w * 2 for w in DEFAULT_WEIGHTS), bias=0.0)
+
+    rng = __import__("random").Random(11)
+    for _ in range(50):
+        left = {name: rng.uniform(-1, 1) for name in FEATURE_NAMES}
+        right = {name: rng.uniform(-1, 1) for name in FEATURE_NAMES}
+        assert (base.score(left) > base.score(right)) == (
+            doubled.score(left) > doubled.score(right)
+        )

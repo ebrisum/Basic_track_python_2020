@@ -7,7 +7,7 @@ per-instance state), never in card behaviour.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from enum import Enum
 
 # The six domains (164.1). Order is fixed so serialization is deterministic.
@@ -62,6 +62,24 @@ class CardRef:
     # 434 Attach / 716 -- the unit this gear is attached to.
     attached_to: int | None = None
 
+
+    def copy(self) -> "CardRef":
+        """A copy sharing nothing mutable.
+
+        Every field is a scalar, a string, or a tuple (`granted_keywords`), so
+        copying the instance dict wholesale is a complete copy. This is the
+        single hottest call in search -- roughly 200,000 per three games --
+        and `dataclasses.replace` costs a `getattr` and a full `__init__` per
+        field, which measured as the largest remaining cost after cloning was
+        made targeted.
+
+        `test_cloning.py` asserts every field's type is immutable, so adding a
+        mutable one fails loudly rather than silently aliasing it.
+        """
+        new = CardRef.__new__(CardRef)
+        new.__dict__.update(self.__dict__)
+        return new
+
     def clone_key(self) -> tuple:
         """Canonical tuple for hashing/serialization."""
         return (
@@ -93,6 +111,10 @@ class Battlefield:
     contested_by: int | None = None
     # Which players have already Scored this battlefield this turn (470).
     scored_by: set[int] = field(default_factory=set)
+
+    def copy(self) -> "Battlefield":
+        # `scored_by` is the only mutable field; everything else is a scalar.
+        return replace(self, scored_by=set(self.scored_by))
 
     def clone_key(self) -> tuple:
         return (
@@ -163,6 +185,9 @@ class RunePool:
             else:
                 self.universal_power -= 1
 
+    def copy(self) -> "RunePool":
+        return replace(self, power=dict(self.power))
+
     def clone_key(self) -> tuple:
         return (
             self.energy,
@@ -191,6 +216,26 @@ class PlayerState:
     # Set once the player has taken their first Channel Phase, for the 1v1
     # going-second extra rune (485.7).
     has_channeled: bool = False
+
+    def copy(self) -> "PlayerState":
+        """A copy sharing nothing mutable.
+
+        Every zone is a list of instance ids -- ints are immutable, so a
+        shallow list copy is a complete one. Only `pool` holds a nested
+        mutable field.
+        """
+        return replace(
+            self,
+            hand=list(self.hand),
+            main_deck=list(self.main_deck),
+            rune_deck=list(self.rune_deck),
+            trash=list(self.trash),
+            banishment=list(self.banishment),
+            champion_zone=list(self.champion_zone),
+            base=list(self.base),
+            channeled_runes=list(self.channeled_runes),
+            pool=self.pool.copy(),
+        )
 
     def clone_key(self) -> tuple:
         return (

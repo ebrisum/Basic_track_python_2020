@@ -11,7 +11,7 @@ cards; `cards/scripts/` supplies the data.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Callable
 
 from cards.dsl import (
@@ -49,6 +49,10 @@ class EffectContext:
     # Remaining repeats for multi-pick effects (e.g. "discard 2").
     remaining: int = 0
     payload: dict = field(default_factory=dict)
+
+    def copy(self) -> "EffectContext":
+        # `chosen` is a tuple; only `payload` is mutable.
+        return replace(self, payload=dict(self.payload))
 
 
 def _resolve_player(who: Who, controller: int) -> list[int]:

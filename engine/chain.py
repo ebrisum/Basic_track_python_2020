@@ -12,7 +12,7 @@ mutation.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass
@@ -31,6 +31,9 @@ class ChainItem:
     # True when the item was put on the chain by a triggered ability or an
     # ability that Adds resources. Focus does not pass for these (346.1).
     from_trigger: bool = False
+
+    def copy(self) -> "ChainItem":
+        return replace(self)   # every field is a scalar
 
     def clone_key(self) -> tuple:
         return (
@@ -59,6 +62,9 @@ class Showdown:
     # Consecutive passes with nothing added; all players passing ends it
     # (347.2.a).
     passes: int = 0
+
+    def copy(self) -> "Showdown":
+        return replace(self)   # every field is a scalar
 
     def clone_key(self) -> tuple:
         return (
