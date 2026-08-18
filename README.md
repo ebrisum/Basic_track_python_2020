@@ -40,9 +40,11 @@ architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 | Gear: Equipment, Equip costs, Might Bonuses, attachment | done — derived from card text |
 | Scoring: fitted value heuristic + calibration | done — see [`SCORING.md`](SCORING.md) |
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
+| Game Actions 410-444 audited rule by rule | done — 4 unimplemented, all ≤4 cards |
+| State invariants checked after every action | done — 12 checks, each citing its rule |
 | Scripting the rest of the card pool | **remaining work** |
 
-**422 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+**488 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
 priority, focus and showdowns, 24 covering Equipment, 29 covering battlefield
 takeover and threat forecasting, 15 covering Elo/SPRT/the league, and 20
 driving the frontend over HTTP — plus two full Riftbound games in the replay

@@ -209,3 +209,59 @@ Modes of play beyond 1v1 (**481–488**), conceding (**649**), XP (**728**),
 additional turns (**734**), counters (**741**), and the full keyword glossary
 (**804–829**, 25 keywords). The keyword glossary is transcribed per-keyword in
 `DSL.md` as cards requiring each are scripted.
+
+
+## Game Actions audit (410-444)
+
+Worked through one at a time, checking each printed rule against the engine
+and implementing what was missing. Card counts are mentions across the 521
+playable cards with printed text, which is what decides the order.
+
+| action | cards | state |
+| --- | --- | --- |
+| 414 Exhaust | 85 | implemented |
+| 415 Ready | 84 | implemented |
+| 413 Draw | 71 | implemented |
+| 417 Deal | 66 | implemented |
+| 434 Attach | 54 | implemented |
+| 428 Kill | 41 | implemented |
+| 416 Recycle | 36 | implemented (was a cost only) |
+| 426 Buff | 35 | implemented |
+| 439 Create / tokens | 34 | implemented |
+| 421 Hide / 811 Hidden | 32 | implemented, see RQ-14 and RQ-15 |
+| 422 Discard | 20 | implemented |
+| 424 Reveal | 16 | implemented, see RQ-16 |
+| 423 Stun | 14 | implemented |
+| 430 Channel | 13 | implemented (was phase-only) |
+| 425 Counter | 5 | implemented |
+| 432 Double | 4 | **not implemented** |
+| 427 Banish | 4 | implemented |
+| 418 Heal | 4 | implemented |
+| 437 Prevent | 2 | **not implemented** |
+| 435 Detach | 2 | implemented |
+| 433 Swap | 1 | **not implemented** |
+| 436 Predict, 440 Burn, 441 Empower, 443 Skip | 0 | no card needs them |
+
+**What the audit found**, beyond filling gaps -- these were live bugs, not
+missing features:
+
+* **431.2 Burn Out ran two of its four steps.** A player whose deck emptied
+  gave up a point and then stayed permanently deckless: the trash was never
+  recycled and the draw never completed.
+* **167 emptied the rune pool at the start of a Main Phase but not at the end
+  of a turn**, so power survived into the opponent's Awaken, Beginning,
+  Channel and Draw phases -- where Reactions can spend it.
+* **471.2.b Hold abilities did not exist**, so ten cards' printed text did
+  nothing, including one whose entire text is "When I hold, you score 1
+  point."
+* **471.2 fired Conquer triggers everywhere**, not at the battlefield that
+  scored, so gear on a unit at one battlefield triggered on a score at
+  another.
+* **423.1.b could not be expressed at all** -- there was no way for a unit to
+  contribute no Might to combat damage.
+* **719.5 was enforced in one of three code paths**, so a unit bounced to hand
+  left its Equipment attached to a card that was no longer in play.
+
+The last one was found by `engine/invariants.py` rather than by reading, which
+is the argument for checking structural truths after every action of every
+game rather than sampling them with hand-written cases.
