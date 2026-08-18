@@ -218,10 +218,16 @@ def test_spsa_tunes_in_mirrors():
     """Each SPSA iteration is an agent-vs-agent match, so it inherits the
     deck-noise problem: a gradient computed across mismatched decks is mostly
     deck luck. Pinned because it is invisible from the output — the run still
-    completes, it just learns nothing."""
+    completes, it just learns nothing.
+
+    Asserted by *calling* the function, not by grepping its source. A source
+    check passed happily while `matchups` referenced an undefined name and
+    crashed on the first real call.
+    """
     import inspect
 
     from analysis import tune
 
-    source = inspect.getsource(tune.spsa)
-    assert "mirror_only=True" in source
+    assert tune.matchups(["a", "b"], mirror_only=True) == [("a", "a"), ("b", "b")]
+    assert len(tune.matchups(["a", "b"])) == 4
+    assert "mirror_only=True" in inspect.getsource(tune.spsa)

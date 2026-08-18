@@ -66,7 +66,12 @@ from cards.database import load as load_db  # noqa: E402
 from engine.setup import available_decks, load_deck  # noqa: E402
 
 
-def matchups(decks):
+def matchups(decks, mirror_only: bool = False):
+    """Deck pairings to play over.
+
+    `mirror_only` restricts to same-deck matchups, which removes deck
+    imbalance from the comparison entirely -- see `benchmark.mirror_field`.
+    """
     if mirror_only:
         return [(deck, deck) for deck in decks]
     return [(a, b) for a in decks for b in decks]
