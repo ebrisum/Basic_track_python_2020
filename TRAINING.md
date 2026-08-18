@@ -133,6 +133,31 @@ improvement. Before this test that was ambiguous: broken learner, or weights
 already near a local optimum? Now it is the second. The learner can climb; it
 just has nowhere obvious to climb *to* from the hand-set prior.
 
+### The unexpected part: the recovery overshot
+
+| match | score | W-L-D | Elo | 95% interval |
+| --- | --- | --- | --- | --- |
+| trained vs healthy | **0.660** | 132-68-0 | **+115** | 0.594–0.726 |
+
+The run that started from *damaged* weights finished **stronger than the
+weights it was repairing toward** — 4.5 standard deviations above even, and
+transitively consistent with the other two rows (healthy > damaged,
+trained > damaged, trained > healthy).
+
+That is a result about the search landscape, not a fluke of one number.
+Starting at the prior, the gradient is flat and noisy and SPSA barely moves —
+two runs from there produced candidates that validated at 0.487 and 0.485.
+Starting from a hole, there is a large consistent gradient to follow, and
+following it carries the weights across territory a run from the prior never
+visits. This is the classic argument for **random restarts**: perturb
+deliberately and re-tune, rather than always polishing the incumbent.
+
+**Caveat on this specific number.** `learning_check.py` did not save the
+weights it produced — since fixed — and SPSA's games changed underneath it
+when pairing was added, so that exact vector is not reproducible. The claim
+worth making is the one about the landscape; any particular candidate has to
+win its own confirmation on fresh seeds before it is installed.
+
 Run this whenever the training path changes. A learner that cannot escape a
 hole someone dug for it will certainly not find improvements nobody knows
 about, and any weak positive result from it is noise.
