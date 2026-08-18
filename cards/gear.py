@@ -38,6 +38,9 @@ from engine.zones import DOMAINS
 
 EQUIPMENT_TAG = "equipment"
 
+# Sentinel so a cached None is distinguishable from a cache miss.
+_MISSING = object()
+
 # `(<cost>: Attach this to a unit you control.)` -- 818.1.c.2 quoted on the
 # card. The cost is everything before the colon.
 _REMINDER = re.compile(
@@ -121,8 +124,34 @@ def _parse_might_bonus(text: str) -> int | None:
     return int(signed or trailing)
 
 
+# Parsing a card face is a pure function of immutable card data, but it was
+# being redone on every call: profiling ISMCTS found `equip_ability` running
+# 34,718 regex parses across six searches, because legal-action generation
+# asks every card on the board for its activated abilities every ply.
+#
+# Keyed on the card *face*, not just the id. Keying on the id alone assumes
+# id -> face is a bijection, which holds for the loaded database but silently
+# returns the wrong answer for any constructed card that reuses an id -- as
+# the parser's own tests do.
+def _key(card) -> tuple:
+    return (card.card_id, card.rules_text, tuple(card.keywords or ()))
+
+
+_PROFILE_CACHE: dict[tuple, "EquipmentProfile | None"] = {}
+
+
 def equipment_profile(card) -> EquipmentProfile | None:
     """The Equipment facts for `card`, or None if it is not Equipment."""
+    key = _key(card)
+    cached = _PROFILE_CACHE.get(key, _MISSING)
+    if cached is not _MISSING:
+        return cached
+    profile = _parse_equipment(card)
+    _PROFILE_CACHE[key] = profile
+    return profile
+
+
+def _parse_equipment(card) -> EquipmentProfile | None:
     if not is_equipment(card):
         return None
     text = card.rules_text or ""
@@ -139,6 +168,9 @@ def equipment_profile(card) -> EquipmentProfile | None:
     )
 
 
+_ABILITY_CACHE: dict[tuple, "Ability | None"] = {}
+
+
 def equip_ability(card) -> Ability | None:
     """818.1.c.2 -- "[Cost]: Attach this gear to a unit you control."
 
@@ -146,6 +178,16 @@ def equip_ability(card) -> Ability | None:
     off the card face. A card whose cost is unparsed stays inert rather than
     being handed a guessed cost.
     """
+    key = _key(card)
+    cached = _ABILITY_CACHE.get(key, _MISSING)
+    if cached is not _MISSING:
+        return cached
+    ability = _build_equip_ability(card)
+    _ABILITY_CACHE[key] = ability
+    return ability
+
+
+def _build_equip_ability(card) -> Ability | None:
     profile = equipment_profile(card)
     if profile is None or profile.equip_cost is None:
         return None

@@ -29,6 +29,11 @@ def script_for(card_id: str) -> CardScript | None:
     return registry().get(card_id)
 
 
+# Same reasoning as cards/gear.py: this is a pure function of the card face
+# and legal-action generation calls it for every card on the board, every ply.
+_ACTIVATED_CACHE: dict[tuple, tuple] = {}
+
+
 def activated_abilities(card) -> tuple[Ability, ...]:
     """Every activated ability on `card` (376), in a stable order.
 
@@ -40,12 +45,18 @@ def activated_abilities(card) -> tuple[Ability, ...]:
     index it already had -- recorded replays address abilities by index, and
     renumbering them would silently invalidate every one.
     """
+    key = (card.card_id, card.rules_text, tuple(card.keywords or ()))
+    cached = _ACTIVATED_CACHE.get(key)
+    if cached is not None:
+        return cached
     script = script_for(card.card_id)
     abilities = list(script.of_kind(TriggerKind.ACTIVATED)) if script else []
     equip = equip_ability(card)
     if equip is not None:
         abilities.append(equip)
-    return tuple(abilities)
+    result = tuple(abilities)
+    _ACTIVATED_CACHE[key] = result
+    return result
 
 
 def abilities_of_kind(card, kind: TriggerKind) -> tuple[Ability, ...]:
