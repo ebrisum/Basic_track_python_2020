@@ -190,6 +190,32 @@ rather than assumed. See `DECISIONS.md`.
 
 ---
 
+## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
+
+**Status:** open, bounded, four cards.
+
+**Situation.** Equip costs are derived from each card's printed reminder text
+(818.1.c.2). Four Equipment print `(Pay the cost: ...)` instead of the cost,
+because their cost is not purely resources:
+
+| Card | Printed Equip cost |
+| --- | --- |
+| SFD-150 Last Rites | Chaos, Recycle 2 cards from your trash |
+| SFD-178 Blade of the Ruined King | Order, Kill a friendly unit |
+| UNL-158 Shepherd's Heirloom | Spend 1 XP |
+| UNL-188 Hextech Gauntlets | 3 energy, 1 rune of any type, reduced by the chosen unit's Might |
+
+**Decision.** These get no Equip ability and stay inert, with the reason
+recorded on the profile (`cost_note`). Handing them a guessed cost would be a
+hidden approximation.
+
+**Effect on outcomes:** four cards cannot be equipped. None is in the starter
+decks. `RecycleFromTrash` and a kill cost already exist as DSL costs, so
+SFD-150 and SFD-178 are a small scripting job, not an architectural one; XP
+(UNL-158) is an unimplemented subsystem.
+
+---
+
 ## RQ-5 — Card rules text is not executed
 
 **Status:** open. The single largest approximation in the engine.

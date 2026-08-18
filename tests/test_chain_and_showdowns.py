@@ -460,3 +460,116 @@ def test_a_reaction_can_answer_a_reaction(decks):
     assert PlayCard(second) in state.legal_actions(), "a Reaction answers a Reaction"
     state.apply(PlayCard(second))
     assert len(state.chain) >= 3, "three items stacked on the chain"
+
+
+# --- gear on the board: attachment, movement, recall (457, 718-719) ---------
+
+
+def put_gear(state, player, card_id, location=BASE_LOCATION):
+    instance_id = give(state, player, card_id)
+    state.players[player].hand.remove(instance_id)
+    state.cards[instance_id].location = location
+    state.players[player].base.append(instance_id)
+    return instance_id
+
+
+def test_attached_gear_moves_with_its_host(decks):
+    """719.3 -- a Top-Most Card and everything attached to it are at the same
+    location, and 719.3.a moves them together."""
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175")
+    gear = put_gear(state, player, "SFD-124")
+    state.cards[gear].attached_to = host
+
+    state.apply(StandardMove(host, bf_location(0)))
+    assert state.cards[gear].location == bf_location(0)
+
+
+def test_gear_can_never_be_moved_on_its_own(decks):
+    """718.5.c -- Attached cards cannot be moved separately, and unattached
+    gear has no Standard Move either: 144 moves units."""
+    state = arena(decks)
+    player = state.turn_player
+    gear = put_gear(state, player, "SFD-124")
+    assert not [
+        a for a in state.legal_actions()
+        if isinstance(a, StandardMove) and a.instance_id == gear
+    ]
+
+
+def test_unattached_gear_at_a_battlefield_is_recalled(decks):
+    """457.1 -- an un-attached non-unit Gear at a battlefield is Recalled to
+    its controller's base during the next Cleanup."""
+    state = arena(decks)
+    player = state.turn_player
+    gear = put_gear(state, player, "SFD-124", bf_location(0))
+    state._cleanup()
+    assert state.cards[gear].location == BASE_LOCATION
+
+
+def test_attached_gear_at_a_battlefield_stays(decks):
+    """457.1 applies only to *un-attached* gear -- an Equipment on a unit at
+    a battlefield is present there legitimately."""
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175", bf_location(0))
+    gear = put_gear(state, player, "SFD-124", bf_location(0))
+    state.cards[gear].attached_to = host
+    state._cleanup()
+    assert state.cards[gear].location == bf_location(0)
+
+
+def test_gear_is_not_counted_as_a_unit_at_a_battlefield(decks):
+    """A gear present at a battlefield must not hold it or fight for it."""
+    state = arena(decks)
+    player = state.turn_player
+    put_gear(state, player, "SFD-124", bf_location(0))
+    assert state.units_at(bf_location(0)) == []
+
+
+# --- late arrivals at a combat (464.2.c.3.a) -------------------------------
+
+
+def test_a_unit_arriving_mid_combat_gains_its_designation_at_cleanup(decks):
+    """464.2.c.3.a -- a unit that becomes present after Attacker and Defender
+    are established gains the designation during the following Cleanup."""
+    state = arena(decks)
+    attacker = state.turn_player
+    defender = state.opponent(attacker)
+    put_unit(state, defender, "OGN-175", bf_location(0))
+    contest(state, attacker)
+    assert state.combat is not None or state.showdown is not None
+
+    latecomer = put_unit(state, attacker, "OGN-175", bf_location(0))
+    assert not state.cards[latecomer].is_attacker  # not yet -- 464.2.c.3.a
+    state._cleanup()
+    assert state.cards[latecomer].is_attacker
+    assert not state.cards[latecomer].is_defender
+
+
+def test_a_late_defender_gains_the_defender_designation(decks):
+    state = arena(decks)
+    attacker = state.turn_player
+    defender = state.opponent(attacker)
+    put_unit(state, defender, "OGN-175", bf_location(0))
+    contest(state, attacker)
+
+    latecomer = put_unit(state, defender, "OGN-175", bf_location(0))
+    state._cleanup()
+    assert state.cards[latecomer].is_defender
+    assert not state.cards[latecomer].is_attacker
+
+
+def test_designations_are_dropped_when_a_unit_leaves_the_battlefield(decks):
+    """323.2.c -- units elsewhere lose Attacker/Defender designations."""
+    state = arena(decks)
+    attacker = state.turn_player
+    defender = state.opponent(attacker)
+    put_unit(state, defender, "OGN-175", bf_location(0))
+    mine = contest(state, attacker)
+    assert state.cards[mine].is_attacker
+
+    state.cards[mine].location = BASE_LOCATION
+    state._cleanup()
+    assert not state.cards[mine].is_attacker

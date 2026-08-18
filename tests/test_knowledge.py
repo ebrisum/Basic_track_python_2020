@@ -34,6 +34,20 @@ def decks():
     return load_deck("jinx_chaos_fury"), load_deck("volibear_body_fury")
 
 
+def midgame_with_channeled_runes(decks, player: int, seeds: int = 20):
+    """A midgame state where `player` has runes on the board.
+
+    Searched rather than pinned to a seed: a random walk's path depends on
+    the whole legal-action set, so any unrelated new action (Equip, say)
+    silently changes where seed N lands and the precondition evaporates.
+    """
+    for seed in range(1, seeds + 1):
+        state = midgame(decks, seed)
+        if state.players[player].channeled_runes:
+            return state
+    raise AssertionError(f"no seed in 1..{seeds} left P{player} holding runes")
+
+
 def midgame(decks, seed=1, steps=120):
     state = build_state(decks[0], decks[1], seed=seed, db=DB)
     agent = RandomAgent(seed)
@@ -84,10 +98,9 @@ def test_public_counts_covers_trash_board_and_champion_zone(decks):
 def test_channeled_runes_are_not_main_deck_cards(decks):
     """161.1 / 052 -- a rune in a base is public, but counting it would
     inflate the deduced 40-card list every time one was channeled."""
-    state = midgame(decks, 7)
+    state = midgame_with_channeled_runes(decks, player=1)
     counts = public_counts(state, 1)
     channeled = state.players[1].channeled_runes
-    assert channeled, "this test needs runes on the board"
     for instance_id in channeled:
         assert state.cards[instance_id].card_id not in counts
 

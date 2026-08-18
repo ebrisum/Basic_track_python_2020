@@ -35,6 +35,8 @@ from agents.ismcts import ISMCTSAgent
 from agents.random_agent import RandomAgent
 from analysis.evaluation import evaluate, load_model
 from cards.database import load as load_db
+from cards.gear import equipment_profile
+from cards.scripts import activated_abilities
 from engine.setup import DeckError, available_decks, build_state, load_deck
 from engine.state import Phase, RiftboundState
 
@@ -174,6 +176,7 @@ class Game:
                 }
             observation = state.observation(player)
             payload = asdict(observation)
+            self._annotate_cards(payload)
             payload.update(
                 {
                     "started": True,
@@ -209,6 +212,43 @@ class Game:
                 }
             )
             return payload
+
+    def _annotate_cards(self, payload: dict) -> None:
+        """Add card-face facts the UI needs but the observation should not carry.
+
+        `is_equipment`, the Might Bonus and per-ability labels are all
+        derivable from the card database, which this server already holds.
+        Putting them on the observation instead would widen the frozen
+        agent-facing interface and rewrite every replay hash -- the harness
+        caught exactly that -- for information no agent needs.
+        """
+        def walk(node):
+            """Yield every card view, however deeply the payload nests it.
+
+            Zones vary in shape -- `board` is a tuple, `trash` a tuple per
+            player, `legend` a single view -- so this recurses rather than
+            listing them and silently missing one.
+            """
+            if isinstance(node, dict):
+                if "card_id" in node:
+                    yield node
+                    return
+                for value in node.values():
+                    yield from walk(value)
+            elif isinstance(node, (list, tuple)):
+                for value in node:
+                    yield from walk(value)
+
+        for view in walk(payload):
+                card = self.db.get(view.get("card_id"))
+                if card is None:
+                    continue
+                profile = equipment_profile(card)
+                view["is_equipment"] = profile is not None
+                view["might_bonus"] = profile.might_bonus if profile else None
+                view["ability_labels"] = [
+                    a.text or "activate" for a in activated_abilities(card)
+                ]
 
     def act(self, player: int, action_repr: str) -> dict:
         with self._lock:

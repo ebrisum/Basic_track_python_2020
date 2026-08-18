@@ -337,29 +337,71 @@ def test_an_exhausted_seal_cannot_be_activated_again(decks):
     assert ActivateAbility(instance_id, 0) not in state.legal_actions()
 
 
-def test_warmogs_armor_attaches_to_a_friendly_unit(decks):
-    """SFD-108: [EQUIP Body] Attach this to a unit you control (434)."""
+def equip(state, gear: int, host: int) -> None:
+    """Play a gear, then pay its Equip cost to attach it (818.1).
+
+    Playing Equipment does *not* attach it -- Equip is a separate activated
+    ability with its own cost. Only Quick-Draw attaches on play (819.1.d).
+    """
+    play(state, gear)
+    equip_action = next(
+        a for a in state.legal_actions()
+        if isinstance(a, ActivateAbility) and a.instance_id == gear
+    )
+    state.apply(equip_action)
+    if state.phase is Phase.CHOOSING:
+        state.apply(ChooseTarget(host))
+    pass_until_resolved(state)
+
+
+def test_playing_equipment_does_not_attach_it(decks):
+    """818.1 -- Equip is an activated ability with a cost, not a play effect.
+
+    This file used to script the attach as ON_PLAY, so Warmog's Armor
+    equipped itself for free the moment it was played.
+    """
+    state = arena(decks)
+    put_unit(state, 0, "OGN-142", BASE_LOCATION)
+    gear = give(state, 0, "SFD-108")
+    play(state, gear)
+    assert state.cards[gear].attached_to is None
+
+
+def test_warmogs_armor_attaches_when_its_equip_cost_is_paid(decks):
+    """SFD-108: [EQUIP Body] (Body: Attach this to a unit you control.)"""
+    state = arena(decks)
+    host = put_unit(state, 0, "OGN-142", BASE_LOCATION)
+    gear = give(state, 0, "SFD-108")
+    equip(state, gear, host)
+    assert state.cards[gear].attached_to == host
+
+
+def test_equip_costs_are_actually_charged(decks):
+    """818.1.b -- the cost is paid to attach. Body power buys Warmog's."""
     state = arena(decks)
     host = put_unit(state, 0, "OGN-142", BASE_LOCATION)
     gear = give(state, 0, "SFD-108")
     play(state, gear)
-    if state.phase is Phase.CHOOSING:
-        state.apply(ChooseTarget(host))
-    pass_until_resolved(state)
-    assert state.cards[gear].attached_to == host
+    before = state.players[0].pool.total_power()
+    equip_action = next(
+        a for a in state.legal_actions()
+        if isinstance(a, ActivateAbility) and a.instance_id == gear
+    )
+    state.apply(equip_action)
+    assert state.players[0].pool.total_power() == before - 1
 
 
-def test_attached_gear_adds_its_might_to_the_host(decks):
-    """716 Attachment -- Doran's Ring is a 1-Might gear."""
+def test_attached_gear_adds_its_might_bonus_to_the_host(decks):
+    """718.4 / 137.3 -- the *Might Bonus*, not the card's `might` field."""
+    from cards.gear import equipment_profile
+
     state = arena(decks)
     host = put_unit(state, 0, "OGN-197", BASE_LOCATION)
     base = state.might_of(state.cards[host])
     gear = give(state, 0, "SFD-124")
-    play(state, gear)
-    if state.phase is Phase.CHOOSING:
-        state.apply(ChooseTarget(host))
-    pass_until_resolved(state)
-    assert state.might_of(state.cards[host]) == base + DB["SFD-124"].might
+    equip(state, gear, host)
+    bonus = equipment_profile(DB["SFD-124"]).might_bonus
+    assert state.might_of(state.cards[host]) == base + bonus
 
 
 def test_gear_detaches_when_its_host_dies(decks):
@@ -402,3 +444,19 @@ def test_vanilla_units_have_no_abilities(card_id):
     script = script_for(card_id)
     assert script is not None and script.abilities == ()
     assert DB[card_id].rules_text.strip() == ""
+
+
+def test_a_detached_gear_waits_at_the_battlefield_until_cleanup(decks):
+    """719.5 -- attached cards Detach "remaining in their current zones";
+    457.1 is what sends them home, at the *next* Cleanup, not immediately."""
+    state = arena(decks)
+    host = put_unit(state, 0, "OGN-197", bf_location(0))
+    gear = give(state, 0, "SFD-124")
+    equip(state, gear, host)
+    assert state.cards[gear].location == bf_location(0)
+
+    state._kill(state.cards[host])
+    assert state.cards[gear].attached_to is None
+    assert state.cards[gear].location == bf_location(0)   # still there
+    state._cleanup()
+    assert state.cards[gear].location == BASE_LOCATION    # 457.1

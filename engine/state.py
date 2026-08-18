@@ -27,7 +27,8 @@ from cards.dsl import (
     TriggerKind,
 )
 from cards.primitives import EffectContext, execute
-from cards.scripts import script_for
+from cards.gear import equipment_profile
+from cards.scripts import abilities_of_kind, activated_abilities, script_for
 from engine.chain import (
     ChainItem,
     Showdown,
@@ -271,10 +272,7 @@ class RiftboundState:
             if ref.controller != player or ref.location is None:
                 continue
             card = self.db[ref.card_id]
-            script = script_for(ref.card_id)
-            if script is None:
-                continue
-            for index, ability in enumerate(script.of_kind(TriggerKind.ACTIVATED)):
+            for index, ability in enumerate(activated_abilities(card)):
                 if not ability_can_activate(
                     card, ability, player, self.turn_player, self.chain, self.showdown
                 ):
@@ -359,12 +357,17 @@ class RiftboundState:
             if name == "Assault":
                 assault += value
         bonus = assault if ref.is_attacker else 0
-        # Attached gear contributes its printed Might (716).
-        attached = sum(
-            self.db[g.card_id].might
-            for g in self.cards.values()
-            if g.attached_to == ref.instance_id
-        )
+        # 718.4 / 137.3 -- an Attached card modulates the Top-Most card's
+        # Might by its printed *Might Bonus*, which is not the card's `might`
+        # field: B.F. Sword prints "+3 Might" and carries might 0. Using the
+        # field silently gave most Equipment the wrong number.
+        attached = 0
+        for gear in self.cards.values():
+            if gear.attached_to != ref.instance_id:
+                continue
+            profile = equipment_profile(self.db[gear.card_id])
+            if profile is not None and profile.might_bonus is not None:
+                attached += profile.might_bonus
         return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
 
     def _has_lethal(self, ref: CardRef) -> bool:
@@ -423,10 +426,7 @@ class RiftboundState:
     def _fire(self, kind: TriggerKind, instance_id: int) -> None:
         """382 -- queue every ability of `kind` printed on this card."""
         ref = self.cards[instance_id]
-        script = script_for(ref.card_id)
-        if script is None:
-            return
-        for ability in script.of_kind(kind):
+        for ability in abilities_of_kind(self.db[ref.card_id], kind):
             self._queue(ability, ref.controller, instance_id)
 
     def _resolve_effects(self) -> None:
@@ -618,9 +618,7 @@ class RiftboundState:
                 state.base.append(item.instance_id)
                 self._fire(TriggerKind.ON_PLAY, item.instance_id)
         else:
-            script = script_for(ref.card_id)
-            assert script is not None
-            ability = script.of_kind(TriggerKind.ACTIVATED)[item.ability_index]
+            ability = activated_abilities(card)[item.ability_index]
             self._queue(ability, item.controller, item.instance_id)
 
         self._resolve_effects()
@@ -665,6 +663,12 @@ class RiftboundState:
         ref.exhausted = True  # 144.2 -- exhausting is the cost
         ref.location = action.destination
         name = self.db[ref.card_id].name
+        # 719.3 -- a Top-Most Card and everything Attached to it are at the
+        # same location; 719.3.a moves them together. Attached cards have no
+        # move of their own (718.5.c), so this is the only way they travel.
+        for attached in self.cards.values():
+            if attached.attached_to == ref.instance_id:
+                attached.location = ref.location
 
         if action.destination != BASE_LOCATION:
             index = int(action.destination.split(":")[1])
@@ -713,9 +717,7 @@ class RiftboundState:
     def _apply_activate(self, action: ActivateAbility) -> None:
         """376/398 -- pay the costs, then put the ability on the Chain."""
         ref = self.cards[action.instance_id]
-        script = script_for(ref.card_id)
-        assert script is not None
-        ability = script.of_kind(TriggerKind.ACTIVATED)[action.index]
+        ability = activated_abilities(self.db[ref.card_id])[action.index]
         self._pay_ability(ref, ability)
         self._emit(f"P{ref.controller} activates {self.db[ref.card_id].name}")
 
@@ -957,6 +959,8 @@ class RiftboundState:
                 return
             changed |= self._resolve_lethal_damage()
             changed |= self._resolve_control()
+            changed |= self._resolve_designations()
+            changed |= self._recall_stranded_gear()
             changed |= self._maybe_open_showdown()
             if not changed:
                 return
@@ -1014,10 +1018,13 @@ class RiftboundState:
         """428 Kill -- the card goes to its owner's trash (108.2.b)."""
         # 457.1 -- gear left unattached at a battlefield is recalled; gear
         # attached to a dying unit detaches here.
+        # 719.5 -- attached cards Detach, "remaining in their current zones".
+        # They are not sent home here: an Equipment whose host died at a
+        # battlefield stays there until 457.1 recalls it at the next Cleanup,
+        # which is a window other effects can see.
         for gear in self.cards.values():
             if gear.attached_to == ref.instance_id:
                 gear.attached_to = None
-                gear.location = BASE_LOCATION
         state = self.players[ref.controller]
         if ref.instance_id in state.base:
             state.base.remove(ref.instance_id)
@@ -1045,6 +1052,54 @@ class RiftboundState:
                 bf.contested = False
                 bf.contested_by = None
                 changed = True
+        return changed
+
+    def _resolve_designations(self) -> bool:
+        """323.2 / 464.2.c.3.a -- keep Attacker and Defender designations in
+        step with who is actually at the battlefield under combat.
+
+        464.2.c.3 stamps the units present when Attacker and Defender are
+        established, but a unit can arrive later -- moved in, or played there
+        by an effect. 464.2.c.3.a gives it the designation during the Cleanup
+        that follows, which is here. 323.2.c takes the designation *off* a
+        unit that has left, which is the same comparison in reverse.
+        """
+        fight = self.combat if self.combat is not None else self.showdown
+        if fight is not None and not getattr(fight, "is_combat", True):
+            fight = None  # a Non-Combat Showdown designates nobody (344.2)
+        location = bf_location(fight.battlefield) if fight is not None else None
+
+        changed = False
+        for ref in self.cards.values():
+            if self.db[ref.card_id].type != "unit":
+                continue
+            if fight is None or ref.location != location:
+                wants_attacker = wants_defender = False
+            else:
+                wants_attacker = ref.controller == fight.attacker
+                wants_defender = ref.controller == fight.defender
+            if ref.is_attacker != wants_attacker or ref.is_defender != wants_defender:
+                ref.is_attacker, ref.is_defender = wants_attacker, wants_defender
+                changed = True
+        return changed
+
+    def _recall_stranded_gear(self) -> bool:
+        """457.1 -- an un-attached non-Unit Gear at a battlefield is Recalled
+        to its controller's base during the next Cleanup.
+
+        Gear reaches a battlefield only by riding a host (719.3.a), so this
+        fires when that host dies or the gear is detached: the Equipment is
+        left standing on a battlefield it cannot hold, and goes home.
+        """
+        changed = False
+        for ref in self.cards.values():
+            if ref.location in (None, BASE_LOCATION) or ref.attached_to is not None:
+                continue
+            if self.db[ref.card_id].type != "gear":
+                continue
+            ref.location = BASE_LOCATION
+            self._emit(f"{self.db[ref.card_id].name} is recalled to base")
+            changed = True
         return changed
 
     def _maybe_open_showdown(self) -> bool:

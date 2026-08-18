@@ -15,11 +15,18 @@ Card text **executes** for every card in the starter decks: a DSL interpreter
 runs 15 primitives drawn from the game's own Game Actions (413-444), with
 player choices raised through `legal_actions()` rather than a side channel.
 
-**The remaining caveat:** only the 24 cards in the two starter decks are
-scripted. The other ~400 playable cards have no script, so their text is inert
-and every affected card is stamped `inert` in the UI with a tooltip saying
-why. Scripting more is mechanical work, not new architecture. See RQ-5 in
-[`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
+Gear splits the way the physical game does: only the 36 cards carrying the
+**Equipment** tag can be attached to a unit (150.1), and they attach by paying
+an **Equip** cost as a separate activated ability (818.1) — not for free when
+played. The other 75 gear can never be equipped; they sit in the Base and use
+their own abilities. Equip costs, Might Bonuses and Quick-Draw are all
+*derived from printed card text*, so 23 more cards became playable with no
+per-card Python at all — 24 hand-scripted cards, 47 executable.
+
+**The remaining caveat:** the rest of the ~400 playable cards have no script,
+so their text is inert and every affected card is stamped `inert` in the UI
+with a tooltip saying why. Scripting more is mechanical work, not new
+architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 
 | Area | State |
 | --- | --- |
@@ -28,14 +35,16 @@ why. Scripting more is mechanical work, not new architecture. See RQ-5 in
 | Frozen interface, replay harness, batch runner | done |
 | Engine: setup, turns, resources, movement, combat, scoring | done |
 | Frontend (local web UI) | done |
-| Card effect DSL interpreter | done — 15 primitives, 24 cards scripted |
+| Card effect DSL interpreter | done — 15 primitives, 47 cards executable |
 | Chain, priority, focus, showdowns, combat | done — RQ-10 closed |
+| Gear: Equipment, Equip costs, Might Bonuses, attachment | done — derived from card text |
 | Scoring: fitted value heuristic + calibration | done — see [`SCORING.md`](SCORING.md) |
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
-**319 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
-priority, focus and showdowns, and 18 driving the frontend over HTTP — plus two full Riftbound games in the replay
+**354 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+priority, focus and showdowns, 24 covering Equipment, and 18 driving the
+frontend over HTTP — plus two full Riftbound games in the replay
 harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
 ## Play a game

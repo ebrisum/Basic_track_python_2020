@@ -148,6 +148,24 @@ they belong in the engine's state model, not in the card-effect layer.
 Keyword reminder text is parenthetical and redundant with the glossary; the
 parser should **strip it** rather than interpret it.
 
+### The one exception: Equip
+
+**818.1.c.2** does not merely describe Equip, it *defines* it:
+"Equip is functionally short for `[Cost]: Attach this gear to a unit you
+control.`" The reminder text on every Equipment card is that expansion,
+printed — `(1 Fury: Attach this to a unit you control.)`. So `cards/gear.py`
+reads the cost out of the reminder rather than the `[EQUIP ...]` marker.
+
+This is a measurement, not a preference. The marker is printed at least six
+ways across sets (`[EQUIP Fury]`, `[EQUIP 1, Fury]`, `[EQUIP1, Calm]`,
+`[EQUIP 1 Body]`, `[Equip] 1 calm rune`, bare `Equip 1 body rune`); the
+reminder's grammar is identical on all of them. Parsing the reliable half of
+the card is what makes 32 Equipment playable with no per-card Python.
+
+Cards whose Equip cost is not purely resources print `(Pay the cost: ...)`,
+which states no cost at all. Those are reported unparsed with a note and stay
+inert — never handed a guessed cost.
+
 ## What is deliberately absent
 
 No `custom_script` escape hatch, per the brief. If a card cannot be expressed

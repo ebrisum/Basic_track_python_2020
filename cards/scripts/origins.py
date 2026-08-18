@@ -252,14 +252,14 @@ SCRIPTS: tuple[CardScript, ...] = (
         ),
     ),
     # --- gear: equipment ---------------------------------------------------
+    # No Attach ability is scripted here. Equip is an *activated* ability with
+    # a cost (818.1), derived from printed text by cards/gear.py -- scripting
+    # it as ON_PLAY, as this file used to, attached the gear for free the
+    # moment it was played. Only Quick-Draw attaches on play (819.1.d), and
+    # neither of these cards has it.
     CardScript(
         card_id="SFD-108",  # Warmog's Armor
         abilities=(
-            Ability(
-                kind=TriggerKind.ON_PLAY,
-                effects=(Attach(),),
-                text="[EQUIP Body] Attach this to a unit you control.",
-            ),
             Ability(
                 kind=TriggerKind.ON_CONQUER,
                 effects=(Buff(1, Duration.PERMANENT, SELF),),
@@ -270,11 +270,6 @@ SCRIPTS: tuple[CardScript, ...] = (
     CardScript(
         card_id="SFD-124",  # Doran's Ring
         abilities=(
-            Ability(
-                kind=TriggerKind.ON_PLAY,
-                effects=(Attach(),),
-                text="[EQUIP Chaos] Attach this to a unit you control.",
-            ),
             Ability(
                 kind=TriggerKind.ON_CONQUER,
                 effects=(Discard(1, Who.YOU), Draw(1, Who.YOU)),

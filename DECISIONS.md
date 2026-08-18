@@ -312,3 +312,50 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   0.259-0.658** -- recorded as a null result rather than filed away. It does
   beat random 0.917 (22-2), so the search works; it just has not paid for
   itself against the heuristic at this budget.
+
+## Session 11 -- gear, equipment, and late arrivals at a combat
+
+- **Equip is derived from card text, not scripted per card** -- 818.1.c.2
+  defines "Equip [Cost]" as "[Cost]: Attach this gear to a unit you control",
+  so `cards/gear.py` builds an ordinary activated `Ability` from the printed
+  reminder text. 23 more cards became playable with no per-card Python.
+- **The cost is read from the reminder text, not the `[EQUIP ...]` marker** --
+  measured, not preferred: the marker is printed six different ways across
+  sets, the reminder's grammar is identical on all of them.
+- **Four Equipment print `(Pay the cost: ...)` and stay inert** -- a
+  non-resource Equip cost is not derivable, and a guessed cost is exactly the
+  hidden approximation the brief forbids. Reported with a note instead.
+- **Gear's `might` field is NOT its Might Bonus** -- B.F. Sword prints
+  "+3 Might" and carries `might: 0`; the two disagree on most Equipment.
+  `might_of` had been adding the field, so attached gear contributed the
+  wrong number. The bonus is parsed as the last signed Might token outside
+  reminder text, which is principled: 137.1 puts it in the lower-right corner,
+  so it is the last one printed. A test pins the disagreement so the shortcut
+  cannot come back.
+- **Playing Equipment does not attach it** -- `origins.py` had scripted the
+  attach as ON_PLAY for Warmog's Armor and Doran's Ring, equipping them free
+  the moment they were played. Only Quick-Draw attaches on play (819.1.d),
+  and neither card has it. The hand-written script got the timing wrong where
+  the derivation gets it right, which is the argument for derivation.
+- **150.1 is what makes most gear unequippable** -- only the 36 Equipment-
+  tagged gear can attach at all; `equipment_profile` returns None for the
+  other 75 rather than an empty profile, so "cannot be equipped" is a
+  distinguishable answer rather than a missing one.
+- **Attached cards ride their host** (719.3.a) and have no move of their own
+  (718.5.c); 457.1 recalls an un-attached gear stranded at a battlefield at
+  the next Cleanup. `_kill` used to send attachments straight home, skipping
+  the window 719.5 leaves them standing in.
+- **Late arrivals at a combat gain designations at Cleanup** (464.2.c.3.a) --
+  designations were only stamped when Attacker and Defender were established,
+  so a unit moved in mid-combat never became an attacker, and ASSAULT/SHIELD
+  silently missed it. `_resolve_designations` now reconciles both directions
+  each Cleanup, which also implements 323.2.c.
+- **The showdown flow itself was already right** -- 450 contest, 344 open at
+  Cleanup, 464.2.c.1 attacker = whoever applied Contested, 464.2.d attacker
+  gains Focus first, 347 act-or-pass. Verified against the rules rather than
+  rewritten.
+- **UI facts live on the server, not the observation** -- `is_equipment`,
+  `might_bonus` and `ability_labels` are derivable from the card database the
+  frontend already holds. Putting them on `observation()` widened the frozen
+  agent-facing interface and rewrote every replay hash; the replay harness
+  caught it on the first run, which is precisely what it is for.
