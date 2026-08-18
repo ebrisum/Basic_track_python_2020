@@ -141,11 +141,14 @@ def check(state) -> list[str]:
             say(f"card {ref.instance_id} is hidden at battlefield "
                 f"{ref.hidden_at}, which does not exist")
         elif state.battlefields[ref.hidden_at].controller != ref.controller:
-            # 811.1.b -- "at a battlefield you control ... for as long as you
-            # control that battlefield". RQ-14 records that the rules do not
-            # say what happens when control is lost, so this is reported
-            # rather than enforced.
-            pass
+            # 107.3.c -- a card may occupy a Facedown Zone only while its
+            # controller also controls the associated battlefield; 107.3.d and
+            # 323.7 remove it at the next Cleanup when that stops being true.
+            # Cleanup runs to fixpoint inside `apply`, so between actions this
+            # must never be observable.
+            say(f"card {ref.instance_id} is hidden at battlefield "
+                f"{ref.hidden_at}, which P{ref.controller} does not control "
+                f"(107.3.c / 323.7)")
     for index, hidden in facedown.items():
         if len(hidden) > 1:
             say(f"battlefield {index} has {len(hidden)} facedown cards; 811.1.b "

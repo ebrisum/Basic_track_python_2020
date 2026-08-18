@@ -58,6 +58,10 @@ class EffectContext:
     # Remaining repeats for multi-pick effects (e.g. "discard 2").
     remaining: int = 0
     payload: dict = field(default_factory=dict)
+    # 811.1.d.2 -- when the source was played from Hidden, the battlefield it
+    # was hidden at, as a location string ("bf:0"). Targets must come from
+    # there. `None` for every ordinary play, which is the common case.
+    restrict_location: str | None = None
 
     def copy(self) -> "EffectContext":
         # `chosen` is a tuple; only `payload` is mutable.
@@ -70,6 +74,25 @@ def _resolve_player(who: Who, controller: int) -> list[int]:
     if who is Who.OPPONENT:
         return [1 - controller]
     return [controller, 1 - controller]
+
+
+def restriction_binds(selector: Selector) -> bool:
+    """811.1.d.2 -- whether Hidden's "choose from among options at that
+    battlefield" restriction applies to this selector.
+
+    The exception is "unless the ability explicitly restricts targeting in a
+    way that makes this impossible" -- a *static* property of the selector, not
+    of what happens to be on the board. 811.1.d already covers the empty-board
+    case separately: a hidden spell with no valid target under the restriction
+    simply cannot be played from Hidden.
+
+    The only selector the DSL can currently express that is impossible to
+    satisfy at a battlefield is one restricted to a base. Riftbound's own
+    example of the exception -- Tideturner's "a unit you control at *another*
+    location" -- needs a relative-location constraint the DSL does not have;
+    no scripted card uses one, and RQ-14 records that.
+    """
+    return selector.location != "base"
 
 
 def matches(state, ref, selector: Selector, controller: int, source: int | None) -> bool:
@@ -97,14 +120,21 @@ def matches(state, ref, selector: Selector, controller: int, source: int | None)
     return True
 
 
-def candidates(state, selector: Selector, controller: int, source: int | None) -> list[int]:
-    """All instance ids a selector matches, in canonical order."""
+def candidates(state, selector: Selector, controller: int, source: int | None,
+               restrict_location: str | None = None) -> list[int]:
+    """All instance ids a selector matches, in canonical order.
+
+    `restrict_location` is 811.1.d.2's Hidden restriction: the battlefield the
+    source was played from. It narrows the matches; it never widens them.
+    """
     if selector.scope == "self":
         return [source] if source is not None else []
+    restrict = restrict_location if restriction_binds(selector) else None
     return sorted(
         ref.instance_id
         for ref in state.cards.values()
         if matches(state, ref, selector, controller, source)
+        and (restrict is None or ref.location == restrict)
     )
 
 
@@ -119,7 +149,9 @@ def _targets(
     if ctx.chosen:
         return list(ctx.chosen), None
 
-    options = candidates(state, selector, ctx.controller, ctx.source)
+    options = candidates(
+        state, selector, ctx.controller, ctx.source, ctx.restrict_location
+    )
     if selector.scope in ("self", "all"):
         return options, None
     if not options:
@@ -192,7 +224,9 @@ def _kill(state, effect: Kill, ctx: EffectContext) -> ChoiceRequest | None:
                 controller="friendly",
                 location=effect.selector.location,
             )
-            options = candidates(state, scoped, player, ctx.source)
+            options = candidates(
+                state, scoped, player, ctx.source, ctx.restrict_location
+            )
             if not options:
                 continue
             key = f"killed_{player}"

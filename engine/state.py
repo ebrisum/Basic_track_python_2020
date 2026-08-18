@@ -26,7 +26,7 @@ from cards.dsl import (
     RecycleFromTrash,
     TriggerKind,
 )
-from cards.primitives import EffectContext, execute
+from cards.primitives import EffectContext, candidates, execute
 from cards.gear import equipment_profile
 from cards.scripts import abilities_of_kind, activated_abilities, script_for
 from engine.chain import (
@@ -167,7 +167,6 @@ class RiftboundState:
     _resume_phase: "Phase | None" = None
     # 811.1.d.1 -- set while a card played from Hidden is on the chain, so it
     # enters at that battlefield rather than the Base.
-    _playing_from_hidden: int | None = None
     _rng: random.Random = field(default_factory=random.Random)
 
     # ------------------------------------------------------------- cloning
@@ -228,7 +227,6 @@ class RiftboundState:
         clone.units_enter_ready = set(self.units_enter_ready)
         clone.accelerated = set(self.accelerated)
         clone._resume_phase = self._resume_phase
-        clone._playing_from_hidden = self._playing_from_hidden
         clone._last_from_trigger = self._last_from_trigger
 
         # A clone must not share a random stream with its original, or one
@@ -389,6 +387,8 @@ class RiftboundState:
             if not can_play(self.db[ref.card_id], player, self.turn_player,
                             self.chain, self.showdown, reaction_override=True):
                 continue
+            if not self._hidden_play_has_targets(ref):
+                continue          # 811.1.d
             actions.append(PlayCard(ref.instance_id))
 
         # Rune abilities (164.2) are both Reactions, so they stay available
@@ -489,6 +489,33 @@ class RiftboundState:
                 attached += profile.might_bonus
         return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
 
+    def _hidden_play_has_targets(self, ref: CardRef) -> bool:
+        """811.1.d -- "A card cannot be played from Hidden if it is a spell
+        with no valid targets under these restrictions."
+
+        355.8 requires a valid choice for *every* target before a spell goes on
+        the chain, so one unsatisfiable target is enough to bar the play. Only
+        spells are gated: a hidden permanent is played to that battlefield
+        (811.1.d.1) whether or not its play effect finds anything, and 355.6
+        lets an unfulfillable non-target choice simply do nothing.
+
+        The DSL has no "you may choose" flag, so an optional target would be
+        treated as required here. No scripted card has one; RQ-14 records it.
+        """
+        card = self.db[ref.card_id]
+        if card.type != "spell":
+            return True
+        here = bf_location(ref.hidden_at)
+        for ability in abilities_of_kind(card, TriggerKind.ON_RESOLVE):
+            for effect in ability.effects:
+                selector = getattr(effect, "selector", None)
+                if selector is None or selector.scope != "choose":
+                    continue
+                if not candidates(self, selector, ref.controller,
+                                  ref.instance_id, here):
+                    return False
+        return True
+
     def _facedown_at(self, index: int) -> CardRef | None:
         """811.1.b -- at most one facedown card per battlefield."""
         for ref in self.cards.values():
@@ -572,16 +599,27 @@ class RiftboundState:
             elif isinstance(cost, PayEnergy):
                 state.pool.pay(cost.count, [])
 
-    def _queue(self, ability: Ability, controller: int, source: int | None) -> None:
-        """Push an ability's effects onto the resolution queue."""
-        for effect in ability.effects:
-            self.pending.append((effect, EffectContext(controller=controller, source=source)))
+    def _queue(self, ability: Ability, controller: int, source: int | None,
+               restrict_location: str | None = None) -> None:
+        """Push an ability's effects onto the resolution queue.
 
-    def _fire(self, kind: TriggerKind, instance_id: int) -> None:
+        `restrict_location` carries 811.1.d.2 down to every selector the
+        ability resolves: when the source was played from Hidden, its targets
+        must be chosen from among options at that battlefield.
+        """
+        for effect in ability.effects:
+            self.pending.append((
+                effect,
+                EffectContext(controller=controller, source=source,
+                              restrict_location=restrict_location),
+            ))
+
+    def _fire(self, kind: TriggerKind, instance_id: int,
+              restrict_location: str | None = None) -> None:
         """382 -- queue every ability of `kind` printed on this card."""
         ref = self.cards[instance_id]
         for ability in abilities_of_kind(self.db[ref.card_id], kind):
-            self._queue(ability, ref.controller, instance_id)
+            self._queue(ability, ref.controller, instance_id, restrict_location)
 
     def _resolve_effects(self) -> None:
         """Drain the effect queue, pausing whenever a choice is needed."""
@@ -730,9 +768,6 @@ class RiftboundState:
             else:
                 state.champion_zone.remove(action.instance_id)
 
-        # 811.1.d.1 -- a hidden permanent must be played to that battlefield,
-        # which overrides the normal restriction that gear go to base.
-        self._playing_from_hidden = from_hidden
 
         self._emit(
             f"P{player} plays {card.name}"
@@ -744,8 +779,12 @@ class RiftboundState:
             # effect, so the unit enters ready even if it loses the keyword
             # during finalization. Recorded per instance, not per card.
             self.accelerated.add(action.instance_id)
+        # 811.1.d -- recorded on the item, not on the state: the chain can
+        # hold several cards, and a card played in response must not disturb
+        # where an earlier hidden card is played to or makes its choices.
         item = ChainItem(
-            kind="card", instance_id=action.instance_id, controller=player, pending=False
+            kind="card", instance_id=action.instance_id, controller=player,
+            pending=False, from_hidden=from_hidden,
         )
         self.chain.append(item)  # 354 -- this Closes the State
         self.chain_passes = 0
@@ -772,16 +811,20 @@ class RiftboundState:
         state = self.players[item.controller]
 
         if item.kind == "card":
+            # 811.1.d.2 -- a card played from Hidden makes its choices at the
+            # battlefield it was hidden at. Captured before either branch can
+            # clear it, and handed to the play effect rather than consulted
+            # after the fact.
+            hidden_bf = item.from_hidden
+            hidden_here = bf_location(hidden_bf) if hidden_bf is not None else None
             if card.type == "spell":
-                self._fire(TriggerKind.ON_RESOLVE, item.instance_id)
                 state.trash.append(item.instance_id)  # 351.2
+                self._fire(TriggerKind.ON_RESOLVE, item.instance_id, hidden_here)
             else:
                 # 148.1.a.1 -- permanents enter the Base, unless 811.1.d.1
                 # sends a card played from Hidden to its battlefield instead.
-                hidden_bf = getattr(self, "_playing_from_hidden", None)
                 ref.location = (
-                    bf_location(hidden_bf) if hidden_bf is not None
-                    else BASE_LOCATION
+                    hidden_here if hidden_here is not None else BASE_LOCATION
                 )
                 # 143.4 -- units enter exhausted, unless ACCELERATE was paid
                 # (805.1.a) or an effect says otherwise this turn.
@@ -793,8 +836,7 @@ class RiftboundState:
                 if card.type == "gear":
                     ref.exhausted = False
                 state.base.append(item.instance_id)
-                self._playing_from_hidden = None
-                self._fire(TriggerKind.ON_PLAY, item.instance_id)
+                self._fire(TriggerKind.ON_PLAY, item.instance_id, hidden_here)
         else:
             ability = activated_abilities(card)[item.ability_index]
             self._queue(ability, item.controller, item.instance_id)
@@ -1211,6 +1253,7 @@ class RiftboundState:
             changed |= self._resolve_control()
             changed |= self._resolve_designations()
             changed |= self._recall_stranded_gear()
+            changed |= self._remove_stranded_hidden()
             changed |= self._maybe_open_showdown()
             if not changed:
                 return
@@ -1419,6 +1462,47 @@ class RiftboundState:
                 continue
             ref.location = BASE_LOCATION
             self._emit(f"{self.db[ref.card_id].name} is recalled to base")
+            changed = True
+        return changed
+
+    def _remove_stranded_hidden(self) -> bool:
+        """323.7 -- cleanup step 5: "Remove all Hidden cards from all
+        Battlefields that are not controlled by the same player and place them
+        in their owner's Trash."
+
+        107.3.c says a card may only occupy a Facedown Zone while the card's
+        controller also controls the associated battlefield, and 107.3.d says
+        the cards are removed at the next Cleanup when that stops being true.
+        811.1.b's "for as long as you control that battlefield" is the same
+        rule read from the keyword's side.
+
+        421.4 -- a facedown card changing zones is revealed to all players, so
+        the removal names the card in the shared log and is recorded as a
+        revelation both players may reason from.
+        """
+        changed = False
+        for ref in list(self.cards.values()):
+            if ref.hidden_at is None:
+                continue
+            index = ref.hidden_at
+            if 0 <= index < len(self.battlefields):
+                if self.battlefields[index].controller == ref.controller:
+                    continue
+            name = self.db[ref.card_id].name
+            ref.hidden_at = None
+            ref.hidden_on_turn = 0
+            # 421.4 -- the card is revealed as it changes zones. It lands in
+            # the trash, which is a public zone with public contents (108.2.d),
+            # so `knowledge.public_counts` picks the identity up on its own;
+            # naming it in the log is what makes the reveal visible to players.
+            if ref.is_token:
+                self.cease_to_exist(ref)           # 186.1
+            else:
+                self.players[ref.owner].trash.append(ref.instance_id)
+            self._emit(
+                f"{name} is revealed and trashed: P{ref.controller} no longer "
+                f"controls battlefield {index} (323.7)"
+            )
             changed = True
         return changed
 

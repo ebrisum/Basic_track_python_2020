@@ -31,6 +31,11 @@ class ChainItem:
     # True when the item was put on the chain by a triggered ability or an
     # ability that Adds resources. Focus does not pass for these (346.1).
     from_trigger: bool = False
+    # 811.1.d -- the battlefield this card was played from Hidden at, or None
+    # for an ordinary play. It belongs to the item and not to the state: the
+    # chain can hold several cards at once, and a card played in response must
+    # not disturb where an earlier hidden card makes its choices.
+    from_hidden: int | None = None
 
     def copy(self) -> "ChainItem":
         return replace(self)   # every field is a scalar
@@ -43,6 +48,7 @@ class ChainItem:
             self.ability_index,
             self.pending,
             self.from_trigger,
+            self.from_hidden,
         )
 
 

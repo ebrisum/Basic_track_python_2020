@@ -743,3 +743,81 @@ def test_recycling_more_than_is_there_takes_what_there_is(decks):
     execute(state, Recycle(count=3, zone="trash", who=Who.YOU),
             EffectContext(controller=player))
     assert state.players[player].trash == []
+
+
+# --- 323.7 / 107.3.d: losing the battlefield strands the hidden card --------
+
+
+def test_losing_the_battlefield_trashes_the_hidden_card(decks):
+    """323.7 -- cleanup step 5: "Remove all Hidden cards from all Battlefields
+    that are not controlled by the same player and place them in their owner's
+    Trash." 107.3.d says the same from the Facedown Zone's side.
+    """
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+    assert state.cards[card].hidden_at == 0
+
+    state.battlefields[0].controller = state.opponent(player)
+    state._cleanup()
+
+    assert state.cards[card].hidden_at is None
+    assert card in state.players[player].trash
+    assert state.cards[card].location is None
+
+
+def test_an_uncontrolled_battlefield_also_strands_the_hidden_card(decks):
+    """107.3.c -- occupancy requires that the card's controller *also* control
+    the battlefield. An uncontrolled battlefield is not controlled by them."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+
+    state.battlefields[0].controller = None
+    state._cleanup()
+
+    assert card in state.players[player].trash
+
+
+def test_a_stranded_hidden_card_is_revealed_as_it_is_trashed(decks):
+    """421.4 -- "If a facedown card would change zones ... its owner reveals it
+    to all players." The removal is public, and the deducer learns it."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    other = state.opponent(player)
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+    name = DB[state.cards[card].card_id].name
+
+    state.battlefields[0].controller = other
+    state._cleanup()
+
+    assert any(name in line for line in state.log[-6:])
+
+
+def test_the_hidden_card_survives_while_you_still_control_the_battlefield(decks):
+    """The removal is scoped to *lost* control -- an ordinary cleanup must not
+    disturb a hidden card at a battlefield you still hold."""
+    from engine.actions import HideCard
+
+    state = arena(decks)
+    player = state.turn_player
+    state.battlefields[0].controller = player
+    card = hidable(state, player)
+    state.apply(HideCard(card, 0))
+
+    state._cleanup()
+
+    assert state.cards[card].hidden_at == 0
+    assert card not in state.players[player].trash
