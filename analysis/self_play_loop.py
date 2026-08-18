@@ -18,6 +18,24 @@ actually played. Prediction is not control. Every generation here has to win
 games to be promoted, and a generation that fails to improve is reported and
 discarded rather than quietly installed.
 
+## Why the gate is a league and a sequential test, not one match
+
+Two failure modes killed the first version of this loop.
+
+**Intransitivity.** Gating on "beat the previous generation" cannot tell you
+whether anything improved: strength is not transitive, and a loop that only
+ever plays its predecessor will happily walk a circle for ten generations and
+report ten improvements. Every promoted generation is now kept in
+`analysis/league/`, and each new one is rated against a *frozen gauntlet* of
+all of them, so the numbers are comparable down the whole run.
+
+**Sample size.** The old gate was 40 games, which can only resolve an edge of
+about 0.65 -- far larger than any real improvement. Sizing a fixed test for a
+55% edge needs ~385 games, and this engine plays 0.66 greedy games/second.
+So promotion now uses **SPRT** (as computer-chess testing does), which watches
+the result arrive and stops as soon as the evidence is decisive: cheap on
+obvious cases, patient only where it has to be.
+
 ## Why self-play data beats random data
 
 The weights fitted on random games learned correlations, not causes -- most
@@ -40,9 +58,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import random  # noqa: E402
+
 from agents.greedy_agent import GreedyAgent  # noqa: E402
 from agents.random_agent import RandomAgent  # noqa: E402
 from analysis.benchmark import duel, interval  # noqa: E402
+from analysis.ladder import (  # noqa: E402
+    SPRT,
+    League,
+    elo_from_score,
+    elo_interval,
+)
 from analysis.evaluation import (  # noqa: E402
     FEATURE_NAMES,
     WEIGHTS_PATH,
@@ -57,6 +83,18 @@ from engine.setup import build_state, load_deck  # noqa: E402
 
 HISTORY = Path(__file__).resolve().parent / "generations.json"
 MAX_STEPS = 40_000
+
+
+def matchups(decks):
+    """Every ordered pair of decks in the field, including mirrors.
+
+    Training on a single matchup teaches the matchup. The weights have no way
+    to separate "this is strong in Riftbound" from "this is strong against
+    Volibear", and the second does not transfer. Rotating through the field
+    is the cheapest available fix; the field itself is limited by how many
+    decks can be built entirely from cards whose text executes.
+    """
+    return [(a, b) for a in decks for b in decks]
 
 
 def play_and_sample(seed, d0, d1, db, make_agent, stride=3):
@@ -76,9 +114,51 @@ def play_and_sample(seed, d0, d1, db, make_agent, stride=3):
     return [(vector, label) for vector in vectors]
 
 
-def generation(index, model, args, db, decks) -> dict:
+def sprt_duel(make_a, make_b, max_games, base_seed, decks, db,
+              elo0=0.0, elo1=20.0):
+    """`duel`, but stopping as soon as SPRT can call it.
+
+    Seats still swap every other game, so an early stop cannot be an artefact
+    of one agent having had the first move more often -- the test is only
+    consulted on even game counts.
+    """
+    test = SPRT(elo0=elo0, elo1=elo1)
+    field = matchups(decks)
+    wins = losses = draws = 0
+    for i in range(max_games):
+        pair = field[i % len(field)]
+        score, w, l, d = duel(make_a, make_b, 1, base_seed + i, pair, db)
+        if w + l + d == 0:
+            continue
+        wins += w
+        losses += l
+        draws += d
+        test.record(score)
+        if i % 2 == 1 and test.verdict() != "continue":
+            break
+    return test, wins, losses, draws
+
+
+def biggest_moves(before: Model, after: Model, top: int = 4):
+    """Which weights the fit actually moved -- the "what changed" line.
+
+    A generation that is promoted without this is a number with no story; with
+    it, a suspicious move (a feature flipping sign) is visible immediately.
+    """
+    moves = [
+        (name, after.weights[i] - before.weights[i])
+        for i, name in enumerate(FEATURE_NAMES)
+    ]
+    moves.sort(key=lambda row: abs(row[1]), reverse=True)
+    return [[name, round(delta, 4)] for name, delta in moves[:top]]
+
+
+def format_moves(moves) -> str:
+    return ", ".join(f"{name} {delta:+.3f}" for name, delta in moves)
+
+
+def generation(index, model, args, db, decks, league) -> dict:
     """One full cycle: play, fit, benchmark, decide."""
-    d0, d1 = decks
     print(f"\n=== generation {index} ===")
 
     # Generation 0 seeds from random play; after that the agent plays itself,
@@ -91,9 +171,14 @@ def generation(index, model, args, db, decks) -> dict:
         source = f"greedy(gen {index - 1}), epsilon={args.epsilon}"
     print(f"playing {args.games} games with {source}…")
 
+    field = matchups(decks)
+    if len(field) > 1:
+        print(f"  rotating through {len(field)} matchups from {len(decks)} decks")
     per_game = []
     for i in range(args.games):
-        rows = play_and_sample(args.seed + index * 10_000 + i, d0, d1, db, make_agent)
+        pair = field[i % len(field)]
+        rows = play_and_sample(args.seed + index * 10_000 + i, pair[0], pair[1],
+                               db, make_agent)
         if rows:
             per_game.append(rows)
     if len(per_game) < 8:
@@ -108,35 +193,54 @@ def generation(index, model, args, db, decks) -> dict:
     before, after = brier(model, test), brier(candidate, test)
     print(f"  held-out Brier {before:.4f} -> {after:.4f}")
 
-    # The gate that matters: does it win?
-    print(f"  benchmarking candidate vs incumbent over {args.bench} games…")
-    score, wins, losses, draws = duel(
+    # The gate that matters: does it win? Tested sequentially, so an obvious
+    # answer costs a handful of games and only a marginal one costs the full
+    # budget.
+    print(f"  SPRT vs incumbent (elo0={args.elo0}, elo1={args.elo1}, "
+          f"max {args.bench} games)…")
+    test, wins, losses, draws = sprt_duel(
         lambda s: GreedyAgent(s, candidate),
         lambda s: GreedyAgent(s, model),
         args.bench, args.seed + 777 + index, decks, db,
-    )
-    low, high = interval(score, wins + losses + draws)
-    print(f"  candidate scores {score:.3f} ({wins}-{losses}-{draws}), 95% {low:.3f}-{high:.3f}")
+        elo0=args.elo0, elo1=args.elo1,
+    )   # sprt_duel rotates the matchup per game, so a promotion cannot be one
+        # deck pairing flattering the candidate
+    print(f"  {test.summary()}")
+    low, high = elo_interval(test.score, max(1, test.games))
+    print(f"  candidate {wins}-{losses}-{draws}, "
+          f"{elo_from_score(test.score):+.0f} Elo [{low:+.0f}, {high:+.0f}]")
 
-    promoted = low > 0.5   # the whole interval must clear even, not just the mean
+    # "accept" is decisive evidence the candidate is stronger. "continue"
+    # means the budget ran out before the evidence did -- not an improvement.
+    promoted = test.verdict() == "accept"
     record = {
         "generation": index,
         "trained_on_games": len(per_game),
         "brier_before": before,
         "brier_after": after,
-        "bench_score": score,
+        "bench_score": test.score,
         "bench_record": [wins, losses, draws],
-        "bench_interval": [low, high],
+        "bench_games": test.games,
+        "llr": test.llr,
+        "verdict": test.verdict(),
+        "elo_vs_incumbent": elo_from_score(test.score),
+        "weight_deltas": biggest_moves(model, candidate),
         "promoted": promoted,
         "at": datetime.now(timezone.utc).isoformat(),
     }
     if promoted:
-        save_model(Model(weights=candidate.weights, bias=candidate.bias,
-                         fitted=True, trained_on_games=len(per_game)))
-        print(f"  PROMOTED -> {WEIGHTS_PATH.name}")
+        promoted_model = Model(weights=candidate.weights, bias=candidate.bias,
+                               fitted=True, trained_on_games=len(per_game))
+        save_model(promoted_model)
+        # Keep it. The previous version used to be overwritten here, which
+        # made the ladder impossible: once a generation was installed, the one
+        # before it no longer existed to be compared against.
+        league.add(index + 1, promoted_model)
+        print(f"  PROMOTED -> {WEIGHTS_PATH.name} and league gen {index + 1}")
+        print(f"  biggest weight moves: {format_moves(record['weight_deltas'])}")
     else:
-        print("  NOT promoted: the candidate did not beat the incumbent "
-              "convincingly. Prediction quality alone is not enough.")
+        print(f"  NOT promoted ({test.verdict()}): the candidate did not show "
+              "itself stronger. Prediction quality alone is not enough.")
     return record
 
 
@@ -144,7 +248,15 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--generations", type=int, default=3)
     ap.add_argument("--games", type=int, default=150, help="self-play games per generation")
-    ap.add_argument("--bench", type=int, default=40, help="benchmark games per generation")
+    ap.add_argument("--bench", type=int, default=400,
+                    help="MAXIMUM promotion games; SPRT usually stops far short")
+    ap.add_argument("--elo0", type=float, default=0.0,
+                    help="SPRT null: the candidate is no stronger")
+    ap.add_argument("--elo1", type=float, default=20.0,
+                    help="SPRT alternative: the smallest gain worth promoting")
+    ap.add_argument("--patience", type=int, default=3,
+                    help="consecutive generations without an improvement "
+                         "before the run stops")
     ap.add_argument("--epsilon", type=float, default=0.15,
                     help="exploration while generating data; without it the agent "
                          "only ever sees the lines it already prefers")
@@ -153,25 +265,55 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--lr", type=float, default=0.30)
     ap.add_argument("--l2", type=float, default=1e-4)
     ap.add_argument("--test-frac", type=float, default=0.25)
+    ap.add_argument("--field", action="store_true",
+                    help="train across every deck in decks/ rather than one "
+                         "fixed matchup")
     ap.add_argument("--deck0", default="jinx_chaos_fury")
     ap.add_argument("--deck1", default="volibear_body_fury")
     args = ap.parse_args(argv)
 
     db = load_db()
-    decks = (load_deck(args.deck0), load_deck(args.deck1))
+    if args.field:
+        from engine.setup import available_decks
+
+        decks = tuple(load_deck(slug) for slug in available_decks())
+        print(f"training on a field of {len(decks)} decks: "
+              f"{', '.join(d.name.split(' - ')[0] for d in decks)}")
+    else:
+        decks = (load_deck(args.deck0), load_deck(args.deck1))
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
 
+    league = League()
+    if not league.generations():
+        # Generation 0 is the starting point the ladder is measured from. It
+        # has to exist before anything can be said to have improved.
+        league.add(0, load_model())
+        print(f"seeded the league with generation 0 ({len(league.generations())} entries)")
+
+    misses = 0
     for index in range(args.generations):
         model = load_model()
-        record = generation(index, model, args, db, decks)
+        record = generation(index, model, args, db, decks, league)
         history.append(record)
         HISTORY.write_text(json.dumps(history, indent=2) + "\n")
-        if not record.get("promoted"):
-            print("\nstopping: a generation that does not improve ends the run.")
+        if record.get("promoted"):
+            misses = 0
+            continue
+        misses += 1
+        # Training is noisy: one generation that fails to prove itself is not
+        # evidence the run is finished. Stopping dead on the first miss was
+        # why this loop never got past generation 1.
+        if misses >= args.patience:
+            print(f"\nstopping: {misses} generations in a row without an "
+                  f"improvement (--patience {args.patience}).")
             break
+        print(f"  retrying with fresh data ({misses}/{args.patience} misses)")
 
     promoted = sum(1 for r in history if r.get("promoted"))
     print(f"\n{promoted}/{len(history)} generations promoted; history in {HISTORY.name}")
+    print(f"league now holds generations {league.generations()}")
+    print("\nrate them all against the frozen gauntlet with:")
+    print("    .venv/bin/python analysis/rate.py --table")
     return 0
 
 

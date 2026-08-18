@@ -171,3 +171,29 @@ def test_committed_replay_is_well_formed(path):
     for i, step in enumerate(raw["steps"]):
         assert step["player"] in (0, 1), f"{path.name} step {i}: bad player"
         assert step["expected_state_hash"], f"{path.name} step {i}: empty hash"
+
+
+def test_the_starter_decks_are_fixtures_not_outputs():
+    """A recorded replay is only meaningful against the exact decklist it was
+    played with, so rebuilding a deck silently invalidates every game recorded
+    with it. This caught a real break: improving Equipment changed which cards
+    counted as implemented, which changed the deck builder's ordering, which
+    changed the starter decks under the committed replays.
+
+    `build_decks.py` therefore refuses to overwrite an existing deck without
+    `--force`.
+    """
+    import json
+
+    from engine.setup import load_deck
+
+    for slug, champion in (
+        ("jinx_chaos_fury", "OGN-197"),
+        ("volibear_body_fury", "OGN-036"),
+    ):
+        deck = load_deck(slug)
+        assert len(deck.main) == 40, f"{slug} main deck changed size"
+        assert deck.champion == champion, (
+            f"{slug}'s champion changed to {deck.champion}; the committed "
+            f"replays were recorded against {champion}"
+        )

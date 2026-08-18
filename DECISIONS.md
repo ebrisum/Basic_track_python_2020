@@ -403,3 +403,42 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   `python3 play.py` on a fresh clone builds the decks, starts the server and
   opens a browser. Verified against a fresh clone on bare `python3` 3.11.
   pytest is a test dependency, not a runtime one.
+
+## Session 13 -- measuring whether training worked
+
+- **"Beat the previous generation" cannot answer "did we improve"** --
+  strength is not transitive, so a loop gated on the incumbent can walk a
+  circle for ten generations and report ten real improvements while ending up
+  no stronger. Replaced with a frozen gauntlet (`analysis/rate.py`) plus Elo,
+  so every generation is scored against the same opponents.
+- **Every promoted generation is kept** (`analysis/league/`) -- the loop used
+  to overwrite one weights file, so once generation 3 was installed
+  generation 2 no longer existed to compare against. A ladder is impossible
+  without the rungs.
+- **SPRT instead of a fixed game count** -- a fixed-N test needs ~385 games to
+  resolve a 0.55 edge, and the old gate was 40 games, which can only resolve
+  0.65. So a genuine +35 Elo generation would have been rejected every time.
+  Borrowed from computer-chess testing rather than invented.
+- **Patience, not a hard stop** -- the loop halted on its first
+  non-promotion, which is why it never reached generation 2. Training is
+  noisy; `--patience 3` retries with fresh data.
+- **Training rotates through a field of decks** (`--field`) -- one matchup
+  teaches the matchup, and the weights cannot tell "strong in Riftbound" from
+  "strong against Volibear". 3 decks gives 9 matchups.
+- **The field is capped by card scripting, which makes scripting a training
+  concern, not a cosmetic one** -- only 3 legends can field a deck where >=85%
+  of card text executes; the rest come in at 52-68%, and a deck where a third
+  of the cards are inert teaches a different game than the printed one.
+- **Decks on disk are fixtures, not outputs** -- `build_decks.py` now refuses
+  to overwrite without `--force`. Improving Equipment changed which cards
+  counted as implemented, which changed the builder's ordering, which changed
+  the starter decks under the committed replays. The harness caught it on the
+  next run; a test pins it now.
+- **The harness was verified unbiased before trusting it** -- the identical
+  model against itself scores 0.480 (192-208) over 400 games, interval
+  0.431-0.529. Worth checking rather than assuming: agent A's tie-breaking RNG
+  is seeded from the game seed while B's is offset, so A's randomness is
+  correlated with the shuffle. `analysis/nulltest.py` keeps the check runnable.
+- **Promotions report which weights moved** -- a promotion with no story is
+  unauditable, and a feature flipping sign is exactly how the `hand_diff`
+  artefact was caught the first time.

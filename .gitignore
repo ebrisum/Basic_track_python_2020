@@ -1,4 +1,6 @@
-__pycache__/
 *.py[cod]
-.venv/
 .pytest_cache/
+.venv/
+__pycache__/
+analysis/generations.json
+analysis/weights.candidate.json

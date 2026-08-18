@@ -277,10 +277,14 @@ It is a sound feature and it did not improve play:
 
 | pairing | score | W-L-D | 95% interval |
 | --- | --- | --- | --- |
-| greedy WITH takeover_edge vs the same greedy WITHOUT | 0.537 | 43-37-0 | 0.428–0.647 |
+| greedy WITH takeover_edge vs the same greedy WITHOUT (80 games) | 0.537 | 43-37-0 | 0.428–0.647 |
+| the same, 300 games | 0.540 | 162-138-0 | 0.484–0.596 |
 
-The interval straddles 0.5, so at 80 games this is **indistinguishable from
-the ablated agent**, not an improvement. The hand-set weight of 0.45 is a
+Both intervals straddle 0.5, so this is **not established as an improvement**.
+The point estimate is stable across independent sample sizes (0.537 → 0.540,
+about +28 Elo), which is consistent with a small real gain — but consistent
+with is not the same as demonstrated, and ~385 games would be needed to
+resolve an edge this size. The hand-set weight of 0.45 is a
 guess, exactly like the other eleven were before fitting, and the same rule
 applies to it as to everything else here: the benchmark is the gate, and this
 has not passed it.

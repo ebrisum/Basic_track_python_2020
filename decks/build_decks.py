@@ -13,7 +13,9 @@ those arrive.
 
 from __future__ import annotations
 
+import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -104,20 +106,105 @@ def build(legend_id: str, name: str, db, prefer_vanilla: bool = True,
     )
 
 
-def main() -> int:
+def slugify(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
+
+
+def discover(db, limit: int) -> list[tuple[str, str, str]]:
+    """Pick `limit` legends that can each seed a legal, playable deck.
+
+    Training on one matchup teaches the matchup, not the game -- the weights
+    have no way to tell "this is good in Riftbound" from "this is good against
+    Volibear". A field of decks is the cheapest fix available, and the pool
+    already holds 94 legends.
+
+    Legends are taken in a spread across domain identities rather than in card
+    order, so the field is varied rather than five flavours of Fury.
+    """
+    legends = sorted(
+        (c for c in db.cards.values() if c.type == "legend" and c.domains),
+        key=lambda c: c.card_id,
+    )
+    by_identity: dict[tuple, list] = {}
+    for legend in legends:
+        by_identity.setdefault(tuple(sorted(legend.domains)), []).append(legend)
+
+    specs: list[tuple[str, str, str]] = []
+    round_index = 0
+    while len(specs) < limit:
+        added = False
+        for identity in sorted(by_identity):
+            bucket = by_identity[identity]
+            if round_index >= len(bucket) or len(specs) >= limit:
+                continue
+            legend = bucket[round_index]
+            label = f"{legend.name} ({'/'.join(legend.domains)})"
+            specs.append((legend.card_id, slugify(legend.name), label))
+            added = True
+        if not added:
+            break
+        round_index += 1
+    return specs
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--count", type=int, default=2,
+                    help="how many decks to build; >2 gives training a field "
+                         "instead of a single matchup")
+    ap.add_argument("--keep-starters", action="store_true", default=True,
+                    help="always include the two named starter decks")
+    ap.add_argument("--force", action="store_true",
+                    help="overwrite decks that already exist. Off by default: "
+                         "a deck on disk is a fixture, not an output. Replays "
+                         "are recorded against exact decklists, so rebuilding "
+                         "one silently invalidates every game recorded with "
+                         "it -- which is how this flag came to exist.")
+    ap.add_argument("--min-implemented", type=float, default=0.0,
+                    help="reject decks below this fraction of executable card "
+                         "text (1.0 = every card plays as printed). Training "
+                         "on a deck where a third of the cards are inert "
+                         "teaches a different game than the printed one.")
+    args = ap.parse_args(argv)
+
     db = load()
     specs = [
         ("OGN-251", "jinx_chaos_fury", "Jinx - Loose Cannon (Chaos/Fury)"),
         ("OGN-249", "volibear_body_fury", "Volibear - Relentless Storm (Body/Fury)"),
     ]
+    if args.count > len(specs):
+        seen = {slug for _, slug, _ in specs}
+        for spec in discover(db, args.count * 3):
+            if len(specs) >= args.count:
+                break
+            if spec[1] in seen or spec[0] in {s[0] for s in specs}:
+                continue
+            specs.append(spec)
+            seen.add(spec[1])
+
     written = 0
+    failed = []
     for index, (legend_id, slug, label) in enumerate(specs):
-        deck = build(legend_id, label, db, bf_offset=index)
+        try:
+            deck = build(legend_id, label, db, bf_offset=index)
+        except ValueError as exc:
+            # Not every legend has 40 legal, priceable cards inside its
+            # identity; those are skipped rather than shipped broken.
+            failed.append(f"{slug}: {exc}")
+            continue
         problems = validate(deck, db)
         if problems:
-            print(f"REJECTED {slug}: {problems}")
+            failed.append(f"{slug}: {problems}")
+            continue
+        coverage = sum(1 for cid in deck.main if db[cid].text_implemented) / len(deck.main)
+        if coverage < args.min_implemented:
+            failed.append(f"{slug}: only {coverage:.0%} of card text executes")
             continue
         path = HERE / f"{slug}.json"
+        if path.exists() and not args.force:
+            print(f"{path.name}: already exists, left alone (--force to rebuild)")
+            written += 1
+            continue
         path.write_text(
             json.dumps(
                 {
@@ -135,10 +222,16 @@ def main() -> int:
         vanilla = sum(1 for cid in deck.main if db[cid].text_implemented)
         print(
             f"{path.name}: {len(deck.main)} main, {len(deck.runes)} runes, "
-            f"{vanilla}/{len(deck.main)} fully-implemented text"
+            f"{vanilla}/{len(deck.main)} fully-implemented text "
+            f"({vanilla / len(deck.main):.0%})"
         )
         written += 1
-    return 0 if written == len(specs) else 1
+    if failed:
+        print(f"\nskipped {len(failed)} legend(s) that cannot field a legal deck:")
+        for line in failed[:5]:
+            print(f"  {line}")
+    print(f"\n{written} deck(s) written to {HERE}/")
+    return 0 if written >= 2 else 1
 
 
 if __name__ == "__main__":

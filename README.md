@@ -42,9 +42,10 @@ architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Scripting the rest of the card pool | **remaining work** |
 
-**385 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
+**401 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
 priority, focus and showdowns, 24 covering Equipment, 29 covering battlefield
-takeover and threat forecasting, and 20 driving the frontend over HTTP — plus two full Riftbound games in the replay
+takeover and threat forecasting, 15 covering Elo/SPRT/the league, and 20
+driving the frontend over HTTP — plus two full Riftbound games in the replay
 harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
 
 ## Play a game on your own machine
@@ -264,9 +265,18 @@ asserted, and is measured on held-out games.
 .venv/bin/python analysis/fit_weights.py --games 300   # fit, with a held-out split
 .venv/bin/python analysis/calibrate.py --games 120     # does it predict winning?
 .venv/bin/python analysis/benchmark.py --games 60      # does it cause winning?
-.venv/bin/python analysis/benchmark.py --games 24 --ismcts 60   # add search
-.venv/bin/python analysis/self_play_loop.py --generations 3     # learn from its own games
+.venv/bin/python analysis/nulltest.py --games 400      # is the harness unbiased?
+.venv/bin/python analysis/self_play_loop.py --generations 5 --field   # train
+.venv/bin/python analysis/rate.py --table              # did it actually improve?
 ```
+
+**How to tell whether training worked** is its own problem, and a harder one
+than running the training: see [`TRAINING.md`](TRAINING.md). Short version —
+every generation is kept in a league and rated against a *frozen* gauntlet,
+because "beat the previous generation" cannot distinguish improvement from
+walking in a circle; and promotion uses SPRT rather than a fixed game count,
+because a 40-game gate can only resolve a 0.65 edge and real improvements are
+0.53–0.58.
 
 `agents/ismcts.py` is the answer to the conditional judgments a weighted sum
 cannot make — sweep when behind, deny at 7 but not at 1, hold a Reaction for
@@ -326,6 +336,7 @@ engine or the tests.
 
 ## Documents
 
+- [`TRAINING.md`](TRAINING.md) — how to see improvement, and what to adjust
 - [`SCORING.md`](SCORING.md) — reward vs heuristic, and what the numbers say
 - [`RULES_SUMMARY.md`](RULES_SUMMARY.md) — implementation target for `engine/`
 - [`DSL.md`](DSL.md) — effect primitive spec; the gate before bulk scripting
