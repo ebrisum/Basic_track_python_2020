@@ -124,19 +124,37 @@ field.** That is the single highest-value thing to work on.
 
 ### 2. Throughput — everything downstream is rate-limited by this
 
-| agent | games/sec | plies/game |
-| --- | --- | --- |
-| random | 17.2 | 275 |
-| greedy | 0.66 | 171 |
-| ismcts(60) | 0.03 | 148 |
+Every measurement above is priced in games, so speed is not a comfort, it is
+how many experiments fit in an afternoon. Two profiling passes moved it:
 
-A generation of 300 self-play games plus a 400-game SPRT ceiling is roughly
-18 minutes of greedy play. ISMCTS at 33 seconds per game cannot generate bulk
-training data at all — it is an evaluation opponent, not a data source, until
-it gets faster.
+| agent | before | after | |
+| --- | --- | --- | --- |
+| greedy | 0.66 games/sec | **2.45** | 3.7× |
+| ismcts(60) | 0.03 games/sec | **0.05** | 1.6× |
 
-Cheapest wins available: parallelism across cores (games are independent), and
-profiling `legal_actions()`, which runs on every ply of every game.
+**89% of a greedy game was `copy.deepcopy`** — 7.8 million object copies for
+1,844 clones, because search clones the state once per legal action and the
+generic deepcopy walked every card, every zone list and every string in the
+log. Every mutable part of the state holds only scalars, strings, tuples and
+ints, so `RiftboundState.__deepcopy__` now copies each in one shallow pass and
+shares the immutable card database. Written as `__deepcopy__` rather than a
+`clone()` method so agents get the fast path without changing.
+
+Then legal-action generation rose to the top, and inside it `equip_ability`
+was running **34,718 regex parses across six searches** — re-parsing printed
+card text every time a card was asked for its abilities. Memoized on the card
+face.
+
+Hand-written cloning is exactly the code that silently shares one mutable
+field and corrupts every search that touches it, so `tests/test_cloning.py`
+mutates every mutable field of a clone and asserts the original is untouched,
+checks the RNG stream is not shared and the database *is*, and asserts every
+`CardRef` field is of an immutable type. The committed replays hash every
+state in two full games and pass unchanged.
+
+Still available: parallelism across cores (games are independent), and the
+`_window_actions` loop, which still scans every card in the game rather than
+only the ones on the board.
 
 ### 3. Patience — one bad generation is not the end of the run
 

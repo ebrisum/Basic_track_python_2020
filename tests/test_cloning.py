@@ -168,3 +168,38 @@ def test_every_card_ref_field_is_immutable():
             f"CardRef.{spec.name} is {type(value).__name__}, which is mutable; "
             f"CardRef.copy() would alias it into every clone"
         )
+
+
+def test_every_on_board_card_is_in_exactly_one_zone_list(decks):
+    """An invariant, and a load-bearing one.
+
+    `legal_actions` enumerates a player's activated abilities from their zone
+    lists rather than by scanning all ~108 card instances, which is only
+    correct while those lists account for every card with a location. It also
+    catches a class of bug directly: a killed Equipment that kept its
+    `attached_to` was dragged out of the trash onto a battlefield by the rule
+    that moves attached cards with their host (719.3.a), leaving a card on the
+    board that belonged to no zone at all.
+    """
+    from agents.random_agent import RandomAgent
+
+    for seed in (3, 7, 11):
+        state = build_state(decks[0], decks[1], seed=seed, db=DB)
+        agent = RandomAgent(seed)
+        for _ in range(220):
+            if state.is_terminal():
+                break
+            state.apply(agent.act(state))
+            for player in (0, 1):
+                zones = state.players[player]
+                tracked = set(zones.base) | set(zones.channeled_runes)
+                on_board = {
+                    ref.instance_id
+                    for ref in state.cards.values()
+                    if ref.controller == player and ref.location is not None
+                }
+                assert tracked == on_board, (
+                    f"seed {seed} P{player}: on board but in no zone list "
+                    f"{on_board - tracked}; in a zone list but not on the board "
+                    f"{tracked - on_board}"
+                )

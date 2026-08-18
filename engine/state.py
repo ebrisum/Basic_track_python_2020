@@ -337,7 +337,14 @@ class RiftboundState:
 
         # Activated abilities (376, 145.2). Their own printed timing governs,
         # which is why a rune seal's REACTION ability works inside a chain.
-        for ref in self.cards.values():
+        #
+        # Iterating the player's zone lists rather than every card instance:
+        # this runs on every ply of every search node, and scanning all ~108
+        # instances to find the ~4 on the board was the largest remaining cost
+        # in ISMCTS. `test_cloning.py` pins the invariant this relies on --
+        # that base + channeled_runes accounts for every card with a location.
+        for instance_id in state.base + state.channeled_runes:
+            ref = self.cards[instance_id]
             if ref.controller != player or ref.location is None:
                 continue
             card = self.db[ref.card_id]
@@ -744,7 +751,9 @@ class RiftboundState:
         # same location; 719.3.a moves them together. Attached cards have no
         # move of their own (718.5.c), so this is the only way they travel.
         for attached in self.cards.values():
-            if attached.attached_to == ref.instance_id:
+            # Only cards still on the board travel; anything that has left
+            # is no longer attached to anything that can carry it.
+            if attached.attached_to == ref.instance_id and attached.location is not None:
                 attached.location = ref.location
 
         if action.destination != BASE_LOCATION:
@@ -1102,6 +1111,13 @@ class RiftboundState:
         for gear in self.cards.values():
             if gear.attached_to == ref.instance_id:
                 gear.attached_to = None
+        # ...and this card stops being attached to anything. 718.5 says an
+        # Attached card "still has all properties of being a card on the
+        # board", so the relationship cannot outlive leaving the board. Left
+        # set, a killed Equipment stayed bound to its host and 719.3.a then
+        # dragged it out of the trash onto whatever battlefield the host
+        # moved to.
+        ref.attached_to = None
         state = self.players[ref.controller]
         if ref.instance_id in state.base:
             state.base.remove(ref.instance_id)

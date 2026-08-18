@@ -573,3 +573,38 @@ def test_designations_are_dropped_when_a_unit_leaves_the_battlefield(decks):
     state.cards[mine].location = BASE_LOCATION
     state._cleanup()
     assert not state.cards[mine].is_attacker
+
+
+def test_a_killed_gear_stops_being_attached(decks):
+    """719.5 / 718.5 -- attachment is a relationship between cards *on the
+    board*. A gear that leaves the board must detach, or it stays bound to a
+    unit it no longer shares a zone with.
+
+    Found in play: a killed Equipment kept `attached_to`, and the rule that
+    moves attached cards with their host (719.3.a) then dragged it out of the
+    trash and back onto a battlefield.
+    """
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175")
+    gear = put_gear(state, player, "SFD-108")
+    state.cards[gear].attached_to = host
+
+    state._kill(state.cards[gear])
+    assert state.cards[gear].attached_to is None
+    assert state.cards[gear].location is None
+
+
+def test_a_dead_gear_is_not_dragged_back_onto_the_board(decks):
+    """The consequence, asserted end to end: moving the host must not give a
+    card in the trash a board location."""
+    state = arena(decks)
+    player = state.turn_player
+    host = put_unit(state, player, "OGN-175")
+    gear = put_gear(state, player, "SFD-108")
+    state.cards[gear].attached_to = host
+    state._kill(state.cards[gear])
+
+    state.apply(StandardMove(host, bf_location(0)))
+    assert state.cards[gear].location is None
+    assert gear in state.players[player].trash
