@@ -31,6 +31,7 @@ from cards.dsl import (
     CreateToken,
     Detach,
     Heal,
+    Reveal,
     Exhaust,
     Stun,
     GainPoints,
@@ -323,6 +324,19 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _reveal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """424 -- announce cards publicly. The cards do not change zones."""
+    for player in _resolve_player(effect.who, ctx.controller):
+        zones = state.players[player]
+        source = zones.hand if effect.zone == "hand" else zones.main_deck
+        shown = source[: effect.count]
+        if not shown:
+            continue
+        names = ", ".join(state.db[state.cards[i].card_id].name for i in shown)
+        state._emit(f"P{player} reveals {names} (from {effect.zone})")
+    return None
+
+
 def _heal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """418 -- clearing damage is Healing (418.1.a)."""
     ids, request = _targets(state, effect.selector, ctx, "Heal")
@@ -488,6 +502,7 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    Reveal: _reveal,
     Heal: _heal,
     Banish: _banish,
     Detach: _detach,

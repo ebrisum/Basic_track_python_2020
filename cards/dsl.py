@@ -172,6 +172,22 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class Reveal(Effect):
+    """424 -- present a card to all players from a zone they cannot see.
+
+    424.1.a: Revealed is a temporary *state*, not a zone -- the card does not
+    move. What the action actually does is make information public, so the
+    engine announces it in the shared log, which is the one channel both
+    players read and which is deliberately excluded from the state hash
+    (it is presentation, not position).
+    """
+
+    who: Who = Who.YOU
+    count: int = 1
+    zone: str = "hand"          # hand | deck
+
+
+@dataclass(frozen=True)
 class Heal(Effect):
     """418 -- clear marked damage from units. Any clearing is Healing (418.1.a)."""
 

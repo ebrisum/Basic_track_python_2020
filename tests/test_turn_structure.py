@@ -656,3 +656,38 @@ def test_detaching_unlinks_an_attached_card(decks):
                                             type="gear")),
             EffectContext(controller=0))
     assert state.cards[gear].attached_to is None
+
+
+# --- 424 Reveal -------------------------------------------------------------
+
+
+def test_revealing_announces_the_card_without_moving_it(decks):
+    """424.1 / 424.1.a -- revealing presents a card to all players; Revealed
+    is a temporary state and not a zone, so the card stays where it is."""
+    from cards.dsl import Reveal, Who
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    player = state.turn_player
+    hand_before = list(state.players[player].hand)
+    shown = state.db[state.cards[hand_before[0]].card_id].name
+
+    execute(state, Reveal(who=Who.YOU, count=1, zone="hand"),
+            EffectContext(controller=player))
+
+    assert state.players[player].hand == hand_before, "the card must not move"
+    assert any(shown in line and "reveals" in line for line in state.log)
+
+
+def test_revealing_from_an_empty_zone_does_nothing(decks):
+    """055 -- do as much as you can, ignoring impossible instructions."""
+    from cards.dsl import Reveal, Who
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    player = state.turn_player
+    state.players[player].hand.clear()
+    before = len(state.log)
+    execute(state, Reveal(who=Who.YOU, count=1, zone="hand"),
+            EffectContext(controller=player))
+    assert len(state.log) == before

@@ -190,6 +190,32 @@ rather than assumed. See `DECISIONS.md`.
 
 ---
 
+## RQ-16 — A revealed card is announced but not remembered
+
+**Status:** open, deliberate, and one-directional.
+
+**Situation.** 424 Reveal is implemented as a public announcement in the
+shared log, which is faithful to 424.1 ("presenting a card to all players")
+and to 424.1.a ("Revealed is a temporary state and is not a zone" -- the card
+does not move). Both players read the same log, so the information really is
+made public.
+
+What the engine does *not* do is feed that back into `engine/knowledge.py`.
+The deduction there bounds an opponent's hand by subtracting everything
+publicly located from a known 40-card decklist; a card revealed from a hand
+and then hidden again is not recorded, so the deducer does not narrow its
+estimate the way a human player's memory would.
+
+**Effect on outcomes.** An agent forgets what it was shown. That makes it
+strictly *less* informed than the rules allow, never more -- so it cannot
+produce illegal play, only weaker play, and only on the 16 cards that reveal.
+
+**What it needs.** A per-player record of revelations that `deduce()` reads,
+which is also what would let the evaluation price "I know they hold an
+answer". Worth doing with RQ-14's selector work rather than alone.
+
+---
+
 ## RQ-14 — A hidden card's targeting is not restricted to its battlefield
 
 **Status:** open. Implemented in part; the missing part is named here rather
