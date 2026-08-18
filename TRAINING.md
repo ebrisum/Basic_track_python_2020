@@ -100,6 +100,43 @@ properties, and this project had the first without the second.
 
 ---
 
+## Part 1b — Does it learn at all? A test with a known answer
+
+Before any of the levers below are worth pulling, one question has to be
+settled: **does the training loop learn, or does it just move numbers?**
+
+Every result had been of the form "the candidate scored 0.51, the interval
+straddles even" — equally consistent with a learner that works weakly and one
+that is broken. The problem is there is no ground truth: nobody knows the best
+weight vector, so "did it get closer" is unanswerable.
+
+`analysis/learning_check.py` manufactures a ground truth. It takes weights
+known to play well, **damages one on purpose**, and asks whether training
+climbs back:
+
+```sh
+.venv/bin/python analysis/learning_check.py --feature point_diff --how flip
+```
+
+| match | score | W-L-D | Elo | 95% interval |
+| --- | --- | --- | --- | --- |
+| damaged vs healthy | 0.330 | 66-134-0 | −123 | 0.265–0.395 |
+| **trained vs damaged** | **0.765** | **153-47-0** | **+205** | **0.706–0.824** |
+
+**The loop learns.** Flipping `point_diff` costs 123 Elo, and 400 SPSA
+iterations recover 205 of it. That is not a marginal result that could be
+noise — it is the machinery demonstrably working.
+
+Which also settles a different question. Two SPSA runs on the *healthy*
+weights produced candidates that validated at 0.487 and 0.485 — no
+improvement. Before this test that was ambiguous: broken learner, or weights
+already near a local optimum? Now it is the second. The learner can climb; it
+just has nowhere obvious to climb *to* from the hand-set prior.
+
+Run this whenever the training path changes. A learner that cannot escape a
+hole someone dug for it will certainly not find improvements nobody knows
+about, and any weak positive result from it is noise.
+
 ## Part 2 — What to adjust, in order of what it is costing
 
 ### 1. Deck variety — the biggest lever, and it is capped by card scripting
