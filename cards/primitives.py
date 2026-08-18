@@ -25,8 +25,12 @@ from cards.dsl import (
     Draw,
     Duration,
     Effect,
+    Banish,
     Channel,
+    Counter,
     CreateToken,
+    Detach,
+    Heal,
     Exhaust,
     Stun,
     GainPoints,
@@ -319,6 +323,88 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _heal(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """418 -- clearing damage is Healing (418.1.a)."""
+    ids, request = _targets(state, effect.selector, ctx, "Heal")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        if ref.damage:
+            ref.damage = 0
+            state._emit(f"{state.db[ref.card_id].name} is healed")
+    return None
+
+
+def _banish(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """427 -- straight into Banishment, from wherever the card is.
+
+    Not routed through kill or discard: 427.2.a/b say Banish is a subset of
+    neither, so a banished permanent fires no death trigger.
+    """
+    ids, request = _targets(state, effect.selector, ctx, "Banish")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        owner = state.players[ref.owner]
+        controller = state.players[ref.controller]
+        for zone in (controller.base, controller.channeled_runes, owner.hand,
+                     owner.trash, owner.main_deck, owner.rune_deck,
+                     owner.champion_zone):
+            if instance_id in zone:
+                zone.remove(instance_id)
+        if ref.is_token:
+            # 186.1 -- a token in a non-board zone ceases to exist instead.
+            state.cease_to_exist(ref)
+            continue
+        state.leave_board(ref)
+        ref.damage = 0
+        owner.banishment.append(instance_id)
+        state._emit(f"{state.db[ref.card_id].name} is banished")
+    return None
+
+
+def _detach(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """435 -- unlink. 435.1.a.1: doing this to an unattached card does
+    nothing."""
+    ids, request = _targets(state, effect.selector, ctx, "Detach")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        if ref.attached_to is None:
+            continue
+        ref.attached_to = None
+        state._emit(f"{state.db[ref.card_id].name} is detached")
+    return None
+
+
+def _counter(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
+    """425 -- negate the item this one is answering.
+
+    The chain resolves newest-first (340.1), so the item being countered is
+    the one directly beneath the countering spell: its controller played it
+    in response. 425.1.a clears it, 425.1.a.1 sends a countered card to the
+    trash, and 425.1.b means no "when you play" trigger fires for it.
+    """
+    target = None
+    for index in range(len(state.chain) - 1, -1, -1):
+        if state.chain[index].instance_id != ctx.source:
+            target = index
+            break
+    if target is None:
+        return None
+    item = state.chain.pop(target)
+    ref = state.cards[item.instance_id]
+    name = state.db[ref.card_id].name
+    if item.kind == "card":
+        # 425.1.a.1 -- cleared cards are placed in the trash.
+        state.players[ref.owner].trash.append(item.instance_id)
+    state._emit(f"{name} is countered")
+    return None
+
+
 def _create_token(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """439 -- create `count` tokens for the effect's controller (182/183)."""
     from engine.zones import BASE_LOCATION
@@ -402,6 +488,10 @@ HANDLERS: dict[type, Callable] = {
     ReturnToHand: _return_to_hand,
     LookAtTop: _look_at_top,
     Attach: _attach,
+    Heal: _heal,
+    Banish: _banish,
+    Detach: _detach,
+    Counter: _counter,
     CreateToken: _create_token,
     Channel: _channel,
     Stun: _stun,

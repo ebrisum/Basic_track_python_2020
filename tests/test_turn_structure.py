@@ -568,3 +568,91 @@ def test_hiding_pays_one_power_of_any_domain(decks):
     assert HideCard(card, 0) in state.legal_actions()
     state.apply(HideCard(card, 0))
     assert state.players[player].pool.total_power() == 0
+
+
+# --- 425 Counter / 418 Heal / 427 Banish / 435 Detach -----------------------
+
+
+def test_countering_clears_the_item_and_trashes_the_card(decks):
+    """425.1.a -- "does nothing and is cleared from the chain";
+    425.1.a.1 -- "cards cleared from the chain in this way are placed in the
+    trash"."""
+    from engine.chain import ChainItem
+    from engine.zones import CardRef
+
+    state = arena(decks)
+    player = state.turn_player
+    victim = max(state.cards) + 1
+    state.cards[victim] = CardRef(instance_id=victim, card_id="OGN-045",
+                                  owner=player, controller=player)
+    counterer = max(state.cards) + 1
+    state.cards[counterer] = CardRef(instance_id=counterer, card_id="OGN-064",
+                                     owner=player, controller=player)
+    state.chain.append(ChainItem("card", victim, player))
+    state.chain.append(ChainItem("card", counterer, player))
+
+    from cards.dsl import Counter
+    from cards.primitives import EffectContext, execute
+
+    execute(state, Counter(), EffectContext(controller=player, source=counterer))
+    assert all(item.instance_id != victim for item in state.chain)
+    assert victim in state.players[player].trash
+
+
+def test_healing_clears_marked_damage(decks):
+    """418.1 -- "Damage being cleared from Units is Healing"."""
+    from cards.dsl import Heal, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    state.cards[unit].damage = 4
+    execute(state, Heal(selector=Selector(scope="all", controller="friendly",
+                                          type="unit")),
+            EffectContext(controller=0))
+    assert state.cards[unit].damage == 0
+
+
+def test_banishing_is_not_killing(decks):
+    """427.2.a -- "Banish is not a subset of Kill", so the card goes to
+    Banishment rather than the trash."""
+    from cards.dsl import Banish, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    execute(state, Banish(selector=Selector(scope="all", controller="friendly",
+                                            type="unit")),
+            EffectContext(controller=0))
+    assert unit in state.players[0].banishment
+    assert unit not in state.players[0].trash
+    assert state.cards[unit].location is None
+
+
+def test_detaching_an_unattached_card_does_nothing(decks):
+    """435.1.a.1."""
+    from cards.dsl import Detach, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    gear = put_unit(state, 0, "SFD-124")
+    assert state.cards[gear].attached_to is None
+    execute(state, Detach(selector=Selector(scope="all", controller="friendly",
+                                            type="gear")),
+            EffectContext(controller=0))
+    assert state.cards[gear].attached_to is None
+
+
+def test_detaching_unlinks_an_attached_card(decks):
+    """435.1.b."""
+    from cards.dsl import Detach, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    host = put_unit(state, 0, "OGN-142")
+    gear = put_unit(state, 0, "SFD-124")
+    state.cards[gear].attached_to = host
+    execute(state, Detach(selector=Selector(scope="all", controller="friendly",
+                                            type="gear")),
+            EffectContext(controller=0))
+    assert state.cards[gear].attached_to is None

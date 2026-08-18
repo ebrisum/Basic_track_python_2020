@@ -172,6 +172,44 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class Heal(Effect):
+    """418 -- clear marked damage from units. Any clearing is Healing (418.1.a)."""
+
+    selector: Selector = field(
+        default_factory=lambda: Selector(controller="friendly", type="unit")
+    )
+
+
+@dataclass(frozen=True)
+class Banish(Effect):
+    """427 -- put a card into Banishment, directly from wherever it is.
+
+    427.2.a/b: Banish is not a subset of Kill and not a subset of Discard, so
+    a banished permanent fires no death triggers.
+    """
+
+    selector: Selector = field(default_factory=lambda: Selector(type="any"))
+
+
+@dataclass(frozen=True)
+class Detach(Effect):
+    """435 -- unlink an Attached card. A no-op if it is not attached
+    (435.1.a.1)."""
+
+    selector: Selector = field(default_factory=lambda: Selector(type="gear"))
+
+
+@dataclass(frozen=True)
+class Counter(Effect):
+    """425 -- negate a card or ability on the chain.
+
+    425.1.a: the item does nothing and is cleared from the chain; 425.1.a.1
+    a countered *card* goes to the trash; 425.1.b it does not count as having
+    been played, so nothing that triggers on playing fires.
+    """
+
+
+@dataclass(frozen=True)
 class CreateToken(Effect):
     """439 Create -- produce a token (179-187).
 

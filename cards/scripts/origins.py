@@ -20,6 +20,7 @@ from cards.dsl import (
     Buff,
     CardScript,
     Channel,
+    Counter,
     CreateToken,
     Deal,
     Discard,
@@ -253,6 +254,17 @@ SCRIPTS: tuple[CardScript, ...] = (
                 costs=(ExhaustSelf(),),
                 effects=(AddPower("Chaos", 1),),
                 text="Exhaust: REACTION - ADD chaos.",
+            ),
+        ),
+    ),
+    # --- 425 Counter / 418 Heal / 427 Banish --------------------------------
+    CardScript(
+        card_id="OGN-064",  # Wind Wall
+        abilities=(
+            Ability(
+                kind=TriggerKind.ON_RESOLVE,
+                effects=(Counter(),),
+                text="Counter a spell.",
             ),
         ),
     ),
