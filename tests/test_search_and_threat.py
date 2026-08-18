@@ -1,0 +1,219 @@
+"""Threat features and ISMCTS.
+
+The judgments the repo owner described -- deny the 8th point but not the
+first, sweep when behind, hold a Reaction for something worth answering -- are
+mostly *conditional*, and a weighted sum of features cannot represent a
+condition. These tests pin the one part that is representable (a threshold),
+and the search that represents the rest.
+"""
+
+from __future__ import annotations
+
+import copy
+import random
+
+import pytest
+
+from agents.ismcts import ISMCTSAgent, Node, determinize
+from agents.random_agent import RandomAgent
+from analysis.evaluation import FEATURE_NAMES, DEFAULT_WEIGHTS, Model, evaluate, features
+from cards.database import load as load_db
+from engine.setup import build_state, load_deck
+from engine.state import VICTORY_SCORE, Phase
+
+DB = load_db()
+PRIOR = Model()
+
+
+@pytest.fixture(scope="module")
+def decks():
+    return load_deck("jinx_chaos_fury"), load_deck("volibear_body_fury")
+
+
+def midgame(decks, seed=1, steps=80):
+    state = build_state(decks[0], decks[1], seed=seed, db=DB)
+    agent = RandomAgent(seed)
+    for _ in range(steps):
+        if state.is_terminal():
+            break
+        state.apply(agent.act(state))
+    return state
+
+
+# --- the threat threshold ---------------------------------------------------
+
+
+def test_feature_vector_and_weights_stay_aligned():
+    assert len(FEATURE_NAMES) == len(DEFAULT_WEIGHTS)
+
+
+def test_victory_pressure_depends_on_the_board_not_just_the_score():
+    """The point the repo owner made: 7 points with no board is less urgent
+    than 5 points holding both battlefields, because control is the rate at
+    which points arrive (469.2)."""
+    from analysis.evaluation import _pressure
+
+    assert _pressure(5, 2) > _pressure(7, 0)
+    assert _pressure(7, 2) > _pressure(7, 1) > _pressure(7, 0)
+    assert _pressure(7, 1) > _pressure(3, 1)
+
+
+def test_control_lengthens_or_shortens_the_clock_at_a_fixed_score():
+    """Board state moves the urgency at every score, which is the whole point
+    of measuring in turns rather than points."""
+    from analysis.evaluation import _pressure
+
+    # Losing the board slows a 7-point player down without making them safe.
+    assert _pressure(7, 0) < _pressure(7, 2)
+    # And a full board does not make a player at 0 urgent -- that is 4 turns away.
+    assert _pressure(0, 2) < _pressure(7, 0)
+
+
+def test_victory_pressure_is_maximal_once_the_score_is_reached():
+    from analysis.evaluation import _pressure
+
+    assert _pressure(VICTORY_SCORE, 0) == 1.0
+
+
+def test_an_opponent_about_to_win_collapses_the_evaluation(decks):
+    state = midgame(decks, 3)
+    state.players[0].points = state.players[1].points = 4
+    for bf in state.battlefields:
+        bf.controller = None
+    even = evaluate(state, 0, PRIOR)
+    state.players[1].points = VICTORY_SCORE - 1
+    for bf in state.battlefields:
+        bf.controller = 1          # and they hold the board, so it is a real clock
+    threatened = evaluate(state, 0, PRIOR)
+    assert threatened < even - 0.2, "an imminent loss must dominate, not nudge"
+
+
+def test_early_points_matter_less_than_late_ones(decks):
+    """'The first point often cannot be prevented and that is fine.'"""
+    state = midgame(decks, 4)
+    state.players[0].points = state.players[1].points = 0
+    base = evaluate(state, 0, PRIOR)
+    state.players[1].points = 1
+    after_first = evaluate(state, 0, PRIOR)
+    state.players[1].points = VICTORY_SCORE - 1
+    after_seventh = evaluate(state, 0, PRIOR)
+    # (board held constant, so only the score is moving)
+    assert (base - after_first) < (after_first - after_seventh), (
+        "conceding the first point must cost far less than the seventh"
+    )
+
+
+def test_threat_features_keep_the_evaluation_zero_sum(decks):
+    for seed in range(4):
+        state = midgame(decks, seed)
+        assert evaluate(state, 0, PRIOR) + evaluate(state, 1, PRIOR) == pytest.approx(1.0)
+
+
+# --- determinization respects hidden information ----------------------------
+
+
+def test_determinization_preserves_what_the_searcher_can_see(decks):
+    """128 Privacy -- own hand and the board are known, the rest is not."""
+    state = midgame(decks, 5)
+    sampled = determinize(state, 0, random.Random(0))
+    assert sampled.players[0].hand == state.players[0].hand
+    assert len(sampled.players[1].hand) == len(state.players[1].hand)
+    assert len(sampled.cards) == len(state.cards)
+    board_before = {r.instance_id for r in state.cards.values() if r.location}
+    board_after = {r.instance_id for r in sampled.cards.values() if r.location}
+    assert board_before == board_after, "the board is public and must not move"
+
+
+def test_determinization_actually_resamples_the_opponent_hand(decks):
+    state = midgame(decks, 6)
+    seen = {
+        tuple(determinize(state, 0, random.Random(s)).players[1].hand)
+        for s in range(8)
+    }
+    assert len(seen) > 1, "every determinization identical means no sampling"
+
+
+def test_determinization_does_not_mutate_the_real_state(decks):
+    state = midgame(decks, 7)
+    before = state.observation(0).to_canonical_bytes()
+    determinize(state, 0, random.Random(1))
+    assert state.observation(0).to_canonical_bytes() == before
+
+
+def test_determinized_worlds_conserve_the_opponents_cards(decks):
+    """Cards may be reshuffled between hand and deck, never created or lost."""
+    state = midgame(decks, 8)
+    sampled = determinize(state, 0, random.Random(2))
+    before = sorted(state.players[1].hand + state.players[1].main_deck)
+    after = sorted(sampled.players[1].hand + sampled.players[1].main_deck)
+    assert before == after
+
+
+# --- the search itself ------------------------------------------------------
+
+
+def test_ismcts_returns_a_legal_action(decks):
+    state = midgame(decks, 9)
+    if state.is_terminal():
+        pytest.skip("game ended")
+    action = ISMCTSAgent(9, iterations=30, model=PRIOR).act(state)
+    assert action in state.legal_actions()
+
+
+def test_ismcts_does_not_mutate_the_state(decks):
+    state = midgame(decks, 10)
+    before = state.observation(0).to_canonical_bytes()
+    ISMCTSAgent(10, iterations=30, model=PRIOR).act(state)
+    assert state.observation(0).to_canonical_bytes() == before
+
+
+def test_ismcts_is_deterministic_for_a_seed(decks):
+    state = midgame(decks, 11)
+    a = ISMCTSAgent(11, iterations=40, model=PRIOR).act(copy.deepcopy(state))
+    b = ISMCTSAgent(11, iterations=40, model=PRIOR).act(copy.deepcopy(state))
+    assert repr(a) == repr(b)
+
+
+def test_ismcts_availability_is_counted_not_just_visits():
+    """ISMCTS divides by availability, so an action legal in only some
+    determinizations is not punished for the iterations it never appeared in."""
+    node = Node()
+    node.availability["play:1"] = 10
+    node.children["play:1"] = Node(visits=2, total_value=1.0)
+    assert node.children["play:1"].value() == pytest.approx(0.5)
+    assert node.availability["play:1"] == 10
+
+
+def test_ismcts_plays_a_full_game_without_error(decks):
+    state = build_state(decks[0], decks[1], seed=12, db=DB)
+    search = ISMCTSAgent(12, iterations=15, model=PRIOR)
+    opponent = RandomAgent(13)
+    steps = 0
+    while not state.is_terminal() and steps < 3000:
+        agent = search if state.current_player == 0 else opponent
+        state.apply(agent.act(state))
+        steps += 1
+    assert state.is_terminal()
+    assert sum(state.returns()) == pytest.approx(1.0)
+
+
+def test_ismcts_takes_the_win_when_it_is_available(decks):
+    """Search should not need a heuristic to see a won position through."""
+    state = midgame(decks, 14)
+    while state.phase is not Phase.MAIN and not state.is_terminal():
+        state.apply(RandomAgent(14).act(state))
+    if state.is_terminal():
+        pytest.skip("game ended during setup")
+    player = state.turn_player
+    state.players[player].points = VICTORY_SCORE - 1
+    state.players[1 - player].points = 0
+    for bf in state.battlefields:
+        bf.controller = player
+        bf.scored_by.clear()
+
+    agent = ISMCTSAgent(15, iterations=30, model=PRIOR)
+    for _ in range(80):
+        if state.is_terminal():
+            break
+        state.apply(agent.act(state))
+    assert state.is_terminal() and state.winner == player

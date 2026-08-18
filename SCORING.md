@@ -160,6 +160,88 @@ captures something real. `analysis/benchmark.py` runs the head-to-head, swapping
 sharing seeds so first-player advantage cannot be mistaken for skill, and
 reports a 95% interval so a 55% result over 40 games is not read as evidence.
 
+## The judgments a weighted sum cannot make
+
+The repo owner raised a set of real tactical questions: deny the opponent's
+point, but not at the cost of resources needed to score later; letting them
+score is often fine; sweeping the board is good when behind; when to hold a
+Reaction; when recycling a rune for power costs more than it gains.
+
+**Most of these cannot be expressed by any linear evaluation**, and no amount
+of weight-fitting will change that, because they are *conditional*:
+
+| judgment | why a weighted sum fails |
+| --- | --- |
+| Sweep the board when behind, not when ahead | An interaction between two features. A sum has no product term. |
+| Deny the point at 7, ignore it at 1 | Same action, opposite valuation depending on the score. |
+| Hold a Reaction for something worth answering | A fact about the future, not the present position. |
+| Recycle a rune now vs keep the resource | A tradeoff across turns, invisible in a single-position score. |
+
+Search represents all four for free, because it plays the consequences out.
+That is why `agents/ismcts.py` exists and why the evaluation's job is
+deliberately small: score leaves, and let the tree find the tactics.
+
+### The one part that *is* a feature
+
+"How urgent is the opponent's threat" is a property of a position, so it
+belongs in the evaluation. The first attempt made it a threshold at one point
+from victory — which was wrong, as the repo owner pointed out: it says the
+same thing about a player at 7 with an empty board as one at 7 holding
+everything.
+
+`victory_pressure` measures it in **turns, not points**: points still needed
+divided by points per turn, where the rate is battlefields controlled, since
+Hold scores one per controlled battlefield per turn (469.2).
+
+| position | pressure |
+| --- | --- |
+| 7 points, no battlefields | 0.333 |
+| 5 points, both battlefields | **0.400** |
+| 7 points, both battlefields | 0.667 |
+| 0 points, both battlefields | 0.200 |
+
+Five points with the board is more urgent than seven without it, which is the
+correct reading and is what a score-only threshold got wrong.
+
+## Hidden information: ISMCTS
+
+Plain search would cheat by reading the opponent's hand. `agents/ismcts.py`
+determinizes instead — each iteration samples one world consistent with what
+the searching player can legally see (128), searches it, and shares statistics
+across iterations keyed by action sequence. Averaged over many samples the
+agent plans against the *distribution* of possible hands.
+
+Statistics divide by **availability**, not visits, so an action legal in only
+some determinizations is not punished for the iterations where it never
+appeared. Leaves are scored with the evaluation rather than played out, which
+is what makes the search affordable on turns that run hundreds of steps.
+
+## The destination: no hand-set anything
+
+The features and weights here are scaffolding for generation 0. They are not
+meant to survive. `analysis/self_play_loop.py` is the mechanism that replaces
+them:
+
+```
+generation N agent -> plays games -> fit weights on those outcomes
+                   -> benchmark candidate vs incumbent
+                   -> promote ONLY if the 95% interval clears even
+```
+
+Two properties make this honest rather than a treadmill:
+
+- **Self-play data has no random-play artefacts.** The `hand_diff` weight came
+  out negative when fitted on random games, because random agents accumulate
+  cards they cannot play. An agent that plays properly does not generate that
+  correlation, and the positions it visits are the positions it will face —
+  closing the distribution shift by construction.
+- **Every generation has to win to be promoted.** A generation that only
+  predicts better is discarded, loudly, with its numbers written to
+  `analysis/generations.json`.
+
+Exploration (`--epsilon`) is on while generating data, because an agent that
+only plays its preferred lines never learns what the alternatives were worth.
+
 ## Where this goes next
 
 The heuristic is the value function an ISMCTS agent will need. Two things make

@@ -51,6 +51,9 @@
   .box > .cap{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#c8a24a;
               opacity:.85;margin-bottom:4px}
   .box .items{display:flex;gap:5px;flex-wrap:wrap;align-items:flex-start}
+  /* room for a 90-degree rotation without overlapping neighbours */
+  .box .items > .card.exhausted{margin:calc((var(--ch) - var(--cw)) / 2)
+                                       calc((var(--cw) - var(--ch)) / 2)}
   .bfgroup{display:flex;gap:8px;flex-wrap:wrap;width:100%}
   .bfcell{flex:1;min-width:220px;border:1px dashed rgba(200,162,74,.45);border-radius:8px;padding:5px}
   .bfcell .hd{display:flex;justify-content:space-between;gap:6px;align-items:baseline;margin-bottom:4px}
@@ -67,7 +70,10 @@
   .card .fallback{height:var(--ch);padding:20px 5px 5px;display:flex;flex-direction:column;gap:2px}
   .card .fallback .nm{font-size:10px;font-weight:650;line-height:1.15}
   .card .fallback .tx{font-size:8.5px;color:var(--muted);overflow:hidden}
-  .card.exhausted{transform:rotate(7deg);opacity:.75}
+  /* 414.1.a -- an exhausted card is rotated 90 degrees; a ready card is
+     upright. Rotating in place needs extra room, so the slot reserves it. */
+  .card.exhausted{transform:rotate(90deg);opacity:.85}
+  .card.exhausted .acts{transform:rotate(-90deg)}
   .card.attacker{outline:2px solid var(--bad)} .card.defender{outline:2px solid var(--accent)}
   .badges{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;display:flex;gap:2px;flex-wrap:wrap}
   .b{font-size:8.5px;padding:0 3px;border-radius:3px;background:rgba(6,9,16,.88);border:1px solid var(--line)}

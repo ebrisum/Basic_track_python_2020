@@ -59,6 +59,7 @@ FEATURE_NAMES: tuple[str, ...] = (
     "rune_diff",            # runes channeled (resource development)
     "deck_diff",            # main deck remaining (burn-out risk)
     "tempo",                # ready (unexhausted) units
+    "victory_pressure",     # how close to winning, given the current scoring rate
 )
 
 # Hand-set starting point, replaced by `fit_weights.py` once self-play data
@@ -75,6 +76,7 @@ DEFAULT_WEIGHTS: tuple[float, ...] = (
     0.06,   # rune_diff
     0.02,   # deck_diff
     0.04,   # tempo
+    0.90,   # victory_pressure
 )
 DEFAULT_BIAS: float = 0.0
 
@@ -91,6 +93,7 @@ SCALES: dict[str, float] = {
     "rune_diff": 6.0,
     "deck_diff": 20.0,
     "tempo": 4.0,
+    "victory_pressure": 1.0,
 }
 
 
@@ -138,6 +141,30 @@ def save_model(model: Model, path: Path | None = None) -> None:
         )
         + "\n"
     )
+
+
+def _pressure(points: int, battlefields: int) -> float:
+    """Urgency in [0, 1]: how near a player is to winning at their current rate.
+
+    Estimates turns-to-victory as (points still needed) / (points per turn),
+    where the rate is the battlefields under control, since Hold scores one per
+    controlled battlefield per turn (469.2). A player with no board has no
+    clock at all and reads as no threat, however many points they hold.
+
+    This replaced a hard threshold at "one point from winning", which said the
+    same thing about a player at 7 with an empty board as one at 7 holding
+    everything.
+    """
+    from engine.state import VICTORY_SCORE
+
+    needed = max(0, VICTORY_SCORE - points)
+    if needed == 0:
+        return 1.0
+    if battlefields <= 0:
+        # No scoring rate: only off-board effects can win, so treat the clock
+        # as long rather than infinite.
+        return 1.0 / (1.0 + needed * 2.0)
+    return 1.0 / (1.0 + needed / battlefields)
 
 
 def features(state, player: int) -> dict[str, float]:
@@ -192,6 +219,14 @@ def features(state, player: int) -> dict[str, float]:
             sum(1 for r in my_units if not r.exhausted)
             - sum(1 for r in their_units if not r.exhausted)
         ),
+        # Urgency, measured in turns rather than points.
+        #
+        # A threshold at "7 points" is the wrong shape: 7 points while
+        # controlling nothing is not urgent, and 5 points while holding both
+        # battlefields is a two-turn clock. What matters is how fast the score
+        # is actually moving, and control is the rate -- a held battlefield
+        # scores once per turn in the Beginning Phase (469.2).
+        "victory_pressure": _pressure(me.points, my_bfs) - _pressure(them.points, their_bfs),
     }
     return {name: raw[name] / SCALES[name] for name in FEATURE_NAMES}
 

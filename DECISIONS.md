@@ -258,3 +258,30 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   A test asserts the registry cannot auto-load them.
 - **Extraction records a sha256 of the card text** -- if a card is errata'd the
   hash stops matching and the extraction is known to be stale.
+
+## Session 9 -- search, threat, and self-play
+
+- **The hard tactical judgments go to search, not to the evaluation** -- sweep
+  when behind, deny at 7 but not at 1, hold a Reaction: all conditional, and a
+  weighted sum has no product term. ISMCTS represents them by playing the
+  consequences out.
+- **ISMCTS determinizes rather than reading hidden state** -- each iteration
+  samples a world consistent with 128 Privacy. Statistics divide by
+  *availability*, not visits, so an action legal in only some determinizations
+  is not punished for iterations where it never appeared.
+- **Leaves are evaluated, not rolled out** -- Riftbound turns run hundreds of
+  steps; full rollouts would spend the whole budget on one line.
+- **`victory_pressure` measures urgency in turns, not points** -- a threshold
+  at "one point from winning" said the same thing about 7 points with an empty
+  board as 7 points holding everything. Rate = battlefields controlled, since
+  Hold scores one per controlled battlefield per turn (469.2). 5 points with
+  the board (0.400) now outranks 7 without it (0.333).
+- **Exhausted cards rotate 90 degrees** (414.1.a), not the 7 degrees the first
+  UI used; the slot reserves room so a rotated card does not overlap.
+- **ABCD is Awaken/Beginning/Channel/Draw (315.1-315.4)** -- already
+  implemented in that order; verified rather than rebuilt.
+- **The hand-set features are generation 0, not the design** --
+  `analysis/self_play_loop.py` replaces them with weights fitted on the agent
+  own games, gated on winning a head-to-head whose 95% interval clears even.
+  Fitting on random play produced a negative `hand_diff` (random agents hoard
+  unplayable cards); self-play data does not contain that artefact.

@@ -24,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from agents.greedy_agent import GreedyAgent  # noqa: E402
+from agents.ismcts import ISMCTSAgent  # noqa: E402
 from agents.random_agent import RandomAgent  # noqa: E402
 from analysis.evaluation import Model, load_model  # noqa: E402
 from cards.database import load as load_db  # noqa: E402
@@ -77,6 +78,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=500)
     ap.add_argument("--deck0", default="jinx_chaos_fury")
     ap.add_argument("--deck1", default="volibear_body_fury")
+    ap.add_argument("--ismcts", type=int, default=0,
+                    help="also benchmark ISMCTS with this many iterations")
     args = ap.parse_args(argv)
 
     db = load_db()
@@ -94,6 +97,16 @@ def main(argv: list[str] | None = None) -> int:
                          lambda s: GreedyAgent(s, fitted), lambda s: RandomAgent(s)))
         pairings.append(("greedy(fitted)  vs greedy(prior)",
                          lambda s: GreedyAgent(s, fitted), lambda s: GreedyAgent(s, prior)))
+
+    if args.ismcts:
+        pairings = [
+            (f"ismcts({args.ismcts})   vs random",
+             lambda s: ISMCTSAgent(s, iterations=args.ismcts, model=prior),
+             lambda s: RandomAgent(s)),
+            (f"ismcts({args.ismcts})   vs greedy",
+             lambda s: ISMCTSAgent(s, iterations=args.ismcts, model=prior),
+             lambda s: GreedyAgent(s, prior)),
+        ]
 
     print(f"{args.games} games per pairing, seats swapped, shared seeds\n")
     print("| pairing | score | W-L-D | 95% interval |")

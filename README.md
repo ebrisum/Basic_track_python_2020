@@ -185,7 +185,15 @@ asserted, and is measured on held-out games.
 .venv/bin/python analysis/fit_weights.py --games 300   # fit, with a held-out split
 .venv/bin/python analysis/calibrate.py --games 120     # does it predict winning?
 .venv/bin/python analysis/benchmark.py --games 60      # does it cause winning?
+.venv/bin/python analysis/benchmark.py --games 24 --ismcts 60   # add search
+.venv/bin/python analysis/self_play_loop.py --generations 3     # learn from its own games
 ```
+
+`agents/ismcts.py` is the answer to the conditional judgments a weighted sum
+cannot make — sweep when behind, deny at 7 but not at 1, hold a Reaction for
+something worth answering. Search plays the consequences out; the evaluation
+only scores leaves. It determinizes hidden information rather than reading the
+opponent's hand.
 
 The greedy agent beats random **0.925 (37-3)** against a 0.525
 random-vs-random baseline, so the heuristic captures something real.
