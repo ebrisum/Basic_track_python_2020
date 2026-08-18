@@ -779,7 +779,7 @@ class RiftboundState:
         card = self.db[ref.card_id]
         state.channeled_runes.remove(action.instance_id)
         state.rune_deck.append(action.instance_id)  # bottom of the Rune Deck
-        ref.location = None
+        self.leave_board(ref)
         ref.exhausted = False
         if card.domains:
             state.pool.add_power(card.domains[0])
@@ -1108,24 +1108,33 @@ class RiftboundState:
         # They are not sent home here: an Equipment whose host died at a
         # battlefield stays there until 457.1 recalls it at the next Cleanup,
         # which is a window other effects can see.
-        for gear in self.cards.values():
-            if gear.attached_to == ref.instance_id:
-                gear.attached_to = None
-        # ...and this card stops being attached to anything. 718.5 says an
-        # Attached card "still has all properties of being a card on the
-        # board", so the relationship cannot outlive leaving the board. Left
-        # set, a killed Equipment stayed bound to its host and 719.3.a then
-        # dragged it out of the trash onto whatever battlefield the host
-        # moved to.
-        ref.attached_to = None
         state = self.players[ref.controller]
         if ref.instance_id in state.base:
             state.base.remove(ref.instance_id)
-        ref.location = None
+        self.leave_board(ref)
         ref.damage = 0
-        ref.is_attacker = ref.is_defender = False
         self.players[ref.owner].trash.append(ref.instance_id)
         self._emit(f"{self.db[ref.card_id].name} is killed")
+
+    def leave_board(self, ref) -> None:
+        """719.5 -- a card changing from a board zone to a non-board zone.
+
+        Attachment is a relationship between cards *on the board* (718.5), so
+        it cannot survive either end of it leaving: everything attached to
+        this card Detaches, and this card stops being attached to anything.
+        Designations go too (466.7.a) -- a card that is gone is not attacking.
+
+        Every path that takes a card off the board goes through here. Before
+        it existed only `_kill` detached, so a unit returned to hand by
+        `ReturnToHand` left its Equipment attached to a card in a hand -- an
+        invariant violation the state checker found within six random games.
+        """
+        for attached in self.cards.values():
+            if attached.attached_to == ref.instance_id:
+                attached.attached_to = None
+        ref.attached_to = None
+        ref.location = None
+        ref.is_attacker = ref.is_defender = False
 
     def _resolve_control(self) -> bool:
         """190.3.b.1 -- clear Contested when its author has left and no

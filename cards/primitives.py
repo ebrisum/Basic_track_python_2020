@@ -264,11 +264,13 @@ def _return_to_hand(state, effect: ReturnToHand, ctx: EffectContext) -> ChoiceRe
         controller_state = state.players[ref.controller]
         if instance_id in controller_state.base:
             controller_state.base.remove(instance_id)
-        ref.location = None
+        # 719.5 -- leaving the board detaches both directions. This used to
+        # clear only the location, so a unit bounced to hand left its
+        # Equipment attached to a card that was no longer in play.
+        state.leave_board(ref)
         ref.damage = 0
         ref.exhausted = False
         ref.might_this_turn = 0
-        ref.is_attacker = ref.is_defender = False
         owner_state.hand.append(instance_id)
         state._emit(f"{state.db[ref.card_id].name} returns to its owner's hand")
     return None
