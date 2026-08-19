@@ -1,6 +1,6 @@
 """The large-scale simulator validation run.
 
-    .venv/bin/python -m analysis.validate --games 10000
+    .venv/bin/python -m analysis.validate --games 10000 --check-every 1 --deep
 
 `TCG_AI_BUILD.md` section 10 asks for at least 10,000 automated matches
 verified against four failure modes, and section 39 makes passing that run an

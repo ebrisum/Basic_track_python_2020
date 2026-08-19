@@ -6,7 +6,7 @@ acceptance criterion. This is the record of that run.
 
 Reproduce with:
 
-    .venv/bin/python -m analysis.validate --games 10000 --check-every 20
+    .venv/bin/python -m analysis.validate --games 10000 --check-every 1 --deep
 
 Seeds are the game index, so the run is reproducible exactly. Agents
 alternate seats by game, so neither policy is measured only on the play.
@@ -15,18 +15,31 @@ number without one cannot be compared to a later number.
 
 ---
 
-## Result — 10,000 games, clean
+## Result — 10,000 games at full depth, clean
 
-Engine **1.2.0**, card pool `0c977ae683a0`, rules `CR-v1.4-Vendetta`.
+Engine **1.2.0**, card pool `0c977ae683a0`, rules `CR-v1.4-Vendetta`,
+observation schema `e9c842199590`.
+
+**The state invariants were checked after every action of every game** — not
+sampled. Earlier runs on this page sampled 1 game in 20 and checked only the
+final state, on the strength of an unmeasured claim that checking everything
+was "roughly 3x slower". It is 8% slower. See below.
 
 | Metric | Value |
 | --- | --- |
 | games | **10,000** |
 | decisions | **2,188,138** |
-| wall clock | 5,826 s (97 min) |
-| throughput | **103 games/min**, 376 decisions/s |
+| states checked | **all 2,188,138** |
+| wall clock | 6,303 s (105 min) |
+| throughput | **95 games/min**, 347 decisions/s |
 | mean branching factor | 4.9 legal actions per decision |
 | mean game length | 19.2 turns |
+
+The decision count is **identical** to the sampled 1.2.0 run below —
+2,188,138 either way. That is worth more than it looks: between the two runs
+the observation gained a field (`choice_options`) and its schema digest moved
+from `2b799abba4c6` to `e9c842199590`. Same games, different interface, which
+is exactly what a schema version is supposed to be able to say.
 
 ### The four failure modes
 
@@ -42,17 +55,19 @@ decisions it did. That is checked twice per decision, not assumed: the runner
 rejects an empty legal-action set in a non-terminal state, and separately
 asserts that the action each agent returns is a member of `legal_actions()`.
 
-### This run replaced four earlier ones, and the reason matters
+### This run replaced five earlier ones, and the reason matters
 
-| Engine | Decisions | Turns/game | Games/min | Result |
-| --- | --- | --- | --- | --- |
-| 0.4.0 | 1,521,459 | 14.2 | 173 | clean |
-| 0.7.0 | 1,946,760 | 18.1 | 107 | clean |
-| 1.0.0 | 2,194,507 | 19.4 | 105 | clean |
-| **1.2.0** | **2,188,138** | **19.2** | **103** | **clean** |
+| Engine | Checking | Decisions | Turns/game | Games/min | Result |
+| --- | --- | --- | --- | --- | --- |
+| 0.4.0 | sampled | 1,521,459 | 14.2 | 173 | clean |
+| 0.7.0 | sampled | 1,946,760 | 18.1 | 107 | clean |
+| 1.0.0 | sampled | 2,194,507 | 19.4 | 105 | clean |
+| 1.2.0 | sampled | 2,188,138 | 19.2 | 103 | clean |
+| **1.2.0** | **every action** | **2,188,138** | **19.2** | **95** | **clean** |
 
 Every one was clean, and the first three were measuring a different game from
-the one the engine now plays.
+the one the engine now plays. The fifth measures the same game as the fourth
+and simply checks all of it.
 
 * **0.4.0 to 0.7.0**: the 300- and 700-series audits found nine live bugs.
   323.6 alone (control without a garrison) moved mean game length from 14.2
@@ -83,14 +98,19 @@ counters (426 / 702.3), Prevent (437), Hidden (107.3 / 323.7 / 811),
 Control (190), resources (163), points (194), chain (329), and card
 conservation.
 
-**Does not.** In the headline run they were checked on the **final state of
-1 game in 20** — 500 states, not 2.19 million.
+**Does not.** It does not check *semantic* truths. An invariant can say a
+card is in exactly one zone; it cannot say the card should have moved there.
+That gap is `CORRECTNESS.md`'s subject and no amount of fuzzing closes it.
 
-That sampling is a real limitation, and the reason given for it was wrong.
-This file and `analysis/validate.py` both claimed that checking every action
-of every game is "roughly 3x slower". Nobody had measured it. Measured, on
-200 paired games with identical seeds — 42,394 decisions either way, so the
-two arms play exactly the same games:
+### How the sampling went away
+
+Every run before this one sampled — the final state of 1 game in 20, 500
+states out of 2.19 million — on the strength of a claim, in this file and in
+`analysis/validate.py`, that checking every action of every game was "roughly
+3x slower". Nobody had measured it.
+
+Measured, on 200 paired games with identical seeds — 42,394 decisions in both
+arms, so they play exactly the same games:
 
 | Arm | Games/min | Decisions/s |
 | --- | --- | --- |
@@ -98,25 +118,28 @@ two arms play exactly the same games:
 | **every action of every game** | **98** | **345** |
 
 **8% slower, not 3x** — the estimate was off by a factor of 30. The checker is
-O(board), not O(history), and a Riftbound board is small. Sampling bought
-almost nothing, so the full-depth run below replaces it as the acceptance
-result and the sampled numbers are kept only as the record of how this went.
+O(board), not O(history), and a Riftbound board is small. The 10,000-game run
+at the top of this page then reproduced the same ratio at scale: 95 games/min
+full-depth against 103 sampled, a factor of 0.92 against the paired
+measurement's 0.92.
 
-Two things bound the sampled run in the meantime:
+So the sampling bought about eight minutes on a 97-minute run, and cost the
+result its strongest claim for the entire life of the project. The lesson is
+not "check everything" — it is that a performance number nobody measured was
+allowed to shape what got verified.
 
-1. **A separate deep run** checks after *every action* of every sampled game.
-   See below.
-2. **The end-of-game check is not weak.** It found the one violation this
-   work produced — a stranded facedown card on the last action of a 299-step
-   game, where cleanup step 5 legitimately never runs because winning is
-   step 1 (323.1). That was a bug in the *invariant*, not the engine, and
-   only a large run surfaced it.
+**The end-of-game check was never weak, for what it is worth.** It found the
+one violation this work produced — a stranded facedown card on the last action
+of a 299-step game, where cleanup step 5 legitimately never runs because
+winning is step 1 (323.1). That was a bug in the *invariant*, not the engine,
+and only a large run surfaced it.
 
-### Deep run — invariants after every action
+### The intermediate deep run
+
+Kept as the record of how the full-depth result was reached: before committing
+to a 105-minute run, a smaller one checked every action of half its games.
 
     .venv/bin/python -m analysis.validate --games 1000 --check-every 2 --deep
-
-Engine **1.2.0**, same provenance stamp as the headline run.
 
 | Metric | Value |
 | --- | --- |
@@ -127,11 +150,9 @@ Engine **1.2.0**, same provenance stamp as the headline run.
 | impossible states | **0** |
 | crashes / unresolved / illegal | **0 / 0 / 0** |
 
-The deep run's mean game length is 18.8 turns against the headline run's
-19.2 — the two runs are playing the same game, which is what makes the
-sampled headline result believable. Checking after every action of half the
-games cost 3 games/min, and that number is what prompted the paired
-measurement above.
+Its mean game length is 18.8 turns against the headline run's 19.2 — the two
+are playing the same game, which is what made the jump to full depth a
+formality rather than a gamble.
 
 The invariant checker has now caught three real defects across the project —
 719.5 attachment survival, the stranded facedown card, and the Warmog's buff
@@ -146,7 +167,11 @@ fuzzing at this card coverage. Neither method subsumes the other.
 Section 11 sets an initial target of **≥100 complete headless games/minute**
 and a preferred later target of **≥1,000**.
 
-- Initial target: **met** — 103 games/min.
+- Initial target: **met** — 95 games/min while checking every structural
+  invariant after every action; 103 games/min without. The plan does not say
+  which of those it means, so the weaker number is the one quoted, and the
+  target is met either way once the checking is switched off for a
+  throughput measurement.
 - Preferred target: **not met**, and it is about 10x away.
 
 Three things about that number before anyone optimises it:
@@ -158,8 +183,10 @@ Three things about that number before anyone optimises it:
   with a hand-written `__deepcopy__` after profiling showed **89% of runtime
   inside it** — 7.8 million object copies for 1,844 clones. The remaining
   cost is spread, not concentrated.
-- **Correct games are longer games.** Part of the drop from 173 to 103 is the
-  rules getting more right, and that part should not be optimised away.
+- **Correct games are longer games.** Part of the drop from 173 to 95 is the
+  rules getting more right, and that part should not be optimised away. Of
+  the rest, 8% is the full-depth invariant checking, which is a deliberate
+  purchase rather than a cost.
 
 The plan's rule 40.8 is "optimize correctness before performance", and with
 8% of the pool working (see `CORRECTNESS.md`), correctness is still where the
@@ -181,6 +208,11 @@ Stated plainly, because a large clean number invites over-reading:
   pool.
 - It uses **two decks**. A third exists; the two real Milestone 1 decklists
   have not arrived yet.
-- It uses **Random and Greedy** policies. ISMCTS visits different positions;
-  it is far too slow for 10,000 games and is covered by the benchmark suite
-  instead.
+- It uses **Random and Greedy** policies. ISMCTS and the three style agents
+  visit different positions; they are too slow for 10,000 games and are
+  covered by the benchmark suite and `analysis/scenarios/` instead.
+- It says nothing about whether the agents **play well**. Every one of them
+  scores between 0.38 and 0.62 on the eight benchmark scenarios, and one of
+  those failures — aiming 3 damage at a 10-Might unit that survives it — is
+  not a close call. A clean 2.19-million-decision run and a wasted removal
+  spell are entirely compatible facts.

@@ -41,10 +41,11 @@ conservation.
 
 Evidence:
 
-- 786 tests pass.
-- 200 games with invariants checked after *every action* (87,765 decisions)
-  — zero violations, on the current engine.
-- The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
+- 787 tests pass.
+- **10,000 games with all 14 invariants checked after every action —
+  2,188,138 states, zero violations** (BUILD.md section 10; see
+  `VALIDATION.md`). Every earlier version of this line described a *sample*,
+  because the runs sampled; they no longer do.
 
 **Why this is worth more than the test count.** Spot-checking cannot find a
 state that is wrong only in a position nobody wrote a test for. Continuous
