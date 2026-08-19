@@ -17,16 +17,16 @@ number without one cannot be compared to a later number.
 
 ## Result — 10,000 games, clean
 
-Engine **0.7.0**, card pool `0c977ae683a0`, rules `CR-v1.4-Vendetta`.
+Engine **1.2.0**, card pool `0c977ae683a0`, rules `CR-v1.4-Vendetta`.
 
 | Metric | Value |
 | --- | --- |
 | games | **10,000** |
-| decisions | **1,946,760** |
-| wall clock | 5,592 s (93 min) |
-| throughput | **107 games/min**, 348 decisions/s |
-| mean branching factor | 5.0 legal actions per decision |
-| mean game length | 18.1 turns |
+| decisions | **2,188,138** |
+| wall clock | 5,826 s (97 min) |
+| throughput | **103 games/min**, 376 decisions/s |
+| mean branching factor | 4.9 legal actions per decision |
+| mean game length | 19.2 turns |
 
 ### The four failure modes
 
@@ -37,39 +37,55 @@ Engine **0.7.0**, card pool `0c977ae683a0`, rules `CR-v1.4-Vendetta`.
 | unresolved games (3,000-action cap) | **0** |
 | illegal actions | **0** |
 
-Section 29 requires the illegal-action count to stay at 0. Over 1.95 million
+Section 29 requires the illegal-action count to stay at 0. Over 2.19 million
 decisions it did. That is checked twice per decision, not assumed: the runner
 rejects an empty legal-action set in a non-terminal state, and separately
 asserts that the action each agent returns is a member of `legal_actions()`.
 
-### This run replaced an earlier one, and the reason matters
+### This run replaced four earlier ones, and the reason matters
 
-An earlier 10,000-game run on engine 0.4.0 was also clean: 1,521,459
-decisions, zeros across the board, 173 games/min, **14.2** turns per game.
+| Engine | Decisions | Turns/game | Games/min | Result |
+| --- | --- | --- | --- | --- |
+| 0.4.0 | 1,521,459 | 14.2 | 173 | clean |
+| 0.7.0 | 1,946,760 | 18.1 | 107 | clean |
+| 1.0.0 | 2,194,507 | 19.4 | 105 | clean |
+| **1.2.0** | **2,188,138** | **19.2** | **103** | **clean** |
 
-It was clean and it was measuring the wrong game. The 300- and 700-series
-rules audits that followed found nine live bugs, one of which (323.6, control
-without a garrison) moved mean game length from 14.2 turns to 18.1 here and
-to 25.3 in a Greedy-first sample. Throughput fell from 173 to 107 games/min
-for the same reason — the games got longer, not the engine slower.
+Every one was clean, and the first three were measuring a different game from
+the one the engine now plays.
+
+* **0.4.0 to 0.7.0**: the 300- and 700-series audits found nine live bugs.
+  323.6 alone (control without a garrison) moved mean game length from 14.2
+  turns to 18.1.
+* **0.7.0 to 1.0.0**: targets moved to play time (355.8) and triggered
+  abilities became chain items (383.3).
+* **1.0.0 to 1.2.0**: Repeat added a legal action to a card *in these decks*
+  (SFD-122 Called Shot, offered in 56 of 60 sampled games), and death
+  replacement changed whether a warded unit survives.
+
+Three runs were killed mid-flight rather than reported, because the engine had
+changed under them. The provenance stamp made that decidable rather than a
+judgement call: `action_schema_version` moved on its own when `PlayCard`
+gained its `repeat` field.
 
 **A clean validation run says the machine is sound. It says nothing about
 whether the rules are right.** That distinction is the whole of
-`CORRECTNESS.md`, and this pair of runs is the evidence for it.
+`CORRECTNESS.md`, and this sequence is the evidence for it.
 
 ---
 
 ## What "impossible states = 0" does and does not cover
 
-**Does.** `engine/invariants.py` checks 13 structural truths, each citing its
+**Does.** `engine/invariants.py` checks 14 structural truths, each citing its
 rule: one zone per card (107-108), location and zone agreement, attachment
 (718-719), designations (464 / 466.7.a), tokens (186), Stun (423), Buff
-counters (426 / 702.3), Hidden (107.3 / 323.7 / 811), Control (190),
-resources (163), points (194), chain (329), and card conservation.
+counters (426 / 702.3), Prevent (437), Hidden (107.3 / 323.7 / 811),
+Control (190), resources (163), points (194), chain (329), and card
+conservation.
 
 **Does not.** In the headline run they were checked on the **final state of
-1 game in 20** — 500 states, not 1.95 million. Checking after every action of
-every game is roughly 3x slower and would have pushed a 93-minute run past
+1 game in 20** — 500 states, not 2.19 million. Checking after every action of
+every game is roughly 3x slower and would have pushed a 97-minute run past
 four hours.
 
 That sampling is a real limitation and worth stating rather than glossing.
@@ -108,8 +124,8 @@ fuzzing at this card coverage. Neither method subsumes the other.
 Section 11 sets an initial target of **≥100 complete headless games/minute**
 and a preferred later target of **≥1,000**.
 
-- Initial target: **met** — 107 games/min.
-- Preferred target: **not met**, and it is about 9x away.
+- Initial target: **met** — 103 games/min.
+- Preferred target: **not met**, and it is about 10x away.
 
 Three things about that number before anyone optimises it:
 
@@ -120,11 +136,11 @@ Three things about that number before anyone optimises it:
   with a hand-written `__deepcopy__` after profiling showed **89% of runtime
   inside it** — 7.8 million object copies for 1,844 clones. The remaining
   cost is spread, not concentrated.
-- **Correct games are longer games.** Part of the drop from 173 to 107 is the
+- **Correct games are longer games.** Part of the drop from 173 to 103 is the
   rules getting more right, and that part should not be optimised away.
 
 The plan's rule 40.8 is "optimize correctness before performance", and with
-7% of cards working (see `CORRECTNESS.md`), correctness is still where the
+8% of the pool working (see `CORRECTNESS.md`), correctness is still where the
 work belongs.
 
 ---
@@ -136,9 +152,11 @@ Stated plainly, because a large clean number invites over-reading:
 - It does not show the **rules are right**. It shows the machine never
   reaches a structurally impossible position. The 0.4.0 run above was equally
   clean while battlefields were free to hold forever.
-- It does not cover most **card abilities**, because 487 of 526 playable
-  cards have none wired up. The run exercises costs, stats, movement, combat,
-  scoring, buffs, the chain and showdowns.
+- It does not cover most **card abilities**: 484 of 526 playable cards have
+  none wired up. It *does* cover both decks it plays — each is 15 of 15
+  distinct cards fully implemented — so every ability appearing in these
+  10,000 games works. What it cannot measure is a deck built from the wider
+  pool.
 - It uses **two decks**. A third exists; the two real Milestone 1 decklists
   have not arrived yet.
 - It uses **Random and Greedy** policies. ISMCTS visits different positions;
