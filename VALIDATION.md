@@ -168,12 +168,19 @@ fuzzing at this card coverage. Neither method subsumes the other.
 Section 11 sets an initial target of **≥100 complete headless games/minute**
 and a preferred later target of **≥1,000**.
 
-- Initial target: **met** — 95 games/min while checking every structural
-  invariant after every action; 103 games/min without. The plan does not say
-  which of those it means, so the weaker number is the one quoted, and the
-  target is met either way once the checking is switched off for a
-  throughput measurement.
-- Preferred target: **not met**, and it is about 10x away.
+- Initial target: **met** — 95 games/min single-process while checking every
+  structural invariant after every action; 103 games/min without. The plan
+  does not say which of those it means, so the weaker number is the one
+  quoted.
+- Preferred target: **not met**, but it is now about 3x away rather than 10x.
+  `--workers 4` runs **350 games/min** on this four-core box against 98
+  serial, a 3.5x speedup, with byte-identical results — the same 42,394
+  decisions on the same 200 games. Games depend only on their seed, so they
+  are independent and every counter is a sum.
+
+The parallel number is the honest one for *doing a run*; the serial number is
+the honest one for *comparing engines*, since it does not depend on how many
+cores the box had. Both are recorded above for that reason.
 
 Three things about that number before anyone optimises it:
 

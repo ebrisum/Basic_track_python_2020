@@ -40,7 +40,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 789 tests; the 10,000-match run in `VALIDATION.md` now checks all 14 structural invariants after **every action of every game** — 2,188,138 states, not a 500-state sample — with crashes, impossible states, unresolved games and illegal actions all at 0. |
+| 10 | Simulator validation | **done** | 790 tests; the 10,000-match run in `VALIDATION.md` now checks all 14 structural invariants after **every action of every game** — 2,188,138 states, not a 500-state sample — with crashes, impossible states, unresolved games and illegal actions all at 0. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -64,7 +64,7 @@ requiring the interface to be *sufficient*, not merely tight.
 | § | Item | Status | Detail |
 | --- | --- | --- | --- |
 | 12 | Baseline agents | **done** | `RandomAgent`, `GreedyAgent`, `ISMCTSAgent`, and now `AggroAgent` / `ConservativeAgent` / `ObjectiveAgent` in `agents/styles.py`. They diverge from Greedy on 54-55% of decisions and from each other on 39-73%, at win rates against Random of 0.933-0.967 against Greedy's 0.933 -- diversity without a weak pool member. Getting there took two discarded designs; see below. |
-| 13 | Match runner | **partial** | `analysis/benchmark.py::duel` and `analysis/batch.py` run matches and aggregate; `Replay` carries actions and a final state hash. No worker-pool parallelism — everything is single-process. |
+| 13 | Match runner | **done** | `analysis/benchmark.py::duel` and `analysis/batch.py` run matches and aggregate; `Replay` carries actions and a final state hash. `analysis/validate.py --workers N` runs games across processes: **350 games/min on 4 cores against 98 serial**, a 3.5x speedup, with identical results — a game depends only on its seed, so the games are independent and every counter is a sum. A test asserts every number agrees between 1 worker and 4, not just the verdict. |
 | 14 | **Trajectory format** | **done** | `learning/trajectory.py`: gzipped JSONL, one provenance header, one record per decision carrying the observation, the legal-index mask, the action index, the reward and optional policy/value, and a closing result record. 102 bytes per decision measured on a real 624-decision game, against 1,215 for the raw observation. A test replays a recorded file back through a fresh engine and matches the final state hash, which is the only real proof a trajectory is a record of what happened. |
 | 15 | Reward function | **done** | `returns()` is win 1.0 / loss 0.0 / draw 0.5 — an affine remap of the plan's +1/-1/0. No shaping, which is what the plan asks for. |
 
@@ -161,7 +161,7 @@ and rule 40.8 ("optimize correctness before performance") say.
 
 | § | Item | Status | Detail |
 | --- | --- | --- | --- |
-| 23 | Opponent league | **partial** | `analysis/ladder.py::League`, a frozen gauntlet in `analysis/rate.py`, `analysis/league/gen_000.json`. The machinery is real; the pool is thin because section 12's agents are missing. |
+| 23 | Opponent league | **partial** | `analysis/ladder.py::League`, a frozen gauntlet in `analysis/rate.py`, `analysis/league/gen_000.json`. The machinery is real and the pool is now six agents deep (Random, Greedy, ISMCTS, Aggro, Conservative, Objective); what is still missing is a *trained* checkpoint to put in it. |
 | 24 | Checkpoint promotion | **done, and ahead of the plan** | The plan asks for "confidence criteria". This has SPRT (as fishtest uses), seat swapping, mirror matchups, and paired seeds. Pairing cut the standard deviation from 0.369 to 0.273. |
 | 25 | Elo / rating | **done** | `analysis/ladder.py`: `elo_from_score`, `elo_interval`, `SPRT`. |
 | 26 | Curriculum learning | **absent, deliberately** | The plan says levels should *restrict available content*, not change rules. There is very little to restrict: 42 of 526 playable cards have working text and the engine measures two decks. A level-1 "tiny pool, simple units" and a level-4 "complete card pool" would today be the same pool. `learning/config.py` carries a `curriculum.level` key that **raises** on any value but 0, so a config claiming to run a restricted game fails instead of quietly running the full one. This unblocks when RQ-5 does. |
@@ -216,12 +216,12 @@ and the *content*, not to jump to a transformer.
 | Milestone | Status |
 | --- | --- |
 | **1 — AI adapter** | **nearly complete**. Canonical state ✓, observation ✓, legal actions ✓, deterministic wrapper ✓. Missing: action encoding (§7). Success criterion — 10,000 matches without error — measured in `VALIDATION.md`. |
-| **2 — Baseline agents** | **partial**. 3 of the 5 named agents; batch runner and benchmarking ✓. |
+| **2 — Baseline agents** | **done**. All named agents plus ISMCTS; batch runner and benchmarking ✓. |
 | **3 — Training dataset** | **not started**. Throughput is not the obstacle: the 10,000-match run alone produces well over a million decisions. The obstacle is that no trajectory format exists to record them in. |
 | **4 — Policy + value model** | **not started**, and gated on the dependency decision above. |
 | **5 — Self play** | **partial**. The loop, league and promotion tests exist. Its success criterion — "a trained checkpoint consistently defeats RandomAgent" — is met only by the *hand-set* model (0.967, +585 Elo), never by a trained one. |
 | **6 — League** | **machinery done, result not demonstrated**. |
-| **7 — Competitive evaluation** | **partial**. Matchup matrix ✓, human-vs-AI ✓. Fixed scenarios ✗. Representative decks: 3 exist; the two real Milestone 1 decklists were to come from you and have not arrived. |
+| **7 — Competitive evaluation** | **partial**. Matchup matrix ✓, human-vs-AI ✓, fixed scenarios ✓ (8 of them, and every agent fails at least three). Representative decks: 3 exist; the two real Milestone 1 decklists were to come from you and have not arrived. |
 
 ## Acceptance criteria (section 39)
 

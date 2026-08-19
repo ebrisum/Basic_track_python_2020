@@ -34,6 +34,7 @@ import argparse
 import json
 import time
 import traceback
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from agents.greedy_agent import GreedyAgent
@@ -46,6 +47,99 @@ from engine.versions import provenance
 ACTION_CAP = 3000
 
 
+@dataclass(frozen=True)
+class _Job:
+    seed: int
+    checking: bool
+    deep: bool
+    decks: tuple[str, str]
+
+
+@dataclass
+class _Outcome:
+    decisions: int = 0
+    branch: int = 0
+    turns: int = 0
+    crashes: int = 0
+    impossible: int = 0
+    unresolved: int = 0
+    illegal: int = 0
+    problem: list[str] = field(default_factory=list)
+    traceback: str = ""
+
+
+# One database per process. `cards.database.load` re-parses the card JSON on
+# every call and a worker plays hundreds of games, so loading it per game would
+# cost more than the parallelism saves.
+_DB = None
+_DECKS: dict[tuple[str, str], tuple] = {}
+
+
+def _fixtures(decks: tuple[str, str]):
+    global _DB
+    if _DB is None:
+        _DB = load_db()
+    if decks not in _DECKS:
+        _DECKS[decks] = (load_deck(decks[0]), load_deck(decks[1]))
+    return _DB, _DECKS[decks]
+
+
+def _run_one(job: _Job) -> _Outcome:
+    """Play one game and report what happened. Runs in a worker process."""
+    out = _Outcome()
+    db, (d0, d1) = _fixtures(job.decks)
+    try:
+        state = build_state(d0, d1, seed=job.seed, db=db)
+        # Alternate seats so neither policy is measured only on the play.
+        agents = ([RandomAgent(job.seed), GreedyAgent(job.seed + 1)]
+                  if job.seed % 2
+                  else [GreedyAgent(job.seed), RandomAgent(job.seed + 1)])
+        steps = 0
+        while not state.is_terminal() and steps < ACTION_CAP:
+            legal = state.legal_actions()
+            if not legal:
+                out.illegal += 1
+                break
+            action = agents[state.current_player].act(state)
+            if action not in legal:
+                out.illegal += 1
+                break
+            out.branch += len(legal)
+            out.decisions += 1
+            state.apply(action)
+            steps += 1
+            if job.checking and job.deep:
+                problems = check(state)
+                if problems:
+                    out.impossible += 1
+                    out.problem = out.problem or problems
+                    break
+        if steps >= ACTION_CAP and not state.is_terminal():
+            out.unresolved += 1
+        out.turns += state.turn_number
+        if job.checking and not job.deep:
+            problems = check(state)
+            if problems:
+                out.impossible += 1
+                out.problem = out.problem or problems
+    except Exception:                                      # noqa: BLE001
+        out.crashes += 1
+        out.traceback = traceback.format_exc()
+    return out
+
+
+def _consume(results, args, started):
+    """Drain the results, printing the progress line as they arrive."""
+    collected = []
+    for index, outcome in enumerate(results):
+        collected.append(outcome)
+        if args.progress and (index + 1) % args.progress == 0:
+            elapsed = time.time() - started
+            print(f"  {index + 1}/{args.games}  "
+                  f"{(index + 1) / elapsed * 60:.0f} games/min", flush=True)
+    return collected
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--games", type=int, default=10000)
@@ -56,6 +150,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--decks", nargs=2,
                         default=["jinx_chaos_fury", "volibear_body_fury"])
     parser.add_argument("--progress", type=int, default=1000)
+    parser.add_argument("--workers", type=int, default=1,
+                        help="run games in N processes (BUILD.md section 13). "
+                             "Results are identical: a game depends only on "
+                             "its seed and every counter is a sum")
     parser.add_argument("--metrics", default=None,
                         help="write the run's numbers and provenance to a "
                              "JSON file (BUILD.md section 29)")
@@ -78,50 +176,44 @@ def main(argv: list[str] | None = None) -> int:
     first_problem: list[str] = []
     started = time.time()
 
-    for index in range(args.games):
-        seed = index
-        checking = index % args.check_every == 0
-        try:
-            state = build_state(d0, d1, seed=seed, db=db)
-            # Alternate seats so neither policy is measured only on the play.
-            agents = ([RandomAgent(seed), GreedyAgent(seed + 1)] if index % 2
-                      else [GreedyAgent(seed), RandomAgent(seed + 1)])
-            steps = 0
-            while not state.is_terminal() and steps < ACTION_CAP:
-                legal = state.legal_actions()
-                if not legal:
-                    illegal += 1
-                    break
-                action = agents[state.current_player].act(state)
-                if action not in legal:
-                    illegal += 1
-                    break
-                branch += len(legal)
-                decisions += 1
-                state.apply(action)
-                steps += 1
-                if checking and args.deep:
-                    problems = check(state)
-                    if problems:
-                        impossible += 1
-                        first_problem = first_problem or problems
-                        break
-            if steps >= ACTION_CAP and not state.is_terminal():
-                unresolved += 1
-            turns += state.turn_number
-            if checking and not args.deep:
-                problems = check(state)
-                if problems:
-                    impossible += 1
-                    first_problem = first_problem or problems
-        except Exception:                                  # noqa: BLE001
-            crashes += 1
-            if crashes <= 3:
-                traceback.print_exc()
-        if args.progress and (index + 1) % args.progress == 0:
-            elapsed = time.time() - started
-            print(f"  {index + 1}/{args.games}  "
-                  f"{(index + 1) / elapsed * 60:.0f} games/min", flush=True)
+    work = [
+        _Job(seed=index, checking=index % args.check_every == 0,
+             deep=bool(args.deep), decks=(args.decks[0], args.decks[1]))
+        for index in range(args.games)
+    ]
+
+    if args.workers > 1:
+        # BUILD.md 13. Safe to parallelise for one reason: a game's outcome
+        # depends only on its seed, so the games are independent and every
+        # counter below is a sum, which does not care what order it is summed
+        # in. `imap` keeps results in submission order anyway, so the progress
+        # line still counts up.
+        import multiprocessing
+
+        # "spawn" rather than the platform default. Forking a process that has
+        # threads is deprecated in 3.12 and unsafe in general, and pytest's
+        # runner has them -- the warning fires on every parallel test. Spawn
+        # costs each worker a fresh import and one card-database parse, which
+        # is a second of startup against runs measured in minutes.
+        context = multiprocessing.get_context("spawn")
+        with context.Pool(args.workers) as pool:
+            results = pool.imap(_run_one, work, chunksize=8)
+            outcomes = _consume(results, args, started)
+    else:
+        outcomes = _consume((_run_one(job) for job in work), args, started)
+
+    for outcome in outcomes:
+        crashes += outcome.crashes
+        impossible += outcome.impossible
+        unresolved += outcome.unresolved
+        illegal += outcome.illegal
+        decisions += outcome.decisions
+        branch += outcome.branch
+        turns += outcome.turns
+        if outcome.problem and not first_problem:
+            first_problem = outcome.problem
+        if outcome.traceback and crashes <= 3:
+            print(outcome.traceback)
 
     elapsed = time.time() - started
     checked = args.games // args.check_every
