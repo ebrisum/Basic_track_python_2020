@@ -67,8 +67,8 @@ SCRIPTS: tuple[CardScript, ...] = (
                 text="When you play me, give me +3 Might this turn.",
             ),
         ),
-        complete=False,
-        note="HIDDEN (811) is parsed but not implemented.",
+        complete=True,
+        note="",
     ),
     CardScript(
         card_id="OGN-036",  # Vi - Destructive
@@ -85,18 +85,11 @@ SCRIPTS: tuple[CardScript, ...] = (
     # can assert every deck card is accounted for.
     CardScript(card_id="OGN-142"),  # Mountain Drake
     CardScript(card_id="OGN-175"),  # Shipyard Skulker
-    CardScript(
-        card_id="OGN-010",  # Legion Rearguard
-        abilities=(),
-        complete=False,
-        note="ACCELERATE (805) is an alternative additional cost; not implemented.",
-    ),
-    CardScript(
-        card_id="OGN-013",  # Pouty Poro
-        abilities=(),
-        complete=False,
-        note="DEFLECT (809) taxes opponents' selection; not implemented.",
-    ),
+    # Both cards' entire printed text is one keyword the engine implements --
+    # ACCELERATE (805) and DEFLECT (809) -- so there is nothing left to script
+    # and nothing left to caveat.
+    CardScript(card_id="OGN-010"),  # Legion Rearguard
+    CardScript(card_id="OGN-013"),  # Pouty Poro
     # --- spells ------------------------------------------------------------
     CardScript(
         card_id="OGN-004",  # Cleave
@@ -188,8 +181,8 @@ SCRIPTS: tuple[CardScript, ...] = (
                 text="Look at the top 2 cards of your Main Deck...",
             ),
         ),
-        complete=False,
-        note="REPEAT Chaos (820) optional additional cost is not implemented.",
+        complete=True,
+        note="",
     ),
     # --- gear: the rune-seal cycle (429 Add) -------------------------------
     CardScript(

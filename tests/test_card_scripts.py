@@ -573,3 +573,39 @@ def test_a_stunned_unit_deals_no_combat_damage(decks):
     state.stun(state.cards[mine])
     assert state.combat_might(0, location) == 0
     assert state.cards[mine].location == location    # still there
+
+
+# --- script notes must not outlive the gap they describe --------------------
+
+
+def test_no_script_note_names_an_implemented_keyword():
+    """A `complete=False` note is shown to the player as the reason a card is
+    partly inert. Once the engine implements the thing a note names, the note
+    is a false claim, not just stale bookkeeping.
+
+    Two notes had outlived their gaps: Teemo's cited HIDDEN and Called Shot's
+    cited REPEAT, both implemented since. This test is the guard.
+    """
+    import cards.keywords as kw
+    from cards.scripts import registry
+
+    offenders = []
+    for card_id, script in sorted(registry().items()):
+        if script.complete or not script.note:
+            continue
+        note = script.note.lower()
+        for keyword in kw.IMPLEMENTED:
+            if keyword.lower() in note:
+                offenders.append(f"{card_id}: note cites {keyword}, "
+                                 f"which is implemented -- {script.note[:60]}")
+    assert not offenders, "\n".join(offenders)
+
+
+def test_a_complete_script_carries_no_note():
+    """The other direction: a note explains an *incomplete* script. Leaving
+    one on a complete script would show a caveat that does not apply."""
+    from cards.scripts import registry
+
+    for card_id, script in sorted(registry().items()):
+        if script.complete:
+            assert not script.note, f"{card_id} is complete but carries a note"

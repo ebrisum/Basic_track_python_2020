@@ -87,9 +87,9 @@ it to nobody.
 
 This is where the honest part lives.
 
-### Card text: 39 of 526 playable cards fully work
+### Card text: 41 of 526 playable cards fully work
 
-**About 7%**, of which 31 are scripted and the rest are cards whose entire
+**About 8%**, of which 31 are scripted and the rest are cards whose entire
 printed text is keywords the engine implements. Every other card is inert —
 it has correct costs, stats, types, domains and keywords, and moves and
 fights correctly, but its printed ability does nothing.
@@ -115,9 +115,28 @@ earned. Correcting the set moved the count from 30 to 39. The badge is
 user-facing, so a stale set there is a wrong claim, not just untidy
 bookkeeping.
 
-**What this means for any number produced today:** win rates from this
-engine measure a game of costs, stats, movement, combat and scoring. They
-are not Riftbound win rates and must not be quoted as such.
+### What that means for the numbers, precisely
+
+The pool figure is the ceiling for simulating *arbitrary* decks — the
+matchup-matrix goal — and it is low. It is **not** the right figure for the
+games this engine actually plays, and saying so is the honest correction:
+
+| Deck | Distinct cards fully implemented |
+| --- | --- |
+| `jinx_chaos_fury` | **15 of 15** |
+| `volibear_body_fury` | 14 of 15 |
+| `miss_fortune_bounty_hunter` | 14 of 15 |
+
+The two gaps are named rather than averaged away. **OGN-023 Unlicensed
+Armory** needs a delayed replacement effect ("the next time it dies this turn,
+you may pay 1 Fury to recall it exhausted instead"), and **OGN-268 Bullet
+Time** needs a variable X cost ("Pay any amount of rune to deal that much
+damage").
+
+So a win rate measured on the two starter decks does reflect those decks'
+cards, with one gear's replacement effect missing on one side. What it cannot
+yet do is measure a deck built from the wider pool. That is the real shape of
+RQ-5, and it is a different claim from the one this document made before.
 
 ### Every Game Action any card needs is implemented
 
@@ -223,7 +242,7 @@ Closed this session: RQ-10, RQ-14, RQ-15, RQ-16.
 
 In the order that buys the most:
 
-1. **Script the cards.** 7% to a meaningful fraction. This is the gate on
+1. **Script the cards.** 8% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
 2. **Transcribe Layers (473-477)** (RQ-3) before any continuous modifier
    lands, and build **727 Dependent Keywords** (12 cards) and **728-732 XP**
