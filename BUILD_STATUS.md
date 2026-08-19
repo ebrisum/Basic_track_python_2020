@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **absent** | No `ActionEncoder`, no factorized (type, source, target, option) representation, no action mask. This is the prerequisite for any policy head. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 619 tests; 13 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
+| 10 | Simulator validation | **done** | 628 tests; 13 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **The one real hole in Part I is section 7.** Everything else is either done
@@ -197,10 +197,9 @@ Everything in steps 1-3 is pure stdlib and needs no decision from you.
    can produce. Nothing else in this list changes that, and the rules work is
    now far enough along that scripting will not be invalidated the way it
    would have been a day ago.
-2. **Triggered abilities as real chain items** (383, 354.2). RQ-19 is closed
-   for spells and activated abilities; this is the piece of the same picture
-   that lets a trigger be responded to, and it is what 471.2's ordering
-   needs.
+2. **The last mechanical gaps**: Double, Prevent and Swap (7 cards, the only
+   Game Actions any card still needs), then Repeat (820) and Weaponmaster
+   (821), both unblocked by the targeting and trigger work.
 3. **Section 7 — the action encoder**, then **§14 trajectory format**, then
    **§12's three missing agents**, then **§27 scenarios**, then **§30 config**.
    That order unblocks the most with the least.

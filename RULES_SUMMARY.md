@@ -501,8 +501,35 @@ It needed a game where a cleanup kills a unit between a choice being offered
 and answered. Sampling 500 end-states out of 10,000 games caught it, which is
 the argument for the large runs being large.
 
+## Triggered abilities on the Chain (383.3)
+
+Not an audit finding so much as the last structural gap the audits pointed
+at. **383.3**: "When a Condition is met, a Triggered Ability behaves like an
+Activated Ability and is placed on the Chain." The engine ran a trigger's
+effects inline, out of the game action that caused them.
+
+Three rules failed together: **383.3.c** (a trigger can be responded to, in a
+Closed or Open state, on any player's turn), **340.1** (triggers resolve
+newest-first like any chain item), and **355.5.b** (a trigger's targets are
+declared when *it* is finalized).
+
+**341 of 526 playable cards print trigger wording** -- the most common
+mechanic in the game -- and only 9 scripted abilities are triggers today.
+That gap is exactly why the change was cheap now and would not have been
+after scripting.
+
+A spell's own ON_RESOLVE text is not a triggered ability (359) and stays
+inline; two tests pin that, or every spell would take two resolutions.
+
+**A second defect fell out.** A trigger firing during an automatic phase --
+471.2's Hold abilities in the Beginning Phase -- left the turn walking on to
+Channel, Draw and Main with a finalized item still on the chain, offering
+Main-phase actions in what 309.1 calls a Closed State. 354.4 says outstanding
+tasks are finished first, so the sequence now stops, opens a window, and
+resumes where it left off.
+
 ### Tally
 
-Four series audited: **eighteen live bugs**, three keywords built
-(Temporary, Unique, Deflect), and the structural gap RQ-19 fixed for spells
-and activated abilities.
+Four series audited: **twenty live bugs**, three keywords built (Temporary,
+Unique, Deflect), and both structural gaps closed -- RQ-19's targeting and
+383.3's triggers.

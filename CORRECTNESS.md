@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 619 tests pass.
+- 628 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -121,7 +121,7 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Four series audited, eighteen live bugs
+### Four series audited, twenty live bugs
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
 live bugs**, not merely missing features. The turn-structure audit walked
@@ -140,6 +140,8 @@ more**, and the keyword glossary 800-829 found **three** after that:
 | **718.2 / 724** | Inactive text | a worn gear could re-equip itself; a loose one fired its worn trigger |
 | **719.3.a** | attachments travel with the host | true on the move path, not the combat-recall path |
 | **359.3.e.5** | a choice is re-checked before it is honoured | a stale option could bind a gear to a card not in play |
+| **383.3** | a triggered ability goes on the Chain | it resolved inline, so nobody could respond (341 cards print triggers) |
+| **354.4** | a chain interrupts an automatic phase | the turn walked on with a finalized item still on the chain |
 | **816 Temporary** | a Temporary permanent dies at its controller's Beginning Phase | it lived forever (11 cards) |
 | **825 Unique** | one copy per deck by name | unenforced |
 | **815.1.c.2** | the citation for Tank damage ordering | cited 626.1.d.4, which is not a rule |
@@ -164,11 +166,11 @@ kind of gap — every item below is named, counted and reachable:
   are blocked on RQ-19, not on effort.
 - **Three Game Actions**: Double (4 cards), Prevent (2), Swap (1).
 
-Eighteen live bugs across four audited series. The rate did not fall off:
+Twenty live bugs across four audited series. The rate did not fall off:
 the last series still produced three, and the 10,000-game validation run
 found one more that every smaller run had missed.
 
-### The structural gap, now closed
+### The two structural gaps, now closed
 
 **RQ-19** was the largest single deviation: targets were chosen at resolution
 rather than at finalization, against 355.8. One deviation cost four rules, and
@@ -185,9 +187,13 @@ fixing it required putting the whole play process back in its printed order
 355.5.b scopes it, and the scope is the rule's own: a permanent's "when I'm
 played" trigger does *not* choose its target as the card is played — "The
 target will be chosen when the ability triggers", which is where the engine
-chooses it. The related gap that remains is that triggered abilities are not
-yet chain items anyone can respond to (383, 354.2); that belongs with 471.2's
-timing work rather than here.
+chooses it.
+
+**383.3** was the other half, and is now closed too: a triggered ability is a
+chain item, so the opponent can respond to it (383.3.c), it resolves
+newest-first (340.1), and its targets are declared at its own finalization.
+341 of 526 cards print trigger wording, so this was the most common mechanic
+in the game running on the wrong machinery.
 
 ### Known approximations, all logged
 
@@ -210,10 +216,9 @@ In the order that buys the most:
 
 1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Triggered abilities as real chain items** (383, 354.2), so a trigger can
-   be responded to and 471.2's ordering is expressible. It is what remains of
-   the targeting work, and what the FAQ's Azir / Overzealous Fan example
-   needs.
+2. **Implement Double, Prevent and Swap** (7 cards), the last three Game
+   Actions any card needs, and **Repeat (820)** and **Weaponmaster (821)**,
+   which are now unblocked.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 
