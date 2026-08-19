@@ -31,15 +31,25 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 4 | Card definition vs card instance | **done** | Exactly the split the plan asks for: `CardData` (static, shared, immutable) and `CardRef` (mutable, per-instance). |
 | 5 | Observation system | **done** | `RiftboundObservation.build`, plus the leakage suite the plan calls mandatory. See section 28. |
 | 6 | Legal action interface | **done** | `engine/actions.py`; the agent may reach nothing else. |
-| 7 | **Stable action encoding** | **absent** | No `ActionEncoder`, no factorized (type, source, target, option) representation, no action mask. This is the prerequisite for any policy head. |
+| 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 673 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 712 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
-**The one real hole in Part I is section 7.** Everything else is either done
-or documented. Action encoding is small, pure-stdlib work, and nothing in
-sections 17-22 can start without it.
+**Part I is now closed.** Section 7 was its one real hole and it is filled,
+in pure stdlib, in a new `learning/` package that may read observations and
+actions but never `RiftboundState` -- an encoder with state access would hand
+a model information the interface does not grant, and no leakage test would
+catch it, because the leak would be in the encoder.
+
+Writing it paid for itself immediately. The encoder needs every action's
+`instance_id` to resolve to something in the observation, which turned a
+silent gap into a hard failure: "look at the top 3 of your Main Deck" raised
+`ChooseTarget` actions over cards the observation exposed nowhere, so every
+agent -- and every human at the frontend -- had been choosing blind. That is
+a third discovery method alongside reading the rules and fuzzing them:
+requiring the interface to be *sufficient*, not merely tight.
 
 ---
 

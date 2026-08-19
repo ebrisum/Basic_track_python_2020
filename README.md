@@ -48,12 +48,13 @@ the 8% is the ceiling on simulating an *arbitrary* deck.
 | State invariants checked after every action | done — 14 checks, each citing its rule |
 | Scripting the rest of the card pool | **remaining work** |
 
-**673 tests passing** — 152 on the core rules, turn structure and the Chain;
+**712 tests passing** — 152 on the core rules, turn structure and the Chain;
 125 on card scripts, gear, targeting, buffs, Deflect, Repeat and death
-replacement; 74 on information tightness (`test_no_cheating`,
-`test_knowledge`, `test_hidden_targeting`); 62 on determinism, cloning,
-replay and the provenance stamp; 25 on the frozen interface; 25 driving the
-frontend over HTTP — plus two full Riftbound games replayed action by action
+replacement; 85 on information tightness in both directions (`test_no_cheating`
+that nothing leaks in, `test_choice_visibility` that nothing a player is
+entitled to see is missing); 62 on determinism, cloning, replay and the
+provenance stamp; 28 on the action encoding; 25 on the frozen interface; 25
+driving the frontend over HTTP — plus two full Riftbound games replayed action by action
 against a committed hash. The suite runs in under two minutes.
 
 A 10,000-game acceptance run — 2.19 million decisions, zero crashes, zero
