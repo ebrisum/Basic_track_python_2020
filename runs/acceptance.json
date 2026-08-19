@@ -1,0 +1,37 @@
+{
+  "decks": [
+    "jinx_chaos_fury",
+    "volibear_body_fury"
+  ],
+  "failures": {
+    "crashes": 0,
+    "first_problem": [],
+    "illegal": 0,
+    "impossible": 0,
+    "unresolved": 0
+  },
+  "metrics": {
+    "decisions": 2188138,
+    "decisions_per_second": 1381.8,
+    "games": 10000,
+    "games_per_minute": 378.9,
+    "mean_branching_factor": 4.88,
+    "mean_turns_per_game": 19.25,
+    "states_checked_games": 10000,
+    "wall_seconds": 1583.5
+  },
+  "provenance": {
+    "action_schema_version": "3969dbad620b",
+    "card_pool_version": "0c977ae683a0",
+    "engine_version": "1.2.0",
+    "observation_schema_version": "e9c842199590",
+    "rules_version": "CR-v1.4-Vendetta+da73a77ef8cb"
+  },
+  "settings": {
+    "action_cap": 3000,
+    "check_every": 1,
+    "deep": true,
+    "games": 10000,
+    "workers": 4
+  }
+}
