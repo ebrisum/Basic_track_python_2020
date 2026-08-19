@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 724 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 733 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -59,7 +59,7 @@ requiring the interface to be *sufficient*, not merely tight.
 | --- | --- | --- | --- |
 | 12 | Baseline agents | **done** | `RandomAgent`, `GreedyAgent`, `ISMCTSAgent`, and now `AggroAgent` / `ConservativeAgent` / `ObjectiveAgent` in `agents/styles.py`. They diverge from Greedy on 54-55% of decisions and from each other on 39-73%, at win rates against Random of 0.933-0.967 against Greedy's 0.933 -- diversity without a weak pool member. Getting there took two discarded designs; see below. |
 | 13 | Match runner | **partial** | `analysis/benchmark.py::duel` and `analysis/batch.py` run matches and aggregate; `Replay` carries actions and a final state hash. No worker-pool parallelism — everything is single-process. |
-| 14 | **Trajectory format** | **absent** | The replays are a *determinism* artefact, not training data: they hold actions and hashes, no encoded observation, no legal-action mask, no per-transition reward, no action probability, no value estimate. |
+| 14 | **Trajectory format** | **done** | `learning/trajectory.py`: gzipped JSONL, one provenance header, one record per decision carrying the observation, the legal-index mask, the action index, the reward and optional policy/value, and a closing result record. 102 bytes per decision measured on a real 624-decision game, against 1,215 for the raw observation. A test replays a recorded file back through a fresh engine and matches the final state hash, which is the only real proof a trajectory is a record of what happened. |
 | 15 | Reward function | **done** | `returns()` is win 1.0 / loss 0.0 / draw 0.5 — an affine remap of the plan's +1/-1/0. No shaping, which is what the plan asks for. |
 
 ### What building section 12 turned up about the evaluator
@@ -113,7 +113,7 @@ repository diverge hardest.
 | 18 | Policy scored over legal actions | **absent** — ISMCTS has an unused `prior` hook, defaulted off |
 | 19 | Supervised bootstrap | **absent** (the plan marks it skippable) |
 | 20 | Baseline-generated games for pretraining | **partial** — games are generated, nothing consumes them as a dataset |
-| 21 | Self-play | **partial** — `analysis/self_play_loop.py` runs generations, but saves *weights*, not per-decision trajectories |
+| 21 | Self-play | **partial** — `analysis/self_play_loop.py` runs generations and saves *weights*; the per-decision trajectory format now exists (section 14) but the loop does not yet write one |
 | 22 | PPO | **absent** |
 
 ### The decision that blocks this block

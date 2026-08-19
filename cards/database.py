@@ -267,7 +267,13 @@ def _coerce(raw: dict) -> CardData | None:
 
 @functools.lru_cache(maxsize=1)
 def load(path: str | None = None) -> CardDatabase:
-    """Load and cache the card database. Pure; safe to call anywhere."""
+    """Load the card database. Pure; safe to call anywhere.
+
+    Not cached, despite what this docstring used to claim: every call
+    re-parses the card JSON. That is deliberate -- a shared cached instance
+    would be mutable global state reachable from the engine -- but it means a
+    caller in a loop should load once and pass the result down.
+    """
     source = Path(path) if path else CARDS_JSON
     if not source.exists():
         raise FileNotFoundError(
