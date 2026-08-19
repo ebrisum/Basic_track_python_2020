@@ -28,7 +28,12 @@ from cards.dsl import (
 )
 from cards.primitives import EffectContext, candidates, execute
 from cards.gear import equipment_profile
-from cards.scripts import abilities_of_kind, activated_abilities, script_for
+from cards.scripts import (
+    abilities_of_kind,
+    activatable_indices,
+    activated_abilities,
+    script_for,
+)
 from engine.chain import (
     ChainItem,
     Showdown,
@@ -357,7 +362,14 @@ class RiftboundState:
             if ref.controller != player or ref.location is None:
                 continue
             card = self.db[ref.card_id]
-            for index, ability in enumerate(activated_abilities(card)):
+            # 718.2 / 721.2 -- an attached card's printed Rules Text is
+            # Inactive and "cannot be activated", so an equipped gear stops
+            # offering its own Equip ability. Without this an Equipment could
+            # re-target itself onto any other unit, every turn, for its cost.
+            live = activatable_indices(card, ref.attached_to is not None)
+            abilities = activated_abilities(card)
+            for index in live:
+                ability = abilities[index]
                 if not ability_can_activate(
                     card, ability, player, self.turn_player, self.chain, self.showdown
                 ):
@@ -689,7 +701,8 @@ class RiftboundState:
         """
         ref = self.cards[instance_id]
         source = self.top_most(instance_id)
-        for ability in abilities_of_kind(self.db[ref.card_id], kind):
+        attached = ref.attached_to is not None
+        for ability in abilities_of_kind(self.db[ref.card_id], kind, attached):
             self._queue(ability, ref.controller, source, restrict_location)
 
     def _resolve_effects(self) -> None:

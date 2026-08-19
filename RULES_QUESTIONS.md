@@ -336,6 +336,39 @@ that needs it than speculatively.
 
 ---
 
+## RQ-18 — Rules Text and Effect Text cannot be told apart on the card
+
+**Status:** open. Implemented by inference, and the inference is named here.
+
+**Situation.** 136.1 and 136.2 divide a card's printed text into **Rules
+Text** and **Effect Text**, and 718.2 / 724 make exactly one half live at a
+time:
+
+* attached — printed Rules Text is Inactive (718.2); Effect Text is live and
+  appended to the Top-Most Card (718.3);
+* unattached — Rules Text is live (723); Effect Text is Inactive (724).
+
+Physically the division is a box on the card. In the scraped data both halves
+arrive merged into one `rules_text` string, so the engine cannot read it.
+
+**Implemented.** For an Equipment, the derived Equip and Quick-Draw abilities
+are treated as Rules Text and every scripted ability as Effect Text. Every
+non-Equipment card is treated as all Rules Text, which is exactly right: 723
+says Rules Text is never Inactive by default, and a card that cannot be
+attached never reaches 724.
+
+**Where it would be wrong.** An Equipment with a printed activated ability
+meant to work while it is loose would be misfiled as Effect Text and go
+quiet. No card in the scripted pool has one. The inverse -- a non-Equipment
+card with Effect Text -- cannot arise, since Effect Text exists to be
+appended on attachment.
+
+**Effect on outcomes.** None measured today. It grows with every Equipment
+scripted, and the fix is data, not logic: a source that keeps the two text
+boxes separate, or a per-card marker in the script.
+
+---
+
 ## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
 
 **Status:** open, bounded, four cards.

@@ -34,6 +34,53 @@ def script_for(card_id: str) -> CardScript | None:
 _ACTIVATED_CACHE: dict[tuple, tuple] = {}
 
 
+def is_equipment(card) -> bool:
+    """Whether this card carries an Equip ability, i.e. is an Equipment."""
+    return equip_ability(card) is not None
+
+
+def _split_text(card) -> tuple[tuple[Ability, ...], tuple[Ability, ...]]:
+    """(rules_text_abilities, effect_text_abilities) for one card.
+
+    136.1/136.2 divide a card's printed text in two, and 718.2 / 724 make
+    exactly one half live at a time depending on whether the card is
+    Attached. The scraped `rules_text` merges both halves into one string, so
+    the engine cannot read the division off the card.
+
+    **Approximation, and a real one** (RQ-18): for an Equipment, the derived
+    Equip and Quick-Draw abilities are treated as Rules Text and every
+    scripted ability as Effect Text. That matches how Equipment are laid out
+    -- the Equip line above, the worn effect in the box below with the Might
+    Bonus -- but it would misfile a printed activated ability meant to work
+    while the gear is loose. No card in the scripted pool has one.
+
+    Every non-Equipment card is all Rules Text: 723 says Rules Text is never
+    Inactive by default, and 724 makes Effect Text moot for a card that
+    cannot be attached.
+    """
+    script = script_for(card.card_id)
+    scripted = tuple(script.abilities) if script else ()
+    derived = tuple(a for a in (equip_ability(card), quick_draw_ability(card))
+                    if a is not None)
+    if not derived:
+        return scripted, ()
+    return derived, scripted
+
+
+def abilities_for(card, attached: bool) -> tuple[Ability, ...]:
+    """The abilities that are *live* on this card right now.
+
+    718.2 -- attached: printed Rules Text is Inactive.
+    718.3 / 724 -- attached: Effect Text is live and appended to the host.
+    723 -- unattached: Rules Text is live, Effect Text is not.
+
+    722 is the reason this filters abilities and nothing else: Inactive text
+    is still *present*, so keywords, types and the Might Bonus are untouched.
+    """
+    rules, effect = _split_text(card)
+    return effect if attached else rules
+
+
 def activated_abilities(card) -> tuple[Ability, ...]:
     """Every activated ability on `card` (376), in a stable order.
 
@@ -59,15 +106,28 @@ def activated_abilities(card) -> tuple[Ability, ...]:
     return result
 
 
-def abilities_of_kind(card, kind: TriggerKind) -> tuple[Ability, ...]:
-    """Every ability of `kind` on `card`: scripted, plus any derived from a
-    printed keyword. Quick-Draw (819.1.d) contributes an on-play Attach."""
+def abilities_of_kind(card, kind: TriggerKind,
+                      attached: bool = False) -> tuple[Ability, ...]:
+    """Every *live* ability of `kind` on `card`.
+
+    `attached` selects which half of the card's text is active: Rules Text
+    when loose (723), Effect Text when worn (718.2 / 718.3 / 724). See
+    `abilities_for`.
+    """
     if kind is TriggerKind.ACTIVATED:
-        return activated_abilities(card)
-    script = script_for(card.card_id)
-    abilities = list(script.of_kind(kind)) if script else []
-    if kind is TriggerKind.ON_PLAY:
-        derived = quick_draw_ability(card)
-        if derived is not None:
-            abilities.append(derived)
-    return tuple(abilities)
+        live = set(activatable_indices(card, attached))
+        return tuple(a for i, a in enumerate(activated_abilities(card))
+                     if i in live)
+    return tuple(a for a in abilities_for(card, attached) if a.kind is kind)
+
+
+def activatable_indices(card, attached: bool) -> tuple[int, ...]:
+    """Indices into `activated_abilities(card)` that can be activated now.
+
+    The *list* stays whole and stably ordered whatever the card's state --
+    recorded replays address abilities by index, so filtering the list itself
+    would silently renumber every one. What changes is which indices are live.
+    """
+    live = {id(a) for a in abilities_for(card, attached)}
+    return tuple(i for i, a in enumerate(activated_abilities(card))
+                 if id(a) in live)
