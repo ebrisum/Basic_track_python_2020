@@ -4,3 +4,11 @@
 __pycache__/
 analysis/generations.json
 analysis/weights.candidate.json
+
+# Trajectory datasets are hundreds of megabytes and regenerable from a seed.
+data/trajectories/
+
+# Recorded runs: `acceptance.json` is committed on purpose (see runs/README.md);
+# ad-hoc metrics files written alongside it are not.
+runs/*.json
+!runs/acceptance.json

@@ -7,7 +7,12 @@ acceptance criterion. This is the record of that run.
 Reproduce with:
 
     .venv/bin/python -m analysis.validate --games 10000 --check-every 1 --deep \
-        --metrics runs/acceptance.json
+        --workers 4 --metrics runs/acceptance.json
+
+That takes 26 minutes on four cores. Drop `--workers` for the single-process
+figure, which is the one to quote when comparing engines, and takes 105.
+`runs/acceptance.json` in this repository is the output of exactly that
+command.
 
 Seeds are the game index, so the run is reproducible exactly. Agents
 alternate seats by game, so neither policy is measured only on the play.
@@ -31,8 +36,8 @@ was "roughly 3x slower". It is 8% slower. See below.
 | games | **10,000** |
 | decisions | **2,188,138** |
 | states checked | **all 2,188,138** |
-| wall clock | 6,303 s (105 min) |
-| throughput | **95 games/min**, 347 decisions/s |
+| wall clock | 6,303 s single-process; **1,584 s (26 min) on 4 workers** |
+| throughput | 95 games/min serial, **379 games/min on 4 workers** |
 | mean branching factor | 4.9 legal actions per decision |
 | mean game length | 19.2 turns |
 
@@ -58,17 +63,24 @@ asserts that the action each agent returns is a member of `legal_actions()`.
 
 ### This run replaced five earlier ones, and the reason matters
 
-| Engine | Checking | Decisions | Turns/game | Games/min | Result |
-| --- | --- | --- | --- | --- | --- |
-| 0.4.0 | sampled | 1,521,459 | 14.2 | 173 | clean |
-| 0.7.0 | sampled | 1,946,760 | 18.1 | 107 | clean |
-| 1.0.0 | sampled | 2,194,507 | 19.4 | 105 | clean |
-| 1.2.0 | sampled | 2,188,138 | 19.2 | 103 | clean |
-| **1.2.0** | **every action** | **2,188,138** | **19.2** | **95** | **clean** |
+| Engine | Checking | Workers | Decisions | Turns/game | Games/min | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0.4.0 | sampled | 1 | 1,521,459 | 14.2 | 173 | clean |
+| 0.7.0 | sampled | 1 | 1,946,760 | 18.1 | 107 | clean |
+| 1.0.0 | sampled | 1 | 2,194,507 | 19.4 | 105 | clean |
+| 1.2.0 | sampled | 1 | 2,188,138 | 19.2 | 103 | clean |
+| 1.2.0 | every action | 1 | 2,188,138 | 19.2 | 95 | clean |
+| **1.2.0** | **every action** | **4** | **2,188,138** | **19.2** | **379** | **clean** |
 
 Every one was clean, and the first three were measuring a different game from
-the one the engine now plays. The fifth measures the same game as the fourth
-and simply checks all of it.
+the one the engine now plays. The last three measure the same game: the fifth
+simply checks all of it, and the sixth checks all of it four times faster.
+
+**The last three runs report 2,188,138 decisions each.** Not "about the same"
+-- the same integer, three times, across a change to the observation schema
+and a change from one process to four. That is the strongest single line on
+this page, and it is an accident of nothing: games depend only on their seed,
+so the same seeds must produce the same games however they are scheduled.
 
 * **0.4.0 to 0.7.0**: the 300- and 700-series audits found nine live bugs.
   323.6 alone (control without a garrison) moved mean game length from 14.2
@@ -172,11 +184,10 @@ and a preferred later target of **≥1,000**.
   structural invariant after every action; 103 games/min without. The plan
   does not say which of those it means, so the weaker number is the one
   quoted.
-- Preferred target: **not met**, but it is now about 3x away rather than 10x.
-  `--workers 4` runs **350 games/min** on this four-core box against 98
-  serial, a 3.5x speedup, with byte-identical results — the same 42,394
-  decisions on the same 200 games. Games depend only on their seed, so they
-  are independent and every counter is a sum.
+- Preferred target: **not met**, but it is now under 3x away rather than 10x.
+  `--workers 4` ran the full 10,000-game acceptance at **379 games/min** on
+  this four-core box against 95 serial — a 4.0x speedup on 4 cores, with
+  identical results down to the decision count.
 
 The parallel number is the honest one for *doing a run*; the serial number is
 the honest one for *comparing engines*, since it does not depend on how many

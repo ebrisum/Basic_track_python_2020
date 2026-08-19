@@ -107,7 +107,7 @@ Measured, not estimated:
 | --- | --- |
 | serial, invariants after every action | 95 |
 | serial, no checking | 103 |
-| **4 workers, invariants after every action** | **350** |
+| **4 workers, invariants after every action** | **379** |
 
 - The single largest win already taken: replacing `copy.deepcopy` with a
   hand-written `__deepcopy__` after profiling showed **89% of runtime inside

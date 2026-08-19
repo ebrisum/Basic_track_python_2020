@@ -36,6 +36,9 @@ def test_a_run_can_write_its_numbers_and_its_stamp(tmp_path):
     # after every action are different claims wearing the same numbers.
     assert record["settings"]["deep"] is True
     assert record["settings"]["check_every"] == 1
+    # Worker count does not change the result, but it explains a 4x swing in
+    # the throughput line -- a file without it invites the wrong comparison.
+    assert record["settings"]["workers"] == 1
 
 
 def test_no_metrics_flag_writes_nothing(tmp_path):

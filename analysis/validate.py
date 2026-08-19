@@ -250,6 +250,11 @@ def main(argv: list[str] | None = None) -> int:
                 "check_every": args.check_every,
                 "deep": bool(args.deep),
                 "action_cap": ACTION_CAP,
+                # Does not change the result -- a test asserts 1 worker and 4
+                # agree on every number -- but it explains a 4x difference in
+                # the throughput line, so a file without it invites the wrong
+                # comparison.
+                "workers": args.workers,
             },
             "metrics": {
                 "games": args.games,
