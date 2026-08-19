@@ -634,3 +634,40 @@ def test_a_dead_gear_is_not_dragged_back_onto_the_board(decks):
     state.apply(StandardMove(host, bf_location(0)))
     assert state.cards[gear].location is None
     assert gear in state.players[player].trash
+
+
+# --- 347.2.a: a play breaks the pass sequence -------------------------------
+
+
+def test_playing_in_a_showdown_resets_the_pass_count(decks):
+    """347.2.a -- "If all Players have passed once **in sequence**, the
+    Showdown ends." A play is not a pass, so it breaks the sequence.
+
+    The engine only ever incremented the counter, so after any spell the
+    showdown ended one pass early -- the player who had passed before the
+    spell was never offered a response to it.
+    """
+    state = arena(decks)
+    attacker = state.turn_player
+    defender = state.opponent(attacker)
+    put_unit(state, attacker, "OGN-142", bf_location(0))
+    state.battlefields[0].contested = True
+    state.battlefields[0].contested_by = attacker
+    state._cleanup()
+    assert state.showdown is not None, "a showdown should have opened"
+
+    state.apply(PassPhase())                     # one player passes
+    assert state.showdown is not None
+
+    caster = state.current_player
+    state.apply(PlayCard(give(state, caster, "OGN-133")))   # REACTION
+    while state.phase is Phase.CHAIN:
+        state.apply(PassPhase())
+
+    assert state.showdown is not None, "the spell resolved, not the showdown"
+    state.apply(PassPhase())
+    assert state.showdown is not None, (
+        "one pass after a play cannot end the showdown -- the sequence restarted"
+    )
+    state.apply(PassPhase())
+    assert state.showdown is None

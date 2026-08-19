@@ -793,6 +793,7 @@ class RiftboundState:
         )
         self.chain.append(item)  # 354 -- this Closes the State
         self.chain_passes = 0
+        self._break_showdown_pass_sequence()
 
         # 337.2 -- a finalized Unit or Gear resolves immediately.
         if resolves_immediately(card):
@@ -970,6 +971,7 @@ class RiftboundState:
             )
         )
         self.chain_passes = 0
+        self._break_showdown_pass_sequence()   # 347.2.a
         # 337.2 -- an ability that Adds resources resolves immediately, and
         # 346.1 keeps Focus with its controller.
         if adds_resources:
@@ -1025,6 +1027,18 @@ class RiftboundState:
         self.priority = self.focus
         self._current_player = self.focus
         self.phase = Phase.SHOWDOWN
+
+    def _break_showdown_pass_sequence(self) -> None:
+        """347.2.a -- the Showdown ends when all players have passed once *in
+        sequence*. Playing a card or activating an ability is not a pass, so
+        it restarts the count.
+
+        Without this the counter only ever climbed, and any spell cast in a
+        showdown ended it one pass early: the player who had already passed
+        never got to answer the spell.
+        """
+        if self.showdown is not None:
+            self.showdown.passes = 0
 
     def _pass_in_showdown(self) -> None:
         """347.2 -- all players passing in sequence ends the Showdown."""
