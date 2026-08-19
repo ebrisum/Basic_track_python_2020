@@ -388,6 +388,12 @@ engine or the tests.
 
 ## Documents
 
+- [`docs/ai-existing-architecture.md`](docs/ai-existing-architecture.md) — the
+  architecture map: where each piece lives, and what must not be modified
+- [`BUILD_STATUS.md`](BUILD_STATUS.md) — this project against the build plan,
+  section by section
+- [`VALIDATION.md`](VALIDATION.md) — the 10,000-game acceptance run
+- [`CORRECTNESS.md`](CORRECTNESS.md) — what "correct" can and cannot mean here
 - [`TRAINING.md`](TRAINING.md) — how to see improvement, and what to adjust
 - [`SCORING.md`](SCORING.md) — reward vs heuristic, and what the numbers say
 - [`RULES_SUMMARY.md`](RULES_SUMMARY.md) — implementation target for `engine/`

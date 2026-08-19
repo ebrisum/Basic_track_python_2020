@@ -31,8 +31,8 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 
 | § | Item | Status | Detail |
 | --- | --- | --- | --- |
-| 1 | Repository discovery, `docs/ai-existing-architecture.md` | partial | Largely moot: the engine was built here, not adapted. The content lives in `README.md`, `DECISIONS.md`, `RULES_SUMMARY.md`; the named file does not exist. |
-| 2 | Target architecture | partial | Engine → observation + legal actions → evaluation exists. `StateEncoder` → `PolicyValueModel` does not; a 13-feature linear evaluator stands in its place. |
+| 1 | Repository discovery, `docs/ai-existing-architecture.md` | **done** | Written. The plan assumes an engine being adapted; here it was built for this purpose, so "reusable" is nearly the whole list. The section that earns its keep is **what must not be modified** — the six-call interface, `returns()`, the no-per-card-Python boundary, the observation's privacy rules, and the provenance stamps — each with the reason. |
+| 2 | Target architecture | partial | Engine → observation + legal actions → **action encoding** → evaluation exists, and `learning/` is now the adapter layer the diagram calls for. `StateEncoder` → `PolicyValueModel` is still missing; a 13-feature linear evaluator stands in its place. |
 | 3 | Canonical game state | **done** | `RiftboundState` / `RiftboundObservation`, Python rather than TypeScript. |
 | 4 | Card definition vs card instance | **done** | Exactly the split the plan asks for: `CardData` (static, shared, immutable) and `CardRef` (mutable, per-instance). |
 | 5 | Observation system | **done** | `RiftboundObservation.build`, plus the leakage suite the plan calls mandatory. See section 28. |
