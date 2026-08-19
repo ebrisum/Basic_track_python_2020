@@ -471,3 +471,35 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   observation, so building it made the gap a hard failure instead of a
   quiet one. That is a third discovery method alongside reading and fuzzing:
   requiring the interface to be *sufficient*, not merely tight.
+
+## Three style agents, built twice and thrown away twice
+
+- **The evaluator is blind on 77% of decisions, and that is a property of the
+  feature set** -- 1,047 real decisions, of which 810 are exact ties at the
+  top of `evaluate()`, mean tie size 4.2. `GreedyAgent` breaks those with a
+  seeded RNG, so on three quarters of its decisions it is playing randomly.
+  Nobody had measured this before section 12 forced the question.
+- **No feature-based tie-break can ever work here, and the reason is
+  arithmetic** -- `Model.score` is linear in the 13 features, so two actions
+  scoring exactly equal got there by producing exactly equal features. On 398
+  sampled plateaus, 100% consisted of actions whose resulting positions had
+  *identical* feature vectors. The second design ranked the tied set by a
+  style-specific function of those features and discriminated on 0 of 816
+  plateaus. `test_a_feature_tie_break_could_not_have_worked` keeps the
+  measurement runnable, and fails if a future evaluator becomes fine enough
+  for the idea to be worth revisiting.
+- **A style is therefore a preference over action *kinds*, not over
+  positions** -- play a unit, move to a battlefield, channel a rune, decline.
+  It needs no feature the evaluator lacks and costs no strength, because every
+  action it chooses among is one the evaluator called equal: win rates against
+  Random are 0.950 / 0.933 / 0.967 against `GreedyAgent`'s 0.933.
+- **Divergence is asserted with a floor, not with "> 0"** -- the first design
+  diverged on 4.8%, 0.9% and 0.3% of decisions and would have passed a
+  "differs at all" assertion while giving the opponent pool nothing. The test
+  requires 25%; measured is 54-55%.
+- **Each style's tie-break RNG is seeded from its style name** -- without
+  that, two agents whose preferences fail to separate a plateau fall through
+  to identical RNG streams and make identical "random" picks. A first
+  measurement of pairwise disagreement read 1.1% for exactly that reason, and
+  the honest number is 39-73%. Seeds that are equal by accident look like
+  agreement.

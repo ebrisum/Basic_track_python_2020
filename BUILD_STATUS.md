@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 712 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 724 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -57,10 +57,47 @@ requiring the interface to be *sufficient*, not merely tight.
 
 | § | Item | Status | Detail |
 | --- | --- | --- | --- |
-| 12 | Baseline agents | **partial** | `RandomAgent` ✓, `GreedyAgent` ✓, and `ISMCTSAgent` beyond the plan's list. **`AggroAgent`, `ConservativeAgent` and `ObjectiveAgent` are absent.** They matter more than they look: section 23 wants them in the opponent pool, and three agent types is a thin field to train against. |
+| 12 | Baseline agents | **done** | `RandomAgent`, `GreedyAgent`, `ISMCTSAgent`, and now `AggroAgent` / `ConservativeAgent` / `ObjectiveAgent` in `agents/styles.py`. They diverge from Greedy on 54-55% of decisions and from each other on 39-73%, at win rates against Random of 0.933-0.967 against Greedy's 0.933 -- diversity without a weak pool member. Getting there took two discarded designs; see below. |
 | 13 | Match runner | **partial** | `analysis/benchmark.py::duel` and `analysis/batch.py` run matches and aggregate; `Replay` carries actions and a final state hash. No worker-pool parallelism — everything is single-process. |
 | 14 | **Trajectory format** | **absent** | The replays are a *determinism* artefact, not training data: they hold actions and hashes, no encoded observation, no legal-action mask, no per-transition reward, no action probability, no value estimate. |
 | 15 | Reward function | **done** | `returns()` is win 1.0 / loss 0.0 / draw 0.5 — an affine remap of the plan's +1/-1/0. No shaping, which is what the plan asks for. |
+
+### What building section 12 turned up about the evaluator
+
+The three style agents were built twice and thrown away twice before the
+version that shipped, and the reason is worth more than the agents.
+
+**Attempt 1 — re-weighted evaluators.** `GreedyAgent` under a different weight
+vector. It changed 4.8% of decisions for aggro, 0.9% for conservative, 0.3%
+for objective. Weighting hard enough to diverge cost strength: an objective
+agent with the board features zeroed diverged on 78% of decisions and fell
+from 0.93 to 0.62 against Random.
+
+**Attempt 2 — feature tie-breaks.** Measuring why produced the number that
+matters: **77.4% of decisions are exact ties at the top of the evaluator, mean
+tie size 4.2.** `GreedyAgent` is playing randomly on three quarters of its
+decisions. Ranking the tied set by a style-specific function of the resulting
+position's features discriminated on **0 of 816 plateaus**.
+
+That is structural, not unlucky. `Model.score` is *linear* in the 13 features,
+so two actions scoring exactly equal got there by producing exactly equal
+features. Checked directly: on 398 plateaus, **100% consisted of actions whose
+resulting positions had identical feature vectors.** The evaluator is blind
+between 4.2 actions, three quarters of the time, and no re-weighting can fix
+it — it is a property of the feature set.
+
+**This is the strongest argument in the repository for section 16.** The plan
+wants a `StateEncoder` producing object tokens rather than a handful of
+scalars, and the concrete cost of not having one is now measured: the current
+13 features cannot distinguish three quarters of the decisions the engine
+poses. A test (`test_a_feature_tie_break_could_not_have_worked`) fails if a
+future evaluator ever separates a plateau, which is the signal that the
+feature set has become fine enough to matter.
+
+**What shipped** is a preference over *action kinds* applied among the tied
+actions — play a unit, move to a battlefield, channel a rune, decline — which
+needs no feature the evaluator lacks and costs no strength, because every
+action it chooses among is one the evaluator called equal.
 
 ---
 
@@ -71,7 +108,7 @@ repository diverge hardest.
 
 | § | Item | Status |
 | --- | --- | --- |
-| 16 | `StateEncoder` producing object tokens | **absent** — `features()` returns 13 scalars, not a token sequence |
+| 16 | `StateEncoder` producing object tokens | **absent** — `features()` returns 13 scalars, not a token sequence, and section 12's work above measured what that costs: those 13 scalars are identical across every action in 100% of the evaluator's ties, which are 77% of all decisions |
 | 17 | Embedding + transformer + policy/value heads | **absent** |
 | 18 | Policy scored over legal actions | **absent** — ISMCTS has an unused `prior` hook, defaulted off |
 | 19 | Supervised bootstrap | **absent** (the plan marks it skippable) |
