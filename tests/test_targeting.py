@@ -256,3 +256,52 @@ def test_an_ordinary_choose_selector_does_declare_a_target(decks):
     ability = Ability(kind=TriggerKind.ON_RESOLVE,
                       effects=(Kill(selector=Selector(scope="choose", type="unit")),))
     assert len(targets_of((ability,))) == 1
+
+
+# --- a stale choice must be re-validated ------------------------------------
+
+
+def test_a_choice_answered_after_its_option_left_is_dropped(decks):
+    """359.3.e.5 for resolution-time choices, not just declared targets.
+
+    A `ChoiceRequest` lists the options legal *when it is raised*. The cleanup
+    that runs at the end of that same `apply` can kill one of them, and the
+    answer arrives in a later action -- so by the time the choice is honoured
+    the chosen object may be off the board.
+
+    Found by the 10,000-game validation run: an Attach effect bound a gear to
+    a host that had already left, leaving the gear in a base with no location
+    and attached to a card that was not in play (107.1.c, 718.5).
+    """
+    from cards.dsl import Attach, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    host = put_unit(state, 0, "OGN-142", bf_location(0))
+    gear = put_unit(state, 0, "SFD-108", BASE_LOCATION)
+
+    ctx = EffectContext(controller=0, source=gear, chosen=(host,))
+    state.leave_board(state.cards[host])       # the option goes away
+
+    execute(state, Attach(selector=Selector(scope="choose", type="unit",
+                                            controller="friendly")), ctx)
+
+    assert state.cards[gear].attached_to is None, "attached to a card in no zone"
+    assert state.cards[gear].location == BASE_LOCATION
+
+
+def test_a_choice_that_is_still_legal_is_honoured(decks):
+    """The counterweight: re-validation must not drop a live choice."""
+    from cards.dsl import Attach, Selector
+    from cards.primitives import EffectContext, execute
+
+    state = arena(decks)
+    host = put_unit(state, 0, "OGN-142", bf_location(0))
+    gear = put_unit(state, 0, "SFD-108", BASE_LOCATION)
+
+    ctx = EffectContext(controller=0, source=gear, chosen=(host,))
+    execute(state, Attach(selector=Selector(scope="choose", type="unit",
+                                            controller="friendly")), ctx)
+
+    assert state.cards[gear].attached_to == host
+    assert state.cards[gear].location == bf_location(0)

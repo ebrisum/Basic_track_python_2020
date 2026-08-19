@@ -199,7 +199,14 @@ def _targets(
     the controller must choose.
     """
     if ctx.chosen:
-        return list(ctx.chosen), None
+        # 359.3.e.5 -- re-check before honouring the choice. A ChoiceRequest
+        # lists what is legal when it is *raised*, and the cleanup at the end
+        # of that same action can kill one of the options before the answer
+        # arrives in a later one. An option that has since become illegal is
+        # unaffected, exactly as a declared target would be.
+        live = candidates(state, selector, ctx.controller, ctx.source,
+                          ctx.restrict_location)
+        return [i for i in ctx.chosen if i in live], None
     if ctx.targets_declared:
         # 359.3.e.5 -- "If any of the spell's targets are no longer legal,
         # those game objects ... are unaffected by the spell as it resolves.
