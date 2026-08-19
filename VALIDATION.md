@@ -6,7 +6,8 @@ acceptance criterion. This is the record of that run.
 
 Reproduce with:
 
-    .venv/bin/python -m analysis.validate --games 10000 --check-every 1 --deep
+    .venv/bin/python -m analysis.validate --games 10000 --check-every 1 --deep \
+        --metrics runs/acceptance.json
 
 Seeds are the game index, so the run is reproducible exactly. Agents
 alternate seats by game, so neither policy is measured only on the play.

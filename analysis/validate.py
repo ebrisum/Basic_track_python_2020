@@ -31,8 +31,10 @@ play. Seeds are the game index, so the whole run is reproducible.
 from __future__ import annotations
 
 import argparse
+import json
 import time
 import traceback
+from pathlib import Path
 
 from agents.greedy_agent import GreedyAgent
 from agents.random_agent import RandomAgent
@@ -54,6 +56,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--decks", nargs=2,
                         default=["jinx_chaos_fury", "volibear_body_fury"])
     parser.add_argument("--progress", type=int, default=1000)
+    parser.add_argument("--metrics", default=None,
+                        help="write the run's numbers and provenance to a "
+                             "JSON file (BUILD.md section 29)")
     args = parser.parse_args(argv)
 
     db = load_db()
@@ -139,6 +144,45 @@ def main(argv: list[str] | None = None) -> int:
         print("first problem:")
         for line in first_problem[:5]:
             print(f"  {line}")
+
+    if args.metrics:
+        # BUILD.md 29 -- a run whose numbers exist only in a terminal cannot be
+        # compared to the next run. The stamp goes in the same file as the
+        # metrics on purpose: separating them is how a number outlives the
+        # engine that produced it.
+        record = {
+            "provenance": stamp,
+            "decks": list(args.decks),
+            "settings": {
+                "games": args.games,
+                "check_every": args.check_every,
+                "deep": bool(args.deep),
+                "action_cap": ACTION_CAP,
+            },
+            "metrics": {
+                "games": args.games,
+                "decisions": decisions,
+                "wall_seconds": round(elapsed, 1),
+                "games_per_minute": round(args.games / elapsed * 60, 1),
+                "decisions_per_second": round(decisions / elapsed, 1),
+                "mean_branching_factor": round(branch / max(decisions, 1), 2),
+                "mean_turns_per_game": round(turns / args.games, 2),
+                "states_checked_games": checked,
+            },
+            "failures": {
+                "crashes": crashes,
+                "impossible": impossible,
+                "unresolved": unresolved,
+                "illegal": illegal,
+                "first_problem": first_problem[:5],
+            },
+        }
+        path = Path(args.metrics)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n")
+        print()
+        print(f"metrics written to {path}")
+
     return 1 if (crashes or impossible or unresolved or illegal) else 0
 
 
