@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 593 tests pass.
+- 601 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -121,13 +121,13 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Three series audited, thirteen live bugs; one series still unaudited
+### Four series audited, sixteen live bugs
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
 live bugs**, not merely missing features. The turn-structure audit walked
 300-348 and found **four more**, including the largest rules gap the project
 has had. The attachment-and-keywords audit walked 700-732 and found **four
-more** after that:
+more**, and the keyword glossary 800-829 found **three** after that:
 
 | Rule | What was wrong | Effect |
 | --- | --- | --- |
@@ -139,6 +139,9 @@ more** after that:
 | **136.2.c** | an attached card's "me" is its host | an Equipment buffed itself, which 702 forbids |
 | **718.2 / 724** | Inactive text | a worn gear could re-equip itself; a loose one fired its worn trigger |
 | **719.3.a** | attachments travel with the host | true on the move path, not the combat-recall path |
+| **816 Temporary** | a Temporary permanent dies at its controller's Beginning Phase | it lived forever (11 cards) |
+| **825 Unique** | one copy per deck by name | unenforced |
+| **815.1.c.2** | the citation for Tank damage ordering | cited 626.1.d.4, which is not a rule |
 
 323.6 alone moved mean game length from **14.2 turns to 25.3**. Several
 existing tests had been written against the buggy behaviour and had to be
@@ -149,18 +152,19 @@ Two of those found each other: making Buff counters real immediately exposed
 136.2.c, and fixing that exposed 718.2/724. A wrong model can hide the next
 wrong model behind it.
 
-Still unaudited, and stated plainly:
+All four rule series have now been walked one rule at a time. What remains
+is **unimplemented**, not unexamined, which is a different and much better
+kind of gap — every item below is named, counted and reachable:
 
-- **800-series** (the keyword glossary) — implemented and tested for the
-  keywords the engine acts on, but never walked rule by rule.
 - **473-477 Layers** — not transcribed at all (RQ-3). Nothing currently
   needs them; that stops being true as soon as continuous modifiers land.
-- **727 Dependent Keywords** (12 cards) and **728-732 XP** (6 cards) are
-  unimplemented. Neither touches a scripted card or a starter deck, so both
-  are missing features rather than live bugs.
+- **727 Dependent Keywords** (12 cards) and **728-732 XP** (6 cards).
+- **Nine keywords**, led by Deflect (27 cards) and Repeat (17). Both of those
+  are blocked on RQ-19, not on effort.
+- **Three Game Actions**: Double (4 cards), Prevent (2), Swap (1).
 
-Thirteen live bugs across the three series that have been audited. It is not
-reasonable to assume the one that has not is clean.
+Sixteen live bugs across four audited series. The rate did not fall off:
+the last series still produced three.
 
 ### One structural gap, larger than any single rule
 
@@ -206,10 +210,10 @@ In the order that buys the most:
 
 1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Audit the 800-series** the way 410-444, 300-348 and 700-732 were
-   audited — one rule at a time, ask whether the engine's behaviour
-   differs, write the test, fix or log. Thirteen live bugs in the three
-   series done so far.
+2. **Fix RQ-19** — move target selection into the play pipeline. It is the
+   largest remaining structural gap, it makes four rules right at once, and
+   it unblocks the two most common unimplemented keywords. Doing it after the
+   card pool grows means redoing every scripted targeted spell.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 

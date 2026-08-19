@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **absent** | No `ActionEncoder`, no factorized (type, source, target, option) representation, no action mask. This is the prerequisite for any policy head. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 572 tests; 12 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
+| 10 | Simulator validation | **done** | 601 tests; 13 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **The one real hole in Part I is section 7.** Everything else is either done
@@ -195,10 +195,11 @@ Everything in steps 1-3 is pure stdlib and needs no decision from you.
 
 1. **Script cards** (RQ-5). 6% is the ceiling on every number this project
    can produce. Nothing else in this list changes that.
-2. **Audit the 700- and 800-series rules** the way 410-444 and 300-348 were
-   audited. Nine live bugs across the two series done so far, one of them
-   (323.6) large enough to move mean game length by 78%. Doing this *after*
-   scripting cards would mean measuring everything twice.
+2. **Fix RQ-19** — target selection belongs in the play pipeline, not at
+   resolution. It makes four rules right at once (fizzling, Deflect, informed
+   responses, "when you choose me" triggers) and unblocks the two most common
+   unimplemented keywords. All four rule series are now audited; this is what
+   they left behind.
 3. **Section 7 — the action encoder**, then **§14 trajectory format**, then
    **§12's three missing agents**, then **§27 scenarios**, then **§30 config**.
    That order unblocks the most with the least.
