@@ -380,3 +380,61 @@ The **800-series** keyword glossary, apart from the keywords the engine
 already acts on (Assault, Tank, Backline, Ganking, Accelerate, Shield,
 Deflect, Hidden, Equip, Quick-Draw). Three series audited, **thirteen live
 bugs** between them.
+
+## Keyword glossary audit (800-829) — partial
+
+The fourth series, and the only one not carried to completion. What it found
+so far is one thing much larger than a keyword.
+
+### The implemented keywords check out
+
+Assault (807), Shield (814), Tank (815), Backline (826), Ganking (810),
+Accelerate (805), Hidden (811), Equip (818), Quick-Draw (819), Action (806)
+and Reaction (813) were each read against the engine. Tank-before-middle-
+before-Backline damage ordering matches 815.1.c.2 and 826.4.b; Assault and
+Shield sum printed and granted instances per 807.2 / 814.2 and apply only
+while attacking or defending. One wrong citation was corrected in passing
+(`_assign_actions` cited 626.1.d.4; the rule is 815.1.c.2).
+
+### The finding: RQ-19
+
+Auditing **Deflect (809)** — a mandatory additional cost of "[Deflect Value]
+more ... for each time they choose [me]" — showed it is not merely
+unimplemented but *unimplementable* as the engine stands, because there is no
+target at the moment costs are paid.
+
+That traces back to **355.8**: "In order to put a spell or ability on the
+chain, valid choices must be made for all targets." The engine defers target
+choice to resolution. Verified directly: after `PlayCard`, `state.awaiting`
+is `None`; the choice appears only once the chain has emptied.
+
+Four rules fail together as a result — a spell cannot be fizzled (359.3.e.5),
+Deflect cannot be charged (809.1.d), opponents respond blind, and "when you
+choose me" triggers (383.4.b.3) cannot fire on time. It is written up as
+RQ-19 and flagged rather than fixed: it is a redesign of the play pipeline,
+not a rule patch, and it is the right kind of decision to hand over rather
+than make quietly.
+
+### Unimplemented keywords, by pool reach
+
+| Keyword | Cards in pool | In the starter decks |
+| --- | --- | --- |
+| Deflect (809) | 27 | 1 |
+| Repeat (820) | 17 | 1 |
+| Weaponmaster (821) | 16 | 0 |
+| Deathknell (808) | 15 | 0 |
+| Empower / Empowered (827-828) | 13 | 0 |
+| Legion (812 / 727) | 12 | 0 |
+| Temporary (816) | 11 | 0 |
+| Vision (817) | 7 | 0 |
+| Quick-Draw (819) | 6 | 0 |
+| Unique (825), Level (824) | 3, 2 | 0 |
+
+Ambush (822), Hunt (823), Backline (826) and Flow (829) appear on no card in
+the cached pool at all.
+
+### Still to do
+
+820-829 have not been read line by line. The four series so far have found
+**fourteen live bugs**; assuming the rest of this one is clean would be the
+same mistake this audit exists to avoid.

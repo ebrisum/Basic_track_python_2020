@@ -162,6 +162,29 @@ Still unaudited, and stated plainly:
 Thirteen live bugs across the three series that have been audited. It is not
 reasonable to assume the one that has not is clean.
 
+### One structural gap, larger than any single rule
+
+**RQ-19: targets are chosen at resolution, not at finalization.** 355.8 says
+"In order to put a spell or ability on the chain, valid choices must be made
+for all targets." The engine puts the spell on the chain with no target and
+asks only as it resolves.
+
+That single deviation costs four rules at once:
+
+- a spell **cannot be fizzled** by removing its target in response
+  (359.3.e.5), which is a core defensive play the Core Rules illustrate three
+  times;
+- **Deflect (809) cannot be charged**, because the tax depends on a target
+  that does not exist yet """ + D + """ 27 cards in the pool;
+- **opponents respond blind**, not knowing what a spell will hit;
+- **"when you choose me" triggers** (383.4.b.3) cannot fire at the right time.
+
+It is one-directional: every targeted spell is strictly stronger than the
+rules make it. It is flagged rather than fixed because it is a redesign of the
+play pipeline """ + D + """ touching the chain, the choice protocol, the action stream,
+determinization and every replay """ + D + """ not a rule patch, and it is worth doing
+before the card pool grows rather than after.
+
 ### Known approximations, all logged
 
 `RULES_QUESTIONS.md` carries every one with its estimated effect. Open at

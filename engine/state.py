@@ -459,7 +459,15 @@ class RiftboundState:
     # ---------------------------------------------------------------- combat
 
     def _assign_actions(self, player: int) -> list[Action]:
-        """465.2.c, with Tank forced first (626.1.d.4)."""
+        """465.2.c damage assignment, ordered by Tank and Backline.
+
+        815.1.c.2 -- "Units without Tank are invalid assignments until all
+        units with Tank have lethal damage assigned to them."
+        826.4.b -- the mirror: "Units with Backline are invalid assignments
+        until all units without Backline have lethal damage assigned."
+
+        (This previously cited 626.1.d.4, which is not the rule.)
+        """
         assert self.combat is not None
         target_player = self.opponent(player)
         targets = self.units_at(bf_location(self.combat.battlefield), target_player)

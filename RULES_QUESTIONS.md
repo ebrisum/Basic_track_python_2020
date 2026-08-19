@@ -369,6 +369,60 @@ boxes separate, or a per-card marker in the script.
 
 ---
 
+## RQ-19 — Targets are chosen at resolution, not at finalization (355.8)
+
+**Status:** open, structural, and the largest remaining gap after card
+scripting. Flagged rather than fixed: the change is a redesign of the play
+pipeline, not a rule patch, and it deserves a decision rather than a quiet
+rewrite.
+
+**Situation.** 355.8 is explicit: "In order to put a spell or ability on the
+chain, valid choices must be made for **all targets**." 355.7 makes a chosen
+game object a target, and the FAQ's targeting entry adds that "All targets are
+declared during finalization."
+
+The engine defers the choice. A spell goes on the chain with no target; the
+chain drains; and only as the spell *resolves* does `ChoiceRequest` ask the
+controller to pick, from whatever is legal at that moment. Verified directly:
+after `PlayCard`, `state.awaiting` is `None` and the phase is `CHAIN`; the
+choice appears only once the chain has emptied.
+
+**What this changes, all in the caster's favour:**
+
+1. **A spell cannot be fizzled.** 359.3.e.5 -- "If any of the spell's targets
+   are no longer legal, those game objects ... are unaffected by the spell as
+   it resolves." Removing or bouncing the target in response is a core
+   defensive play, and here it does nothing: the spell simply picks a
+   different legal target at resolution. The Core Rules give three worked
+   examples of this interaction (Void Seeker, Bellow's Breath, Hidden Blade
+   vs Tideturner) and none of them can happen.
+2. **Deflect (809) cannot be charged.** It is a mandatory additional cost of
+   "[Deflect Value] more ... for each time they choose [me]", so it is
+   determined at play time from the target. With no target at play time there
+   is nothing to tax. 27 cards in the pool carry Deflect; 1 is in the current
+   starter decks. This is why `cards/scripts/origins.py` carries the note
+   "DEFLECT (809) taxes opponents' selection; not implemented."
+3. **Opponents respond blind.** A Reaction is priced by what it answers. The
+   FAQ's Rebuttal ruling turns on the opponent knowing which spell was
+   chosen; here they do not know what it will hit.
+4. **"When you choose me" triggers cannot fire at the right time.** 383.4.b.3
+   -- Irelia, Fervent's "When you choose or ready me" triggers on *being
+   targeted*, which now happens during resolution rather than on the chain.
+
+**Effect on outcomes.** Systematic and one-directional: every targeted spell
+is strictly better than the rules make it, because it can never be answered
+by removing its target. It reaches only the scripted targeted spells today,
+which is a small set, and grows with every card scripted.
+
+**What it needs.** Target selection moved into the play pipeline: step 3 of
+playing a card gathers choices, the chain item carries them, and resolution
+re-checks legality and skips illegal targets per 359.3.e.5. That touches
+`_apply_play`, `ChainItem`, `cards/primitives`' choice protocol, the frozen
+interface's action stream, ISMCTS determinization, and every recorded replay.
+Sizeable, and worth doing before the card pool grows rather than after.
+
+---
+
 ## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
 
 **Status:** open, bounded, four cards.
