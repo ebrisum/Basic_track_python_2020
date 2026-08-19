@@ -23,7 +23,7 @@ class ChainItem:
     Finalized (329.2-329.3). Finalized items resolve newest-first (340.1).
     """
 
-    kind: str  # "card" | "ability"
+    kind: str  # "card" | "ability" | "trigger"
     instance_id: int
     controller: int
     ability_index: int = 0
@@ -45,6 +45,10 @@ class ChainItem:
     # base cost (805.1.a). Recorded here because the cost is now determined
     # after targeting rather than at the moment the action arrives.
     accelerated: bool = False
+    # 383.3 -- for a "trigger" item, which printed trigger this is. The
+    # ability itself is found by `(trigger_kind, ability_index)` rather than
+    # stored, so the item stays hashable for the replay key.
+    trigger_kind: str = ""
 
     def copy(self) -> "ChainItem":
         # `targets` is the one mutable field; everything else is a scalar.
@@ -61,6 +65,7 @@ class ChainItem:
             self.from_hidden,
             tuple(sorted(self.targets.items())),
             self.accelerated,
+            self.trigger_kind,
         )
 
 

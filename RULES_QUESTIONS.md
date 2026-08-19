@@ -441,6 +441,34 @@ been written. 17 cards.
 
 ---
 
+## RQ-20 — Simultaneous triggers are ordered by instance id, not by choice
+
+**Status:** open, deliberate, small.
+
+**Situation.** 383.3.d: "If more than one Triggered Ability is Triggered
+simultaneously, then the player that controls the Abilities selects the order
+to place them on the Chain." 383.3.d.1 extends it across players, starting
+with the Turn Player.
+
+The engine orders a player's simultaneous triggers by instance id, and does
+not offer the choice.
+
+**Why.** Offering it adds a decision to every board where two triggers fire
+together, on a choice that usually does not matter, and every one of those
+decisions widens the search tree the agent has to explore. The cross-player
+half of 383.3.d.1 *is* implemented, since triggers are placed as each
+player's scoring or play resolves.
+
+**Effect on outcomes.** It matters when two triggers of the same controller
+interact -- one buffs a unit the other checks, say -- and the printed order
+happens to be the worse one. No pair in the scripted pool interacts.
+
+**What it needs.** A `ChooseTrigger` action offered only when a controller has
+two or more simultaneous triggers *whose effects can interact*. Worth doing
+with the first card pair that needs it, not speculatively.
+
+---
+
 ## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
 
 **Status:** open, bounded, four cards.

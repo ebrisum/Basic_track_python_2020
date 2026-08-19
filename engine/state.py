@@ -170,6 +170,9 @@ class RiftboundState:
     accelerated: set = field(default_factory=set)
     # Phase to return to once the effect queue drains.
     _resume_phase: "Phase | None" = None
+    # 354.4 -- the automatic phase a chain interrupted, so the turn can carry
+    # on through Channel, Draw and the rest once the chain empties.
+    _interrupted_phase: "Phase | None" = None
     # 424 Reveal -- instances shown to all players while in their owner's hand.
     # Revealing does not move the card (424.1.a), so this is a record of what
     # was *seen*, not a zone. It is deliberately never pruned: `knowledge` and
@@ -237,6 +240,7 @@ class RiftboundState:
         clone.accelerated = set(self.accelerated)
         clone.revealed_in_hand = set(self.revealed_in_hand)
         clone._resume_phase = self._resume_phase
+        clone._interrupted_phase = self._interrupted_phase
         clone._last_from_trigger = self._last_from_trigger
 
         # A clone must not share a random stream with its original, or one
@@ -764,6 +768,43 @@ class RiftboundState:
             current = host
         return current
 
+    def _trigger(self, kind: TriggerKind, instance_id: int) -> bool:
+        """383.3 -- put every triggered ability of `kind` on the Chain.
+
+        "When a Condition is met, a Triggered Ability behaves like an
+        Activated Ability and is placed on the Chain." So a trigger is not
+        executed inside the game action that caused it: it becomes a chain
+        item, its targets are declared when *it* is finalized (355.5.b), and
+        383.3.c lets either player respond before it resolves.
+
+        341 of 526 playable cards print trigger wording, so this is the most
+        common mechanic in the game.
+
+        383.3.d lets a controller order their simultaneous triggers. The
+        engine orders them by instance id, deterministically; offering the
+        choice would add an action to every multi-trigger board for a decision
+        that rarely matters. Logged as an approximation in RULES_QUESTIONS.
+
+        `from_trigger` is set so 346.1 keeps Focus with the controller: a
+        trigger does not hand the showdown window to the opponent.
+        """
+        ref = self.cards[instance_id]
+        attached = ref.attached_to is not None
+        abilities = abilities_of_kind(self.db[ref.card_id], kind, attached)
+        if not abilities:
+            return False
+        for index, _ability in enumerate(abilities):
+            self.chain.append(ChainItem(
+                kind="trigger",
+                instance_id=instance_id,
+                controller=ref.controller,
+                ability_index=index,
+                pending=True,
+                from_trigger=True,
+                trigger_kind=kind.value,
+            ))
+        return True
+
     def _fire(self, kind: TriggerKind, instance_id: int,
               restrict_location: str | None = None,
               declared: dict | None = None) -> None:
@@ -1016,7 +1057,7 @@ class RiftboundState:
         source card's play cost here would bill the player twice for using a
         permanent they already own.
         """
-        if item.kind == "ability":
+        if item.kind in ("ability", "trigger"):
             return 0, []
         card = self.db[self.cards[item.instance_id].card_id]
         if item.from_hidden is not None:
@@ -1088,7 +1129,14 @@ class RiftboundState:
         """
         ref = self.cards[item.instance_id]
         card = self.db[ref.card_id]
-        if item.kind == "ability":
+        if item.kind == "trigger":
+            # 355.5.b -- a trigger's targets are declared when *it* is
+            # finalized, not when the card that caused it was played.
+            attached = ref.attached_to is not None
+            found = abilities_of_kind(card, TriggerKind(item.trigger_kind), attached)
+            abilities = ((found[item.ability_index],)
+                         if item.ability_index < len(found) else ())
+        elif item.kind == "ability":
             abilities = (activated_abilities(card)[item.ability_index],)
         elif card.type == "spell":
             abilities = abilities_of_kind(
@@ -1118,6 +1166,13 @@ class RiftboundState:
         Costs are paid here rather than when the action arrived, because 356
         is step 3 and the targets that price Deflect are chosen in step 2.
         """
+        if item.kind == "trigger":
+            # 383.3.b -- a trigger has no base cost unless its text opens with
+            # one, which no scripted card does yet. It is simply finalized,
+            # and 383.3.c opens a window before it resolves.
+            item.pending = False
+            self._open_priority_window(item.controller)   # 337.4
+            return
         energy, domains = self._total_cost(item)
         self.players[item.controller].pool.pay(energy, domains)   # 357 / 444
         item.pending = False
@@ -1191,7 +1246,24 @@ class RiftboundState:
                 if card.type == "gear":
                     ref.exhausted = False
                 state.base.append(item.instance_id)
-                self._fire(TriggerKind.ON_PLAY, item.instance_id, hidden_here)
+                # 383.3 -- a play trigger goes on the Chain rather than
+                # executing inside the play. 811.1.d.2's battlefield
+                # restriction rides on the item.
+                if self._trigger(TriggerKind.ON_PLAY, item.instance_id):
+                    self.chain[-1].from_hidden = hidden_bf
+        elif item.kind == "trigger":
+            # 383.3 -- the trigger's own effects, with the targets declared
+            # when this item was finalized (355.5.b) and re-checked now.
+            attached = ref.attached_to is not None
+            abilities = abilities_of_kind(
+                card, TriggerKind(item.trigger_kind), attached
+            )
+            if item.ability_index < len(abilities):
+                here = (bf_location(item.from_hidden)
+                        if item.from_hidden is not None else None)
+                self._queue(abilities[item.ability_index], item.controller,
+                            self.top_most(item.instance_id), here,
+                            item.targets, item.ability_index)
         else:
             ability = activated_abilities(card)[item.ability_index]
             self._queue(ability, item.controller, item.instance_id,
@@ -1217,6 +1289,14 @@ class RiftboundState:
         # 340.2 -- the chain emptied, so play returns to an Open state.
         self.chain_passes = 0
         self.priority = None
+        if self._interrupted_phase is not None:
+            # The chain interrupted an automatic phase; pick the sequence back
+            # up where it stopped rather than dropping the phases after it.
+            resume, self._interrupted_phase = self._interrupted_phase, None
+            self.phase = resume
+            self._current_player = self.turn_player
+            self._run_automatic_phases()
+            return
         if self.showdown is not None:
             # 347.1.b -- when that chain closes, Focus passes. 346.1 excepts a
             # chain opened by a triggered ability or one that Adds resources,
@@ -1488,6 +1568,17 @@ class RiftboundState:
             elif self.phase is Phase.ENDING:
                 self._phase_ending()
             self._cleanup()
+            # 354.4 -- "If there are Tasks outstanding or currently being
+            # handled, finish those Tasks before continuing this process."
+            # A trigger that fired in this phase (471.2's Hold abilities, for
+            # instance) is now a chain item, and 309.1 makes that a Closed
+            # State. The turn stops here and resumes once the chain empties;
+            # `_interrupted_phase` is what `_after_chain_change` reads to
+            # know the sequence was not finished.
+            if self.chain:
+                self._interrupted_phase = self.phase
+                self._open_priority_window(self.turn_player)
+                return
 
     def _phase_awaken(self) -> None:
         """315.1 -- ready everything the turn player controls."""
@@ -2118,8 +2209,8 @@ class RiftboundState:
         location = bf_location(bf.index)
         for ref in sorted(self.cards.values(), key=lambda r: r.instance_id):
             if ref.controller == player and ref.location == location:
-                self._fire(kind, ref.instance_id)
-        self._resolve_effects()
+                self._trigger(kind, ref.instance_id)   # 383.3
+        self._advance_targeting()
 
     # ----------------------------------------------------------------- draw
 

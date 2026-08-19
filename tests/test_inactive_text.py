@@ -27,6 +27,27 @@ from engine.state import Phase, bf_location
 from engine.zones import CardRef
 
 DB = load_db()
+
+
+def settle(state, limit: int = 40) -> None:
+    """Let anything the last action put on the Chain resolve.
+
+    383.3 makes a triggered ability a chain item, so a score or a play no
+    longer executes its trigger inline: the trigger has to be passed down the
+    chain like anything else.
+    """
+    from engine.actions import PassPhase
+    from engine.state import Phase
+
+    for _ in range(limit):
+        if not state.chain:
+            return
+        if state.phase is Phase.CHOOSING:
+            state.apply(state.legal_actions()[0])
+        elif PassPhase() in state.legal_actions():
+            state.apply(PassPhase())
+        else:
+            return
 WARMOGS = "SFD-108"      # [EQUIP Body]; "When I conquer, buff me."
 
 
@@ -110,6 +131,7 @@ def test_an_unattached_equipment_does_not_fire_its_effect_text(decks):
     state.battlefields[0].scored_by.clear()
 
     state._score(player, state.battlefields[0], "Conquer")
+    settle(state)
 
     assert state.cards[gear].buffs == 0, "a loose Equipment's worn text fired"
 
@@ -125,6 +147,7 @@ def test_an_attached_equipment_does_fire_its_effect_text(decks):
     state.battlefields[0].scored_by.clear()
 
     state._score(player, state.battlefields[0], "Conquer")
+    settle(state)
 
     assert state.cards[host].buffs == 1
 

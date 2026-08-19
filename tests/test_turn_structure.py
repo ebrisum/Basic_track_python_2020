@@ -16,6 +16,27 @@ from engine.state import Phase, bf_location
 DB = load_db()
 
 
+def settle(state, limit: int = 40) -> None:
+    """Let anything the last action put on the Chain resolve.
+
+    383.3 makes a triggered ability a chain item, so a score or a play no
+    longer executes its trigger inline: the trigger has to be passed down the
+    chain like anything else.
+    """
+    from engine.actions import PassPhase
+    from engine.state import Phase
+
+    for _ in range(limit):
+        if not state.chain:
+            return
+        if state.phase is Phase.CHOOSING:
+            state.apply(state.legal_actions()[0])
+        elif PassPhase() in state.legal_actions():
+            state.apply(PassPhase())
+        else:
+            return
+
+
 @pytest.fixture(scope="module")
 def decks():
     return load_deck("jinx_chaos_fury"), load_deck("volibear_body_fury")
@@ -303,6 +324,7 @@ def test_hold_abilities_trigger_when_a_battlefield_is_held(decks):
     before = state.players[player].points
 
     state._phase_beginning()
+    settle(state)
     # One point for the Hold itself, one from Ahri's triggered ability.
     assert state.players[player].points == before + 2, state.log[-4:]
     assert state.cards[unit].location == bf_location(0)
@@ -325,6 +347,7 @@ def test_score_triggers_only_fire_at_the_battlefield_that_scored(decks):
 
     # Score battlefield 0, where that unit is not.
     state._score(player, state.battlefields[0], "Hold")
+    settle(state)
     assert state.players[player].points == before + 1, (
         "a unit at another battlefield triggered on a score it was not part of"
     )
@@ -340,6 +363,7 @@ def test_a_hold_trigger_does_not_fire_on_a_conquer(decks):
     put_unit(state, player, "OGN-066", bf_location(0))
     before = state.players[player].points
     state._score(player, state.battlefields[0], "Conquer")
+    settle(state)
     assert state.players[player].points == before + 1
 
 
@@ -363,12 +387,14 @@ def test_a_conquer_trigger_elsewhere_does_not_fire(decks):
     before = state.cards[host].buffs
 
     state._score(player, state.battlefields[0], "Conquer")
+    settle(state)
     assert state.cards[host].buffs == before, (
         "a Conquer trigger at battlefield 1 fired on a Conquer at battlefield 0"
     )
 
     # ...and it does fire when its own battlefield is the one scored.
     state._score(player, state.battlefields[1], "Conquer")
+    settle(state)
     assert state.cards[host].buffs > before
 
 
@@ -419,6 +445,7 @@ def test_boneshiver_channels_a_rune_exhausted_on_conquer(decks):
     before = len(state.players[player].channeled_runes)
 
     state._score(player, state.battlefields[0], "Conquer")
+    settle(state)
     fresh = state.players[player].channeled_runes[before:]
     assert len(fresh) == 1
     assert state.cards[fresh[0]].exhausted is True

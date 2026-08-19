@@ -20,6 +20,27 @@ from engine.zones import BASE_LOCATION
 DB = load_db()
 
 
+def settle(state, limit: int = 40) -> None:
+    """Let anything the last action put on the Chain resolve.
+
+    383.3 makes a triggered ability a chain item, so a score or a play no
+    longer executes its trigger inline: the trigger has to be passed down the
+    chain like anything else.
+    """
+    from engine.actions import PassPhase
+    from engine.state import Phase
+
+    for _ in range(limit):
+        if not state.chain:
+            return
+        if state.phase is Phase.CHOOSING:
+            state.apply(state.legal_actions()[0])
+        elif PassPhase() in state.legal_actions():
+            state.apply(PassPhase())
+        else:
+            return
+
+
 @pytest.fixture(scope="module")
 def decks():
     return load_deck("jinx_chaos_fury"), load_deck("volibear_body_fury")
@@ -468,6 +489,7 @@ def test_warmogs_buffs_permanently_on_conquer(decks):
     bf = state.battlefields[0]
     bf.scored_by.clear()
     state._score(0, bf, "Conquer")
+    settle(state)
     while state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
     # 136.2.c -- an Equipment's effect text is appended to the *host's* rules
@@ -482,6 +504,7 @@ def test_warmogs_buffs_permanently_on_conquer(decks):
     # 702.3 / 426.1.b.1 -- conquering again does not stack a second buff.
     state.battlefields[0].scored_by.clear()
     state._score(0, state.battlefields[0], "Conquer")
+    settle(state)
     while state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
     assert state.cards[host].buffs == 1, "a unit holds at most one buff"
