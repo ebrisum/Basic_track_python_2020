@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from agents.random_agent import RandomAgent  # noqa: E402
 from cards.database import load as load_db  # noqa: E402
 from engine.replay import record_game  # noqa: E402
+from engine.versions import provenance  # noqa: E402
 from engine.setup import build_state, load_deck  # noqa: E402
 from tests.fixtures.toy_game import build_toy_state  # noqa: E402
 
@@ -34,9 +35,19 @@ SPECS = [
 ]
 
 
+# A replay is only worth what it covers. Seed 11 is an ordinary-length game;
+# seed 34 is the longest found in the first 120 seeds and is here on purpose,
+# because a deep game exercises resolution paths a short one never reaches.
+#
+# These were re-recorded when the 337.4 priority fix changed which player acts
+# first after a play. That is a *behaviour* change, so the previously recorded
+# games stopped being legal games and could not be repaired -- unlike a
+# representation change, where `repair.py` updates the hashes and keeps the
+# recorded line intact. The old seed-29 game was 352 steps; seed 34 restores
+# that depth rather than leaving the fixture set shallower than it was.
 RIFTBOUND_SPECS = [
     ("riftbound-ogn-001", 11, "Riftbound 1v1, random policy, full game."),
-    ("riftbound-ogn-002", 29, "Riftbound 1v1, random policy, different line."),
+    ("riftbound-ogn-002", 34, "Riftbound 1v1, random policy, long game."),
 ]
 
 
@@ -72,6 +83,7 @@ def main() -> int:
             replay_id=replay_id,
             description=description,
             game="riftbound",
+            provenance=provenance(load_db()),
         )
         replay.source = "synthetic"
         path = HERE / f"{replay_id}.json"

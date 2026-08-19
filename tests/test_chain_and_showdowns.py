@@ -107,13 +107,36 @@ def test_playing_a_spell_puts_it_on_the_chain_and_closes_the_state(decks):
     assert state.phase is Phase.CHAIN
 
 
-def test_the_opponent_gets_priority_after_a_spell_is_finalized(decks):
-    """337.4/338 -- the next player gains Priority."""
+def test_the_caster_gets_the_first_priority_window(decks):
+    """337.4 -- "the controller of the **next item on the chain** gains
+    Priority", and the item just played is the next to resolve.
+
+    This test previously asserted the opposite, citing the same rule. It was
+    wrong: 338.1.a.5 says the first player with priority after creating the
+    chain may add "an additional item to the item that Started the Chain",
+    which only makes sense if that player is the caster. 340.4 -- the same
+    rule shape after a resolve -- was already implemented this way, so the
+    engine was inconsistent with itself.
+
+    It matters: the caster can stack a second item on top of their own, so it
+    resolves first, before the opponent ever gets to interact with the
+    original.
+    """
     state = arena(decks)
     caster = state.turn_player
     state.apply(PlayCard(give(state, caster, "OGN-004")))
+    assert state.current_player == caster
+    assert state.priority == caster
+
+
+def test_priority_then_passes_to_the_opponent(decks):
+    """338.1.b.1 -- the player with Priority passes to the next in turn order."""
+    state = arena(decks)
+    caster = state.turn_player
+    state.apply(PlayCard(give(state, caster, "OGN-004")))
+    state.apply(PassPhase())
     assert state.current_player == state.opponent(caster)
-    assert state.priority == state.opponent(caster)
+    assert state.chain, "one pass does not resolve the item"
 
 
 def test_a_spell_resolves_only_after_all_players_pass(decks):
@@ -124,9 +147,9 @@ def test_a_spell_resolves_only_after_all_players_pass(decks):
     state.apply(PlayCard(give(state, caster, "OGN-004")))
 
     assert state.chain, "still on the chain after one player has priority"
-    state.apply(PassPhase())          # opponent passes
+    state.apply(PassPhase())          # caster passes (337.4 gave them priority)
     assert state.chain, "one pass is not enough"
-    state.apply(PassPhase())          # caster passes -> resolve
+    state.apply(PassPhase())          # opponent passes -> resolve
     assert not state.chain
 
 
@@ -140,6 +163,7 @@ def test_the_chain_resolves_newest_first(decks):
     state.apply(PlayCard(give(state, caster, "OGN-009")))  # Hextech Ray, deal 3
     if state.phase is Phase.CHOOSING:
         state.apply(ChooseTarget(victim))
+    state.apply(PassPhase())    # 337.4 gave the caster priority; they pass
     # The opponent responds with Gust (a Reaction) while the ray is on the chain.
     gust = give(state, other, "OGN-169")
     assert PlayCard(gust) in state.legal_actions(), "Reactions are legal in a Closed state"
@@ -165,6 +189,7 @@ def test_a_reaction_can_be_played_into_a_chain_but_an_action_cannot(decks):
     caster = state.turn_player
     other = state.opponent(caster)
     state.apply(PlayCard(give(state, caster, "OGN-004")))
+    state.apply(PassPhase())                   # priority reaches the opponent
 
     reaction = give(state, other, "OGN-133")   # Flurry of Blades, REACTION
     action = give(state, other, "OGN-004")     # Cleave, ACTION
@@ -190,8 +215,7 @@ def test_rune_abilities_stay_available_inside_a_chain(decks):
     caster = state.turn_player
     assert state.players[caster].channeled_runes, "caster needs runes on the board"
     state.apply(PlayCard(give(state, caster, "OGN-004")))
-    # Priority is with the opponent; pass it back to the caster, who has runes.
-    state.apply(PassPhase())
+    # 337.4 -- the caster holds priority, and it is the caster who has runes.
     assert state.chain, "the spell is still on the chain"
     reprs = [repr(a) for a in state.legal_actions()]
     assert any(r.startswith(("tap_energy:", "recycle_power:")) for r in reprs)
@@ -452,10 +476,12 @@ def test_a_reaction_can_answer_a_reaction(decks):
     state.apply(PlayCard(give(state, caster, "OGN-009")))   # Hextech Ray
     if state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
+    state.apply(PassPhase())          # 337.4 -- the caster passes first
     first = give(state, other, "OGN-133")                   # Flurry, REACTION
     state.apply(PlayCard(first))
     if state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
+    state.apply(PassPhase())          # and so does the responder
     second = give(state, caster, "OGN-169")                 # Gust, REACTION
     assert PlayCard(second) in state.legal_actions(), "a Reaction answers a Reaction"
     state.apply(PlayCard(second))

@@ -11,7 +11,7 @@ import pytest
 from agents.random_agent import RandomAgent
 from cards.database import load as load_db
 from engine.setup import build_state, load_deck
-from engine.state import Phase
+from engine.state import Phase, bf_location
 
 DB = load_db()
 
@@ -498,6 +498,17 @@ def test_faithful_manufactor_creates_a_recruit_where_it_is_played(decks):
 # --- 421 Hide / 811 Hidden --------------------------------------------------
 
 
+def garrison(state, player, index=0):
+    """Give `player` control of a battlefield *and* a unit standing on it.
+
+    323.6 takes control away at the next cleanup from a player with no units
+    there, so a test that only sets `controller` is testing a position the
+    rules delete on the next breath.
+    """
+    state.battlefields[index].controller = player
+    put_unit(state, player, "OGN-142", bf_location(index))
+
+
 def hidable(state, player):
     """Put a HIDDEN card in `player`'s hand and give them a power to pay [A]."""
     from engine.zones import CardRef
@@ -521,7 +532,7 @@ def test_hide_puts_a_card_facedown_at_a_battlefield_you_control(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
 
     assert HideCard(card, 0) in state.legal_actions()
@@ -548,7 +559,7 @@ def test_only_one_card_can_be_hidden_at_a_battlefield(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     first, second = hidable(state, player), hidable(state, player)
     state.apply(HideCard(first, 0))
     assert HideCard(second, 0) not in state.legal_actions()
@@ -560,7 +571,7 @@ def test_a_hidden_card_cannot_be_played_on_the_turn_it_was_hidden(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
     assert PlayCard(card) not in state.legal_actions()
@@ -572,7 +583,7 @@ def test_a_hidden_card_can_be_played_for_free_from_the_next_turn(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
 
@@ -591,7 +602,7 @@ def test_the_opponent_sees_that_a_card_is_hidden_but_not_which(decks):
     state = arena(decks)
     player = state.turn_player
     other = state.opponent(player)
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
 
@@ -609,7 +620,7 @@ def test_hiding_pays_one_power_of_any_domain(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.players[player].pool.universal_power = 0
     state.players[player].pool.power = {"Fury": 1}       # a mismatched domain
@@ -806,7 +817,7 @@ def test_losing_the_battlefield_trashes_the_hidden_card(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
     assert state.cards[card].hidden_at == 0
@@ -826,7 +837,7 @@ def test_an_uncontrolled_battlefield_also_strands_the_hidden_card(decks):
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
 
@@ -844,7 +855,7 @@ def test_a_stranded_hidden_card_is_revealed_as_it_is_trashed(decks):
     state = arena(decks)
     player = state.turn_player
     other = state.opponent(player)
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
     name = DB[state.cards[card].card_id].name
@@ -862,7 +873,7 @@ def test_the_hidden_card_survives_while_you_still_control_the_battlefield(decks)
 
     state = arena(decks)
     player = state.turn_player
-    state.battlefields[0].controller = player
+    garrison(state, player)
     card = hidable(state, player)
     state.apply(HideCard(card, 0))
 

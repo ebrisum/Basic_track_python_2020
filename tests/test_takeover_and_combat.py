@@ -252,3 +252,84 @@ def test_shield_can_save_a_defender_from_a_lethal_attack(decks):
     ref.damage = shielded.might          # lethal without Shield
     state._resolve_lethal_damage()
     assert state.cards[unit].location == BASE_LOCATION
+
+
+# --- 323.6 / 190.4.c: control needs a garrison --------------------------------
+
+
+def test_control_is_lost_when_the_last_unit_leaves(decks):
+    """323.6 (cleanup step 4) and 190.4.c -- "If a player has no Units at a
+    Battlefield and the turn is in an Open state, they lose Control of that
+    Battlefield in the following cleanup unless there is a Combat or Showdown
+    ongoing there."
+
+    190.4.a states the same from the other side: a player maintains control
+    "for as long as they have Units at that Battlefield". The engine granted
+    control permanently once taken, which made a battlefield free to hold and
+    scored a Hold point every turn from an empty field.
+    """
+    state = arena(decks)
+    holder = state.turn_player
+    unit = put_unit(state, holder, "OGN-142", bf_location(0))
+    state.battlefields[0].controller = holder
+
+    state._cleanup()
+    assert state.battlefields[0].controller == holder, "a garrison keeps control"
+
+    state.cards[unit].location = BASE_LOCATION
+    state._cleanup()
+    assert state.battlefields[0].controller is None
+
+
+def test_control_survives_while_a_combat_is_running_there(decks):
+    """190.4.b -- "While a Combat or Showdown is ongoing at a Battlefield,
+    Control of that Battlefield cannot change until instructed by steps of the
+    Combat or Showdown"."""
+    from engine.chain import Showdown
+
+    state = arena(decks)
+    holder = state.turn_player
+    state.battlefields[0].controller = holder     # no units there at all
+    state.showdown = Showdown(battlefield=0, attacker=state.opponent(holder),
+                              defender=holder, is_combat=True)
+    state.combat = state.showdown
+
+    state._cleanup()
+    assert state.battlefields[0].controller == holder
+
+    state.showdown = state.combat = None
+    state._cleanup()
+    assert state.battlefields[0].controller is None
+
+
+def test_control_survives_a_closed_state(decks):
+    """323.6 and 190.4.c both say "if the turn is in an Open State". A chain
+    on the stack is a Closed State, so control is not checked yet -- which is
+    what lets a Reaction put a unit back before control is lost."""
+    from engine.chain import ChainItem
+
+    state = arena(decks)
+    holder = state.turn_player
+    state.battlefields[0].controller = holder
+    state.chain.append(
+        ChainItem(kind="card", instance_id=max(state.cards), controller=holder,
+                  pending=False)
+    )
+
+    state._cleanup()
+    assert state.battlefields[0].controller == holder, "a Closed state defers step 4"
+
+
+def test_an_empty_battlefield_scores_no_hold(decks):
+    """469.2 -- Hold requires maintaining Control. With 323.6 enforced, an
+    undefended battlefield is not controlled by the Beginning Phase, so it
+    cannot be Held. This is the rule that makes garrisoning a real cost."""
+    state = arena(decks)
+    holder = state.turn_player
+    state.battlefields[0].controller = holder
+    state.players[holder].points = 0
+
+    state._cleanup()                 # 323.6 takes it away first
+    state._phase_beginning()
+
+    assert state.players[holder].points == 0

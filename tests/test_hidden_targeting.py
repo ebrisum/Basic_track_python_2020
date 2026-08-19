@@ -19,7 +19,7 @@ from agents.random_agent import RandomAgent
 from cards.database import load as load_db
 from cards.dsl import Ability, CardScript, Deal, Kill, Selector, TriggerKind
 from cards.primitives import candidates, restriction_binds
-from engine.actions import ChooseTarget, HideCard, PlayCard
+from engine.actions import ChooseTarget, HideCard, PassPhase, PlayCard
 from engine.setup import build_state, load_deck
 from engine.state import Phase, bf_location
 from engine.zones import BASE_LOCATION, CardRef
@@ -117,7 +117,8 @@ def hidden_bolt(monkeypatch):
             Ability(
                 kind=TriggerKind.ON_RESOLVE,
                 effects=(Deal(amount=3,
-                              selector=Selector(scope="choose", type="unit")),),
+                              selector=Selector(scope="choose", type="unit",
+                                                controller="enemy")),),
             ),
         ),
     )
@@ -134,7 +135,12 @@ def hide_at(state, player, card_id, index):
     )
     state.players[player].hand.append(instance_id)
     state.players[player].pool.universal_power += 1
+    # 811.1.b hides at "a battlefield you control", and 323.6 takes control
+    # away from a player with no units there at the next cleanup -- which
+    # would then trash the card under 323.7. A garrison is part of the
+    # position, not scenery.
     state.battlefields[index].controller = player
+    put_unit(state, player, bf_location(index))
     state.apply(HideCard(instance_id, index))
     state.turn_number += 1        # 811.1.b -- playable from the next turn
     return instance_id
@@ -145,9 +151,10 @@ def test_a_hidden_spell_cannot_reach_another_battlefield(decks, hidden_bolt):
     chosen from among options at the battlefield it was hidden at."""
     state = arena(decks)
     player = state.turn_player
-    here = put_unit(state, player, bf_location(0))
-    there = put_unit(state, player, bf_location(1))
-    home = put_unit(state, player, BASE_LOCATION)
+    foe = state.opponent(player)
+    here = put_unit(state, foe, bf_location(0))
+    there = put_unit(state, foe, bf_location(1))
+    home = put_unit(state, foe, BASE_LOCATION)
 
     card = hide_at(state, player, hidden_bolt, 0)
     state._current_player = player
@@ -171,8 +178,9 @@ def test_the_same_spell_played_from_hand_targets_freely(decks, hidden_bolt):
     on targeting"."""
     state = arena(decks)
     player = state.turn_player
-    here = put_unit(state, player, bf_location(0))
-    there = put_unit(state, player, bf_location(1))
+    foe = state.opponent(player)
+    here = put_unit(state, foe, bf_location(0))
+    there = put_unit(state, foe, bf_location(1))
 
     instance_id = max(state.cards) + 1
     state.cards[instance_id] = CardRef(
@@ -197,8 +205,9 @@ def test_a_hidden_spell_with_no_target_there_cannot_be_played_from_hidden(
     valid targets under these restrictions"."""
     state = arena(decks)
     player = state.turn_player
-    put_unit(state, player, bf_location(1))       # a unit, but not here
-    put_unit(state, player, BASE_LOCATION)
+    foe = state.opponent(player)
+    put_unit(state, foe, bf_location(1))          # an enemy, but not here
+    put_unit(state, foe, BASE_LOCATION)
 
     card = hide_at(state, player, hidden_bolt, 0)
     state._current_player = player
@@ -213,7 +222,7 @@ def test_that_bar_lifts_as_soon_as_a_unit_arrives(decks, hidden_bolt):
     state._current_player = player
     assert PlayCard(card) not in state.legal_actions()
 
-    put_unit(state, player, bf_location(0))
+    put_unit(state, state.opponent(player), bf_location(0))
     assert PlayCard(card) in state.legal_actions()
 
 
@@ -262,8 +271,8 @@ def test_a_card_played_in_response_does_not_disturb_the_hidden_one(decks,
     state = arena(decks)
     player = state.turn_player
     other = state.opponent(player)
-    here = put_unit(state, player, bf_location(0))
-    there = put_unit(state, player, bf_location(1))
+    here = put_unit(state, other, bf_location(0))
+    there = put_unit(state, other, bf_location(1))
 
     card = hide_at(state, player, hidden_bolt, 0)
     state._current_player = player

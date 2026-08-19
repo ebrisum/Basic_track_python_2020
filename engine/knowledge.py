@@ -137,8 +137,15 @@ def public_counts(state, subject: int) -> Counter:
         if ref.location is not None and ref.owner == subject:
             if _is_main_deck(state, ref.instance_id):
                 counts[ref.card_id] += 1
-    # Items on the chain are public too (108.1.b).
+    # Items on the chain are public too (108.1.b). Only *cards*: an activated
+    # ability on the chain names its source card, which is a permanent still
+    # on the board and already counted above. Counting it here as well
+    # inflated the deduced decklist by one for as long as the ability sat on
+    # the chain -- and, because the deduced list is subtracted to get the
+    # unseen pool, shrank that pool by a card the opponent really might hold.
     for item in getattr(state, "chain", []):
+        if getattr(item, "kind", "card") != "card":
+            continue
         ref = state.cards[item.instance_id]
         if ref.owner == subject and _is_main_deck(state, ref.instance_id):
             counts[ref.card_id] += 1

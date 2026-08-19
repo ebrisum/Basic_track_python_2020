@@ -121,7 +121,15 @@ def test_a_finished_game_may_leave_a_facedown_card_stranded(decks):
     )
     state.players[player].hand.append(instance_id)
     state.players[player].pool.universal_power += 1
+    # 323.6 -- a battlefield with no units of its controller is taken away at
+    # the next cleanup, and 323.7 would then trash the hidden card. Garrison it.
     state.battlefields[0].controller = player
+    garrison = max(state.cards) + 1
+    state.cards[garrison] = CardRef(
+        instance_id=garrison, card_id="OGN-142", owner=player,
+        controller=player, location="bf:0",
+    )
+    state.players[player].base.append(garrison)
     state.apply(HideCard(instance_id, 0))
 
     state.battlefields[0].controller = state.opponent(player)

@@ -26,7 +26,8 @@ from analysis.evaluation import (
 )
 from cards.database import load as load_db
 from engine.setup import build_state, load_deck
-from engine.state import VICTORY_SCORE, Phase
+from engine.state import VICTORY_SCORE, Phase, bf_location
+from engine.zones import CardRef
 
 DB = load_db()
 PRIOR = Model()
@@ -217,6 +218,14 @@ def test_ismcts_takes_the_win_when_it_is_available(decks):
     for bf in state.battlefields:
         bf.controller = player
         bf.scored_by.clear()
+        # 323.6 -- control without a garrison is taken away at the next
+        # cleanup, so a "holding a battlefield" position needs a unit on it.
+        instance_id = max(state.cards) + 1
+        state.cards[instance_id] = CardRef(
+            instance_id=instance_id, card_id="OGN-142", owner=player,
+            controller=player, location=bf_location(bf.index),
+        )
+        state.players[player].base.append(instance_id)
 
     agent = ISMCTSAgent(15, iterations=30, model=PRIOR)
     for _ in range(80):

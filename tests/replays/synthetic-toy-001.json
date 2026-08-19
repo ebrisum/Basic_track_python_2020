@@ -3,6 +3,7 @@
   "description": "Toy game, random policy, decisive finish.",
   "source": "synthetic",
   "game": "toy",
+  "provenance": {},
   "seed": 21,
   "initial_state_hash": "058f3108bce2fcb5",
   "steps": [

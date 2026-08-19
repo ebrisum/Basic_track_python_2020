@@ -322,3 +322,48 @@ def test_an_unrevealed_hand_stays_out_of_the_observation(decks):
     state = midgame(decks, 8)
     view = state.observation(0)
     assert view.revealed_opponent_hand == ()
+
+
+def test_an_ability_on_the_chain_does_not_double_count_its_source(decks):
+    """108.1.b makes the chain public, but an *ability* on the chain is not a
+    card leaving a zone -- its source is a permanent still on the board, and
+    already counted there.
+
+    Counting both inflated the deduced 40-card list while the ability sat on
+    the chain, which shrank the unseen pool by a card the opponent might
+    genuinely hold. Found when a priority fix (337.4) changed which moments a
+    chain exists at, and the decklist-constancy test started failing on a seed
+    it had always passed.
+    """
+    from engine.chain import ChainItem
+
+    state = midgame(decks, 9)
+    before = sum(decklist_counts(state, 1).values())
+
+    source = next(
+        ref.instance_id for ref in state.cards.values()
+        if ref.location is not None and ref.owner == 1
+        and state.db[ref.card_id].type in ("unit", "gear")
+    )
+    state.chain.append(
+        ChainItem(kind="ability", instance_id=source, controller=1, pending=False)
+    )
+
+    assert sum(decklist_counts(state, 1).values()) == before
+
+
+def test_a_card_on_the_chain_is_still_counted(decks):
+    """The counterweight: a *card* on the chain has left its zone and is not
+    counted anywhere else, so dropping it would lose a card instead."""
+    from engine.chain import ChainItem
+
+    state = midgame(decks, 9)
+    before = sum(decklist_counts(state, 1).values())
+
+    instance_id = state.players[1].hand[0]
+    state.players[1].hand.remove(instance_id)
+    state.chain.append(
+        ChainItem(kind="card", instance_id=instance_id, controller=1, pending=False)
+    )
+
+    assert sum(decklist_counts(state, 1).values()) == before

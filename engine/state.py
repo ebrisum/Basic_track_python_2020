@@ -798,7 +798,17 @@ class RiftboundState:
         if resolves_immediately(card):
             self._resolve_top()
         else:
-            self._open_priority_window(self.opponent(player))
+            # 337.4 -- "the controller of the next item on the chain gains
+            # Priority", and the item just played *is* the next to resolve. So
+            # the caster gets the first response window, not the opponent.
+            #
+            # This was the opponent, which let them respond before the caster
+            # could stack a second item of their own. 338.1.a.5 is explicit
+            # that the first player with priority after creating the chain may
+            # add "an additional item to the item that Started the Chain", and
+            # 340.4 -- the same rule shape after a resolve -- was already
+            # implemented this way. The engine was inconsistent with itself.
+            self._open_priority_window(player)
 
     _last_from_trigger: bool = False
 
@@ -1417,20 +1427,57 @@ class RiftboundState:
         ref.location = None
         ref.is_attacker = ref.is_defender = False
 
+    def _busy_at(self, index: int) -> bool:
+        """Whether a Showdown or Combat is ongoing at this battlefield.
+
+        190.4.b -- while one is, Control cannot change except through the
+        steps of that Showdown or Combat.
+        """
+        return (
+            (self.showdown is not None and self.showdown.battlefield == index)
+            or (self.combat is not None and self.combat.battlefield == index)
+        )
+
     def _resolve_control(self) -> bool:
-        """190.3.b.1 -- clear Contested when its author has left and no
-        showdown or combat is running there."""
+        """Cleanup steps 4 and 8 (323.6, 323.11).
+
+        **323.6 / 190.4.c** -- "If a player has no Units at a Battlefield and
+        the turn is in an Open state, they lose Control of that Battlefield in
+        the following cleanup unless there is a Combat or Showdown ongoing
+        there." 190.4.a says the same the other way round: control is
+        maintained "for as long as they have Units at that Battlefield".
+
+        This was missing entirely. Control was granted permanently once taken,
+        so a battlefield cost nothing to keep and scored a Hold every turn
+        from an empty field -- removing the central tension of the game, which
+        is that units cannot both garrison and attack.
+
+        **323.11 / 190.3.b.1** -- Contested is removed when the player who
+        applied it holds no units there and nothing is running.
+        """
         changed = False
+        # 309.2 -- a Chain means a Closed State, and step 4 is gated on an
+        # Open one. This is what lets a Reaction return a unit to a
+        # battlefield before control is checked.
+        open_state = not self.chain
+
         for bf in self.battlefields:
-            if not bf.contested or bf.contested_by is None:
-                continue
-            busy = (
-                (self.showdown is not None and self.showdown.battlefield == bf.index)
-                or (self.combat is not None and self.combat.battlefield == bf.index)
-            )
-            if busy:
-                continue
+            busy = self._busy_at(bf.index)
             occupants = self.units_at(bf_location(bf.index))
+
+            # Step 4 (323.6).
+            if (open_state and not busy and bf.controller is not None
+                    and not any(r.controller == bf.controller for r in occupants)):
+                self._emit(
+                    f"{self.db[bf.card_id].name} becomes uncontrolled: "
+                    f"P{bf.controller} has no units there (323.6)"
+                )
+                bf.controller = None
+                changed = True
+
+            # Step 8 (323.11 / 190.3.b.1).
+            if not bf.contested or bf.contested_by is None or busy:
+                continue
             if not any(r.controller == bf.contested_by for r in occupants):
                 bf.contested = False
                 bf.contested_by = None

@@ -3,6 +3,7 @@
   "description": "Toy game, random policy, long game.",
   "source": "synthetic",
   "game": "toy",
+  "provenance": {},
   "seed": 4242,
   "initial_state_hash": "9c1b3727edd45a9c",
   "steps": [
