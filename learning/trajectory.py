@@ -183,6 +183,71 @@ def read_trajectory(path: str | Path) -> Iterator[dict]:
                 yield json.loads(line)
 
 
+def record_into(
+    writer: TrajectoryWriter,
+    state,
+    agents: list,
+    game_id: str,
+    encoder: ActionEncoder | None = None,
+    action_cap: int = 3000,
+):
+    """Play `state` out with `agents`, writing into an already-open writer.
+
+    Split out from `record_game` so a dataset can hold many games in one file:
+    a header per game would repeat the provenance stamp thousands of times,
+    and a file per game would put a gzip container around 200 records.
+
+    The reward on every transition is 0.0 except the last, which carries the
+    acting player's `returns()`. Assigning a return to *the player who moved*
+    rather than to seat 0 is what makes the file usable without knowing which
+    seat a learner is training.
+    """
+    active = encoder or writer.encoder
+    written: list[Transition] = []
+    step = 0
+    while not state.is_terminal() and step < action_cap:
+        legal = state.legal_actions()
+        if not legal:
+            break
+        player = state.current_player
+        obs = state.observation(player)
+        action = agents[player].act(state)
+        transition = Transition(
+            game_id=game_id,
+            step=step,
+            player=player,
+            observation=slim_observation(obs),
+            action_index=active.encode(obs, action),
+            action_repr=repr(action),
+            legal_indices=sorted({active.encode(obs, a) for a in legal}),
+            legal_reprs=sorted({repr(a) for a in legal}),
+            policy=getattr(agents[player], "last_policy", None),
+            value=getattr(agents[player], "last_value", None),
+        )
+        written.append(transition)
+        writer.write(transition)
+        state.apply(action)
+        step += 1
+
+    returns = state.returns() if state.is_terminal() else (0.5, 0.5)
+    if written:
+        # Section 15: the terminal signal is the only reward. It is written as
+        # a separate closing record as well as onto the last transition, so a
+        # reader streaming one record at a time does not have to look ahead to
+        # know an episode ended.
+        last = written[-1]
+        last.reward = returns[last.player]
+        writer._emit({
+            "record": "transition-reward",
+            "game_id": game_id,
+            "step": last.step,
+            "player": last.player,
+            "reward": last.reward,
+        })
+    writer.finish(returns, state.winner, turns=getattr(state, "turn_number", None))
+    return state
+
+
 def record_game(
     state,
     agents: list,
@@ -193,56 +258,7 @@ def record_game(
     decks: tuple[str, str] | None = None,
     action_cap: int = 3000,
 ):
-    """Play `state` out with `agents` and write the trajectory. Returns the state.
-
-    The reward on every transition is 0.0 except the last, which carries the
-    acting player's `returns()`. Assigning a return to *the player who moved*
-    rather than to seat 0 is what makes the file usable without knowing which
-    seat a learner is training.
-    """
+    """Play one game into its own file. Returns the finished state."""
     active = encoder or ActionEncoder()
-    written: list[Transition] = []
     with TrajectoryWriter(path, encoder=active, db=db, decks=decks) as writer:
-        step = 0
-        while not state.is_terminal() and step < action_cap:
-            legal = state.legal_actions()
-            if not legal:
-                break
-            player = state.current_player
-            obs = state.observation(player)
-            action = agents[player].act(state)
-            transition = Transition(
-                game_id=game_id,
-                step=step,
-                player=player,
-                observation=slim_observation(obs),
-                action_index=active.encode(obs, action),
-                action_repr=repr(action),
-                legal_indices=sorted({active.encode(obs, a) for a in legal}),
-                legal_reprs=sorted({repr(a) for a in legal}),
-                policy=getattr(agents[player], "last_policy", None),
-                value=getattr(agents[player], "last_value", None),
-            )
-            written.append(transition)
-            writer.write(transition)
-            state.apply(action)
-            step += 1
-
-        returns = state.returns() if state.is_terminal() else (0.5, 0.5)
-        if written:
-            # Section 15: the terminal signal is the only reward. It is written
-            # into the file as a separate closing record *and* onto the last
-            # transition, so a reader that streams one record at a time does
-            # not have to look ahead to know an episode ended.
-            last = written[-1]
-            last.reward = returns[last.player]
-            writer._emit({
-                "record": "transition-reward",
-                "game_id": game_id,
-                "step": last.step,
-                "player": last.player,
-                "reward": last.reward,
-            })
-        writer.finish(returns, state.winner,
-                      turns=getattr(state, "turn_number", None))
-    return state
+        return record_into(writer, state, agents, game_id, active, action_cap)

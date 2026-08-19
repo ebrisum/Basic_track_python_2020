@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 770 tests pass.
+- 778 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.

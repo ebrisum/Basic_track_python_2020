@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 770 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 778 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -112,7 +112,7 @@ repository diverge hardest.
 | 17 | Embedding + transformer + policy/value heads | **absent** |
 | 18 | Policy scored over legal actions | **absent** — ISMCTS has an unused `prior` hook, defaulted off |
 | 19 | Supervised bootstrap | **absent** (the plan marks it skippable) |
-| 20 | Baseline-generated games for pretraining | **partial** — games are generated, nothing consumes them as a dataset |
+| 20 | Baseline-generated games for pretraining | **done** — `cli.py generate --games N` writes a gzipped trajectory dataset from any pairing of the five baseline agents, seats alternating by game index, with the pairing recorded in the file. ~22 KB per game. Nothing *consumes* it yet, because sections 16-18 are blocked on the dependency decision |
 | 21 | Self-play | **partial** — `analysis/self_play_loop.py` runs generations and saves *weights*; the per-decision trajectory format now exists (section 14) but the loop does not yet write one |
 | 22 | PPO | **absent** |
 
@@ -159,7 +159,7 @@ and rule 40.8 ("optimize correctness before performance") say.
 | 28 | **No-cheating tests** | **done** | `tests/test_no_cheating.py`, added for this evaluation. It found a leak on its first run — in the *opposite* direction: 128.4 grants a facedown card's face to its controller, and the observation showed it to nobody. |
 | 29 | Logging | **partial** | The analysis tools print their metrics; only the league state is persisted. No per-run metrics file, no illegal-action counter in a log (it is 0, asserted by tests). |
 | 30 | Configuration files | **absent** | CLI flags only; no `ai/config/*.yaml`. Note YAML itself is a dependency; JSON would do. |
-| 31 | Unified CLI (`ai validate`, `ai train`, …) | **partial** | Twelve separate entry points under `analysis/`, plus `play.py`. Every capability the plan names has a command; there is no single `ai` front door. |
+| 31 | Unified CLI (`ai validate`, `ai train`, …) | **done** | `cli.py` -- validate / simulate / benchmark / evaluate / generate / fit / selfplay / play, each delegating to the module that already owned the work. `train` exits 2 with the reason rather than printing a stub that looks like it worked; a test asserts that it does. |
 | 32 | Human-vs-AI interface | **done** | `python3 play.py` — local server, browser UI, hot-seat, human-vs-agent, and spectator mode. `analysis/evaluation.explain()` gives the per-feature contribution; it is not yet surfaced as action probabilities in the UI, because there is no policy to draw them from. |
 | 33 | Matchup analysis API | **done** | `analysis/matchup.py`, with confidence intervals and seat-swapped results. |
 | 34-35 | Card-impact analysis, deck optimizer | **n/a** | The plan says do not build these yet. They are not built. |
