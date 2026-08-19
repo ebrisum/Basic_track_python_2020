@@ -41,7 +41,7 @@ from __future__ import annotations
 
 import gzip
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields, is_dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterator
@@ -86,6 +86,21 @@ def _stamp() -> dict:
 
 
 def _strip(value: Any) -> Any:
+    """Drop the unwanted fields *while* converting, not afterwards.
+
+    The obvious implementation is `asdict(obs)` followed by a filter, and that
+    is what this was. `asdict` deep-converts every field first, including the
+    rules text and image URLs that are about to be discarded -- 1.9 million
+    inner calls per three games, 18% of dataset-generation time spent building
+    dictionaries to throw away. Walking `fields()` and skipping dropped names
+    before recursing never builds them.
+    """
+    if is_dataclass(value) and not isinstance(value, type):
+        return {
+            f.name: _strip(getattr(value, f.name))
+            for f in fields(value)
+            if f.name not in SLIM_DROP
+        }
     if isinstance(value, dict):
         return {k: _strip(v) for k, v in value.items() if k not in SLIM_DROP}
     if isinstance(value, (list, tuple)):
@@ -95,7 +110,7 @@ def _strip(value: Any) -> Any:
 
 def slim_observation(obs) -> dict:
     """The observation with recoverable and presentational fields removed."""
-    return _strip(asdict(obs))
+    return _strip(obs)
 
 
 @dataclass

@@ -113,6 +113,10 @@ class ActionEncoder:
         self.max_objects = max_objects
         self.max_hand = max_hand
         self.max_abilities = max_abilities
+        # One-entry memo; see `slots`.
+        self._slots_for = None
+        self._slots_cache: tuple[int, ...] = ()
+        self._slots_index: dict[int, int] = {}
 
         moves = 1 + MAX_BATTLEFIELDS  # "base", plus one per battlefield
         mulligans = 1 + max_hand + max_hand * (max_hand - 1) // 2
@@ -171,20 +175,35 @@ class ActionEncoder:
         return sorted(ids)
 
     def slots(self, obs) -> tuple[int, ...]:
-        """The canonical slot table: instance ids in ascending order."""
+        """The canonical slot table: instance ids in ascending order.
+
+        Memoised for the most recent observation, because the caller that
+        matters -- encoding every legal action at one decision, then the mask
+        -- asks for the same table five to fifty times in a row, and building
+        it walks every zone and sorts. The memo holds a strong reference to
+        the observation it is keyed on, which is what makes keying on `id()`
+        safe: an object that cannot be collected cannot have its id reused.
+        """
+        if obs is self._slots_for:
+            return self._slots_cache
         ids = self.addressable(obs)
         if len(ids) > self.max_objects:
             raise EncodingOverflow(
                 f"{len(ids)} addressable objects exceeds max_objects="
                 f"{self.max_objects}"
             )
-        return tuple(ids)
+        table = tuple(ids)
+        self._slots_for = obs
+        self._slots_cache = table
+        self._slots_index = {instance_id: slot
+                             for slot, instance_id in enumerate(table)}
+        return table
 
     def _slot_of(self, obs, instance_id: int) -> int:
-        table = self.slots(obs)
+        self.slots(obs)  # populates the index for this observation
         try:
-            return table.index(instance_id)
-        except ValueError:
+            return self._slots_index[instance_id]
+        except KeyError:
             raise KeyError(
                 f"instance {instance_id} is not addressable in this observation"
             ) from None
