@@ -1,16 +1,22 @@
 # Where this project stands against `TCG_AI_BUILD.md`
 
 An evaluation of the uploaded build plan against what is actually in this
-repository, section by section. Written at the commit that closed RQ-14,
-RQ-15 and RQ-16.
+repository, section by section. First written at the commit that closed RQ-14,
+RQ-15 and RQ-16, and revised as the gaps it named were filled.
 
 Two things are true at once and neither should be lost in the summary:
 
 - On **rules fidelity, determinism, information-tightness and statistical
   rigour**, this project is *ahead* of what the plan asks for.
-- On the **ML stack itself** — encoders, a neural policy/value model, PPO,
-  trajectories — it is at zero. Nothing in sections 14, 16, 17, 18 or 22
-  exists.
+- On the **model itself** — a neural policy/value network and the loop that
+  trains it — it is at zero. Sections 16-19 and 22 do not exist.
+
+Everything *around* the model now does: the action encoding (7), the
+trajectory format (14), the dataset generator (20), the three missing baseline
+agents (12), the scenario suite (27) and a single CLI (31) all landed after
+the first draft of this file, each in pure standard library. What remains is
+the one part that cannot be written in pure standard library, which is why the
+dependency question below is the live one.
 
 The plan's own section 10 says *"Do not begin model training until the
 simulator passes the validation requirements."* That instruction is the most
@@ -34,7 +40,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 778 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 786 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -103,8 +109,12 @@ action it chooses among is one the evaluator called equal.
 
 ## Part III — The model (sections 16-22)
 
-This block is **absent in its entirety**, and it is where the plan and this
-repository diverge hardest.
+This block is where the plan and this repository diverge hardest, and it is
+the only place a dependency decision is load-bearing. Everything around the
+model now exists -- the action encoding (7), the trajectory format (14), the
+dataset generator (20), the opponent pool (12), the scenario suite (27) -- so
+what is missing is the model itself and the training loop, sections 16-19 and
+22.
 
 | § | Item | Status |
 | --- | --- | --- |
@@ -158,7 +168,7 @@ and rule 40.8 ("optimize correctness before performance") say.
 | 27 | Fixed evaluation scenarios | **done** | `analysis/scenarios/`: 8 hand-built positions with cited rationales, graded by `python -m analysis.scenarios --agent all`. Random scores 0.38, Greedy 0.62, the styles 0.38-0.50 — it discriminates and nobody passes it. The suite is itself tested: every position passes `invariants.check`, every accepted answer is legal, and every scenario rejects at least one legal action. |
 | 28 | **No-cheating tests** | **done** | `tests/test_no_cheating.py`, added for this evaluation. It found a leak on its first run — in the *opposite* direction: 128.4 grants a facedown card's face to its controller, and the observation showed it to nobody. |
 | 29 | Logging | **partial** | The analysis tools print their metrics; only the league state is persisted. No per-run metrics file, no illegal-action counter in a log (it is 0, asserted by tests). |
-| 30 | Configuration files | **absent** | CLI flags only; no `ai/config/*.yaml`. Note YAML itself is a dependency; JSON would do. |
+| 30 | Configuration files | **done** | `config/*.toml` (default / debug / eval) read by `learning/config.py` with the standard library's `tomllib`. TOML rather than the plan's YAML, deliberately: PyYAML would be a dependency and a config format is a poor thing to spend the first one on. Precedence is defaults < file < flags. `reward.shaping = true` and an unbuilt `curriculum.level` both raise rather than being read. |
 | 31 | Unified CLI (`ai validate`, `ai train`, …) | **done** | `cli.py` -- validate / simulate / benchmark / evaluate / generate / fit / selfplay / play, each delegating to the module that already owned the work. `train` exits 2 with the reason rather than printing a stub that looks like it worked; a test asserts that it does. |
 | 32 | Human-vs-AI interface | **done** | `python3 play.py` — local server, browser UI, hot-seat, human-vs-agent, and spectator mode. `analysis/evaluation.explain()` gives the per-feature contribution; it is not yet surfaced as action probabilities in the UI, because there is no policy to draw them from. |
 | 33 | Matchup analysis API | **done** | `analysis/matchup.py`, with confidence intervals and seat-swapped results. |

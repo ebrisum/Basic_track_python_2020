@@ -1,0 +1,14 @@
+# Measurement settings: enough games for an interval that means something, and
+# the pairing the analysis tools actually run.
+
+[run]
+games = 1000
+seed0 = 100000        # disjoint from training seeds, so evaluation is not measured on games it learned from
+progress = 100
+
+[game]
+agents = ["greedy", "random"]
+
+[evaluation]
+scenarios = true
+interval_games = 100

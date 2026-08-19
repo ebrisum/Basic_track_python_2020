@@ -195,3 +195,32 @@ def test_policy_and_value_are_optional_and_survive(tmp_path):
     assert stored["value"] == 0.5
     assert len(stored["policy"]) == len(indices)
     assert abs(sum(stored["policy"]) - 1.0) < 1e-9
+
+
+def test_a_truncated_episode_carries_no_result(tmp_path):
+    """Hitting the action cap is truncation, not termination.
+
+    Calling it a draw would write a reward the game never produced -- a
+    fabricated label in the one file a learner is supposed to trust. The
+    earlier version of this module did exactly that, and it only showed up
+    because the debug config sets a 400-action cap and two games hit it.
+    """
+    path = tmp_path / "cut.jsonl.gz"
+    record_game(_fresh(3), [RandomAgent(1), RandomAgent(2)], path,
+                game_id="cut", action_cap=12)
+    records = list(read_trajectory(path))
+    result = [r for r in records if r["record"] == "result"][0]
+    assert result["terminal"] is False
+    assert result["returns"] is None
+    transitions = [r for r in records if r["record"] == "transition"]
+    assert transitions, "nothing was recorded"
+    assert all(r["reward"] == 0.0 for r in transitions)
+    assert not [r for r in records if r["record"] == "transition-reward"]
+
+
+def test_a_finished_episode_says_so(tmp_path):
+    path = tmp_path / "done.jsonl.gz"
+    record_game(_fresh(7), [RandomAgent(1), RandomAgent(2)], path, game_id="d")
+    result = [r for r in read_trajectory(path) if r["record"] == "result"][0]
+    assert result["terminal"] is True
+    assert result["returns"] is not None

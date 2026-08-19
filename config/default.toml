@@ -1,0 +1,31 @@
+# The settings a normal run uses. Every key here is also in
+# `learning/config.py::DEFAULTS`; this file exists so the defaults are
+# readable without opening Python, and so a change can be reviewed as a diff.
+#
+# Precedence: built-in defaults < this file < command-line flags.
+
+[run]
+games = 100
+seed0 = 0
+action_cap = 3000     # a game past this is reported unresolved, never truncated silently
+progress = 25
+workers = 1           # section 13's worker pool does not exist yet; >1 is not honoured
+
+[game]
+decks = ["jinx_chaos_fury", "volibear_body_fury"]
+agents = ["random", "greedy"]
+
+[reward]
+# Section 15. Setting this true raises -- see learning/config.py.
+shaping = false
+
+[curriculum]
+level = 0             # 0 is the full game; section 26's levels are not built
+
+[evaluation]
+scenarios = true
+interval_games = 1000
+
+[league]
+checkpoint_interval = 1
+sampling = "uniform"

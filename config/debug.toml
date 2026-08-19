@@ -1,0 +1,12 @@
+# Small and loud: for checking a change runs at all, not for measuring anything.
+# Numbers this small are statistically meaningless by design -- a 5-game
+# result is noise, and reporting one as a finding is the mistake this file
+# should not encourage.
+
+[run]
+games = 5
+progress = 1
+action_cap = 400
+
+[game]
+agents = ["random", "random"]

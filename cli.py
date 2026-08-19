@@ -32,6 +32,7 @@ COMMANDS = """commands:
   simulate    alias for validate, in the plan's wording
   benchmark   head-to-head match between two agents (section 13)
   evaluate    grade an agent on the fixed scenarios (section 27)
+  config      print a merged configuration (section 30)
   generate    write a trajectory dataset from baseline agents (sections 14, 20)
   fit         fit evaluator weights to recorded outcomes
   selfplay    generational self-play over evaluator weights
@@ -69,15 +70,36 @@ def _cmd_evaluate(rest: list[str]) -> int:
 
 
 def _cmd_generate(rest: list[str]) -> int:
+    from learning.config import ConfigError, load as load_config
+
+    # Precedence is defaults < config file < flags, so every flag defaults to
+    # None here and only a value the person actually typed overrides the file.
     parser = argparse.ArgumentParser(prog="cli.py generate")
-    parser.add_argument("--games", type=int, default=100)
+    parser.add_argument("--config", default=None,
+                        help="a name from config/ or a path to a .toml")
+    parser.add_argument("--games", type=int, default=None)
     parser.add_argument("--out", default="data/trajectories/baseline.jsonl.gz")
-    parser.add_argument("--agents", nargs=2, default=["random", "greedy"])
-    parser.add_argument("--decks", nargs=2,
-                        default=["jinx_chaos_fury", "volibear_body_fury"])
-    parser.add_argument("--seed0", type=int, default=0)
-    parser.add_argument("--progress", type=int, default=25)
+    parser.add_argument("--agents", nargs=2, default=None)
+    parser.add_argument("--decks", nargs=2, default=None)
+    parser.add_argument("--seed0", type=int, default=None)
+    parser.add_argument("--progress", type=int, default=None)
     args = parser.parse_args(rest)
+
+    try:
+        config = load_config(args.config)
+    except ConfigError as problem:
+        print(str(problem), file=sys.stderr)
+        return 2
+    if args.games is None:
+        args.games = config["run"]["games"]
+    if args.seed0 is None:
+        args.seed0 = config["run"]["seed0"]
+    if args.progress is None:
+        args.progress = config["run"]["progress"]
+    if args.agents is None:
+        args.agents = list(config["game"]["agents"])
+    if args.decks is None:
+        args.decks = list(config["game"]["decks"])
 
     from pathlib import Path
     from learning.generate import generate
@@ -95,7 +117,10 @@ def _cmd_generate(rest: list[str]) -> int:
         out, args.games,
         tuple(table[name] for name in args.agents),
         decks=tuple(args.decks), seed0=args.seed0, progress=args.progress,
+        action_cap=config["run"]["action_cap"],
     )
+    summary["config"] = args.config or "built-in defaults"
+    summary["agents"] = list(args.agents)
     print(json.dumps(summary, indent=2))
     return 0
 
@@ -136,8 +161,29 @@ def _cmd_train(rest: list[str]) -> int:
     return 2
 
 
+def _cmd_config(rest: list[str]) -> int:
+    """Print the configuration a run would actually use.
+
+    A config system nobody can inspect is a second place for behaviour to
+    hide. This resolves defaults, file and (nothing else, here) and prints the
+    result, so "what did that run use" has an answer.
+    """
+    from learning.config import ConfigError, load as load_config
+
+    parser = argparse.ArgumentParser(prog="cli.py config")
+    parser.add_argument("name", nargs="?", default=None)
+    args = parser.parse_args(rest)
+    try:
+        print(json.dumps(load_config(args.name), indent=2))
+    except ConfigError as problem:
+        print(str(problem), file=sys.stderr)
+        return 2
+    return 0
+
+
 HANDLERS = {
     "validate": _cmd_validate,
+    "config": _cmd_config,
     "simulate": _cmd_validate,
     "benchmark": _cmd_benchmark,
     "evaluate": _cmd_evaluate,

@@ -155,12 +155,19 @@ class TrajectoryWriter:
     def write(self, transition: Transition) -> None:
         self._emit(transition.to_record())
 
-    def finish(self, returns: tuple[float, ...], winner: int | None,
-               turns: int | None = None) -> None:
+    def finish(self, returns: tuple[float, ...] | None, winner: int | None,
+               terminal: bool = True, turns: int | None = None) -> None:
+        """Close an episode.
+
+        `terminal` false means the episode was truncated at the action cap.
+        `returns` is None in that case: the game produced no result, and
+        inventing one would put a fabricated label into training data.
+        """
         self._emit({
             "record": "result",
-            "returns": list(returns),
+            "returns": list(returns) if returns is not None else None,
             "winner": winner,
+            "terminal": terminal,
             "turns": turns,
         })
 
@@ -229,8 +236,14 @@ def record_into(
         state.apply(action)
         step += 1
 
-    returns = state.returns() if state.is_terminal() else (0.5, 0.5)
-    if written:
+    # An episode that hit the action cap was *truncated*, not *terminated*, and
+    # the difference is not cosmetic. Calling it a draw would write a reward
+    # the game never produced -- a fabricated label, in the one file a learner
+    # is supposed to trust. So a truncated episode carries no returns and no
+    # terminal reward, and says so in its result record.
+    terminal = state.is_terminal()
+    returns = tuple(state.returns()) if terminal else None
+    if written and terminal:
         # Section 15: the terminal signal is the only reward. It is written as
         # a separate closing record as well as onto the last transition, so a
         # reader streaming one record at a time does not have to look ahead to
@@ -244,7 +257,8 @@ def record_into(
             "player": last.player,
             "reward": last.reward,
         })
-    writer.finish(returns, state.winner, turns=getattr(state, "turn_number", None))
+    writer.finish(returns, state.winner, terminal=terminal,
+                  turns=getattr(state, "turn_number", None))
     return state
 
 

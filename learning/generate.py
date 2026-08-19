@@ -43,8 +43,8 @@ def generate(
     deck0, deck1 = load_deck(decks[0]), load_deck(decks[1])
     encoder = ActionEncoder()
     started = time.time()
-    decisions = 0
     results = [0, 0, 0]  # p0 wins, p1 wins, draws
+    truncated = 0        # hit the action cap: no result, and not a draw
 
     with TrajectoryWriter(path, encoder=encoder, db=db, decks=decks) as writer:
         writer._emit({
@@ -68,7 +68,9 @@ def generate(
                 encoder=encoder, action_cap=action_cap,
             )
             del before
-            if state.winner is None:
+            if not state.is_terminal():
+                truncated += 1
+            elif state.winner is None:
                 results[2] += 1
             else:
                 results[state.winner] += 1
@@ -85,6 +87,10 @@ def generate(
         "p0_wins": results[0],
         "p1_wins": results[1],
         "draws": results[2],
+        # Reported separately from draws on purpose: a game stopped at the
+        # action cap has no result, and folding it into "draw" would put a
+        # reward into the dataset that the game never produced.
+        "truncated": truncated,
         "bytes": Path(path).stat().st_size,
     }
     summary["bytes_per_game"] = summary["bytes"] // max(1, games)

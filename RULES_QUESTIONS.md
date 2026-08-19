@@ -651,3 +651,27 @@ The brief flagged these in advance. Each now has a starting point:
 - **Champion death / recycle / redeploy** — **103.2.a.3** (Chosen Champion
   identity follows the *name*, not the physical card), **416** Recycle,
   **428** Kill.
+
+---
+
+## RQ-21 — TOML instead of the plan's YAML for configuration
+
+**Status.** Decided, and recorded here because it is a deviation from
+`TCG_AI_BUILD.md` rather than from the Core Rules, and a deviation nobody was
+asked about should still be visible.
+
+**The plan asks for** `ai/config/*.yaml` (section 30).
+
+**What was built** is `config/*.toml`, read with the standard library's
+`tomllib`.
+
+**Why.** YAML needs PyYAML. The standing rule from the first brief is pure
+standard library plus pytest, with any dependency asked for before it is
+added. A configuration file format is a poor thing to spend the first
+dependency on, and TOML does the same job from the standard library on 3.11+.
+
+**What it costs.** YAML's anchors and multi-document files are not available.
+Nothing in the plan's list of configurable fields needs either.
+
+**Reversible.** `learning/config.py` isolates the parse in one function; a
+YAML backend would be a few lines if the dependency is ever approved.
