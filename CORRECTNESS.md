@@ -121,7 +121,7 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Four series audited, seventeen live bugs
+### Four series audited, eighteen live bugs
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
 live bugs**, not merely missing features. The turn-structure audit walked
@@ -139,6 +139,7 @@ more**, and the keyword glossary 800-829 found **three** after that:
 | **136.2.c** | an attached card's "me" is its host | an Equipment buffed itself, which 702 forbids |
 | **718.2 / 724** | Inactive text | a worn gear could re-equip itself; a loose one fired its worn trigger |
 | **719.3.a** | attachments travel with the host | true on the move path, not the combat-recall path |
+| **359.3.e.5** | a choice is re-checked before it is honoured | a stale option could bind a gear to a card not in play |
 | **816 Temporary** | a Temporary permanent dies at its controller's Beginning Phase | it lived forever (11 cards) |
 | **825 Unique** | one copy per deck by name | unenforced |
 | **815.1.c.2** | the citation for Tank damage ordering | cited 626.1.d.4, which is not a rule |
@@ -163,8 +164,9 @@ kind of gap — every item below is named, counted and reachable:
   are blocked on RQ-19, not on effort.
 - **Three Game Actions**: Double (4 cards), Prevent (2), Swap (1).
 
-Sixteen live bugs across four audited series. The rate did not fall off:
-the last series still produced three.
+Eighteen live bugs across four audited series. The rate did not fall off:
+the last series still produced three, and the 10,000-game validation run
+found one more that every smaller run had missed.
 
 ### The structural gap, now closed
 

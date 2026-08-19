@@ -485,8 +485,24 @@ ability's chain item was charged its *source card's* play cost on top of the
 ability cost it had already paid. The whole suite went red at once, which is
 the useful kind of failure.
 
+### What the 10,000-game run added
+
+The acceptance run then found an **eighteenth**, which every smaller run had
+missed: a `ChoiceRequest` lists the options legal when it is *raised*, and the
+cleanup at the end of that same action can kill one before the answer arrives
+in a later one. An Attach bound a gear to a host that had already left the
+board, leaving it in a base with no location (107.1.c, 718.5).
+
+359.3.e.5 already covered this for targets declared at play time; the
+resolution-time path was the half that did not re-check. It does now, in
+`_targets`, so every effect gets the same treatment rather than Attach alone.
+
+It needed a game where a cleanup kills a unit between a choice being offered
+and answered. Sampling 500 end-states out of 10,000 games caught it, which is
+the argument for the large runs being large.
+
 ### Tally
 
-Four series audited: **seventeen live bugs**, three keywords built
+Four series audited: **eighteen live bugs**, three keywords built
 (Temporary, Unique, Deflect), and the structural gap RQ-19 fixed for spells
 and activated abilities.
