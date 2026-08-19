@@ -976,16 +976,8 @@ class RiftboundState:
         player = self._current_player
         ref = self.cards[action.instance_id]
         ref.exhausted = True  # 144.2 -- exhausting is the cost
-        ref.location = action.destination
+        self.move_to(ref, action.destination)
         name = self.db[ref.card_id].name
-        # 719.3 -- a Top-Most Card and everything Attached to it are at the
-        # same location; 719.3.a moves them together. Attached cards have no
-        # move of their own (718.5.c), so this is the only way they travel.
-        for attached in self.cards.values():
-            # Only cards still on the board travel; anything that has left
-            # is no longer attached to anything that can carry it.
-            if attached.attached_to == ref.instance_id and attached.location is not None:
-                attached.location = ref.location
 
         if action.destination != BASE_LOCATION:
             index = int(action.destination.split(":")[1])
@@ -1500,6 +1492,26 @@ class RiftboundState:
         self.cards.pop(ref.instance_id, None)
         self._emit(f"the {self.db[ref.card_id].name} token ceases to exist")
 
+    def move_to(self, ref, location: str) -> None:
+        """719.3 -- put a card at a location, taking its attachments with it.
+
+        "A Top-Most Card and all cards Attached to it are at the same
+        location", and 719.3.a moves them together. Attached cards have no
+        move of their own (718.5.c), so this is the only way they travel.
+
+        Every path that changes a card's location on the board goes through
+        here. Before it existed, only the Standard Move carried attachments,
+        so an attacker recalled at the end of an unresolved combat (466.1.a.2)
+        left its Equipment standing on the battlefield -- the same shape as
+        the 719.5 bug the invariant checker found in `leave_board`.
+        """
+        ref.location = location
+        for attached in self.cards.values():
+            # Only cards still on the board travel; anything that has left is
+            # no longer attached to something that can carry it.
+            if attached.attached_to == ref.instance_id and attached.location is not None:
+                attached.location = location
+
     def leave_board(self, ref) -> None:
         """719.5 -- a card changing from a board zone to a non-board zone.
 
@@ -1742,7 +1754,7 @@ class RiftboundState:
             # 466.1.a.2 (step 3d) -- both sides remain, attackers are Recalled
             # (454), which makes the result "No Result" (466.3.d).
             for ref in attackers:
-                ref.location = BASE_LOCATION
+                self.move_to(ref, BASE_LOCATION)   # 719.3.a
                 ref.is_attacker = False
             self._emit("Attackers are recalled")
         elif attackers or defenders:

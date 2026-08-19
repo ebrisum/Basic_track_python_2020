@@ -163,3 +163,49 @@ def test_a_worn_equipment_still_lends_its_might_bonus(decks):
     before = state.might_of(state.cards[host])
     state.cards[gear].attached_to = host
     assert state.might_of(state.cards[host]) > before
+
+
+# --- 719.3.a: attachments travel with the host, on every path ---------------
+
+
+def test_attachments_follow_a_host_recalled_from_combat(decks):
+    """719.3 -- "A Top-Most Card and all cards Attached to it are at the same
+    location", and 719.3.a moves them together.
+
+    The Standard Move path carried attachments; the combat recall at
+    466.1.a.2 did not, so an attacker sent home at the end of an unresolved
+    combat left its Equipment standing on the battlefield. Attached cards
+    cannot move on their own (718.5.c), so it was stranded there.
+
+    Exactly the shape of the earlier 719.5 bug -- a rule enforced in one code
+    path out of several -- which is the argument for routing every location
+    change through one place.
+    """
+    from engine.state import BASE_LOCATION
+
+    state = arena(decks)
+    player = state.turn_player
+    host = put(state, player, "OGN-142", bf_location(0))
+    gear = put(state, player, WARMOGS, bf_location(0))
+    state.cards[gear].attached_to = host
+
+    state.move_to(state.cards[host], BASE_LOCATION)
+
+    assert state.cards[host].location == BASE_LOCATION
+    assert state.cards[gear].location == BASE_LOCATION, (
+        "the Equipment was left behind at the battlefield"
+    )
+
+
+def test_moving_a_host_does_not_drag_an_unattached_gear(decks):
+    """The counterweight: only *attached* cards travel."""
+    from engine.state import BASE_LOCATION
+
+    state = arena(decks)
+    player = state.turn_player
+    host = put(state, player, "OGN-142", bf_location(0))
+    loose = put(state, player, WARMOGS, bf_location(0))
+
+    state.move_to(state.cards[host], BASE_LOCATION)
+
+    assert state.cards[loose].location == bf_location(0)
