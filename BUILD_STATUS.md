@@ -34,8 +34,8 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **absent** | No `ActionEncoder`, no factorized (type, source, target, option) representation, no action mask. This is the prerequisite for any policy head. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 545 tests; 12 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
-| 11 | Performance instrumentation | **partial** | Measured: ~169 games/min, ~437 decisions/s, ~4.7 legal actions per decision. Above the plan's initial target of 100 games/min, below its preferred 1,000. No `ai benchmark` command; the numbers come from a script. |
+| 10 | Simulator validation | **done** | 572 tests; 12 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`. |
+| 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **The one real hole in Part I is section 7.** Everything else is either done
 or documented. Action encoding is small, pure-stdlib work, and nothing in
@@ -124,7 +124,7 @@ and rule 40.8 ("optimize correctness before performance") say.
 | § | Item | Status |
 | --- | --- | --- |
 | 36 | Persistence layout | different, deliberately — `engine/ cards/ agents/ analysis/ frontend/` rather than `ai/*`, which the plan permits ("adapt to current project conventions") |
-| 37 | **Versioning of datasets and replays** | **absent** — replays carry a seed and hashes but no `game_version`, `card_pool_version`, `rules_version`, or schema versions. This has already bitten twice: replay hashes moved under two justified changes this session, and only a purpose-built repair tool distinguished that from a regression. |
+| 37 | **Versioning of datasets and replays** | **done** — `engine/versions.py`. The schema versions are *derived* from the dataclasses they describe, so they move whether anyone remembers or not; `card_pool_version` digests every card's gameplay fields; `rules_version` digests the cached rules text. A replay divergence now names which component drifted instead of only reporting a hash mismatch. |
 | 40.12 | "Do not silently invent missing game rules" | **done, and it is the spine of the project** — `RULES_QUESTIONS.md` |
 | 40.13 | "Mark unresolved rule dependencies" | **done** — 16 numbered entries, 4 now closed |
 | 40.5 | "Never expose hidden game state to the agent" | **done** — section 28 |
@@ -182,10 +182,10 @@ and the *content*, not to jump to a transformer.
 - [x] Checkpoints can be evaluated against old checkpoints
 - [x] League training is operational
 - [~] Metrics are persisted *(league state only)*
-- [ ] Rule / card-pool versions are recorded
+- [x] Rule / card-pool versions are recorded
 - [x] Human-vs-AI debugging is possible
 
-**11 of 16 clean, 2 partial, 3 not met.**
+**12 of 16 clean, 2 partial, 2 not met.**
 
 ---
 
@@ -195,18 +195,23 @@ Everything in steps 1-3 is pure stdlib and needs no decision from you.
 
 1. **Script cards** (RQ-5). 6% is the ceiling on every number this project
    can produce. Nothing else in this list changes that.
-2. **Section 37 — versioning.** Stamp `rules_version`, `card_pool_version`
-   and schema versions on replays and any future dataset. Cheap, and the
-   hash churn this session is the argument for it.
+2. **Audit the 700- and 800-series rules** the way 410-444 and 300-348 were
+   audited. Nine live bugs across the two series done so far, one of them
+   (323.6) large enough to move mean game length by 78%. Doing this *after*
+   scripting cards would mean measuring everything twice.
 3. **Section 7 — the action encoder**, then **§14 trajectory format**, then
    **§12's three missing agents**, then **§27 scenarios**, then **§30 config**.
    That order unblocks the most with the least.
-4. **Audit the 300-, 700- and 800-series rules** the way 410-444 was
-   audited. That method found five live bugs in the one series it covered.
-5. **Then, and only with your answer on dependencies**, sections 16-22.
+4. **Then, and only with your answer on dependencies**, sections 16-22.
+
+Section 37 (versioning) is done, and its timing turned out to matter: the
+four rules fixes that followed it each invalidated the recorded replays, and
+the provenance stamp is what separates "the representation changed" from
+"the rules regressed".
 
 The plan is a good plan. The disagreement I have with running it in its
 stated order is section 41's step 15 ("add small policy/value network")
 arriving before the cards work — and section 10's own "do not begin model
 training until the simulator passes validation" is the plan agreeing with
-me.
+me. The 323.6 fix is the argument in one line: a model trained a week ago
+would have learned that battlefields are free to hold.

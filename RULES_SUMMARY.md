@@ -265,3 +265,51 @@ missing features:
 The last one was found by `engine/invariants.py` rather than by reading, which
 is the argument for checking structural truths after every action of every
 game rather than sampling them with hand-written cases.
+
+## Turn structure audit (300-348)
+
+The same method applied to the second series: read one rule, ask whether the
+engine does what it says, write a test, fix or log. The Game Actions audit
+(410-444) found five live bugs. This one found **four**, and the first is the
+largest rules gap the project has had.
+
+| Rule | What it says | Was |
+| --- | --- | --- |
+| **323.6 / 190.4.c** | a player with no Units at a Battlefield loses Control at the next Cleanup, in an Open State, with nothing running there | **missing entirely** |
+| **337.4** | after finalizing, the controller of the next item on the chain gains Priority -- the caster | gave it to the opponent |
+| **347.2.a** | the Showdown ends when all players have passed once *in sequence* | a play did not break the sequence |
+| **317.2.b** | the Ending Phase inserts "3c. Heal all Units" | only combat healed (466.1.a.1) |
+
+### 323.6 in particular
+
+Control was granted permanently once taken. A battlefield therefore cost
+nothing to keep and scored a Hold point every Beginning Phase from an empty
+field, which removes the central tension of the game: units cannot both
+garrison and attack.
+
+Measured before the fix: **2,209 of 8,408** sampled Neutral Open States had a
+battlefield held by a player with no units on it. Mean game length goes from
+**14.2 turns to 25.3** once control has to be earned every turn.
+
+Several existing tests had been written against the buggy behaviour and had to
+garrison their battlefields to keep working. That is worth naming rather than
+quietly fixing: they were asserting about positions the rules delete on the
+next cleanup, which is how a wrong engine makes its own tests agree with it.
+
+### What the audit did *not* cover
+
+`_run_automatic_phases` treats Awaken, Beginning, Channel, Draw and Ending as
+non-interactive. 315.2.a.1, 316.4 and 317.1.a all say "game effects take
+place" at those points, which becomes a real window as soon as a card triggers
+there. Nothing in the scripted pool does yet.
+
+315.1.b readies every Game Object the turn player controls, including cards in
+non-board zones; 415.1 scopes readying to the board. Harmless today because
+`exhausted` is set explicitly whenever a card enters the board, and logged
+here rather than left to be discovered.
+
+### Still unaudited
+
+The **700-series** (attachment, keywords) and **800-series** (the keyword
+glossary) have not had this treatment. Two series audited, nine live bugs
+between them. It would be unreasonable to assume the remaining two are clean.

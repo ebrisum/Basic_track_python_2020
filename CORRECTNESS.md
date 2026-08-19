@@ -41,9 +41,9 @@ conservation.
 
 Evidence:
 
-- 545 tests pass.
-- 60 random games, 15,824 actions, invariants checked after *every action* —
-  zero violations.
+- 572 tests pass.
+- 200 games with invariants checked after *every action* (87,765 decisions)
+  — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
 
 **Why this is worth more than the test count.** Spot-checking cannot find a
@@ -121,24 +121,36 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Only the 400-series has had a systematic audit
+### Two series audited, nine live bugs; two series still unaudited
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
-live bugs**, not merely missing features. That is the strongest single piece
-of evidence in this document — and it is also the reason the following must
-be said plainly:
+live bugs**, not merely missing features. The turn-structure audit then
+walked 300-348 and found **four more**, including the largest rules gap the
+project has had:
 
-- **300-series** (timing, chains, priority, focus, cleanups) — implemented
-  and tested by 30 tests in `test_chain_and_showdowns.py`, but never walked
-  rule by rule the way 410-444 was.
-- **700-series** (attachment, keywords) — same.
+| Rule | What was wrong | Effect |
+| --- | --- | --- |
+| **323.6 / 190.4.c** | control never required units to hold it | a battlefield taken once was free forever and scored every turn |
+| **337.4** | the opponent got the first priority window after a play | a caster could never stack on their own item first |
+| **347.2.a** | a play did not break the showdown pass sequence | showdowns ended one pass early after any spell |
+| **317.2.b** | units were never healed at the end of a turn | non-combat damage accumulated until it killed |
+
+323.6 alone moved mean game length from **14.2 turns to 25.3**. Several
+existing tests had been written against the buggy behaviour and had to be
+corrected — which is how a wrong engine makes its own tests agree with it,
+and the reason reading the rules beats trusting a green suite.
+
+Still unaudited, and stated plainly:
+
+- **700-series** (attachment, keywords) — implemented and tested, but never
+  walked rule by rule.
 - **800-series** (the keyword glossary) — same, apart from the keywords
   named above.
 - **473-477 Layers** — not transcribed at all (RQ-3). Nothing currently
   needs them; that stops being true as soon as continuous modifiers land.
 
-An audit found five bugs in the one series it covered. It is not reasonable
-to assume the three unaudited series contain none.
+Nine live bugs across the two series that have been audited. It is not
+reasonable to assume the two that have not are clean.
 
 ### Known approximations, all logged
 
@@ -161,9 +173,10 @@ In the order that buys the most:
 
 1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Audit the 300-, 700- and 800-series** the way 410-444 was audited —
-   one rule at a time, ask whether the engine's behaviour differs, write the
-   test, fix or log. That method found five bugs in one series.
+2. **Audit the 700- and 800-series** the way 410-444 and 300-348 were
+   audited — one rule at a time, ask whether the engine's behaviour
+   differs, write the test, fix or log. Nine live bugs in the two series done
+   so far.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 
