@@ -113,11 +113,40 @@ class Kill(Effect):
 
 
 @dataclass(frozen=True)
-class Buff(Effect):
-    """426 Buff -- a Might modifier (701)."""
+class ModifyMight(Effect):
+    """A Might modification: "give me +3 Might this turn".
+
+    Deliberately *not* named Buff. 426 Buff is a different mechanic -- a
+    counter, capped at one per unit, worth exactly +1 Might -- and calling
+    this one Buff is what let the two be conflated. `PlaceBuff` is the Game
+    Action; this is the raw modifier.
+    """
 
     might: int
     duration: Duration = Duration.THIS_TURN
+    selector: Selector = field(default_factory=lambda: SELF)
+
+
+@dataclass(frozen=True)
+class PlaceBuff(Effect):
+    """426 Buff -- place a Buff counter (701-705).
+
+    Not a Might modifier. A Buff is a counter: at most one per unit (702.3),
+    worth exactly +1 Might (703), removed when the unit leaves play (705),
+    spendable as a cost (702.2.b), and visible to "while I'm buffed" and
+    "for each buffed friendly unit". 53 cards in the pool reference it.
+
+    `count` is how many units to buff ("buff two other friendly units").
+    """
+
+    selector: Selector = field(default_factory=lambda: SELF)
+    count: int = 1
+
+
+@dataclass(frozen=True)
+class SpendBuff(Effect):
+    """702.2.b -- remove a Buff counter from a unit you control."""
+
     selector: Selector = field(default_factory=lambda: SELF)
 
 

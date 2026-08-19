@@ -492,7 +492,9 @@ class RiftboundState:
             profile = equipment_profile(self.db[gear.card_id])
             if profile is not None and profile.might_bonus is not None:
                 attached += profile.might_bonus
-        return card.might + ref.might_this_turn + ref.might_permanent + bonus + attached
+        # 703 -- each Buff counter contributes exactly +1 Might.
+        return (card.might + ref.might_this_turn + ref.might_permanent
+                + ref.buffs + bonus + attached)
 
     def _hidden_play_has_targets(self, ref: CardRef) -> bool:
         """811.1.d -- "A card cannot be played from Hidden if it is a spell
@@ -527,6 +529,41 @@ class RiftboundState:
             if ref.hidden_at == index:
                 return ref
         return None
+
+    def buff(self, ref, ignore_cap: bool = False) -> bool:
+        """426 Buff -- place a Buff counter, and report whether it landed.
+
+        702.3 / 426.1.b.1: a unit already holding a buff does not get another.
+        426.1.b.2 lets an effect grant permission to be buffed anyway, which
+        is what `ignore_cap` is for.
+
+        The **return value is the point**. 426.1.c: "Units with Buff Counters
+        can still be chosen for actions that Buff units, but will not be
+        Buffed as part of the execution." So "Buff a unit. Then, if it was
+        buffed this way, draw a card" must not draw when the chosen unit was
+        already buffed, and "when you buff me" must not trigger. A `buff()`
+        that only acted could not express either.
+        """
+        if ref.buffs and not ignore_cap:
+            return False
+        ref.buffs += 1
+        self._emit(f"{self.db[ref.card_id].name} is buffed")
+        return True
+
+    def spend_buff(self, ref, spender: int | None = None) -> bool:
+        """702.2.b -- remove a single Buff counter, reporting success.
+
+        702.2.b.1: nothing to spend from an unbuffed unit. 702.2.b.2: a player
+        may only spend buffs on units they control, which is why `spender` is
+        checked rather than assumed.
+        """
+        if not ref.buffs:
+            return False
+        if spender is not None and ref.controller != spender:
+            return False
+        ref.buffs -= 1
+        self._emit(f"P{ref.controller} spends a buff on {self.db[ref.card_id].name}")
+        return True
 
     def stun(self, ref: CardRef) -> bool:
         """423 -- Stun a unit. Returns whether the status actually changed.
@@ -619,12 +656,41 @@ class RiftboundState:
                               restrict_location=restrict_location),
             ))
 
+    def top_most(self, instance_id: int) -> int:
+        """719 -- the Top-Most Card of the attachment stack `instance_id` is in.
+
+        Walks up rather than assuming one link: 719 allows a chain, and a
+        cycle would hang, so the walk is bounded.
+        """
+        current = instance_id
+        for _ in range(8):
+            host = self.cards[current].attached_to
+            if host is None or host not in self.cards:
+                return current
+            current = host
+        return current
+
     def _fire(self, kind: TriggerKind, instance_id: int,
               restrict_location: str | None = None) -> None:
-        """382 -- queue every ability of `kind` printed on this card."""
+        """382 -- queue every ability of `kind` printed on this card.
+
+        136.2.c -- "The abilities in the Effect Text section of a card are
+        appended to the Rules Text of the card to which the card with the
+        Effect Text is Attached." So an attached Equipment's ability is the
+        *host's* ability, and "me" in it is the host.
+
+        Warmog's Armor is the case that found this: "When I conquer, buff me"
+        was buffing the gear, which is not a unit and cannot hold a buff
+        (702). The state invariant caught it within a few random games.
+
+        136.2.d's exception -- "this", or the attachment's own name, still
+        refers to the attachment -- has no DSL representation yet. No scripted
+        card needs it; RULES_QUESTIONS records it.
+        """
         ref = self.cards[instance_id]
+        source = self.top_most(instance_id)
         for ability in abilities_of_kind(self.db[ref.card_id], kind):
-            self._queue(ability, ref.controller, instance_id, restrict_location)
+            self._queue(ability, ref.controller, source, restrict_location)
 
     def _resolve_effects(self) -> None:
         """Drain the effect queue, pausing whenever a choice is needed."""
@@ -1440,6 +1506,10 @@ class RiftboundState:
         ref.attached_to = None
         ref.location = None
         ref.is_attacker = ref.is_defender = False
+        # 705 -- "If a Unit leaves play, remove all Buffs from it", and 705.1
+        # says a Champion does not keep them in the Champion Zone either.
+        # 124.1 says the same for every temporary modification.
+        ref.buffs = 0
 
     def _busy_at(self, index: int) -> bool:
         """Whether a Showdown or Combat is ongoing at this battlefield.

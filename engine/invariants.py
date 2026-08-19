@@ -165,6 +165,22 @@ def check(state) -> list[str]:
             say(f"battlefield {index} has {len(hidden)} facedown cards; 811.1.b "
                 f"allows one")
 
+    # --- 426 / 702.3 Buff counters -------------------------------------------
+    for ref in state.cards.values():
+        if not ref.buffs:
+            continue
+        if ref.location is None:
+            say(f"card {ref.instance_id} holds a buff off the board; 705 removes "
+                f"buffs when a unit leaves play")
+        elif state.db[ref.card_id].type != "unit":
+            say(f"card {ref.instance_id} holds a buff but is not a unit (702)")
+        if ref.buffs > 1:
+            # 702.3 -- one at a time. 426.1.b.2 lets an effect grant permission
+            # to exceed it, so this is reported for a caller to weigh rather
+            # than treated as impossible; nothing in the pool grants it yet.
+            say(f"card {ref.instance_id} holds {ref.buffs} buffs; 702.3 allows "
+                f"one without an effect granting permission (426.1.b.2)")
+
     # --- 423 Stun -----------------------------------------------------------
     for ref in state.cards.values():
         if not ref.stunned:

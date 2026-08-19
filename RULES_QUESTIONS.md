@@ -309,6 +309,33 @@ engine leaves the card hidden and playable."
 
 ---
 
+## RQ-17 — "this" on an attached card cannot be told from "me"
+
+**Status:** open, narrow, and one-directional.
+
+**Situation.** 136.2.c says an Equipment's Effect Text abilities "are appended
+to the Rules Text of the card to which the card with the Effect Text is
+Attached". So in Warmog's Armor's "When I conquer, buff me", *me* is the host
+unit, and the engine now resolves `SELF` on an attached card to its Top-Most
+Card accordingly.
+
+136.2.d carves out an exception: "Effect Text may refer to 'this' or to the
+name of the Attached game object... Doing so refers to the Attached game
+object and not the Top-Most Card." Guardian Angel's "If I would die, kill
+**Guardian Angel** instead. Heal **me**..." uses both in one sentence.
+
+The DSL has one self-reference, `Selector(scope="self")`, and it now means the
+host. There is no way to write "the attachment itself".
+
+**Effect on outcomes.** None today: no scripted card uses the 136.2.d form.
+It becomes wrong the moment Guardian Angel or Brutalizer is scripted.
+
+**What it needs.** A second scope -- `attachment` alongside `self` -- resolved
+before the walk up the attachment chain. Small, and better done with the card
+that needs it than speculatively.
+
+---
+
 ## RQ-13 — Four Equipment have Equip costs that cannot be read off the card
 
 **Status:** open, bounded, four cards.

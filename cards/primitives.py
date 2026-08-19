@@ -18,7 +18,9 @@ from cards.dsl import (
     AddEnergy,
     AddPower,
     Attach,
-    Buff,
+    ModifyMight,
+    PlaceBuff,
+    SpendBuff,
     ChoiceRequest,
     Deal,
     Discard,
@@ -250,9 +252,13 @@ def _kill(state, effect: Kill, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
-def _buff(state, effect: Buff, ctx: EffectContext) -> ChoiceRequest | None:
-    """426 Buff / 701 -- a Might modifier."""
-    ids, request = _targets(state, effect.selector, ctx, f"Buff +{effect.might} Might")
+def _modify_might(state, effect: ModifyMight, ctx: EffectContext) -> ChoiceRequest | None:
+    """A raw Might modification -- "give me +3 Might this turn".
+
+    Not 426 Buff. See `_place_buff` for the Game Action.
+    """
+    ids, request = _targets(state, effect.selector, ctx,
+                            f"Give +{effect.might} Might")
     if request:
         return request
     for instance_id in ids:
@@ -262,6 +268,38 @@ def _buff(state, effect: Buff, ctx: EffectContext) -> ChoiceRequest | None:
         else:
             ref.might_permanent += effect.might
         state._emit(f"{state.db[ref.card_id].name} gets +{effect.might} Might")
+    return None
+
+
+def _place_buff(state, effect: PlaceBuff, ctx: EffectContext) -> ChoiceRequest | None:
+    """426 Buff -- place a Buff counter on each chosen unit.
+
+    426.1.c: a unit that already has a buff can still be *chosen*, it just is
+    not buffed. `state.buff` reports which happened, and that report is what a
+    linked instruction ("if it was buffed this way, draw 1") and a trigger
+    ("when you buff me") both need. Neither is scripted yet; the information
+    is produced now so those do not have to re-derive it later.
+    """
+    ids, request = _targets(state, effect.selector, ctx, "Buff")
+    if request:
+        return request
+    landed = []
+    for instance_id in ids[: effect.count] if effect.count else ids:
+        ref = state.cards[instance_id]
+        if state.buff(ref):
+            landed.append(instance_id)
+    ctx.payload["buffed"] = tuple(landed)
+    return None
+
+
+def _spend_buff(state, effect: SpendBuff, ctx: EffectContext) -> ChoiceRequest | None:
+    """702.2.b -- remove a Buff counter from a unit its controller owns."""
+    ids, request = _targets(state, effect.selector, ctx, "Spend a buff from")
+    if request:
+        return request
+    spent = [i for i in ids
+             if state.spend_buff(state.cards[i], spender=ctx.controller)]
+    ctx.payload["spent_buff"] = tuple(spent)
     return None
 
 
@@ -563,7 +601,9 @@ HANDLERS: dict[type, Callable] = {
     Discard: _discard,
     Deal: _deal,
     Kill: _kill,
-    Buff: _buff,
+    ModifyMight: _modify_might,
+    PlaceBuff: _place_buff,
+    SpendBuff: _spend_buff,
     GrantKeyword: _grant_keyword,
     AddEnergy: _add_energy,
     AddPower: _add_power,

@@ -17,7 +17,8 @@ from cards.dsl import (
     Ability,
     AddPower,
     Attach,
-    Buff,
+    ModifyMight,
+    PlaceBuff,
     CardScript,
     Channel,
     Counter,
@@ -62,7 +63,7 @@ SCRIPTS: tuple[CardScript, ...] = (
         abilities=(
             Ability(
                 kind=TriggerKind.ON_PLAY,
-                effects=(Buff(3, Duration.THIS_TURN, SELF),),
+                effects=(ModifyMight(3, Duration.THIS_TURN, SELF),),
                 text="When you play me, give me +3 Might this turn.",
             ),
         ),
@@ -75,7 +76,7 @@ SCRIPTS: tuple[CardScript, ...] = (
             Ability(
                 kind=TriggerKind.ACTIVATED,
                 costs=(RecycleFromTrash(1),),
-                effects=(Buff(1, Duration.THIS_TURN, SELF),),
+                effects=(ModifyMight(1, Duration.THIS_TURN, SELF),),
                 text="Recycle 1 from your trash: Give me +1 Might this turn.",
             ),
         ),
@@ -346,7 +347,7 @@ SCRIPTS: tuple[CardScript, ...] = (
         abilities=(
             Ability(
                 kind=TriggerKind.ON_CONQUER,
-                effects=(Buff(1, Duration.PERMANENT, SELF),),
+                effects=(PlaceBuff(SELF),),
                 text="When I conquer, buff me.",
             ),
         ),

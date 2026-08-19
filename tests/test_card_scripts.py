@@ -438,9 +438,21 @@ def test_warmogs_buffs_permanently_on_conquer(decks):
     state._score(0, bf, "Conquer")
     while state.phase is Phase.CHOOSING:
         state.apply(state.legal_actions()[0])
-    assert state.cards[gear].might_permanent == 1
+    # 136.2.c -- an Equipment's effect text is appended to the *host's* rules
+    # text, so "buff me" buffs the host, not the gear. And 426 Buff places a
+    # counter rather than adding Might directly: a gear cannot hold one at all
+    # (702), which is how the invariant checker found this.
+    assert state.cards[host].buffs == 1
+    assert state.cards[gear].buffs == 0
     state._phase_ending()
-    assert state.cards[gear].might_permanent == 1, "permanent buffs survive"
+    assert state.cards[host].buffs == 1, "a buff counter is not a this-turn effect"
+
+    # 702.3 / 426.1.b.1 -- conquering again does not stack a second buff.
+    state.battlefields[0].scored_by.clear()
+    state._score(0, state.battlefields[0], "Conquer")
+    while state.phase is Phase.CHOOSING:
+        state.apply(state.legal_actions()[0])
+    assert state.cards[host].buffs == 1, "a unit holds at most one buff"
 
 
 # --- vanilla ----------------------------------------------------------------

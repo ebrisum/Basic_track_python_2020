@@ -358,16 +358,18 @@ def test_a_conquer_trigger_elsewhere_does_not_fire(decks):
     host = put_unit(state, player, "OGN-175", bf_location(1))
     gear = put_unit(state, player, "SFD-108", bf_location(1))   # Warmog's Armor
     state.cards[gear].attached_to = host
-    before = state.cards[gear].might_permanent
+    # 136.2.c -- the gear's effect text is appended to the host's rules text,
+    # so "buff me" buffs the host.
+    before = state.cards[host].buffs
 
     state._score(player, state.battlefields[0], "Conquer")
-    assert state.cards[gear].might_permanent == before, (
+    assert state.cards[host].buffs == before, (
         "a Conquer trigger at battlefield 1 fired on a Conquer at battlefield 0"
     )
 
     # ...and it does fire when its own battlefield is the one scored.
     state._score(player, state.battlefields[1], "Conquer")
-    assert state.cards[gear].might_permanent > before
+    assert state.cards[host].buffs > before
 
 
 # --- 430 Channel ------------------------------------------------------------

@@ -70,6 +70,10 @@ class CardRef:
     # Phase; permanent ones persist while the object stays on the board.
     might_this_turn: int = 0
     might_permanent: int = 0
+    # 426 / 701-705 -- Buff counters. Normally at most one (702.3), but
+    # 426.1.b.2 lets an effect grant permission to be buffed more than once,
+    # so this is a count and not a flag. Worth exactly +1 Might each (703).
+    buffs: int = 0
     # Keywords granted by effects: (name, value, duration).
     granted_keywords: tuple[tuple[str, int, str], ...] = ()
     # 434 Attach / 716 -- the unit this gear is attached to.
@@ -107,6 +111,7 @@ class CardRef:
             self.is_defender,
             self.might_this_turn,
             self.might_permanent,
+            self.buffs,
             self.granted_keywords,
             self.attached_to,
         )
