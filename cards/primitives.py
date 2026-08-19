@@ -19,6 +19,7 @@ from cards.dsl import (
     AddPower,
     Attach,
     Double,
+    EquipToMe,
     ModifyMight,
     Prevent,
     PlaceBuff,
@@ -531,6 +532,51 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _equip_to_me(state, effect: EquipToMe, ctx: EffectContext) -> ChoiceRequest | None:
+    """821 Weaponmaster -- attach a chosen Equipment to the source unit.
+
+    821.1.c: "Pay the cost of its Equip ability, reduced by [A], to attach it
+    to this unit."
+
+    821.1.c.5 is the whole error path: if the cost cannot be paid, or the card
+    cannot be detached or attached, "it stays in its current location,
+    Attached to anything it was already Attached to". So nothing is changed
+    until the payment succeeds.
+
+    821.1.c and 725.3 make this an exception to 718.2 -- an Equipment already
+    worn by another unit has Inactive Rules Text, and Weaponmaster reaches its
+    Equip cost anyway. That is why the cost is read from the card's profile
+    here rather than from its (Inactive) activated ability.
+    """
+    from cards.gear import discounted_equip_cost, equipment_profile
+
+    ids, request = _targets(state, effect.selector, ctx, "Equip to me")
+    if request:
+        return request
+    if not ids or ctx.source is None:
+        return None
+    gear = state.cards[ids[0]]
+    host = state.cards[ctx.source]
+    profile = equipment_profile(state.db[gear.card_id])
+    if profile is None:
+        return None                        # 821.1.c -- not an Equipment
+    cost = discounted_equip_cost(profile.equip_cost)
+    if cost is None:
+        return None                        # 821.1.c.4 -- no cost to pay
+    energy, domains = cost
+    pool = state.players[ctx.controller].pool
+    if not pool.can_pay(energy, list(domains)):
+        return None                        # 821.1.c.5
+    pool.pay(energy, list(domains))
+    gear.attached_to = host.instance_id
+    gear.location = host.location          # 719.3
+    state._emit(
+        f"{state.db[gear.card_id].name} is equipped to "
+        f"{state.db[host.card_id].name} (Weaponmaster)"
+    )
+    return None
+
+
 def _recycle(state, effect, ctx: EffectContext) -> ChoiceRequest | None:
     """416 -- to the bottom of the corresponding deck (416.1.a/b), and always
     to the card owner's own deck (416.1.c)."""
@@ -736,6 +782,7 @@ HANDLERS: dict[type, Callable] = {
     Deal: _deal,
     Kill: _kill,
     Double: _double,
+    EquipToMe: _equip_to_me,
     ModifyMight: _modify_might,
     Prevent: _prevent,
     Swap: _swap,

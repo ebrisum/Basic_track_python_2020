@@ -33,7 +33,15 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from cards.dsl import Ability, Attach, PayEnergy, PayPower, Selector, TriggerKind
+from cards.dsl import (
+    Ability,
+    Attach,
+    EquipToMe,
+    PayEnergy,
+    PayPower,
+    Selector,
+    TriggerKind,
+)
 from engine.zones import DOMAINS
 
 EQUIPMENT_TAG = "equipment"
@@ -208,6 +216,52 @@ def _build_equip_ability(card) -> Ability | None:
 
 def _attach_to_friendly_unit() -> Attach:
     return Attach(selector=Selector(scope="choose", type="unit", controller="friendly"))
+
+
+def discounted_equip_cost(
+    cost: tuple[int, tuple[str, ...]] | None,
+) -> tuple[int, tuple[str, ...]] | None:
+    """821.1.c -- an Equip cost "reduced by [A]": one Power of any domain off.
+
+    821.1.c.3: a cost with no Power in it "can still be paid, but will not be
+    reduced". 821.1.c.4: a card with no Equip cost at all cannot be paid for,
+    which is `None` here -- and RQ-13's four Equipment with unreadable costs
+    land in that case rather than being handed a guess.
+    """
+    if cost is None:
+        return None                                   # 821.1.c.4
+    energy, domains = cost
+    if not domains:
+        return energy, ()                             # 821.1.c.3
+    return energy, tuple(domains[1:])
+
+
+def weaponmaster_ability(card) -> Ability | None:
+    """821.1.c -- "When you play me, you may choose a Card you control with the
+    Equipment tag ... Pay the cost of its Equip ability, reduced by [A], to
+    attach it to this unit."
+
+    Derived from the printed keyword, like Quick-Draw (819.1.d), so the 16
+    cards carrying Weaponmaster need no per-card script.
+
+    821.1.c and 725.3 make this an explicit exception to 718.2: an Equipment
+    already attached elsewhere has Inactive Rules Text and cannot normally
+    have its Equip ability activated, and Weaponmaster reaches it anyway.
+    821.1.c.6 keeps it from being an activation -- no Equip trigger fires, and
+    the Weaponmaster unit is not *chosen*, so no Deflect is paid for it.
+    """
+    import cards.keywords as kw
+
+    if not kw.has(card.parsed_keywords, "Weaponmaster"):
+        return None
+    return Ability(
+        kind=TriggerKind.ON_PLAY,
+        effects=(EquipToMe(
+            selector=Selector(scope="choose", type="gear", controller="friendly"),
+        ),),
+        text="Weaponmaster — attach an Equipment you control to me, its Equip "
+             "cost reduced by one Power of any domain",
+    )
 
 
 def quick_draw_ability(card) -> Ability | None:

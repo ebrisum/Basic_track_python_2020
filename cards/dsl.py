@@ -238,6 +238,21 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class EquipToMe(Effect):
+    """821 Weaponmaster -- attach a chosen Equipment *to the source*.
+
+    The mirror of `Attach`, which attaches the source to a chosen unit. Here
+    the source is the unit and the choice is the Equipment, and the cost paid
+    is that Equipment's own Equip cost reduced by [A] (821.1.c).
+    """
+
+    selector: Selector = field(
+        default_factory=lambda: Selector(scope="choose", type="gear",
+                                         controller="friendly")
+    )
+
+
+@dataclass(frozen=True)
 class Recycle(Effect):
     """416 -- put cards on the bottom of the corresponding deck.
 

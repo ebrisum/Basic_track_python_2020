@@ -33,6 +33,7 @@ IMPLEMENTED: frozenset[str] = frozenset({
     "Temporary",  # 816 -- dies at its controller's Beginning Phase
     "Unique",     # 825 -- one copy per deck by name (deck construction only)
     "Deflect",    # 809 -- taxes an opponent's spells that choose this
+    "Weaponmaster",  # 821 -- play effect: equip an Equipment at a discount
 })
 
 _PATTERN = re.compile(

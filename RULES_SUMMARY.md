@@ -459,7 +459,7 @@ in deck validation. 825.4 confirms it does nothing else during play.
 | Keyword | Cards in pool | In the starter decks | Blocked on |
 | --- | --- | --- | --- |
 | Repeat (820) | 17 | 1 | 820.2's choices are now possible; not yet built |
-| Weaponmaster (821) | 16 | 0 | — |
+| ~~Weaponmaster (821)~~ | 16 | 0 | **built** |
 | Deathknell (808) | 15 | 0 | — |
 | Empower / Empowered (827-828) | 13 | 0 | — |
 | Legion (812 / 727) | 12 | 0 | — |
@@ -474,11 +474,30 @@ Deflect (809) has since been built -- see below -- which removed the largest
 entry from this table. Repeat is no longer blocked either; it simply has not
 been written.
 
-Weaponmaster is worth a note for later: 821.1.c says "Necessary portions of
-its Rules Text are no longer Inactive if they are currently Inactive", and
-725.3 says the keyword can reference an attached card's Equip ability. So it
-is an explicit exception to the 718.2 Inactive rule implemented above, and
-whoever builds it must not be surprised by that interaction.
+### Weaponmaster (821)
+
+Built, and derived from the printed keyword like Quick-Draw (819.1.d), so the
+16 cards carrying it need no per-card script.
+
+The interaction flagged earlier turned out to be the interesting part.
+821.1.c says "Necessary portions of its Rules Text are no longer Inactive if
+they are currently Inactive", and 725.3 says the keyword can reference an
+attached card's Equip ability. That is an **explicit exception to 718.2**: an
+Equipment already worn by another unit cannot normally have its Equip ability
+activated, and Weaponmaster moves it anyway. The implementation therefore
+reads the cost from the card's Equipment profile rather than from its
+(Inactive) activated ability, and a test moves a worn Equipment between hosts
+to prove 718.2 does not block it.
+
+821.1.c.5 is the whole error path -- if the cost cannot be paid, or the card
+cannot be detached or attached, "it stays in its current location, Attached
+to anything it was already Attached to" -- so nothing changes until payment
+succeeds.
+
+One detail worth pinning, because it makes a test vacuous if missed: the
+[A] reduction is a full Power, so an Equipment costing exactly one Power is
+**free** to a Weaponmaster. The can't-afford test needs a more expensive card
+to mean anything.
 
 ### Deflect (809), and the order of the play steps
 

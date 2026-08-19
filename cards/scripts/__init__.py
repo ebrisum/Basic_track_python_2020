@@ -9,7 +9,11 @@ from __future__ import annotations
 import functools
 
 from cards.dsl import Ability, CardScript, TriggerKind
-from cards.gear import equip_ability, quick_draw_ability
+from cards.gear import (
+    equip_ability,
+    quick_draw_ability,
+    weaponmaster_ability,
+)
 from cards.scripts.origins import SCRIPTS as ORIGINS_SCRIPTS
 
 ALL_SCRIPTS: tuple[CardScript, ...] = ORIGINS_SCRIPTS
@@ -60,7 +64,8 @@ def _split_text(card) -> tuple[tuple[Ability, ...], tuple[Ability, ...]]:
     """
     script = script_for(card.card_id)
     scripted = tuple(script.abilities) if script else ()
-    derived = tuple(a for a in (equip_ability(card), quick_draw_ability(card))
+    derived = tuple(a for a in (equip_ability(card), quick_draw_ability(card),
+                                weaponmaster_ability(card))
                     if a is not None)
     if not derived:
         return scripted, ()
