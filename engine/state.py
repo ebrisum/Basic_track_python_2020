@@ -1225,7 +1225,22 @@ class RiftboundState:
         self._current_player = self.turn_player
 
     def _phase_ending(self) -> None:
-        """317, then the turn passes (306). Turn-scoped modifiers expire."""
+        """317, then the turn passes (306). Turn-scoped modifiers expire.
+
+        317.2 is a Special Cleanup with three inserted steps: 3c heals all
+        units, 3d expires every "this turn" effect, 3e empties the rune pools.
+        They run after the ordinary cleanup steps, so a unit already killed by
+        lethal damage in step 3b is not healed back to life.
+        """
+        # 317.2.b, step 3c -- "Heal all Units". 143.3.b names exactly two
+        # moments damage is healed: here, and a Combat Cleanup (466.1.a.1).
+        # Only the second was implemented, so damage dealt *outside* combat
+        # accumulated across turns and eventually killed units that the rules
+        # heal clean every turn.
+        self._cleanup()
+        for ref in self.cards.values():
+            if ref.location is not None:
+                ref.damage = 0
         for ref in self.cards.values():
             ref.might_this_turn = 0
             # 423.1.a.2 -- Stunned is lost during step 3d, which 317.2.c makes
@@ -1605,7 +1620,9 @@ class RiftboundState:
 
         bf.contested = False  # 466.5.a
         bf.contested_by = None
-        for ref in self.cards.values():  # 466.5 -- clear all marked damage
+        # 466.1.a.1, step 3c of the Combat Cleanup -- "Heal all Units".
+        # 466.7.a -- remove Attacker and Defender designations.
+        for ref in self.cards.values():
             ref.damage = 0
             ref.is_attacker = ref.is_defender = False
 

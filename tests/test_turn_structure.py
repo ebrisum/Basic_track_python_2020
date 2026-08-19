@@ -221,6 +221,55 @@ def test_a_stunned_unit_cannot_be_stunned_again(decks):
     assert state.stun(state.cards[unit]) is False
 
 
+def test_all_units_are_healed_at_the_end_of_the_turn(decks):
+    """317.2.b -- the Expiration Step inserts "3c. Heal all Units."
+
+    143.3.b names the *only* two moments damage is healed: the end of each
+    player's turn, and a Combat Cleanup. The engine implemented the second and
+    not the first, so damage dealt outside combat -- by a spell, an ability,
+    Ganking -- sat on a unit indefinitely and eventually killed it through
+    accumulation that the rules heal away every turn.
+    """
+    state = arena(decks)
+    mine = put_unit(state, 0, "OGN-142")
+    theirs = put_unit(state, 1, "OGN-142")
+    state.cards[mine].damage = 2
+    state.cards[theirs].damage = 1
+
+    state._phase_ending()
+
+    assert state.cards[mine].damage == 0
+    assert state.cards[theirs].damage == 0, "both players' units heal (317.2.b)"
+
+
+def test_damage_below_lethal_does_not_accumulate_across_turns(decks):
+    """The consequence, stated as the thing a player would notice: a 3-Might
+    unit dealt 2 twice on separate turns is not dead."""
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    might = state.might_of(state.cards[unit])
+
+    state.cards[unit].damage = might - 1     # survives
+    state._phase_ending()
+    state.cards[unit].damage += might - 1    # would be lethal if it stacked
+
+    assert not state._has_lethal(state.cards[unit])
+
+
+def test_healing_at_end_of_turn_does_not_rescue_a_lethally_damaged_unit(decks):
+    """Ordering. A unit with lethal damage is killed in cleanup step 3b,
+    *before* step 3c heals the survivors. Healing must not undo that."""
+    state = arena(decks)
+    unit = put_unit(state, 0, "OGN-142")
+    state.cards[unit].damage = state.might_of(state.cards[unit])
+
+    state._cleanup()          # 323.5 -- step 3b kills it
+    assert unit in state.players[0].trash
+
+    state._phase_ending()
+    assert unit in state.players[0].trash, "healing resurrected a dead unit"
+
+
 def test_stun_expires_at_the_end_of_the_turn(decks):
     """423.1.a.2 -- lost during step 3d of the end of turn cleanup, which
     317.2.c places alongside every other "this turn" expiry."""
