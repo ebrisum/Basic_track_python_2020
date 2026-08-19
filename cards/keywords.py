@@ -34,6 +34,7 @@ IMPLEMENTED: frozenset[str] = frozenset({
     "Unique",     # 825 -- one copy per deck by name (deck construction only)
     "Deflect",    # 809 -- taxes an opponent's spells that choose this
     "Weaponmaster",  # 821 -- play effect: equip an Equipment at a discount
+    "Repeat",     # 820 -- optional additional cost: execute the effect twice
 })
 
 _PATTERN = re.compile(

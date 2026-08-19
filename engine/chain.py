@@ -49,6 +49,10 @@ class ChainItem:
     # ability itself is found by `(trigger_kind, ability_index)` rather than
     # stored, so the item stays hashable for the replay key.
     trigger_kind: str = ""
+    # 820.1.d -- Repeat's cost was paid, so the item's instructions execute
+    # one additional time. 820.2.a gives that execution its own choices, which
+    # is why `targets` is keyed by execution as well as by effect.
+    repeat: bool = False
 
     def copy(self) -> "ChainItem":
         # `targets` is the one mutable field; everything else is a scalar.
@@ -66,6 +70,7 @@ class ChainItem:
             tuple(sorted(self.targets.items())),
             self.accelerated,
             self.trigger_kind,
+            self.repeat,
         )
 
 

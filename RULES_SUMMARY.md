@@ -458,7 +458,7 @@ in deck validation. 825.4 confirms it does nothing else during play.
 
 | Keyword | Cards in pool | In the starter decks | Blocked on |
 | --- | --- | --- | --- |
-| Repeat (820) | 17 | 1 | 820.2's choices are now possible; not yet built |
+| ~~Repeat (820)~~ | 17 | 1 | **built** |
 | ~~Weaponmaster (821)~~ | 16 | 0 | **built** |
 | Deathknell (808) | 15 | 0 | — |
 | Empower / Empowered (827-828) | 13 | 0 | — |
@@ -470,9 +470,8 @@ in deck validation. 825.4 confirms it does nothing else during play.
 Ambush (822), Hunt (823) and Flow (829) appear on no card in the cached pool
 at all.
 
-Deflect (809) has since been built -- see below -- which removed the largest
-entry from this table. Repeat is no longer blocked either; it simply has not
-been written.
+Deflect (809), Repeat (820) and Weaponmaster (821) have since been built --
+the three largest entries this table had.
 
 ### Weaponmaster (821)
 
@@ -563,6 +562,26 @@ Channel, Draw and Main with a finalized item still on the chain, offering
 Main-phase actions in what 309.1 calls a Closed State. 354.4 says outstanding
 tasks are finished first, so the sequence now stops, opens a window, and
 resumes where it left off.
+
+### Repeat (820)
+
+820.1.d: "You may pay [Cost] as an additional cost as you play this. If you
+do, execute the instructions of this chain item one additional time during
+resolution."
+
+The clause that makes it more than a loop is **820.2.a**: "Choices made for
+the additional execution do not have to be the same as the choices made for
+the initial execution." So a repeated chain item carries **two independent
+target sets**, and `ChainItem.targets` is keyed by execution as well as by
+effect. That is why Repeat was blocked until targets were declared at play
+time -- 820.2 puts those choices in the Make Relevant Choices step.
+
+The cost is read off the printed keyword like Equip is (`cards/repeat.py`), so
+the 17 cards carrying it need no per-card script. The pool prints it four
+ways: `[REPEAT 1]`, `[REPEAT 2, Fury]`, `[REPEAT 4 Mind]`, and a bare
+`[REPEAT]`. The last is not a free Repeat -- SFD-078 grants "[REPEAT] equal to
+its cost", a value that exists only at play time -- so an unreadable cost
+means no offer is made, the same treatment RQ-13's unreadable Equip costs get.
 
 ### Tally
 

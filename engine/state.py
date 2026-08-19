@@ -27,6 +27,7 @@ from cards.dsl import (
     TriggerKind,
 )
 from cards.primitives import EffectContext, candidates, execute, targets_of
+from cards.repeat import repeat_cost
 from cards.gear import equipment_profile
 from cards.scripts import (
     abilities_of_kind,
@@ -354,6 +355,13 @@ class RiftboundState:
                     if self._can_afford_play(self.cards[instance_id], player,
                                              accelerate=True):
                         actions.append(PlayCard(instance_id, accelerate=True))
+                # 820.1 -- Repeat is an optional additional cost, offered only
+                # when the card prints one the engine can read and the player
+                # can afford it (820.1.c.1 / 358).
+                if repeat_cost(card) is not None and self._can_afford_play(
+                    self.cards[instance_id], player, repeat=True
+                ):
+                    actions.append(PlayCard(instance_id, repeat=True))
 
         # Activated abilities (376, 145.2). Their own printed timing governs,
         # which is why a rune seal's REACTION ability works inside a chain.
@@ -548,7 +556,8 @@ class RiftboundState:
         return total
 
     def _can_afford_play(self, ref: CardRef, player: int,
-                         accelerate: bool = False) -> bool:
+                         accelerate: bool = False,
+                         repeat: bool = False) -> bool:
         """356-358 -- can the total cost be paid for *some* legal target set?
 
         Base cost plus the cheapest Deflect the card's targets can incur. A
@@ -557,11 +566,16 @@ class RiftboundState:
         where the action is offered.
         """
         card = self.db[ref.card_id]
+        energy, domains = card.energy, list(card.power_domains)
         if accelerate:
-            energy = card.energy + 1
-            domains = list(card.power_domains) + list(card.accelerate_power_domains)
-        else:
-            energy, domains = card.energy, list(card.power_domains)
+            energy += 1
+            domains += list(card.accelerate_power_domains)
+        if repeat:
+            more = repeat_cost(card)               # 820.1.c.1
+            if more is None:
+                return False
+            energy += more[0]
+            domains += list(more[1])
         extra = self._cheapest_deflect(ref)
         return self.players[player].pool.can_pay(
             energy, domains + [ANY_DOMAIN] * extra
@@ -757,7 +771,8 @@ class RiftboundState:
 
     def _queue(self, ability: Ability, controller: int, source: int | None,
                restrict_location: str | None = None,
-               declared: dict | None = None, ability_index: int = 0) -> None:
+               declared: dict | None = None, ability_index: int = 0,
+               execution: int = 0) -> None:
         """Push an ability's effects onto the resolution queue.
 
         `restrict_location` carries 811.1.d.2 down to every selector the
@@ -774,7 +789,7 @@ class RiftboundState:
             ctx = EffectContext(controller=controller, source=source,
                                 restrict_location=restrict_location)
             if declared is not None:
-                key = (ability_index, effect_index)
+                key = (execution, ability_index, effect_index)
                 if key in declared:
                     selector = getattr(effect, "selector", None)
                     legal = candidates(self, selector, controller, source,
@@ -843,7 +858,7 @@ class RiftboundState:
 
     def _fire(self, kind: TriggerKind, instance_id: int,
               restrict_location: str | None = None,
-              declared: dict | None = None) -> None:
+              declared: dict | None = None, execution: int = 0) -> None:
         """382 -- queue every ability of `kind` printed on this card.
 
         136.2.c -- "The abilities in the Effect Text section of a card are
@@ -866,7 +881,7 @@ class RiftboundState:
             abilities_of_kind(self.db[ref.card_id], kind, attached)
         ):
             self._queue(ability, ref.controller, source, restrict_location,
-                        declared, index)
+                        declared, index, execution)
 
     def _resolve_effects(self) -> None:
         """Drain the effect queue, pausing whenever a choice is needed."""
@@ -1050,6 +1065,7 @@ class RiftboundState:
         item = ChainItem(
             kind="card", instance_id=action.instance_id, controller=player,
             pending=True, from_hidden=from_hidden, accelerated=action.accelerate,
+            repeat=action.repeat,
         )
         self.chain.append(item)  # 354 -- this Closes the State
         self.chain_passes = 0
@@ -1098,10 +1114,20 @@ class RiftboundState:
         card = self.db[self.cards[item.instance_id].card_id]
         if item.from_hidden is not None:
             return 0, []
+        energy = card.energy
+        domains = list(card.power_domains)
         if item.accelerated:
-            return (card.energy + 1,
-                    card.power_domains + card.accelerate_power_domains)
-        return card.energy, list(card.power_domains)
+            # 805.1.a -- [1][C] on top of the printed cost.
+            energy += 1
+            domains += list(card.accelerate_power_domains)
+        if item.repeat:
+            # 820.1.c.1 -- "The Cost is an Additional Cost to be paid during
+            # the steps of playing the spell or ability."
+            extra = repeat_cost(card)
+            if extra is not None:
+                energy += extra[0]
+                domains += list(extra[1])
+        return energy, domains
 
     def _total_cost(self, item) -> tuple[int, list[str]]:
         """356 -- base cost plus mandatory additional costs.
@@ -1180,7 +1206,13 @@ class RiftboundState:
             )
         else:
             return []
-        return [((a, e), sel) for a, e, sel in targets_of(abilities)]
+        # 820.2.a -- a repeated item makes its choices twice, independently,
+        # so each execution gets its own slots. The key carries the execution
+        # index; execution 0 is the ordinary single pass.
+        executions = 2 if item.repeat else 1
+        return [((run, a, e), sel)
+                for run in range(executions)
+                for a, e, sel in targets_of(abilities)]
 
     def _affordable_with(self, item, key, instance_id: int) -> bool:
         """Whether the controller could still pay if `instance_id` were chosen.
@@ -1264,8 +1296,12 @@ class RiftboundState:
             hidden_here = bf_location(hidden_bf) if hidden_bf is not None else None
             if card.type == "spell":
                 state.trash.append(item.instance_id)  # 351.2
-                self._fire(TriggerKind.ON_RESOLVE, item.instance_id,
-                           hidden_here, item.targets)
+                # 820.1.d -- "execute the instructions of this chain item
+                # one additional time during resolution", each execution
+                # using the choices declared for it (820.2.a).
+                for run in range(2 if item.repeat else 1):
+                    self._fire(TriggerKind.ON_RESOLVE, item.instance_id,
+                               hidden_here, item.targets, run)
             else:
                 # 148.1.a.1 -- permanents enter the Base, unless 811.1.d.1
                 # sends a card played from Hidden to its battlefield instead.

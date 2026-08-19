@@ -68,9 +68,14 @@ class PlayCard(Action):
 
     instance_id: int
     accelerate: bool = False
+    # 820 -- pays Repeat's optional additional cost, so the chain item's
+    # instructions execute one additional time on resolution (820.1.d).
+    repeat: bool = False
 
     def __repr__(self) -> str:
-        return f"play:{self.instance_id}" + ("+accel" if self.accelerate else "")
+        return (f"play:{self.instance_id}"
+                + ("+accel" if self.accelerate else "")
+                + ("+repeat" if self.repeat else ""))
 
 
 @dataclass(frozen=True, order=False)
