@@ -313,3 +313,70 @@ here rather than left to be discovered.
 The **700-series** (attachment, keywords) and **800-series** (the keyword
 glossary) have not had this treatment. Two series audited, nine live bugs
 between them. It would be unreasonable to assume the remaining two are clean.
+
+## Attachment and keywords audit (700-732)
+
+The third series. Four findings, two of them live.
+
+| Rule | What it says | Was |
+| --- | --- | --- |
+| **426 / 701-705** | a Buff is a *counter*: one per unit, +1 Might, spendable, removed on leaving play | modelled as an unbounded Might modifier |
+| **136.2.c / 718.3** | an attached card's Effect Text is appended to the **host's** rules text, so "me" is the host | fired with the gear as "me" |
+| **718.2 / 724** | Rules Text is Inactive while attached; Effect Text is Inactive while loose | both live at all times |
+| **719.3.a** | attachments move with the Top-Most Card | the Standard Move carried them; the combat recall did not |
+
+### Buffs
+
+53 cards reference buffs — "While I'm buffed", "for each buffed friendly
+unit", "spend a buff to..." — and the set prints a rules-reminder card,
+OGN-357, whose entire text is "A unit may have no more than one buff at a
+time." The DSL had an effect called `Buff` that added N Might, which is a
+different mechanic wearing the same name. `PlaceBuff` and `SpendBuff` are now
+the Game Actions and `ModifyMight` is the raw modifier; naming them apart is
+what stops them being conflated again.
+
+`state.buff()` **reports** whether the counter landed. 426.1.c is the reason:
+a unit that already holds a buff can still be chosen but is not buffed, so
+"if it was buffed this way, draw 1" and "when you buff me" must both be able
+to tell.
+
+### The two that found each other
+
+Making buffs real immediately exposed 136.2.c: Warmog's Armor's "When I
+conquer, buff me" was buffing the *gear*, and a gear cannot hold a buff at
+all. The invariant checker caught it within a few random games.
+
+Fixing that exposed 718.2/724: with the trigger now landing on the host, it
+was still firing while the gear sat loose in a base — where 724 makes its
+Effect Text Inactive — and the Equip ability was still offered while worn,
+where 718.2 makes its Rules Text Inactive. An equipped gear could re-target
+itself onto any other unit, every turn, for its cost.
+
+### Reading versus fuzzing, both ways round
+
+719.3.a is the pair to the earlier 719.5 bug, and the two were found by
+opposite methods:
+
+* **719.5** — a rule enforced in one code path out of three. Found by the
+  invariant checker, after reading had missed it.
+* **719.3.a** — the same shape. Found by reading, and *unreachable* by
+  fuzzing: 150 Greedy-vs-Random games produced zero instances, because it
+  needs an Equipment attached to an attacker in a combat both sides survive.
+
+Neither method subsumes the other. Both fixes now route through one function
+(`leave_board`, `move_to`) so the shape cannot recur.
+
+### Missing features, not bugs
+
+* **727 Dependent Keywords** (LEGION, Level N) — 12 cards, none scripted,
+  none in the starter decks.
+* **728-732 XP** — 6 cards, same.
+
+Neither influences the engine today, so neither was built speculatively.
+
+### Still unaudited
+
+The **800-series** keyword glossary, apart from the keywords the engine
+already acts on (Assault, Tank, Backline, Ganking, Accelerate, Shield,
+Deflect, Hidden, Equip, Quick-Draw). Three series audited, **thirteen live
+bugs** between them.

@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 572 tests pass.
+- 593 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -121,12 +121,13 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Two series audited, nine live bugs; two series still unaudited
+### Three series audited, thirteen live bugs; one series still unaudited
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
-live bugs**, not merely missing features. The turn-structure audit then
-walked 300-348 and found **four more**, including the largest rules gap the
-project has had:
+live bugs**, not merely missing features. The turn-structure audit walked
+300-348 and found **four more**, including the largest rules gap the project
+has had. The attachment-and-keywords audit walked 700-732 and found **four
+more** after that:
 
 | Rule | What was wrong | Effect |
 | --- | --- | --- |
@@ -134,23 +135,32 @@ project has had:
 | **337.4** | the opponent got the first priority window after a play | a caster could never stack on their own item first |
 | **347.2.a** | a play did not break the showdown pass sequence | showdowns ended one pass early after any spell |
 | **317.2.b** | units were never healed at the end of a turn | non-combat damage accumulated until it killed |
+| **426 / 701-705** | Buff counters were modelled as a Might modifier | 53 cards reference a mechanic that did not exist |
+| **136.2.c** | an attached card's "me" is its host | an Equipment buffed itself, which 702 forbids |
+| **718.2 / 724** | Inactive text | a worn gear could re-equip itself; a loose one fired its worn trigger |
+| **719.3.a** | attachments travel with the host | true on the move path, not the combat-recall path |
 
 323.6 alone moved mean game length from **14.2 turns to 25.3**. Several
 existing tests had been written against the buggy behaviour and had to be
 corrected — which is how a wrong engine makes its own tests agree with it,
 and the reason reading the rules beats trusting a green suite.
 
+Two of those found each other: making Buff counters real immediately exposed
+136.2.c, and fixing that exposed 718.2/724. A wrong model can hide the next
+wrong model behind it.
+
 Still unaudited, and stated plainly:
 
-- **700-series** (attachment, keywords) — implemented and tested, but never
-  walked rule by rule.
-- **800-series** (the keyword glossary) — same, apart from the keywords
-  named above.
+- **800-series** (the keyword glossary) — implemented and tested for the
+  keywords the engine acts on, but never walked rule by rule.
 - **473-477 Layers** — not transcribed at all (RQ-3). Nothing currently
   needs them; that stops being true as soon as continuous modifiers land.
+- **727 Dependent Keywords** (12 cards) and **728-732 XP** (6 cards) are
+  unimplemented. Neither touches a scripted card or a starter deck, so both
+  are missing features rather than live bugs.
 
-Nine live bugs across the two series that have been audited. It is not
-reasonable to assume the two that have not are clean.
+Thirteen live bugs across the three series that have been audited. It is not
+reasonable to assume the one that has not is clean.
 
 ### Known approximations, all logged
 
@@ -173,10 +183,10 @@ In the order that buys the most:
 
 1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Audit the 700- and 800-series** the way 410-444 and 300-348 were
+2. **Audit the 800-series** the way 410-444, 300-348 and 700-732 were
    audited — one rule at a time, ask whether the engine's behaviour
-   differs, write the test, fix or log. Nine live bugs in the two series done
-   so far.
+   differs, write the test, fix or log. Thirteen live bugs in the three
+   series done so far.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 
