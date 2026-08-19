@@ -46,6 +46,11 @@ the 8% is the ceiling on simulating an *arbitrary* deck.
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
 | Core Rules audited rule by rule: 300s, 400s, 700s, 800s | done — 20 live bugs found and fixed |
 | State invariants checked after every action | done — 14 checks, each citing its rule |
+| Agents: Random, Greedy, ISMCTS, Aggro, Conservative, Objective | done |
+| Action encoding + trajectory format + dataset generator | done — `learning/` |
+| Fixed benchmark scenarios | done — `python3 cli.py evaluate --agent all` |
+| One CLI for everything | done — `python3 cli.py --help` |
+| A neural policy/value model | **blocked** — needs a dependency; see [`BUILD_STATUS.md`](BUILD_STATUS.md) |
 | Scripting the rest of the card pool | **remaining work** |
 
 **786 tests passing** — 152 on the core rules, turn structure and the Chain;
@@ -194,18 +199,25 @@ fields are deliberately not mapped — see RQ-1.
 ## Layout
 
 ```
+cli.py      one front door: validate, benchmark, evaluate, generate, play
+config/     *.toml run settings; defaults < file < flags
 data/       raw/ cache, fetch.py, sources.py, normalize.py -> cards.json
 engine/     rules: zones, state, actions, setup, combat, replay, interface
 cards/      card database + keyword parsing; knows nothing about search
 decks/      decklists + build_decks.py
-agents/     consume the legal-action API only (random, greedy)
-analysis/   batch runs, evaluation heuristic, weight fitting, calibration
+agents/     consume the legal-action API only (random, greedy, ismcts, styles)
+analysis/   batch runs, evaluation heuristic, weight fitting, scenarios/
+learning/   action encoding, trajectory format, dataset generator, config
 frontend/   stdlib HTTP server + single-page client (no rules logic)
 tests/      unit tests; replays/ holds recorded game logs
 ```
 
 Layer separation is strict and load-bearing — it is what lets an ISMCTS agent
-drop in later without a rewrite.
+drop in later without a rewrite. `learning/` has a rule of its own: it may
+read a `RiftboundObservation` and a list of `Action`s, and may never touch
+`RiftboundState`. An encoder with state access would feed a model information
+the interface does not grant, and no leakage test would catch it, because the
+leak would be in the encoder rather than the observation.
 
 ## Agent-facing interface
 
