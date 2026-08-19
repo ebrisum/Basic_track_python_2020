@@ -32,6 +32,7 @@ IMPLEMENTED: frozenset[str] = frozenset({
     "Ganking",    # 810 -- standard move battlefield -> battlefield
     "Temporary",  # 816 -- dies at its controller's Beginning Phase
     "Unique",     # 825 -- one copy per deck by name (deck construction only)
+    "Deflect",    # 809 -- taxes an opponent's spells that choose this
 })
 
 _PATTERN = re.compile(

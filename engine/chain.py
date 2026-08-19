@@ -41,6 +41,10 @@ class ChainItem:
     # carried here, keyed by (ability index, effect index) so a choice can be
     # matched back to the effect it belongs to on resolution.
     targets: dict = field(default_factory=dict)
+    # 805 -- ACCELERATE was chosen as this card was played, which changes its
+    # base cost (805.1.a). Recorded here because the cost is now determined
+    # after targeting rather than at the moment the action arrives.
+    accelerated: bool = False
 
     def copy(self) -> "ChainItem":
         # `targets` is the one mutable field; everything else is a scalar.
@@ -56,6 +60,7 @@ class ChainItem:
             self.from_trigger,
             self.from_hidden,
             tuple(sorted(self.targets.items())),
+            self.accelerated,
         )
 
 

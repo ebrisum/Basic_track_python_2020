@@ -441,8 +441,7 @@ in deck validation. 825.4 confirms it does nothing else during play.
 
 | Keyword | Cards in pool | In the starter decks | Blocked on |
 | --- | --- | --- | --- |
-| Deflect (809) | 27 | 1 | **RQ-19** |
-| Repeat (820) | 17 | 1 | **RQ-19** (820.2 requires play-time choices) |
+| Repeat (820) | 17 | 1 | 820.2's choices are now possible; not yet built |
 | Weaponmaster (821) | 16 | 0 | — |
 | Deathknell (808) | 15 | 0 | — |
 | Empower / Empowered (827-828) | 13 | 0 | — |
@@ -454,8 +453,9 @@ in deck validation. 825.4 confirms it does nothing else during play.
 Ambush (822), Hunt (823) and Flow (829) appear on no card in the cached pool
 at all.
 
-Two of the largest are blocked on the same structural gap, which is the
-clearest argument for fixing RQ-19 before scripting more cards.
+Deflect (809) has since been built -- see below -- which removed the largest
+entry from this table. Repeat is no longer blocked either; it simply has not
+been written.
 
 Weaponmaster is worth a note for later: 821.1.c says "Necessary portions of
 its Rules Text are no longer Inactive if they are currently Inactive", and
@@ -463,7 +463,30 @@ its Rules Text are no longer Inactive if they are currently Inactive", and
 is an explicit exception to the 718.2 Inactive rule implemented above, and
 whoever builds it must not be surprised by that interaction.
 
+### Deflect (809), and the order of the play steps
+
+Deflect is a **mandatory additional cost priced off the declared target**
+(809.1.d), so it was unimplementable while targets were chosen at resolution.
+Fixing RQ-19 unblocked it, but not on its own: the engine still paid before it
+targeted, where 353-359 print the order
+
+    354 move to chain -> 355 make choices -> 356 total cost -> 357 pay
+
+Putting the steps in that order is what gave Deflect something to attach to.
+`deflect_cost` sums 809.2's multiple instances, reads an omitted value as 1
+(809.1.b.3), taxes only an opponent's permanents (809.1.c), and is paid in
+Power of any domain (809.1.c.1).
+
+358 Check legality falls out of it: a target whose tax cannot be paid is not
+offered, and a spell with no affordable target set is not a legal play.
+
+Reordering the steps exposed a second defect immediately -- an activated
+ability's chain item was charged its *source card's* play cost on top of the
+ability cost it had already paid. The whole suite went red at once, which is
+the useful kind of failure.
+
 ### Tally
 
-Four series audited: **sixteen live bugs**, two keywords built, one
-structural gap (RQ-19) written up rather than guessed at.
+Four series audited: **seventeen live bugs**, three keywords built
+(Temporary, Unique, Deflect), and the structural gap RQ-19 fixed for spells
+and activated abilities.

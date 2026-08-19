@@ -369,10 +369,11 @@ boxes separate, or a per-card marker in the script.
 
 ---
 
-## RQ-19 — Targets are declared at finalization — MOSTLY RESOLVED
+## RQ-19 — Targets are declared at finalization — RESOLVED
 
-**Status:** the spell and activated-ability half is implemented. One half
-remains, named below.
+**Status:** closed. Spells and activated abilities declare their targets as
+they are played, which is the whole of what 355.8 asks; 355.5.b puts
+triggered abilities' choices exactly where the engine already makes them.
 
 **What 355.8 asks.** "In order to put a spell or ability on the chain, valid
 choices must be made for all targets." The engine used to defer every choice
@@ -392,7 +393,7 @@ still legal.
 | a spell can be **fizzled** by answering its target (359.3.e.5) | works |
 | a spell with **no legal target cannot be played** (355.8) | gated in `legal_actions` |
 | opponents **see the target** before responding | the chain item carries it |
-| **Deflect** (809) has a target to price against | unblocked, not yet built |
+| **Deflect** (809) has a target to price against | built, see below |
 
 `is_target()` implements 355.7's default and the FAQ's exceptions: 355.10.d
 (no real choice — `scope="all"` and `scope="self"`) and 355.10.e (a set chosen
@@ -401,34 +402,42 @@ by other players — `each_player`). 355.10.a is handled structurally, since
 355.10.f ("must") has no DSL representation and no card in the pool uses the
 wording.
 
-### Still deferred: triggered abilities
+### Scoped exactly as 355.5.b scopes it
 
-Only an item's **own** effects declare early — a spell's ON_RESOLVE and an
-activated ability's effects. A "when you play me" effect belongs to a
-*triggered ability*, which 383 puts on the chain as its own item; its targets
-should be declared when **that** item is finalized. The engine still resolves
-triggered abilities inline rather than as separate chain items, so their
-targets are still chosen late.
+Only an item's **own** effects declare early. That is not a shortcut — it is
+what the rule says. **355.5.b**: "This does not include making choices for
+Triggered Abilities of permanents ... even if those abilities trigger when the
+chain item is played. Example: A unit with a triggered ability that says
+'When I'm played, kill a unit' does not require you to choose a target as it's
+played. The target will be chosen when the ability triggers."
 
-**Effect on outcomes.** A play effect cannot be fizzled, and cannot be taxed
-by Deflect. Smaller than the original gap — a triggered ability's window is
-narrower than a spell's — but the same shape.
+The engine chooses those targets when the ability triggers, which satisfies
+355.5.b. What it does *not* yet do is put a triggered ability on the chain as
+its own item (383, 354.2), so nobody can respond between the trigger and its
+resolution. That is a separate gap from RQ-19 and belongs with 471.2's timing
+work; it is not a leftover of this one.
 
-**What it needs.** Triggered abilities put on the chain as real items (383,
-354.2's Pending Items), which is also what 471.2's timing and the FAQ's
-Overzealous Fan / Azir ordering example require. Worth doing with that work
-rather than alone.
+### Deflect, and the order of the play steps
 
-### Not yet built, though no longer blocked
+Fixing the choice point was necessary but not sufficient. The engine still
+paid before it targeted, where 353-359 print
 
-**Deflect (809)** is a mandatory additional cost priced off the declared
-target, so it needs the cost step to run *after* targeting. 349's play process
-does put "Make Relevant Choices" before "Determine Total Cost", but the engine
-pays first and targets second, so the order has to be swapped before Deflect
-can be charged. 27 cards.
+    354 move to chain -> 355 make choices -> 356 total cost -> 357 pay
 
-**Repeat (820)** likewise: 820.2 says choices for the additional execution are
-made "at the usual time during the Make Relevant Choices step". 17 cards.
+The steps now run in that order, which is what gives Deflect (809.1.d) a
+target to price against. `deflect_cost` sums 809.2's multiple instances, reads
+an omitted value as 1 (809.1.b.3), taxes only an opponent's permanents
+(809.1.c), and is paid in Power of any domain (809.1.c.1). 358 Check legality
+falls out: a target whose tax cannot be paid is not offered, and a spell with
+no affordable target set is not a legal play.
+
+Reordering exposed a second defect at once: an activated ability's chain item
+was charged its *source card's* play cost on top of the ability cost it had
+already paid. The whole suite went red, which is the useful kind of failure.
+
+**Repeat (820)** is no longer blocked either — 820.2's "usual time during
+the Make Relevant Choices step" now exists as a real step. It simply has not
+been written. 17 cards.
 
 ---
 

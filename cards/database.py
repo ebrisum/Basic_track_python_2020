@@ -73,6 +73,16 @@ class CardData:
         return kw.has(self.parsed_keywords, "Backline")  # 826
 
     @property
+    def has_deflect(self) -> bool:
+        """809 -- taxes an opponent's spells that choose this permanent."""
+        return kw.has(self.parsed_keywords, "Deflect")
+
+    @property
+    def deflect(self) -> int:
+        """809.1.b.2 -- the Deflect Value. 809.1.b.3: omitted means 1."""
+        return kw.value_of(self.parsed_keywords, "Deflect") or 1
+
+    @property
     def has_temporary(self) -> bool:
         """816 -- "At the start of this permanent's controller's Beginning
         Phase, before scoring, kill this"."""

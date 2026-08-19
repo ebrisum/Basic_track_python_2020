@@ -342,15 +342,13 @@ class RiftboundState:
             # cannot be put on the chain, so it is not a legal action.
             if not self._spell_has_targets(self.cards[instance_id]):
                 continue
-            if state.pool.can_pay(card.energy, card.power_domains):
+            if self._can_afford_play(self.cards[instance_id], player):
                 actions.append(PlayCard(instance_id))
                 # 805.2 -- ACCELERATE is an optional additional cost paid as
                 # part of playing the unit, never once it is on the board.
                 if card.type == "unit" and card.has_accelerate:
-                    if state.pool.can_pay(
-                        card.energy + 1,
-                        card.power_domains + card.accelerate_power_domains,
-                    ):
+                    if self._can_afford_play(self.cards[instance_id], player,
+                                             accelerate=True):
                         actions.append(PlayCard(instance_id, accelerate=True))
 
         # Activated abilities (376, 145.2). Their own printed timing governs,
@@ -519,6 +517,51 @@ class RiftboundState:
         # 703 -- each Buff counter contributes exactly +1 Might.
         return (card.might + ref.might_this_turn + ref.might_permanent
                 + ref.buffs + bonus + attached)
+
+    def _cheapest_deflect(self, ref: CardRef, here: str | None = None) -> int:
+        """The least Deflect (809) this card's targets can be made to cost.
+
+        One target set has to be affordable for the play to be legal (358), so
+        the gate is priced off the cheapest one. Per selector, that is the
+        candidate whose Deflect tax is lowest -- usually zero, since most
+        permanents have none.
+        """
+        card = self.db[ref.card_id]
+        if card.type != "spell":
+            return 0
+        attached = ref.attached_to is not None
+        total = 0
+        for _a, _e, selector in targets_of(
+            abilities_of_kind(card, TriggerKind.ON_RESOLVE, attached)
+        ):
+            options = candidates(self, selector, ref.controller,
+                                 ref.instance_id, here)
+            if not options:
+                continue
+            total += min(
+                self.deflect_cost([i], ref.controller) for i in options
+            )
+        return total
+
+    def _can_afford_play(self, ref: CardRef, player: int,
+                         accelerate: bool = False) -> bool:
+        """356-358 -- can the total cost be paid for *some* legal target set?
+
+        Base cost plus the cheapest Deflect the card's targets can incur. A
+        card whose only legal target taxes more than the player can pay is not
+        a legal play, which is 358 Check legality doing its job at the point
+        where the action is offered.
+        """
+        card = self.db[ref.card_id]
+        if accelerate:
+            energy = card.energy + 1
+            domains = list(card.power_domains) + list(card.accelerate_power_domains)
+        else:
+            energy, domains = card.energy, list(card.power_domains)
+        extra = self._cheapest_deflect(ref)
+        return self.players[player].pool.can_pay(
+            energy, domains + [ANY_DOMAIN] * extra
+        )
 
     def _spell_has_targets(self, ref: CardRef, here: str | None = None) -> bool:
         """355.8 -- "In order to put a spell or ability on the chain, valid
@@ -888,7 +931,17 @@ class RiftboundState:
     # ----------------------------------------------------------- main actions
 
     def _apply_play(self, action: PlayCard) -> None:
-        """349-355 -- move the card to the Chain, pay, then finalize."""
+        """The process of play, in the printed order (353-359).
+
+        1. **354** move the card to the Chain; it is Pending.
+        2. **355** make relevant choices, targets among them.
+        3. **356** determine total cost -- which is where Deflect (809.1.d)
+           attaches, because it is priced off the targets chosen in step 2.
+        4. **357** pay.
+
+        The engine used to pay first and target afterwards, which is why
+        Deflect had nowhere to attach at all (RQ-19).
+        """
         player = self._current_player
         state = self.players[player]
         ref = self.cards[action.instance_id]
@@ -899,22 +952,10 @@ class RiftboundState:
             # 811.1.b -- played from Hidden, "ignoring its base cost". The
             # card is already off the hand, so there is nothing to remove.
             ref.hidden_at = None
-        elif action.accelerate:
-            # 805.1.a -- pay [1][C] on top of the printed cost.
-            state.pool.pay(
-                card.energy + 1, card.power_domains + card.accelerate_power_domains
-            )
-            if action.instance_id in state.hand:
-                state.hand.remove(action.instance_id)
-            else:
-                state.champion_zone.remove(action.instance_id)
+        elif action.instance_id in state.hand:
+            state.hand.remove(action.instance_id)
         else:
-            state.pool.pay(card.energy, card.power_domains)  # 444 Pay
-            if action.instance_id in state.hand:
-                state.hand.remove(action.instance_id)
-            else:
-                state.champion_zone.remove(action.instance_id)
-
+            state.champion_zone.remove(action.instance_id)
 
         self._emit(
             f"P{player} plays {card.name}"
@@ -931,15 +972,70 @@ class RiftboundState:
         # where an earlier hidden card is played to or makes its choices.
         item = ChainItem(
             kind="card", instance_id=action.instance_id, controller=player,
-            pending=True, from_hidden=from_hidden,
+            pending=True, from_hidden=from_hidden, accelerated=action.accelerate,
         )
         self.chain.append(item)  # 354 -- this Closes the State
         self.chain_passes = 0
         self._break_showdown_pass_sequence()
-        # 355.8 / 329.2 -- the item is Pending until targets are declared and
-        # legality is checked. If a choice is needed the turn parks here and
-        # `_finish_playing` resumes once it is answered.
+        # 355.8 / 329.2 -- the item is Pending until targets are declared,
+        # costs are determined and paid, and legality is checked. If a choice
+        # is needed the turn parks here and resumes once it is answered.
         self._advance_targeting()
+
+    def deflect_cost(self, target_ids, controller: int) -> int:
+        """809 -- the extra Power an opponent's Deflect permanents demand.
+
+        809.1.c: "Spells and abilities an opponent controls that target [me]
+        cost an amount of Power equal to [Deflect Value] more to play ...
+        **for each time they choose [me]**", so a permanent chosen twice taxes
+        twice. 809.2 sums multiple instances on one object; 809.1.b.3 reads an
+        omitted value as 1.
+
+        Only opponents' permanents tax: your own Deflect unit is free to aim
+        at.
+        """
+        total = 0
+        for instance_id in target_ids:
+            ref = self.cards.get(instance_id)
+            if ref is None or ref.controller == controller:
+                continue
+            card = self.db[ref.card_id]
+            if not card.has_deflect:
+                continue
+            total += card.deflect or 1     # 809.1.b.3
+        return total
+
+    def _base_cost(self, item) -> tuple[int, list[str]]:
+        """356.1-356.2 -- the printed cost, before Deflect.
+
+        811.1.b zeroes the base cost of a card played from Hidden; 805.1.a
+        adds [1][C] when ACCELERATE was chosen.
+
+        An **ability** item has no card cost: its own cost was paid by
+        `_pay_ability` when it was activated (204.3.a), and charging the
+        source card's play cost here would bill the player twice for using a
+        permanent they already own.
+        """
+        if item.kind == "ability":
+            return 0, []
+        card = self.db[self.cards[item.instance_id].card_id]
+        if item.from_hidden is not None:
+            return 0, []
+        if item.accelerated:
+            return (card.energy + 1,
+                    card.power_domains + card.accelerate_power_domains)
+        return card.energy, list(card.power_domains)
+
+    def _total_cost(self, item) -> tuple[int, list[str]]:
+        """356 -- base cost plus mandatory additional costs.
+
+        The Deflect share is paid in Power of any domain (809.1.c.1), which is
+        `ANY_DOMAIN` here.
+        """
+        energy, domains = self._base_cost(item)
+        chosen = [i for ids in item.targets.values() for i in ids]
+        extra = self.deflect_cost(chosen, item.controller)
+        return energy, domains + [ANY_DOMAIN] * extra
 
     def _advance_targeting(self) -> None:
         """355.8 -- declare every target before the item is Finalized.
@@ -958,6 +1054,10 @@ class RiftboundState:
                 continue
             options = candidates(self, selector, item.controller,
                                  item.instance_id, here)
+            # 358 -- a choice whose total cost cannot be paid fails the
+            # legality check, so 809's tax narrows the offer rather than
+            # producing an unpayable play.
+            options = [i for i in options if self._affordable_with(item, key, i)]
             if not options:
                 # 355.8 -- no valid choice. `legal_actions` gates this, so
                 # reaching it means a target vanished between offer and play.
@@ -998,8 +1098,28 @@ class RiftboundState:
             return []
         return [((a, e), sel) for a, e, sel in targets_of(abilities)]
 
+    def _affordable_with(self, item, key, instance_id: int) -> bool:
+        """Whether the controller could still pay if `instance_id` were chosen.
+
+        Optimistic about the targets not yet declared -- they are priced when
+        their own turn comes -- and exact about the ones already fixed.
+        """
+        chosen = [i for k, ids in item.targets.items() if k != key for i in ids]
+        chosen.append(instance_id)
+        energy, domains = self._base_cost(item)
+        extra = self.deflect_cost(chosen, item.controller)
+        return self.players[item.controller].pool.can_pay(
+            energy, domains + [ANY_DOMAIN] * extra
+        )
+
     def _finish_playing(self, item) -> None:
-        """329.3 -- the item stops being Pending and becomes Finalized."""
+        """356-359 -- determine the total cost, pay it, and Finalize.
+
+        Costs are paid here rather than when the action arrived, because 356
+        is step 3 and the targets that price Deflect are chosen in step 2.
+        """
+        energy, domains = self._total_cost(item)
+        self.players[item.controller].pool.pay(energy, domains)   # 357 / 444
         item.pending = False
         card = self.db[self.cards[item.instance_id].card_id]
         player = item.controller
