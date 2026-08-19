@@ -503,3 +503,28 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   measurement of pairwise disagreement read 1.1% for exactly that reason, and
   the honest number is 39-73%. Seeds that are equal by accident look like
   agreement.
+
+## The scenario suite argued back
+
+- **Three of the first eight scenarios were wrong, and the agents found them**
+  -- `GreedyAgent` "failed" 003, 004 and 006 by playing its champion from the
+  Champion Zone (108.3), which is a perfectly good move that the accepted set
+  had simply not anticipated. The fix was to deploy the champion during setup
+  so the option is not on the menu, not to call a reasonable play a mistake.
+  A scenario suite written by the same hand that judges it will do this, and
+  the only defence is running it against agents that do not share the
+  assumption.
+- **Every scenario must reject at least one legal action** -- asserted, not
+  assumed. A scenario that accepts everything looks like a test and measures
+  nothing, and it is exactly what an over-broad accepted set produces.
+- **Every scenario is checked against the state invariants** -- a hand-built
+  board can encode a position the rules cannot reach, and an agent graded on
+  an impossible position is being graded on nothing. Nothing in
+  `analysis/scenarios/build.py` mints a card either: instances are drawn from
+  the player's own deck and retyped, so card conservation (107) still means
+  something when the checker runs.
+- **The real find was scenario 007** -- given a 2-Might, a 3-Might and a
+  10-Might enemy unit and a spell that deals 3, every heuristic agent aims it
+  at the 10-Might unit, which survives. That is not a tie-break artefact or a
+  disputable judgement; the removal is simply wasted. It is the kind of error
+  a win rate averages away and a scenario names.

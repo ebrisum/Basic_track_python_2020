@@ -48,7 +48,7 @@ the 8% is the ceiling on simulating an *arbitrary* deck.
 | State invariants checked after every action | done — 14 checks, each citing its rule |
 | Scripting the rest of the card pool | **remaining work** |
 
-**733 tests passing** — 152 on the core rules, turn structure and the Chain;
+**770 tests passing** — 152 on the core rules, turn structure and the Chain;
 125 on card scripts, gear, targeting, buffs, Deflect, Repeat and death
 replacement; 85 on information tightness in both directions (`test_no_cheating`
 that nothing leaks in, `test_choice_visibility` that nothing a player is

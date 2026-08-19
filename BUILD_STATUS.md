@@ -34,7 +34,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 733 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
+| 10 | Simulator validation | **done** | 770 tests; 14 structural invariants asserted after every action; the 10,000-match run in `VALIDATION.md`, re-run on the settled 1.2.0 engine. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, and stamps every run with its provenance. ~100 games/min on the current engine, down from 173 because the 323.6 fix made games 78% longer. Above the plan's initial target of 100, well below its preferred 1,000. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -155,7 +155,7 @@ and rule 40.8 ("optimize correctness before performance") say.
 | 24 | Checkpoint promotion | **done, and ahead of the plan** | The plan asks for "confidence criteria". This has SPRT (as fishtest uses), seat swapping, mirror matchups, and paired seeds. Pairing cut the standard deviation from 0.369 to 0.273. |
 | 25 | Elo / rating | **done** | `analysis/ladder.py`: `elo_from_score`, `elo_interval`, `SPRT`. |
 | 26 | Curriculum learning | **absent** | |
-| 27 | Fixed evaluation scenarios | **absent** | No scenario suite. This is cheap, stdlib, and would catch strategic regressions the win-rate tests cannot localize. |
+| 27 | Fixed evaluation scenarios | **done** | `analysis/scenarios/`: 8 hand-built positions with cited rationales, graded by `python -m analysis.scenarios --agent all`. Random scores 0.38, Greedy 0.62, the styles 0.38-0.50 — it discriminates and nobody passes it. The suite is itself tested: every position passes `invariants.check`, every accepted answer is legal, and every scenario rejects at least one legal action. |
 | 28 | **No-cheating tests** | **done** | `tests/test_no_cheating.py`, added for this evaluation. It found a leak on its first run — in the *opposite* direction: 128.4 grants a facedown card's face to its controller, and the observation showed it to nobody. |
 | 29 | Logging | **partial** | The analysis tools print their metrics; only the league state is persisted. No per-run metrics file, no illegal-action counter in a log (it is 0, asserted by tests). |
 | 30 | Configuration files | **absent** | CLI flags only; no `ai/config/*.yaml`. Note YAML itself is a dependency; JSON would do. |
