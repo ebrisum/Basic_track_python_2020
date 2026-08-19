@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 601 tests pass.
+- 619 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -121,7 +121,7 @@ Every other Game Action any card needs is implemented. Four (436 Predict,
 440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
 in the pool asks for them.
 
-### Four series audited, sixteen live bugs
+### Four series audited, seventeen live bugs
 
 The Game Actions audit walked 410-444 one rule at a time and found **five
 live bugs**, not merely missing features. The turn-structure audit walked
@@ -166,28 +166,26 @@ kind of gap — every item below is named, counted and reachable:
 Sixteen live bugs across four audited series. The rate did not fall off:
 the last series still produced three.
 
-### One structural gap, larger than any single rule
+### The structural gap, now closed
 
-**RQ-19: targets are chosen at resolution, not at finalization.** 355.8 says
-"In order to put a spell or ability on the chain, valid choices must be made
-for all targets." The engine puts the spell on the chain with no target and
-asks only as it resolves.
+**RQ-19** was the largest single deviation: targets were chosen at resolution
+rather than at finalization, against 355.8. One deviation cost four rules, and
+fixing it required putting the whole play process back in its printed order
+(354 chain — 355 choices — 356 cost — 357 pay):
 
-That single deviation costs four rules at once:
+| Rule | Now |
+| --- | --- |
+| 359.3.e.5 — a spell can be **fizzled** by answering its target | works |
+| 809 — **Deflect** has a target to price against | built, 27 cards |
+| 355.8 — a spell with no legal target is not a legal play | gated |
+| opponents see the target before responding | the chain item carries it |
 
-- a spell **cannot be fizzled** by removing its target in response
-  (359.3.e.5), which is a core defensive play the Core Rules illustrate three
-  times;
-- **Deflect (809) cannot be charged**, because the tax depends on a target
-  that does not exist yet """ + D + """ 27 cards in the pool;
-- **opponents respond blind**, not knowing what a spell will hit;
-- **"when you choose me" triggers** (383.4.b.3) cannot fire at the right time.
-
-It is one-directional: every targeted spell is strictly stronger than the
-rules make it. It is flagged rather than fixed because it is a redesign of the
-play pipeline """ + D + """ touching the chain, the choice protocol, the action stream,
-determinization and every replay """ + D + """ not a rule patch, and it is worth doing
-before the card pool grows rather than after.
+355.5.b scopes it, and the scope is the rule's own: a permanent's "when I'm
+played" trigger does *not* choose its target as the card is played — "The
+target will be chosen when the ability triggers", which is where the engine
+chooses it. The related gap that remains is that triggered abilities are not
+yet chain items anyone can respond to (383, 354.2); that belongs with 471.2's
+timing work rather than here.
 
 ### Known approximations, all logged
 
@@ -210,10 +208,10 @@ In the order that buys the most:
 
 1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Fix RQ-19** — move target selection into the play pipeline. It is the
-   largest remaining structural gap, it makes four rules right at once, and
-   it unblocks the two most common unimplemented keywords. Doing it after the
-   card pool grows means redoing every scripted targeted spell.
+2. **Triggered abilities as real chain items** (383, 354.2), so a trigger can
+   be responded to and 471.2's ordering is expressible. It is what remains of
+   the targeting work, and what the FAQ's Azir / Overzealous Fan example
+   needs.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 
