@@ -88,7 +88,7 @@ I am not going to add a dependency without you saying so.
 
 ### The more important reason not to start yet
 
-**31 of 526 playable cards are scripted — about 6%.** A network trained
+**39 of 526 playable cards fully work — about 7%.** A network trained
 today would learn a game of costs, stats, movement and scoring, with almost
 every printed ability inert. It would learn that game very well. That is
 not Riftbound, and the learned weights would not transfer once the cards
@@ -193,7 +193,7 @@ and the *content*, not to jump to a transformer.
 
 Everything in steps 1-3 is pure stdlib and needs no decision from you.
 
-1. **Script cards** (RQ-5). 6% is the ceiling on every number this project
+1. **Script cards** (RQ-5). 7% is the ceiling on every number this project
    can produce. Nothing else in this list changes that, and the rules work is
    now far enough along that scripting will not be invalidated the way it
    would have been a day ago.

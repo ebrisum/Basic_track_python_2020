@@ -124,7 +124,7 @@ Three things about that number before anyone optimises it:
   rules getting more right, and that part should not be optimised away.
 
 The plan's rule 40.8 is "optimize correctness before performance", and with
-6% of cards scripted (see `CORRECTNESS.md`), correctness is still where the
+7% of cards working (see `CORRECTNESS.md`), correctness is still where the
 work belongs.
 
 ---
@@ -136,8 +136,8 @@ Stated plainly, because a large clean number invites over-reading:
 - It does not show the **rules are right**. It shows the machine never
   reaches a structurally impossible position. The 0.4.0 run above was equally
   clean while battlefields were free to hold forever.
-- It does not cover **card abilities**, because 495 of 526 playable cards
-  have none wired up. The run exercises costs, stats, movement, combat,
+- It does not cover most **card abilities**, because 487 of 526 playable
+  cards have none wired up. The run exercises costs, stats, movement, combat,
   scoring, buffs, the chain and showdowns.
 - It uses **two decks**. A third exists; the two real Milestone 1 decklists
   have not arrived yet.

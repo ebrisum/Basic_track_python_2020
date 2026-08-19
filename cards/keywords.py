@@ -25,16 +25,35 @@ ALL_KEYWORDS: tuple[str, ...] = (
 )
 
 # Keywords whose full effect the engine actually implements.
+#
+# This set is load-bearing beyond bookkeeping: `CardData.text_implemented`
+# reads it, and the frontend stamps a visible "text inert" badge on any card
+# it does not cover. It had fallen behind the engine -- timing keywords and
+# Hidden were being reported as unimplemented while the engine acted on them,
+# which marked cards inert that were not.
 IMPLEMENTED: frozenset[str] = frozenset({
+    # Timing (806, 813) -- `engine.chain.can_play` enforces both.
+    "Action",
+    "Reaction",
+    # Combat maths.
     "Assault",    # 807 -- +X Might while an attacker
+    "Shield",     # 814 -- +X Might while a defender
     "Tank",       # 815 -- must be assigned lethal damage first
     "Backline",   # 826 -- must be assigned lethal damage last
+    # Movement and play.
     "Ganking",    # 810 -- standard move battlefield -> battlefield
+    "Accelerate", # 805 -- optional additional cost to enter ready
+    "Hidden",     # 811 -- Hide facedown, play later for its base cost
+    # Attachment.
+    "Equip",         # 818 -- derived activated ability from the reminder text
+    "Quick-Draw",    # 819 -- derived on-play attach
+    "Weaponmaster",  # 821 -- play effect: equip an Equipment at a discount
+    # Costs and taxes.
+    "Deflect",    # 809 -- taxes an opponent's spells that choose this
+    "Repeat",     # 820 -- optional additional cost: execute the effect twice
+    # Board rules.
     "Temporary",  # 816 -- dies at its controller's Beginning Phase
     "Unique",     # 825 -- one copy per deck by name (deck construction only)
-    "Deflect",    # 809 -- taxes an opponent's spells that choose this
-    "Weaponmaster",  # 821 -- play effect: equip an Equipment at a discount
-    "Repeat",     # 820 -- optional additional cost: execute the effect twice
 })
 
 _PATTERN = re.compile(

@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 641 tests pass.
+- 661 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -87,20 +87,33 @@ it to nobody.
 
 This is where the honest part lives.
 
-### Card text: 31 of 526 playable cards are scripted
+### Card text: 39 of 526 playable cards fully work
 
-Approximately **6%**. Five of those have no printed text at all. Every
-unscripted card is inert — it has correct costs, stats, types, domains and
-keywords, and moves and fights correctly, but its printed ability does
-nothing. `CardData.text_implemented` is false for each, and the frontend
-stamps a visible `text inert` badge, so this is never hidden from a player.
-This is RQ-5, and it is the single largest approximation in the project.
+**About 7%**, of which 31 are scripted and the rest are cards whose entire
+printed text is keywords the engine implements. Every other card is inert —
+it has correct costs, stats, types, domains and keywords, and moves and
+fights correctly, but its printed ability does nothing.
+`CardData.text_implemented` is false for each, and the frontend stamps a
+visible `text inert` badge, so this is never hidden from a player. This is
+RQ-5, and it is the single largest approximation in the project.
 
-The mechanical keywords the engine acts on directly — Assault (807), Tank
-(815), Backline (826), Ganking (810), Accelerate (805), Shield (814),
-Deflect (809), Hidden (811), and Equip/Quick-Draw derived from printed
-reminder text (818/819) — do work, which is why 27 of 77 gear are equippable
-with no per-card Python at all.
+**Sixteen keywords now work** without any per-card Python, derived from the
+printed text: the timing pair Action and Reaction (806/813); the combat maths
+Assault, Shield, Tank and Backline (807/814/815/826); Ganking, Accelerate and
+Hidden (810/805/811); the attachment trio Equip, Quick-Draw and Weaponmaster
+(818/819/821); the cost keywords Deflect and Repeat (809/820); and the board
+rules Temporary and Unique (816/825). That is why 27 of 77 gear are equippable
+from their own card face.
+
+Six keywords remain: Deathknell (15 cards), Empower and Empowered (17),
+Legion (12), Vision (7) and Level (2).
+
+A note on how that number moved. The `IMPLEMENTED` set had fallen behind the
+engine — timing keywords and Hidden were listed as unimplemented while the
+engine acted on them, so nine cards carried an `inert` badge they had not
+earned. Correcting the set moved the count from 30 to 39. The badge is
+user-facing, so a stale set there is a wrong claim, not just untidy
+bookkeeping.
 
 **What this means for any number produced today:** win rates from this
 engine measure a game of costs, stats, movement, combat and scoring. They
@@ -210,11 +223,11 @@ Closed this session: RQ-10, RQ-14, RQ-15, RQ-16.
 
 In the order that buys the most:
 
-1. **Script the cards.** 6% to a meaningful fraction. This is the gate on
+1. **Script the cards.** 7% to a meaningful fraction. This is the gate on
    every number the project produces, and nothing else changes that.
-2. **Implement Double, Prevent and Swap** (7 cards), the last three Game
-   Actions any card needs, and **Repeat (820)** and **Weaponmaster (821)**,
-   which are now unblocked.
+2. **Transcribe Layers (473-477)** (RQ-3) before any continuous modifier
+   lands, and build **727 Dependent Keywords** (12 cards) and **728-732 XP**
+   (6 cards) when a card in play needs them.
 3. **Implement Double, Prevent and Swap** (7 cards).
 4. **Transcribe Layers (473-477)** before any continuous modifier lands.
 
