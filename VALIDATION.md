@@ -84,12 +84,25 @@ Control (190), resources (163), points (194), chain (329), and card
 conservation.
 
 **Does not.** In the headline run they were checked on the **final state of
-1 game in 20** — 500 states, not 2.19 million. Checking after every action of
-every game is roughly 3x slower and would have pushed a 97-minute run past
-four hours.
+1 game in 20** — 500 states, not 2.19 million.
 
-That sampling is a real limitation and worth stating rather than glossing.
-Two things bound it:
+That sampling is a real limitation, and the reason given for it was wrong.
+This file and `analysis/validate.py` both claimed that checking every action
+of every game is "roughly 3x slower". Nobody had measured it. Measured, on
+200 paired games with identical seeds — 42,394 decisions either way, so the
+two arms play exactly the same games:
+
+| Arm | Games/min | Decisions/s |
+| --- | --- | --- |
+| final state of 1 game in 200 | 107 | 378 |
+| **every action of every game** | **98** | **345** |
+
+**8% slower, not 3x** — the estimate was off by a factor of 30. The checker is
+O(board), not O(history), and a Riftbound board is small. Sampling bought
+almost nothing, so the full-depth run below replaces it as the acceptance
+result and the sampled numbers are kept only as the record of how this went.
+
+Two things bound the sampled run in the meantime:
 
 1. **A separate deep run** checks after *every action* of every sampled game.
    See below.
@@ -103,13 +116,22 @@ Two things bound it:
 
     .venv/bin/python -m analysis.validate --games 1000 --check-every 2 --deep
 
+Engine **1.2.0**, same provenance stamp as the headline run.
+
 | Metric | Value |
 | --- | --- |
 | games | 1,000 |
 | games checked after **every action** | 500 |
-| decisions | 193,365 |
+| decisions | **213,495** |
+| wall clock | 601 s (100 games/min) |
 | impossible states | **0** |
 | crashes / unresolved / illegal | **0 / 0 / 0** |
+
+The deep run's mean game length is 18.8 turns against the headline run's
+19.2 — the two runs are playing the same game, which is what makes the
+sampled headline result believable. Checking after every action of half the
+games cost 3 games/min, and that number is what prompted the paired
+measurement above.
 
 The invariant checker has now caught three real defects across the project —
 719.5 attachment survival, the stranded facedown card, and the Warmog's buff

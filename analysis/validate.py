@@ -10,11 +10,15 @@ things plus the section 11 performance instrumentation.
 The four failure modes, and how each is detected:
 
 * **crashes** -- any exception escaping a game.
-* **impossible states** -- `engine.invariants.check` over a sampled subset of
-  games. Checking every action of every game is ~3x slower; `--check-every`
-  sets the sampling stride and `--deep` checks after every action of the
-  sampled games rather than only at the end. The end-of-game check alone is
-  what caught a stranded facedown card in a 299-step game.
+* **impossible states** -- `engine.invariants.check`. `--check-every` sets the
+  sampling stride and `--deep` checks after every action of the sampled games
+  rather than only at the end. `--check-every 1 --deep` checks everything and
+  costs 8%, measured: 200 paired games, 42,394 decisions either way, 107
+  games/min shallow against 98 full-depth. An earlier version of this
+  docstring guessed "~3x slower" and the guess was wrong by a factor of 30,
+  which is why the flags default to sampling and the acceptance run no longer
+  does. The end-of-game check alone is what caught a stranded facedown card in
+  a 299-step game.
 * **unresolved games** -- a game that hits the action cap without terminating.
 * **illegal actions** -- an empty legal-action set in a non-terminal state, or
   an agent returning an action outside `legal_actions()`. This must stay 0

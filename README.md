@@ -12,21 +12,25 @@ die roll, deck selection, battlefield selection, mulligan, turns, resources,
 movement, contesting, combat, scoring, win.
 
 Card text **executes** for every card in the starter decks: a DSL interpreter
-runs 15 primitives drawn from the game's own Game Actions (413-444), with
-player choices raised through `legal_actions()` rather than a side channel.
+runs 31 effect primitives and 5 cost primitives drawn from the game's own
+Game Actions (413-444), with player choices raised through `legal_actions()`
+rather than a side channel.
 
-Gear splits the way the physical game does: only the 36 cards carrying the
+Gear splits the way the physical game does: only the 27 gear carrying the
 **Equipment** tag can be attached to a unit (150.1), and they attach by paying
 an **Equip** cost as a separate activated ability (818.1) — not for free when
-played. The other 75 gear can never be equipped; they sit in the Base and use
-their own abilities. Equip costs, Might Bonuses and Quick-Draw are all
-*derived from printed card text*, so 23 more cards became playable with no
-per-card Python at all — 24 hand-scripted cards, 47 executable.
+played. The other 50 gear can never be equipped; they sit in the Base and use
+their own abilities. Equip costs, Might Bonuses, Quick-Draw and Weaponmaster
+are all *derived from printed card text*, so 25 of those 27 are equippable
+from their own card face with no per-card Python at all. The two exceptions
+have Equip costs that are not a resource payment (RQ-13).
 
-**The remaining caveat:** the rest of the ~400 playable cards have no script,
-so their text is inert and every affected card is stamped `inert` in the UI
-with a tooltip saying why. Scripting more is mechanical work, not new
-architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
+**The remaining caveat:** 42 of 526 playable cards fully work — about 8%. The
+rest have no script, so their text is inert and every affected card is stamped
+`inert` in the UI with a tooltip saying why. Scripting more is mechanical work,
+not new architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
+Both decks the engine actually measures are 15 of 15 distinct cards complete;
+the 8% is the ceiling on simulating an *arbitrary* deck.
 
 | Area | State |
 | --- | --- |
@@ -35,20 +39,27 @@ architecture. See RQ-5 in [`RULES_QUESTIONS.md`](RULES_QUESTIONS.md).
 | Frozen interface, replay harness, batch runner | done |
 | Engine: setup, turns, resources, movement, combat, scoring | done |
 | Frontend (local web UI) | done |
-| Card effect DSL interpreter | done — 15 primitives, 47 cards executable |
+| Card effect DSL interpreter | done — 31 effect primitives, 42 cards executable |
 | Chain, priority, focus, showdowns, combat | done — RQ-10 closed |
 | Gear: Equipment, Equip costs, Might Bonuses, attachment | done — derived from card text |
 | Scoring: fitted value heuristic + calibration | done — see [`SCORING.md`](SCORING.md) |
 | Card art in the UI | done — 907/908 cards carry Riot's own render |
-| Game Actions 410-444 audited rule by rule | done — 4 unimplemented, all ≤4 cards |
-| State invariants checked after every action | done — 12 checks, each citing its rule |
+| Core Rules audited rule by rule: 300s, 400s, 700s, 800s | done — 20 live bugs found and fixed |
+| State invariants checked after every action | done — 14 checks, each citing its rule |
 | Scripting the rest of the card pool | **remaining work** |
 
-**488 tests passing** — 32 one-per-card assertions, 30 covering the Chain,
-priority, focus and showdowns, 24 covering Equipment, 29 covering battlefield
-takeover and threat forecasting, 15 covering Elo/SPRT/the league, and 20
-driving the frontend over HTTP — plus two full Riftbound games in the replay
-harness and HTTP-level frontend tests (no browser dependency). 1,000 random games run in ~41s single-threaded.
+**673 tests passing** — 152 on the core rules, turn structure and the Chain;
+125 on card scripts, gear, targeting, buffs, Deflect, Repeat and death
+replacement; 74 on information tightness (`test_no_cheating`,
+`test_knowledge`, `test_hidden_targeting`); 62 on determinism, cloning,
+replay and the provenance stamp; 25 on the frozen interface; 25 driving the
+frontend over HTTP — plus two full Riftbound games replayed action by action
+against a committed hash. The suite runs in under two minutes.
+
+A 10,000-game acceptance run — 2.19 million decisions, zero crashes, zero
+impossible states, zero illegal actions — is recorded in
+[`VALIDATION.md`](VALIDATION.md), and what a clean run does *not* prove is in
+[`CORRECTNESS.md`](CORRECTNESS.md).
 
 ## Play a game on your own machine
 
