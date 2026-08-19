@@ -54,14 +54,24 @@ class Scenario:
     _build: Callable[[], tuple]
     tags: tuple[str, ...] = ()
 
-    def build(self):
-        state, _meta = self._build()
-        return state
+    def position(self):
+        """A fresh state and the accepted answers *for that state*.
 
-    def accepted(self, state) -> set[str]:
-        """The action reprs this scenario counts as right, in `state`."""
-        _fresh, meta = self._build()
-        return set(meta["accept"])
+        Returned together on purpose. An earlier version built the board in
+        `build()` and rebuilt it in `accepted()` to recover the instance ids,
+        which only worked because both builds are deterministic -- and quietly
+        compared reprs from one state against actions from another. One build,
+        one set of ids.
+        """
+        state, meta = self._build()
+        return state, set(meta["accept"])
+
+    def build(self):
+        return self.position()[0]
+
+    def accepted(self, state=None) -> set[str]:
+        """The action reprs this scenario counts as right."""
+        return self.position()[1]
 
 
 @dataclass
@@ -99,8 +109,7 @@ class Report:
 
 def run_scenario(agent, scenario: Scenario) -> Row:
     """Ask an agent for one decision in a scenario position."""
-    state = scenario.build()
-    accepted = scenario.accepted(state)
+    state, accepted = scenario.position()
     chosen = repr(agent.act(copy.deepcopy(state)))
     return Row(
         scenario_id=scenario.scenario_id,

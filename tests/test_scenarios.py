@@ -55,9 +55,8 @@ def test_every_scenario_is_answerable(scenario):
 @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s.scenario_id)
 def test_every_scenario_can_be_failed(scenario):
     """A scenario every action passes measures nothing."""
-    state = scenario.build()
+    state, accepted = scenario.position()
     legal = {repr(a) for a in state.legal_actions()}
-    accepted = scenario.accepted(state)
     assert len(legal - accepted) > 0, (
         f"{scenario.scenario_id} accepts every legal action"
     )
@@ -91,8 +90,8 @@ def test_a_random_agent_does_not_ace_the_suite():
     )
 
 
-def test_running_one_scenario_does_not_disturb_the_next():
-    """Each `build()` is a fresh state; grading must not share one."""
+def test_a_scenario_is_reproducible():
+    """Each `position()` is a fresh state built the same way every time."""
     scenario = SCENARIOS[0]
     first = run_scenario(GreedyAgent(0), scenario)
     second = run_scenario(GreedyAgent(0), scenario)
