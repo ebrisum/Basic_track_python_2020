@@ -83,6 +83,8 @@ def _cmd_generate(rest: list[str]) -> int:
     parser.add_argument("--decks", nargs=2, default=None)
     parser.add_argument("--seed0", type=int, default=None)
     parser.add_argument("--progress", type=int, default=None)
+    parser.add_argument("--force", action="store_true",
+                        help="overwrite an existing dataset at --out")
     args = parser.parse_args(rest)
 
     try:
@@ -112,6 +114,14 @@ def _cmd_generate(rest: list[str]) -> int:
         return 2
 
     out = Path(args.out)
+    if out.exists() and not args.force:
+        # `decks/build_decks.py` learned this the hard way: a regenerate that
+        # silently replaced its inputs changed the starter decks under the
+        # committed replays. A dataset is hours of compute; refusing is cheap.
+        print(f"{out} already exists ({out.stat().st_size} bytes). "
+              f"Pass --force to overwrite, or choose another --out.",
+              file=sys.stderr)
+        return 2
     out.parent.mkdir(parents=True, exist_ok=True)
     summary = generate(
         out, args.games,

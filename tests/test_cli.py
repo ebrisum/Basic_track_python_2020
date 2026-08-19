@@ -88,3 +88,24 @@ def test_the_generator_record_names_who_played(tmp_path, capsys):
     record = [r for r in read_trajectory(out) if r["record"] == "generator"][0]
     assert record["agents"] == ["GreedyAgent", "RandomAgent"]
     assert record["seats_alternate"] is True
+
+
+def test_generate_refuses_to_clobber_an_existing_dataset(tmp_path, capsys):
+    """A dataset is hours of compute; overwriting one silently is not on.
+
+    `decks/build_decks.py` learned this the hard way -- a regenerate replaced
+    its own inputs and changed the starter decks under the committed replays.
+    """
+    out = tmp_path / "ds.jsonl.gz"
+    assert cli.main(["generate", "--games", "1", "--out", str(out),
+                     "--agents", "random", "random", "--progress", "0"]) == 0
+    capsys.readouterr()
+    before = out.stat().st_size
+
+    assert cli.main(["generate", "--games", "1", "--out", str(out),
+                     "--agents", "random", "random", "--progress", "0"]) == 2
+    assert "already exists" in capsys.readouterr().err
+    assert out.stat().st_size == before
+
+    assert cli.main(["generate", "--games", "1", "--out", str(out), "--force",
+                     "--agents", "random", "random", "--progress", "0"]) == 0
