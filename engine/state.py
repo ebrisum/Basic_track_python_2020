@@ -672,8 +672,44 @@ class RiftboundState:
         )
 
     def _has_lethal(self, ref: CardRef) -> bool:
-        """142.4.a -- lethal damage is nonzero damage >= Might."""
-        return ref.damage > 0 and ref.damage >= self.might_of(ref)
+        """142.4.a -- lethal damage is nonzero damage >= Might.
+
+        437.5.a raises the bar by the Prevent Value still tracked on the unit:
+        "a unit with 2 [M] and 'prevent the first 3 damage' would need to be
+        assigned 5 damage in order to have lethal damage assigned to it."
+        437.5.b makes "All" never lethal at any amount.
+        """
+        if ref.prevent is None:
+            return False                              # 437.5.b
+        return ref.damage > 0 and ref.damage >= self.might_of(ref) + ref.prevent
+
+    def deal_damage(self, ref: CardRef, amount: int) -> int:
+        """417 Deal, through 437 Prevent. Returns the damage actually marked.
+
+        437.2 replaces the damage with the same amount reduced by the Prevent
+        Value; 437.3 spends the Prevent Value by what it absorbed, and 437.3.a
+        expires it at zero. 437.4 is why the return value matters: damage
+        entirely prevented "is not considered to have been dealt to it at
+        all", so a linked instruction keyed on damage being dealt must be able
+        to tell.
+        """
+        if amount <= 0:
+            return 0
+        if ref.prevent is None:                       # 437.1.b.1.b -- "All"
+            self._emit(f"{self.db[ref.card_id].name} prevents all {amount}")
+            return 0
+        absorbed = min(ref.prevent, amount)
+        if absorbed:
+            ref.prevent -= absorbed                   # 437.3 / 437.3.a
+            self._emit(f"{self.db[ref.card_id].name} prevents {absorbed}")
+        dealt = amount - absorbed                     # 437.2.a -- never < 0
+        if dealt:
+            ref.damage += dealt
+            self._emit(
+                f"{self.db[ref.card_id].name} is dealt {dealt} "
+                f"({ref.damage}/{self.might_of(ref)})"
+            )
+        return dealt
 
     # ------------------------------------------------- effects and abilities
 
@@ -1354,12 +1390,20 @@ class RiftboundState:
         assert self.combat is not None
         combat = self.combat
         target = self.cards[action.instance_id]
-        needed = max(0, self.might_of(target) - target.damage)
-        dealt = min(combat.remaining, needed if needed > 0 else combat.remaining)
-        target.damage += dealt
-        combat.remaining -= dealt
+        # 437.5.a -- the assignment target includes the Prevent Value, so a
+        # protected unit soaks up that much more of the attacker's Might
+        # before the assignment counts as lethal.
+        cushion = 0 if target.prevent is None else target.prevent
+        needed = max(0, self.might_of(target) + cushion - target.damage)
+        assigned = min(combat.remaining, needed if needed > 0 else combat.remaining)
+        self.deal_damage(target, assigned)
+        # 437.5 -- "Damage can still be assigned to Units in combat that are
+        # affected by Prevent." The assignment spends the attacker's Might
+        # whether or not Prevent then eats it, so the pool drops by what was
+        # assigned rather than by what got through.
+        combat.remaining -= assigned
         self._emit(
-            f"P{combat.assigning} assigns {dealt} to {self.db[target.card_id].name}"
+            f"P{combat.assigning} assigns {assigned} to {self.db[target.card_id].name}"
         )
         if combat.remaining <= 0:
             self._finish_assignment()
@@ -1720,6 +1764,9 @@ class RiftboundState:
                 ref.damage = 0
         for ref in self.cards.values():
             ref.might_this_turn = 0
+            # 437.1.b.1's wording is "...this turn", so an unspent Prevent
+            # Value expires with every other this-turn effect at step 3d.
+            ref.prevent = 0
             # 423.1.a.2 -- Stunned is lost during step 3d, which 317.2.c makes
             # the same moment every other "this turn" effect expires.
             ref.stunned = False
@@ -1915,8 +1962,10 @@ class RiftboundState:
         ref.is_attacker = ref.is_defender = False
         # 705 -- "If a Unit leaves play, remove all Buffs from it", and 705.1
         # says a Champion does not keep them in the Champion Zone either.
-        # 124.1 says the same for every temporary modification.
+        # 124.1 says the same for every temporary modification, which is why
+        # the tracked Prevent Value (437) goes with them.
         ref.buffs = 0
+        ref.prevent = 0
 
     def _busy_at(self, index: int) -> bool:
         """Whether a Showdown or Combat is ongoing at this battlefield.

@@ -181,6 +181,20 @@ def check(state) -> list[str]:
             say(f"card {ref.instance_id} holds {ref.buffs} buffs; 702.3 allows "
                 f"one without an effect granting permission (426.1.b.2)")
 
+    # --- 437 Prevent ---------------------------------------------------------
+    for ref in state.cards.values():
+        if ref.prevent == 0:
+            continue
+        if ref.location is None:
+            say(f"card {ref.instance_id} tracks a Prevent Value off the board; "
+                f"124.1 clears temporary modifications on leaving play (437)")
+        elif state.db[ref.card_id].type != "unit":
+            say(f"card {ref.instance_id} tracks a Prevent Value but is not a "
+                f"unit (437.1)")
+        elif ref.prevent is not None and ref.prevent < 0:
+            say(f"card {ref.instance_id} has a negative Prevent Value "
+                f"{ref.prevent}; 437.3.a expires it at 0")
+
     # --- 423 Stun -----------------------------------------------------------
     for ref in state.cards.values():
         if not ref.stunned:

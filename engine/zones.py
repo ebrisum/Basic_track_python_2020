@@ -74,6 +74,9 @@ class CardRef:
     # 426.1.b.2 lets an effect grant permission to be buffed more than once,
     # so this is a count and not a flag. Worth exactly +1 Might each (703).
     buffs: int = 0
+    # 437 -- the Prevent Value currently tracked on this unit. 0 means none;
+    # `None` is 437.1.b.1.b's "All", which 437.3.c never spends down.
+    prevent: "int | None" = 0
     # Keywords granted by effects: (name, value, duration).
     granted_keywords: tuple[tuple[str, int, str], ...] = ()
     # 434 Attach / 716 -- the unit this gear is attached to.
@@ -112,6 +115,7 @@ class CardRef:
             self.might_this_turn,
             self.might_permanent,
             self.buffs,
+            self.prevent,
             self.granted_keywords,
             self.attached_to,
         )

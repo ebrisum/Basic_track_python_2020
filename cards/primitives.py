@@ -18,9 +18,12 @@ from cards.dsl import (
     AddEnergy,
     AddPower,
     Attach,
+    Double,
     ModifyMight,
+    Prevent,
     PlaceBuff,
     SpendBuff,
+    Swap,
     ChoiceRequest,
     Deal,
     Discard,
@@ -271,12 +274,7 @@ def _deal(state, effect: Deal, ctx: EffectContext) -> ChoiceRequest | None:
     if request:
         return request
     for instance_id in ids:
-        ref = state.cards[instance_id]
-        ref.damage += effect.amount
-        state._emit(
-            f"{state.db[ref.card_id].name} is dealt {effect.amount} "
-            f"({ref.damage}/{state.might_of(ref)})"
-        )
+        state.deal_damage(state.cards[instance_id], effect.amount)
     return None
 
 
@@ -332,6 +330,78 @@ def _modify_might(state, effect: ModifyMight, ctx: EffectContext) -> ChoiceReque
         else:
             ref.might_permanent += effect.might
         state._emit(f"{state.db[ref.card_id].name} gets +{effect.might} Might")
+    return None
+
+
+def _double(state, effect: Double, ctx: EffectContext) -> ChoiceRequest | None:
+    """432 Double -- add the attribute's current value to itself.
+
+    432.1.a: the amount is fixed at resolution from the *current* value, and
+    then applies for the stated duration. Their worked example is a 3-Might
+    unit with Shield 2 defending: current Might 5, so it gains +5, and after
+    combat -- Shield gone -- it is 8 rather than 6.
+    """
+    ids, request = _targets(state, effect.selector, ctx, "Double the Might of")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        gain = state.might_of(ref)
+        if effect.duration is Duration.THIS_TURN:
+            ref.might_this_turn += gain
+        else:
+            ref.might_permanent += gain
+        state._emit(f"{state.db[ref.card_id].name}'s Might is doubled (+{gain})")
+    return None
+
+
+def _swap(state, effect: Swap, ctx: EffectContext) -> ChoiceRequest | None:
+    """433 Swap -- reverse a numeric value between two game objects.
+
+    433.1.b works by difference rather than assignment, which is what keeps
+    the change expressible as two duration-scoped modifiers. 433.1.c makes
+    equal values a no-op, and leaving a +0/-0 pair behind would still be one
+    for Might but not for anything counting modifiers, so nothing is applied.
+    """
+    ids, request = _targets(state, effect.selector, ctx, "Swap Might with")
+    if request:
+        return request
+    if len(ids) < 2:
+        return None
+    first, second = state.cards[ids[0]], state.cards[ids[1]]
+    difference = state.might_of(first) - state.might_of(second)
+    if difference == 0:
+        return None                                   # 433.1.c
+    if effect.duration is Duration.THIS_TURN:
+        first.might_this_turn -= difference
+        second.might_this_turn += difference
+    else:
+        first.might_permanent -= difference
+        second.might_permanent += difference
+    state._emit(
+        f"{state.db[first.card_id].name} and {state.db[second.card_id].name} "
+        f"swap Might"
+    )
+    return None
+
+
+def _prevent(state, effect: Prevent, ctx: EffectContext) -> ChoiceRequest | None:
+    """437 Prevent -- track a Prevent Value on the chosen units.
+
+    437.7 calls this a Delayed Replacement Effect: nothing happens now, and
+    the next damage dealt to the unit is reduced by the tracked value.
+    """
+    ids, request = _targets(state, effect.selector, ctx, "Prevent damage to")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        if effect.amount is None or ref.prevent is None:
+            ref.prevent = None                        # 437.1.b.1.b / 437.3.c
+        else:
+            ref.prevent += effect.amount
+        shown = "all" if ref.prevent is None else ref.prevent
+        state._emit(f"{state.db[ref.card_id].name} will prevent {shown} damage")
     return None
 
 
@@ -665,7 +735,10 @@ HANDLERS: dict[type, Callable] = {
     Discard: _discard,
     Deal: _deal,
     Kill: _kill,
+    Double: _double,
     ModifyMight: _modify_might,
+    Prevent: _prevent,
+    Swap: _swap,
     PlaceBuff: _place_buff,
     SpendBuff: _spend_buff,
     GrantKeyword: _grant_keyword,

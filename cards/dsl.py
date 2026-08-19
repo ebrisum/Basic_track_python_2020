@@ -128,6 +128,43 @@ class ModifyMight(Effect):
 
 
 @dataclass(frozen=True)
+class Double(Effect):
+    """432 Double -- add a numeric attribute's *current* value to itself.
+
+    432.1.a fixes the amount at the moment it resolves and applies it for the
+    stated duration, so a unit doubled while Shield is boosting it keeps the
+    larger bonus after Shield stops applying.
+    """
+
+    selector: Selector = field(default_factory=lambda: SELF)
+    duration: Duration = Duration.THIS_TURN
+
+
+@dataclass(frozen=True)
+class Swap(Effect):
+    """433 Swap -- reverse a numeric value between two game objects.
+
+    433.1.b: find the difference, raise the lower by it and lower the higher
+    by it. 433.1.c: equal values mean no effect at all.
+    """
+
+    selector: Selector = field(default_factory=lambda: SELF)
+    duration: Duration = Duration.THIS_TURN
+
+
+@dataclass(frozen=True)
+class Prevent(Effect):
+    """437 Prevent -- a delayed replacement effect that eats the next damage.
+
+    `amount=None` is 437.1.b.1.b's "All", an infinite Prevent Value that
+    437.3.c never reduces.
+    """
+
+    amount: int | None = 1
+    selector: Selector = field(default_factory=lambda: SELF)
+
+
+@dataclass(frozen=True)
 class PlaceBuff(Effect):
     """426 Buff -- place a Buff counter (701-705).
 

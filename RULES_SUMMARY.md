@@ -234,13 +234,30 @@ playable cards with printed text, which is what decides the order.
 | 423 Stun | 14 | implemented |
 | 430 Channel | 13 | implemented (was phase-only) |
 | 425 Counter | 5 | implemented |
-| 432 Double | 4 | **not implemented** |
+| 432 Double | 4 | implemented |
 | 427 Banish | 4 | implemented |
 | 418 Heal | 4 | implemented |
-| 437 Prevent | 2 | **not implemented** |
+| 437 Prevent | 2 | implemented |
 | 435 Detach | 2 | implemented |
-| 433 Swap | 1 | **not implemented** |
+| 433 Swap | 1 | implemented |
 | 436 Predict, 440 Burn, 441 Empower, 443 Skip | 0 | no card needs them |
+
+**Every Game Action any card in the pool needs is now implemented.** Double,
+Prevent and Swap were the last three. Each is exercised by tests driving the
+primitive directly, because none of the seven cards that use them is scripted
+yet -- a Game Action tested only by the cards that happen to be scripted today
+is tested by accident.
+
+Prevent (437) was the substantial one: a delayed replacement effect (437.7)
+that tracks a Prevent Value per unit, reduces the next damage by it (437.2),
+spends itself down as it absorbs (437.3), treats fully-prevented damage as
+never dealt (437.4), and raises the bar for lethal damage assignment in
+combat (437.5.a) -- with "All" never lethal at any amount (437.5.b).
+
+Implementing it turned up a detail worth stating: 437.5 says damage can still
+be *assigned* to a prevented unit, so the assignment spends the attacker's
+Might whether or not Prevent then eats it. Subtracting only what got through
+would have let a protected unit soak an attack for free.
 
 **What the audit found**, beyond filling gaps -- these were live bugs, not
 missing features:

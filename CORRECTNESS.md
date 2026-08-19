@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 628 tests pass.
+- 641 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -106,20 +106,16 @@ with no per-card Python at all.
 engine measure a game of costs, stats, movement, combat and scoring. They
 are not Riftbound win rates and must not be quoted as such.
 
-### Three Game Actions are unimplemented
+### Every Game Action any card needs is implemented
 
-From the systematic audit of Game Actions 410-444 in `RULES_SUMMARY.md`,
-ordered by how many cards need them:
+Double (432), Prevent (437) and Swap (433) were the last three, covering
+seven cards. Four actions (436 Predict, 440 Burn, 441 Empower, 443 Skip) are
+implemented by nothing because no card in the pool asks for them.
 
-| Action | Cards | Status |
-| --- | --- | --- |
-| 432 Double | 4 | not implemented |
-| 437 Prevent | 2 | not implemented |
-| 433 Swap | 1 | not implemented |
-
-Every other Game Action any card needs is implemented. Four (436 Predict,
-440 Burn, 441 Empower, 443 Skip) are implemented by nothing because no card
-in the pool asks for them.
+Prevent was the substantial one — a delayed replacement effect (437.7)
+tracking a per-unit value that reduces the next damage, spends itself down,
+treats fully-prevented damage as never dealt, and raises the bar for lethal
+assignment in combat, with "All" never lethal at any amount.
 
 ### Four series audited, twenty live bugs
 
