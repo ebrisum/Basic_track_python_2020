@@ -91,6 +91,7 @@ Two things bound it:
 | --- | --- |
 | games | 1,000 |
 | games checked after **every action** | 500 |
+| decisions | 193,365 |
 | impossible states | **0** |
 | crashes / unresolved / illegal | **0 / 0 / 0** |
 

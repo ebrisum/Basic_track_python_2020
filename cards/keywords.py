@@ -30,6 +30,8 @@ IMPLEMENTED: frozenset[str] = frozenset({
     "Tank",       # 815 -- must be assigned lethal damage first
     "Backline",   # 826 -- must be assigned lethal damage last
     "Ganking",    # 810 -- standard move battlefield -> battlefield
+    "Temporary",  # 816 -- dies at its controller's Beginning Phase
+    "Unique",     # 825 -- one copy per deck by name (deck construction only)
 })
 
 _PATTERN = re.compile(

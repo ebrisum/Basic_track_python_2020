@@ -73,6 +73,18 @@ class CardData:
         return kw.has(self.parsed_keywords, "Backline")  # 826
 
     @property
+    def has_temporary(self) -> bool:
+        """816 -- "At the start of this permanent's controller's Beginning
+        Phase, before scoring, kill this"."""
+        return kw.has(self.parsed_keywords, "Temporary")
+
+    @property
+    def has_unique(self) -> bool:
+        """825 -- a deck-construction constraint: one copy by name. 825.4 says
+        it has no additional effect during gameplay."""
+        return kw.has(self.parsed_keywords, "Unique")
+
+    @property
     def has_ganking(self) -> bool:
         return kw.has(self.parsed_keywords, "Ganking")  # 810
 

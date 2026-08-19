@@ -1246,12 +1246,44 @@ class RiftboundState:
         self._emit(f"-- P{self.turn_player} turn {self.turn_number}: awaken")
 
     def _phase_beginning(self) -> None:
-        """315.2.b -- the turn player Holds every battlefield they control."""
+        """315.2.b -- the turn player Holds every battlefield they control.
+
+        816 Temporary resolves first: "At the start of this permanent's
+        controller's Beginning Phase, **before scoring**, kill this." The
+        ordering is load-bearing -- a Temporary unit holding a battlefield is
+        already dead when 315.2.b runs, so it cannot Hold it on the way out.
+        """
+        if self._kill_temporary_permanents():
+            # 319.6 -- a Cleanup becomes an Outstanding Task "after any number
+            # of Game Objects enter or leave the Board", and 334's HOT FEPR
+            # handles outstanding tasks before anything else. So step 4 (323.6)
+            # runs here, and a battlefield whose only defender was Temporary is
+            # uncontrolled before 315.2.b looks at it.
+            self._cleanup()
         for bf in self.battlefields:
             bf.scored_by.clear()  # 470 -- once per battlefield per turn
         for bf in self.battlefields:
             if bf.controller == self.turn_player:
                 self._score(self.turn_player, bf, "Hold")
+
+    def _kill_temporary_permanents(self) -> bool:
+        """816.1.b -- kill every Temporary permanent the turn player controls.
+
+        816.1.c scopes the trigger to *its controller's* Beginning Phase, not
+        anybody's, so a Temporary permanent survives the opponent's turn.
+        816.2.a makes multiple instances redundant, which is free here: a card
+        is killed once and then has no location to be killed from again.
+        """
+        killed = False
+        for ref in list(self.cards.values()):
+            if ref.location is None or ref.controller != self.turn_player:
+                continue
+            if not self.db[ref.card_id].has_temporary:
+                continue
+            self._emit(f"{self.db[ref.card_id].name} is Temporary and dies (816)")
+            self._kill(ref)
+            killed = True
+        return killed
 
     def channel(self, player: int, count: int = 1, exhausted: bool = False) -> int:
         """430 -- take runes from the top of the Rune Deck onto the board.

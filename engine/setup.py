@@ -101,6 +101,18 @@ def validate(deck: Deck, db: CardDatabase) -> list[str]:
     if over:
         problems.append(f"more than {MAX_COPIES} copies by name (103.2.b): {over}")
 
+    # 825.3.a -- "A deck can contain only one card of a given name if the card
+    # has Unique." A tighter limit than 103.2.b's three, and it is the only
+    # thing Unique does: 825.4 says it has no effect during gameplay.
+    unique_over = {
+        name: count for name, count in counts.items()
+        if count > 1 and any(
+            db[cid].name == name and db[cid].has_unique for cid in deck.main
+        )
+    }
+    if unique_over:
+        problems.append(f"more than one copy of a Unique card (825.3.a): {unique_over}")
+
     identity = set(db[deck.legend].domains)
     if identity:
         # 103.1.b.4 -- a multi-domain card needs all its domains present.

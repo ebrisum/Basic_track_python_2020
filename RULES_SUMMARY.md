@@ -381,10 +381,10 @@ already acts on (Assault, Tank, Backline, Ganking, Accelerate, Shield,
 Deflect, Hidden, Equip, Quick-Draw). Three series audited, **thirteen live
 bugs** between them.
 
-## Keyword glossary audit (800-829) — partial
+## Keyword glossary audit (800-829)
 
-The fourth series, and the only one not carried to completion. What it found
-so far is one thing much larger than a keyword.
+The fourth series. It produced two implementations and one finding much
+larger than a keyword.
 
 ### The implemented keywords check out
 
@@ -415,26 +415,55 @@ RQ-19 and flagged rather than fixed: it is a redesign of the play pipeline,
 not a rule patch, and it is the right kind of decision to hand over rather
 than make quietly.
 
-### Unimplemented keywords, by pool reach
+### Two built: Temporary (816) and Unique (825)
 
-| Keyword | Cards in pool | In the starter decks |
-| --- | --- | --- |
-| Deflect (809) | 27 | 1 |
-| Repeat (820) | 17 | 1 |
-| Weaponmaster (821) | 16 | 0 |
-| Deathknell (808) | 15 | 0 |
-| Empower / Empowered (827-828) | 13 | 0 |
-| Legion (812 / 727) | 12 | 0 |
-| Temporary (816) | 11 | 0 |
-| Vision (817) | 7 | 0 |
-| Quick-Draw (819) | 6 | 0 |
-| Unique (825), Level (824) | 3, 2 | 0 |
+Both were unimplemented and neither depends on RQ-19, so they were built
+rather than logged.
 
-Ambush (822), Hunt (823), Backline (826) and Flow (829) appear on no card in
-the cached pool at all.
+**816 Temporary** -- "At the start of this permanent's controller's Beginning
+Phase, **before scoring**, kill this." Without it a permanent meant to last
+one round lived forever. The ordering is load-bearing and has a second step
+the rule does not spell out: killing the permanent makes a Cleanup an
+Outstanding Task (319.6), so step 4 (323.6) runs *before* 315.2.b scores. A
+Temporary unit that was a battlefield's only defender therefore cannot Hold
+it on the way out. That only became true once 323.6 existed -- the two fixes
+compose.
 
-### Still to do
+816.1.c scopes the trigger to *its controller's* Beginning Phase, so a
+Temporary permanent survives the opponent's turn; 816.2.a's redundancy is
+free, since a card killed once has no location to be killed from again.
 
-820-829 have not been read line by line. The four series so far have found
-**fourteen live bugs**; assuming the rest of this one is clean would be the
-same mistake this audit exists to avoid.
+**825 Unique** -- "A deck can contain only one card of a given name if the
+card has Unique", a tighter limit than 103.2.b's three, checked alongside it
+in deck validation. 825.4 confirms it does nothing else during play.
+
+### Still unimplemented, by pool reach
+
+| Keyword | Cards in pool | In the starter decks | Blocked on |
+| --- | --- | --- | --- |
+| Deflect (809) | 27 | 1 | **RQ-19** |
+| Repeat (820) | 17 | 1 | **RQ-19** (820.2 requires play-time choices) |
+| Weaponmaster (821) | 16 | 0 | — |
+| Deathknell (808) | 15 | 0 | — |
+| Empower / Empowered (827-828) | 13 | 0 | — |
+| Legion (812 / 727) | 12 | 0 | — |
+| Vision (817) | 7 | 0 | — |
+| Quick-Draw (819) | 6 | 0 | derived already; no scripted card uses it |
+| Level (824) | 2 | 0 | 728-732 XP |
+
+Ambush (822), Hunt (823) and Flow (829) appear on no card in the cached pool
+at all.
+
+Two of the largest are blocked on the same structural gap, which is the
+clearest argument for fixing RQ-19 before scripting more cards.
+
+Weaponmaster is worth a note for later: 821.1.c says "Necessary portions of
+its Rules Text are no longer Inactive if they are currently Inactive", and
+725.3 says the keyword can reference an attached card's Equip ability. So it
+is an explicit exception to the 718.2 Inactive rule implemented above, and
+whoever builds it must not be surprised by that interaction.
+
+### Tally
+
+Four series audited: **sixteen live bugs**, two keywords built, one
+structural gap (RQ-19) written up rather than guessed at.
