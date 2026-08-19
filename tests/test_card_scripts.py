@@ -201,21 +201,39 @@ def test_hextech_ray_asks_when_several_units_are_available(decks):
     b = put_unit(state, 1, "OGN-142", bf_location(0))
     play(state, give(state, 0, "OGN-009"))
 
+    # 355.8 -- the target is declared to put the spell on the chain, so the
+    # question arrives at play time rather than at resolution.
     assert state.phase is Phase.CHOOSING
     options = {act.instance_id for act in state.legal_actions()}
     assert options == {a, b}
     state.apply(ChooseTarget(b))
+    pass_until_resolved(state)
     assert state.cards[b].damage == 3
     assert state.cards[a].damage == 0
     assert state.phase is not Phase.CHOOSING
 
 
 def test_hextech_ray_cannot_hit_units_at_a_base(decks):
-    """The selector is 'at a battlefield' (location filter)."""
+    """The selector is 'at a battlefield' (location filter).
+
+    With 355.8 declaring targets at play time, a base-only board makes the
+    spell unplayable rather than merely ineffective -- a stronger statement of
+    the same restriction.
+    """
     state = arena(decks)
     safe = put_unit(state, 1, "OGN-142", BASE_LOCATION)
-    play(state, give(state, 0, "OGN-009"))
+    ray = give(state, 0, "OGN-009")
+    state._current_player = 0
+    state.turn_player = 0
+
+    assert PlayCard(ray) not in state.legal_actions()
+
+    # And with a battlefield unit present, the base unit is still not a choice.
+    exposed = put_unit(state, 1, "OGN-142", bf_location(0))
+    play(state, ray)
+    pass_until_resolved(state)
     assert state.cards[safe].damage == 0
+    assert state.cards[exposed].damage == 3
 
 
 def test_flurry_of_blades_hits_every_unit_at_battlefields(decks):
@@ -259,12 +277,26 @@ def test_gust_returns_a_small_unit_to_hand(decks):
 
 
 def test_gust_cannot_return_a_big_unit(decks):
-    """The '3 Might or less' filter must exclude Mountain Drake (10)."""
+    """The '3 Might or less' filter must exclude Mountain Drake (10).
+
+    355.9.b -- "Only words that describe the target restrict which objects can
+    be chosen", and the Might clause does describe it. So with only a big unit
+    on the board there is no valid choice and 355.8 bars the play.
+    """
     state = arena(decks)
     big = put_unit(state, 1, "OGN-142", bf_location(0))
-    play(state, give(state, 0, "OGN-169"))
+    gust = give(state, 0, "OGN-169")
+    state._current_player = 0
+    state.turn_player = 0
+
+    assert PlayCard(gust) not in state.legal_actions()
+
+    # With a small unit present, the big one is still not a legal choice.
+    small = put_unit(state, 1, "OGN-197", bf_location(0))     # 1 Might
+    play(state, gust)
+    pass_until_resolved(state)
     assert state.cards[big].location == bf_location(0)
-    assert big not in state.players[1].hand
+    assert small in state.players[1].hand
 
 
 def test_confront_draws_and_sets_units_enter_ready(decks):

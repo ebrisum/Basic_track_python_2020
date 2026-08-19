@@ -98,6 +98,9 @@ def test_units_and_gear_resolve_immediately():
 def test_playing_a_spell_puts_it_on_the_chain_and_closes_the_state(decks):
     """354 -- moving the card to the Chain Closes the State."""
     state = arena(decks)
+    # 355.8 -- Cleave gives a unit ASSAULT 3, so it needs a unit to give it to
+    # before it can be put on the chain at all.
+    put_unit(state, state.turn_player, "OGN-142", bf_location(0))
     spell = give(state, state.turn_player, "OGN-004")
     state._current_player = state.turn_player
     state.apply(PlayCard(spell))
@@ -124,6 +127,7 @@ def test_the_caster_gets_the_first_priority_window(decks):
     """
     state = arena(decks)
     caster = state.turn_player
+    put_unit(state, caster, "OGN-142", bf_location(0))   # 355.8 needs a target
     state.apply(PlayCard(give(state, caster, "OGN-004")))
     assert state.current_player == caster
     assert state.priority == caster
@@ -133,6 +137,7 @@ def test_priority_then_passes_to_the_opponent(decks):
     """338.1.b.1 -- the player with Priority passes to the next in turn order."""
     state = arena(decks)
     caster = state.turn_player
+    put_unit(state, caster, "OGN-142", bf_location(0))   # 355.8 needs a target
     state.apply(PlayCard(give(state, caster, "OGN-004")))
     state.apply(PassPhase())
     assert state.current_player == state.opponent(caster)
@@ -188,6 +193,7 @@ def test_a_reaction_can_be_played_into_a_chain_but_an_action_cannot(decks):
     state = arena(decks)
     caster = state.turn_player
     other = state.opponent(caster)
+    put_unit(state, caster, "OGN-142", bf_location(0))   # 355.8 needs a target
     state.apply(PlayCard(give(state, caster, "OGN-004")))
     state.apply(PassPhase())                   # priority reaches the opponent
 
@@ -206,6 +212,8 @@ def test_standard_move_is_illegal_in_a_closed_state(decks):
     assert any(isinstance(a, StandardMove) for a in state.legal_actions())
 
     state.apply(PlayCard(give(state, mover, "OGN-004")))
+    while state.phase is Phase.CHOOSING:
+        state.apply(state.legal_actions()[0])
     assert not any(isinstance(a, StandardMove) for a in state.legal_actions())
 
 
@@ -214,6 +222,7 @@ def test_rune_abilities_stay_available_inside_a_chain(decks):
     state = arena(decks)
     caster = state.turn_player
     assert state.players[caster].channeled_runes, "caster needs runes on the board"
+    put_unit(state, caster, "OGN-142", bf_location(0))   # 355.8 needs a target
     state.apply(PlayCard(give(state, caster, "OGN-004")))
     # 337.4 -- the caster holds priority, and it is the caster who has runes.
     assert state.chain, "the spell is still on the chain"
@@ -472,6 +481,9 @@ def test_a_reaction_can_answer_a_reaction(decks):
     caster = state.turn_player
     other = state.opponent(caster)
     put_unit(state, other, "OGN-142", bf_location(0))
+    # 355.8 -- Gust returns "a unit with 3 Might or less", so the position
+    # needs one or Gust is not a legal play at all.
+    put_unit(state, other, "OGN-197", bf_location(0))       # 1 Might
 
     state.apply(PlayCard(give(state, caster, "OGN-009")))   # Hextech Ray
     if state.phase is Phase.CHOOSING:

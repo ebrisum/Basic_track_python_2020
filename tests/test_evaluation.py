@@ -202,9 +202,12 @@ def test_greedy_agent_is_deterministic(decks):
 
 def test_greedy_agent_does_not_mutate_the_state_it_is_given(decks):
     """It searches on clones; leaking a mutation would corrupt the real game."""
-    state = midgame(decks, 13)
+    # Seed 17 rather than 13: under 355.8 the seed-13 walk now finishes the
+    # game within 90 steps, and a skipped test checks nothing.
+    state = midgame(decks, 17)
+    assert not state.is_terminal(), "this test needs a live position"
     before = state.observation(0).to_canonical_bytes()
-    GreedyAgent(13, PRIOR).act(state)
+    GreedyAgent(17, PRIOR).act(state)
     assert state.observation(0).to_canonical_bytes() == before
 
 

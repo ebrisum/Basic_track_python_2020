@@ -38,7 +38,7 @@ DIGEST_LEN = 12
 # Bumped by hand when engine *behaviour* changes in a way that makes older
 # generated data unsafe to mix -- a rules fix, a new Game Action, a scripted
 # card that changes how positions are reached. Not bumped for refactors.
-ENGINE_VERSION = "0.7.0"
+ENGINE_VERSION = "0.8.0"
 
 # The rules text every citation in this repo points at.
 RULES_VERSION = "CR-v1.4-Vendetta"

@@ -12,7 +12,7 @@ mutation.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 
 @dataclass
@@ -36,9 +36,15 @@ class ChainItem:
     # chain can hold several cards at once, and a card played in response must
     # not disturb where an earlier hidden card makes its choices.
     from_hidden: int | None = None
+    # 355.8 -- "In order to put a spell or ability on the chain, valid choices
+    # must be made for all targets." Declared as the item is played and
+    # carried here, keyed by (ability index, effect index) so a choice can be
+    # matched back to the effect it belongs to on resolution.
+    targets: dict = field(default_factory=dict)
 
     def copy(self) -> "ChainItem":
-        return replace(self)   # every field is a scalar
+        # `targets` is the one mutable field; everything else is a scalar.
+        return replace(self, targets={k: v for k, v in self.targets.items()})
 
     def clone_key(self) -> tuple:
         return (
@@ -49,6 +55,7 @@ class ChainItem:
             self.pending,
             self.from_trigger,
             self.from_hidden,
+            tuple(sorted(self.targets.items())),
         )
 
 

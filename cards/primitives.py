@@ -64,6 +64,12 @@ class EffectContext:
     # was hidden at, as a location string ("bf:0"). Targets must come from
     # there. `None` for every ordinary play, which is the common case.
     restrict_location: str | None = None
+    # 355.8 -- set when this effect's targets were declared as the item was
+    # played. It distinguishes "no target was ever chosen" from "every
+    # declared target has since become illegal", which 359.3.e.5 resolves
+    # very differently: the second leaves the instruction unfollowed rather
+    # than letting the effect pick something new.
+    targets_declared: bool = False
 
     def copy(self) -> "EffectContext":
         # `chosen` is a tuple; only `payload` is mutable.
@@ -76,6 +82,50 @@ def _resolve_player(who: Who, controller: int) -> list[int]:
     if who is Who.OPPONENT:
         return [1 - controller]
     return [controller, 1 - controller]
+
+
+def is_target(selector) -> bool:
+    """355.7-355.10 -- whether choosing by this selector declares a *target*.
+
+    355.7 makes anything a spell chooses a target "unless indicated otherwise
+    by the rules in this section". The FAQ's targeting page enumerates the
+    exceptions; two of them are expressible in this DSL and both are excluded
+    here:
+
+    * **355.10.d** "there is no real choice involved" -- `scope="all"` applies
+      to everything matching, and `scope="self"` picks nothing. Note 355.10.d.2:
+      a selector with exactly one legal option *is* still a target; that is a
+      fact about the board, not about the selector.
+    * **355.10.e** "part of a set chosen wholly or partly by other players" --
+      `each_player`, whose worked example in the FAQ is literally "Each player
+      kills a unit they control".
+
+    The remaining exceptions need no test here. 355.10.a (a non-public zone) is
+    excluded because `Discard` and `LookAtTop` reach the hand and deck without
+    a selector at all. 355.10.c (trigger conditions and costs) is excluded
+    because costs are `Cost` objects, not effects. 355.10.f ("must") has no
+    DSL representation, and no scripted card uses the wording.
+    """
+    return (selector is not None
+            and selector.scope == "choose"
+            and not selector.each_player)
+
+
+def targets_of(abilities) -> list[tuple[int, int, Selector]]:
+    """Every targeted selector in `abilities`, as (ability, effect, selector).
+
+    The indices address the effect within the ability list they came from, so
+    a stored choice can be matched back to the effect it belongs to when the
+    item resolves. Both indices are needed: one ability can hold several
+    targeted effects.
+    """
+    found = []
+    for ability_index, ability in enumerate(abilities):
+        for effect_index, effect in enumerate(ability.effects):
+            selector = getattr(effect, "selector", None)
+            if is_target(selector):
+                found.append((ability_index, effect_index, selector))
+    return found
 
 
 def restriction_binds(selector: Selector) -> bool:
@@ -150,6 +200,13 @@ def _targets(
     """
     if ctx.chosen:
         return list(ctx.chosen), None
+    if ctx.targets_declared:
+        # 359.3.e.5 -- "If any of the spell's targets are no longer legal,
+        # those game objects ... are unaffected by the spell as it resolves.
+        # Any instructions related to an illegal target can't be followed."
+        # The declared target is gone, so the instruction is skipped -- not
+        # re-aimed at whatever else happens to be legal now.
+        return [], None
 
     options = candidates(
         state, selector, ctx.controller, ctx.source, ctx.restrict_location

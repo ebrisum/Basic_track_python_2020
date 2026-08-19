@@ -369,57 +369,66 @@ boxes separate, or a per-card marker in the script.
 
 ---
 
-## RQ-19 — Targets are chosen at resolution, not at finalization (355.8)
+## RQ-19 — Targets are declared at finalization — MOSTLY RESOLVED
 
-**Status:** open, structural, and the largest remaining gap after card
-scripting. Flagged rather than fixed: the change is a redesign of the play
-pipeline, not a rule patch, and it deserves a decision rather than a quiet
-rewrite.
+**Status:** the spell and activated-ability half is implemented. One half
+remains, named below.
 
-**Situation.** 355.8 is explicit: "In order to put a spell or ability on the
-chain, valid choices must be made for **all targets**." 355.7 makes a chosen
-game object a target, and the FAQ's targeting entry adds that "All targets are
-declared during finalization."
+**What 355.8 asks.** "In order to put a spell or ability on the chain, valid
+choices must be made for all targets." The engine used to defer every choice
+to resolution, which cost four rules at once.
 
-The engine defers the choice. A spell goes on the chain with no target; the
-chain drains; and only as the spell *resolves* does `ChoiceRequest` ask the
-controller to pick, from whatever is legal at that moment. Verified directly:
-after `PlayCard`, `state.awaiting` is `None` and the phase is `CHAIN`; the
-choice appears only once the chain has emptied.
+### Implemented
 
-**What this changes, all in the caster's favour:**
+A chain item is now **Pending** (329.2) until its targets are declared, then
+Finalized (329.3). `ChainItem.targets` carries them, keyed by (ability index,
+effect index). On resolution each declared target is **re-checked against the
+board**, and 359.3.e.5 is applied: an illegal target is unaffected and its
+instruction skipped, rather than the effect being re-aimed at whatever is
+still legal.
 
-1. **A spell cannot be fizzled.** 359.3.e.5 -- "If any of the spell's targets
-   are no longer legal, those game objects ... are unaffected by the spell as
-   it resolves." Removing or bouncing the target in response is a core
-   defensive play, and here it does nothing: the spell simply picks a
-   different legal target at resolution. The Core Rules give three worked
-   examples of this interaction (Void Seeker, Bellow's Breath, Hidden Blade
-   vs Tideturner) and none of them can happen.
-2. **Deflect (809) cannot be charged.** It is a mandatory additional cost of
-   "[Deflect Value] more ... for each time they choose [me]", so it is
-   determined at play time from the target. With no target at play time there
-   is nothing to tax. 27 cards in the pool carry Deflect; 1 is in the current
-   starter decks. This is why `cards/scripts/origins.py` carries the note
-   "DEFLECT (809) taxes opponents' selection; not implemented."
-3. **Opponents respond blind.** A Reaction is priced by what it answers. The
-   FAQ's Rebuttal ruling turns on the opponent knowing which spell was
-   chosen; here they do not know what it will hit.
-4. **"When you choose me" triggers cannot fire at the right time.** 383.4.b.3
-   -- Irelia, Fervent's "When you choose or ready me" triggers on *being
-   targeted*, which now happens during resolution rather than on the chain.
+| Consequence | Now |
+| --- | --- |
+| a spell can be **fizzled** by answering its target (359.3.e.5) | works |
+| a spell with **no legal target cannot be played** (355.8) | gated in `legal_actions` |
+| opponents **see the target** before responding | the chain item carries it |
+| **Deflect** (809) has a target to price against | unblocked, not yet built |
 
-**Effect on outcomes.** Systematic and one-directional: every targeted spell
-is strictly better than the rules make it, because it can never be answered
-by removing its target. It reaches only the scripted targeted spells today,
-which is a small set, and grows with every card scripted.
+`is_target()` implements 355.7's default and the FAQ's exceptions: 355.10.d
+(no real choice — `scope="all"` and `scope="self"`) and 355.10.e (a set chosen
+by other players — `each_player`). 355.10.a is handled structurally, since
+`Discard` and `LookAtTop` reach non-public zones without a selector at all.
+355.10.f ("must") has no DSL representation and no card in the pool uses the
+wording.
 
-**What it needs.** Target selection moved into the play pipeline: step 3 of
-playing a card gathers choices, the chain item carries them, and resolution
-re-checks legality and skips illegal targets per 359.3.e.5. That touches
-`_apply_play`, `ChainItem`, `cards/primitives`' choice protocol, the frozen
-interface's action stream, ISMCTS determinization, and every recorded replay.
-Sizeable, and worth doing before the card pool grows rather than after.
+### Still deferred: triggered abilities
+
+Only an item's **own** effects declare early — a spell's ON_RESOLVE and an
+activated ability's effects. A "when you play me" effect belongs to a
+*triggered ability*, which 383 puts on the chain as its own item; its targets
+should be declared when **that** item is finalized. The engine still resolves
+triggered abilities inline rather than as separate chain items, so their
+targets are still chosen late.
+
+**Effect on outcomes.** A play effect cannot be fizzled, and cannot be taxed
+by Deflect. Smaller than the original gap — a triggered ability's window is
+narrower than a spell's — but the same shape.
+
+**What it needs.** Triggered abilities put on the chain as real items (383,
+354.2's Pending Items), which is also what 471.2's timing and the FAQ's
+Overzealous Fan / Azir ordering example require. Worth doing with that work
+rather than alone.
+
+### Not yet built, though no longer blocked
+
+**Deflect (809)** is a mandatory additional cost priced off the declared
+target, so it needs the cost step to run *after* targeting. 349's play process
+does put "Make Relevant Choices" before "Determine Total Cost", but the engine
+pays first and targets second, so the order has to be swapped before Deflect
+can be charged. 27 cards.
+
+**Repeat (820)** likewise: 820.2 says choices for the additional execution are
+made "at the usual time during the Make Relevant Choices step". 17 cards.
 
 ---
 

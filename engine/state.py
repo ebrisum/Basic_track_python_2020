@@ -26,7 +26,7 @@ from cards.dsl import (
     RecycleFromTrash,
     TriggerKind,
 )
-from cards.primitives import EffectContext, candidates, execute
+from cards.primitives import EffectContext, candidates, execute, targets_of
 from cards.gear import equipment_profile
 from cards.scripts import (
     abilities_of_kind,
@@ -338,6 +338,10 @@ class RiftboundState:
                 continue
             if not can_play(card, player, self.turn_player, self.chain, self.showdown):
                 continue
+            # 355.8 -- a spell with no valid choice for one of its targets
+            # cannot be put on the chain, so it is not a legal action.
+            if not self._spell_has_targets(self.cards[instance_id]):
+                continue
             if state.pool.can_pay(card.energy, card.power_domains):
                 actions.append(PlayCard(instance_id))
                 # 805.2 -- ACCELERATE is an optional additional cost paid as
@@ -516,15 +520,19 @@ class RiftboundState:
         return (card.might + ref.might_this_turn + ref.might_permanent
                 + ref.buffs + bonus + attached)
 
-    def _hidden_play_has_targets(self, ref: CardRef) -> bool:
-        """811.1.d -- "A card cannot be played from Hidden if it is a spell
-        with no valid targets under these restrictions."
+    def _spell_has_targets(self, ref: CardRef, here: str | None = None) -> bool:
+        """355.8 -- "In order to put a spell or ability on the chain, valid
+        choices must be made for all targets." One unsatisfiable target is
+        enough to bar the play, so a spell with nothing legal to hit is not a
+        legal action.
 
-        355.8 requires a valid choice for *every* target before a spell goes on
-        the chain, so one unsatisfiable target is enough to bar the play. Only
-        spells are gated: a hidden permanent is played to that battlefield
-        (811.1.d.1) whether or not its play effect finds anything, and 355.6
-        lets an unfulfillable non-target choice simply do nothing.
+        811.1.d says the same thing again for Hidden, narrowed to that
+        battlefield: pass `here` and the same check gates the hidden play.
+
+        Only spells are gated. A permanent's "when you play me" effect belongs
+        to a triggered ability, which 383 puts on the chain as its own item
+        later; its targets are declared then, and 355.6 lets an unfulfillable
+        choice simply do nothing.
 
         The DSL has no "you may choose" flag, so an optional target would be
         treated as required here. No scripted card has one; RQ-14 records it.
@@ -532,16 +540,19 @@ class RiftboundState:
         card = self.db[ref.card_id]
         if card.type != "spell":
             return True
-        here = bf_location(ref.hidden_at)
-        for ability in abilities_of_kind(card, TriggerKind.ON_RESOLVE):
-            for effect in ability.effects:
-                selector = getattr(effect, "selector", None)
-                if selector is None or selector.scope != "choose":
-                    continue
-                if not candidates(self, selector, ref.controller,
-                                  ref.instance_id, here):
-                    return False
+        attached = ref.attached_to is not None
+        for _key, selector in [
+            ((a, e), sel) for a, e, sel in
+            targets_of(abilities_of_kind(card, TriggerKind.ON_RESOLVE, attached))
+        ]:
+            if not candidates(self, selector, ref.controller,
+                              ref.instance_id, here):
+                return False
         return True
+
+    def _hidden_play_has_targets(self, ref: CardRef) -> bool:
+        """811.1.d -- the same gate, narrowed to the hidden battlefield."""
+        return self._spell_has_targets(ref, bf_location(ref.hidden_at))
 
     def _facedown_at(self, index: int) -> CardRef | None:
         """811.1.b -- at most one facedown card per battlefield."""
@@ -662,19 +673,39 @@ class RiftboundState:
                 state.pool.pay(cost.count, [])
 
     def _queue(self, ability: Ability, controller: int, source: int | None,
-               restrict_location: str | None = None) -> None:
+               restrict_location: str | None = None,
+               declared: dict | None = None, ability_index: int = 0) -> None:
         """Push an ability's effects onto the resolution queue.
 
         `restrict_location` carries 811.1.d.2 down to every selector the
         ability resolves: when the source was played from Hidden, its targets
         must be chosen from among options at that battlefield.
+
+        `declared` holds targets chosen when the item was played (355.8),
+        keyed by (ability index, effect index). Each is **re-checked against
+        the board now**: 359.3.e.5 says an illegal target is unaffected, so a
+        target that has since left is dropped and its instruction skipped,
+        rather than the effect being re-aimed at something still legal.
         """
-        for effect in ability.effects:
-            self.pending.append((
-                effect,
-                EffectContext(controller=controller, source=source,
-                              restrict_location=restrict_location),
-            ))
+        for effect_index, effect in enumerate(ability.effects):
+            ctx = EffectContext(controller=controller, source=source,
+                                restrict_location=restrict_location)
+            if declared is not None:
+                key = (ability_index, effect_index)
+                if key in declared:
+                    selector = getattr(effect, "selector", None)
+                    legal = candidates(self, selector, controller, source,
+                                       restrict_location) if selector else []
+                    still = tuple(i for i in declared[key] if i in legal)
+                    ctx.targets_declared = True
+                    ctx.chosen = still
+                    if declared[key] and not still:
+                        self._emit(
+                            f"{self.db[self.cards[source].card_id].name}'s target "
+                            f"is no longer legal; that instruction is skipped "
+                            f"(359.3.e.5)"
+                        ) if source in self.cards else None
+            self.pending.append((effect, ctx))
 
     def top_most(self, instance_id: int) -> int:
         """719 -- the Top-Most Card of the attachment stack `instance_id` is in.
@@ -691,7 +722,8 @@ class RiftboundState:
         return current
 
     def _fire(self, kind: TriggerKind, instance_id: int,
-              restrict_location: str | None = None) -> None:
+              restrict_location: str | None = None,
+              declared: dict | None = None) -> None:
         """382 -- queue every ability of `kind` printed on this card.
 
         136.2.c -- "The abilities in the Effect Text section of a card are
@@ -710,8 +742,11 @@ class RiftboundState:
         ref = self.cards[instance_id]
         source = self.top_most(instance_id)
         attached = ref.attached_to is not None
-        for ability in abilities_of_kind(self.db[ref.card_id], kind, attached):
-            self._queue(ability, ref.controller, source, restrict_location)
+        for index, ability in enumerate(
+            abilities_of_kind(self.db[ref.card_id], kind, attached)
+        ):
+            self._queue(ability, ref.controller, source, restrict_location,
+                        declared, index)
 
     def _resolve_effects(self) -> None:
         """Drain the effect queue, pausing whenever a choice is needed."""
@@ -737,7 +772,27 @@ class RiftboundState:
             self._current_player = self.turn_player
 
     def _apply_choice(self, action: ChooseTarget) -> None:
-        """Feed a chosen instance back into the paused effect (355.2)."""
+        """Feed a chosen instance back to whatever asked for it.
+
+        Two things ask. 355.8 declares a chain item's targets as it is played,
+        which is answered here by recording the choice on the item and
+        resuming `_advance_targeting`. Everything else -- a Limited Action a
+        player performs as an effect resolves (411.1), a choice in a
+        non-public zone (355.10.a) -- is answered by resuming the effect.
+        """
+        if self.chain and self.chain[-1].pending:
+            item = self.chain[-1]
+            for key, _selector in self._target_slots(item):
+                if key not in item.targets:
+                    item.targets[key] = (action.instance_id,)
+                    break
+            self.awaiting = None
+            if self._resume_phase is not None:
+                self.phase = self._resume_phase
+                self._resume_phase = None
+            self._advance_targeting()
+            return
+
         assert self.awaiting is not None and self.pending
         effect, ctx = self.pending[0]
         ctx.chosen = (action.instance_id,)
@@ -876,11 +931,87 @@ class RiftboundState:
         # where an earlier hidden card is played to or makes its choices.
         item = ChainItem(
             kind="card", instance_id=action.instance_id, controller=player,
-            pending=False, from_hidden=from_hidden,
+            pending=True, from_hidden=from_hidden,
         )
         self.chain.append(item)  # 354 -- this Closes the State
         self.chain_passes = 0
         self._break_showdown_pass_sequence()
+        # 355.8 / 329.2 -- the item is Pending until targets are declared and
+        # legality is checked. If a choice is needed the turn parks here and
+        # `_finish_playing` resumes once it is answered.
+        self._advance_targeting()
+
+    def _advance_targeting(self) -> None:
+        """355.8 -- declare every target before the item is Finalized.
+
+        Walks the pending item's targeted selectors in order. A selector with
+        one legal option is assigned without asking (355.10.d.2 keeps it a
+        target, but there is no decision to offer); one with several parks a
+        `ChoiceRequest`, exactly as resolution-time choices already do.
+        """
+        item = self.chain[-1] if self.chain else None
+        if item is None or not item.pending:
+            return
+        here = bf_location(item.from_hidden) if item.from_hidden is not None else None
+        for key, selector in self._target_slots(item):
+            if key in item.targets:
+                continue
+            options = candidates(self, selector, item.controller,
+                                 item.instance_id, here)
+            if not options:
+                # 355.8 -- no valid choice. `legal_actions` gates this, so
+                # reaching it means a target vanished between offer and play.
+                item.targets[key] = ()
+                continue
+            if len(options) == 1:
+                item.targets[key] = (options[0],)
+                continue
+            self.awaiting = ChoiceRequest(
+                player=item.controller, options=tuple(options),
+                prompt=f"Choose a target ({selector.describe()})",
+            )
+            if self._resume_phase is None:
+                self._resume_phase = self.phase
+            self.phase = Phase.CHOOSING
+            self._current_player = item.controller
+            return
+        self._finish_playing(item)
+
+    def _target_slots(self, item) -> list:
+        """The item's targeted selectors, as ((ability, effect), selector).
+
+        Only the item's **own** effects: a spell's ON_RESOLVE, an activated
+        ability's own effects. A "when you play me" effect belongs to a
+        *triggered ability*, which 383 puts on the chain as its own item later
+        and which therefore declares its targets then. RQ-19 records that the
+        second half is still resolved late.
+        """
+        ref = self.cards[item.instance_id]
+        card = self.db[ref.card_id]
+        if item.kind == "ability":
+            abilities = (activated_abilities(card)[item.ability_index],)
+        elif card.type == "spell":
+            abilities = abilities_of_kind(
+                card, TriggerKind.ON_RESOLVE, ref.attached_to is not None
+            )
+        else:
+            return []
+        return [((a, e), sel) for a, e, sel in targets_of(abilities)]
+
+    def _finish_playing(self, item) -> None:
+        """329.3 -- the item stops being Pending and becomes Finalized."""
+        item.pending = False
+        card = self.db[self.cards[item.instance_id].card_id]
+        player = item.controller
+        if item.kind == "ability":
+            ability = activated_abilities(card)[item.ability_index]
+            # 337.2 -- an ability that Adds resources resolves immediately, and
+            # 346.1 keeps Focus with its controller.
+            if resolves_immediately(card, ability):
+                self._resolve_top()
+            else:
+                self._open_priority_window(player)   # 337.4
+            return
 
         # 337.2 -- a finalized Unit or Gear resolves immediately.
         if resolves_immediately(card):
@@ -922,7 +1053,8 @@ class RiftboundState:
             hidden_here = bf_location(hidden_bf) if hidden_bf is not None else None
             if card.type == "spell":
                 state.trash.append(item.instance_id)  # 351.2
-                self._fire(TriggerKind.ON_RESOLVE, item.instance_id, hidden_here)
+                self._fire(TriggerKind.ON_RESOLVE, item.instance_id,
+                           hidden_here, item.targets)
             else:
                 # 148.1.a.1 -- permanents enter the Base, unless 811.1.d.1
                 # sends a card played from Hidden to its battlefield instead.
@@ -942,7 +1074,8 @@ class RiftboundState:
                 self._fire(TriggerKind.ON_PLAY, item.instance_id, hidden_here)
         else:
             ability = activated_abilities(card)[item.ability_index]
-            self._queue(ability, item.controller, item.instance_id)
+            self._queue(ability, item.controller, item.instance_id,
+                        None, item.targets, item.ability_index)
 
         self._resolve_effects()
         self._after_chain_change()
@@ -1045,18 +1178,16 @@ class RiftboundState:
                 instance_id=action.instance_id,
                 controller=ref.controller,
                 ability_index=action.index,
-                pending=False,
+                pending=True,          # 329.2 -- until targets are declared
                 from_trigger=adds_resources,
             )
         )
         self.chain_passes = 0
         self._break_showdown_pass_sequence()   # 347.2.a
-        # 337.2 -- an ability that Adds resources resolves immediately, and
-        # 346.1 keeps Focus with its controller.
-        if adds_resources:
-            self._resolve_top()
-        else:
-            self._open_priority_window(self.opponent(ref.controller))
+        # 355.8 -- declare targets, then finalize. `_finish_playing` runs the
+        # 337.2 immediate-resolution branch for an ability that Adds
+        # resources, and opens the priority window otherwise.
+        self._advance_targeting()
 
     def _apply_pass(self) -> None:
         """Pass priority, pass focus, or end the phase, depending on state."""
