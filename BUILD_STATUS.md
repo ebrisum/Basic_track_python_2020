@@ -88,7 +88,7 @@ I am not going to add a dependency without you saying so.
 
 ### The more important reason not to start yet
 
-**41 of 526 playable cards fully work — about 8%**, and the three starter decks are 15/15, 14/15 and 14/15. A network trained
+**42 of 526 playable cards fully work — about 8%**, and the two decks the engine measures are both 15/15. A network trained
 today would learn a game of costs, stats, movement and scoring, with almost
 every printed ability inert. It would learn that game very well. That is
 not Riftbound, and the learned weights would not transfer once the cards

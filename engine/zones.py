@@ -77,6 +77,9 @@ class CardRef:
     # 437 -- the Prevent Value currently tracked on this unit. 0 means none;
     # `None` is 437.1.b.1.b's "All", which 437.3.c never spends down.
     prevent: "int | None" = 0
+    # 367-373 -- a one-shot death replacement armed on this unit, as
+    # (recall, exhaust, heal, cost_power). None when nothing is armed.
+    death_replacement: tuple | None = None
     # Keywords granted by effects: (name, value, duration).
     granted_keywords: tuple[tuple[str, int, str], ...] = ()
     # 434 Attach / 716 -- the unit this gear is attached to.
@@ -116,6 +119,7 @@ class CardRef:
             self.might_permanent,
             self.buffs,
             self.prevent,
+            self.death_replacement,
             self.granted_keywords,
             self.attached_to,
         )

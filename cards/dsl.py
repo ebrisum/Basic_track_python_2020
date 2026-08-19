@@ -238,6 +238,28 @@ class Attach(Effect):
 
 
 @dataclass(frozen=True)
+class ReplaceDeath(Effect):
+    """367-373 -- arm a one-shot replacement for a unit's death.
+
+    370.1.a.1: replacing a death "is the same as the kill action that caused
+    that death not occurring", so an armed unit that would die is not killed
+    at all -- it does whatever the replacement says instead.
+
+    The flags are the printed vocabulary of the cards that use it: Unlicensed
+    Armory "recall it exhausted", Zhonya's Hourglass "heal that unit, exhaust
+    it, and recall it". `cost_power` is the "you may pay 1 Fury" clause; a
+    cost that cannot be paid simply means the replacement does not apply.
+    """
+
+    selector: Selector = field(default_factory=lambda: SELF)
+    recall: bool = True
+    exhaust: bool = True
+    heal: bool = False
+    cost_power: str | None = None
+    duration: Duration = Duration.THIS_TURN
+
+
+@dataclass(frozen=True)
 class EquipToMe(Effect):
     """821 Weaponmaster -- attach a chosen Equipment *to the source*.
 

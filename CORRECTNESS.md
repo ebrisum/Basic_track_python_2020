@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 661 tests pass.
+- 673 tests pass.
 - 200 games with invariants checked after *every action* (87,765 decisions)
   — zero violations, on the current engine.
 - The 10,000-match validation run (BUILD.md section 10) — see `VALIDATION.md`.
@@ -87,7 +87,7 @@ it to nobody.
 
 This is where the honest part lives.
 
-### Card text: 41 of 526 playable cards fully work
+### Card text: 42 of 526 playable cards fully work
 
 **About 8%**, of which 31 are scripted and the rest are cards whose entire
 printed text is keywords the engine implements. Every other card is inert —
@@ -124,19 +124,19 @@ games this engine actually plays, and saying so is the honest correction:
 | Deck | Distinct cards fully implemented |
 | --- | --- |
 | `jinx_chaos_fury` | **15 of 15** |
-| `volibear_body_fury` | 14 of 15 |
+| `volibear_body_fury` | **15 of 15** |
 | `miss_fortune_bounty_hunter` | 14 of 15 |
 
-The two gaps are named rather than averaged away. **OGN-023 Unlicensed
-Armory** needs a delayed replacement effect ("the next time it dies this turn,
-you may pay 1 Fury to recall it exhausted instead"), and **OGN-268 Bullet
-Time** needs a variable X cost ("Pay any amount of rune to deal that much
-damage").
+**Both decks the engine measures are now fully implemented.** The last gap was
+OGN-023 Unlicensed Armory, which needed death replacement effects (367-373) --
+built, and the one remaining gap anywhere in the three decks is OGN-268 Bullet
+Time's variable X cost ("Pay any amount of rune to deal that much damage"),
+in a deck that is not currently measured.
 
-So a win rate measured on the two starter decks does reflect those decks'
-cards, with one gear's replacement effect missing on one side. What it cannot
-yet do is measure a deck built from the wider pool. That is the real shape of
-RQ-5, and it is a different claim from the one this document made before.
+So a win rate measured on the two starter decks reflects those decks' cards
+entirely. What the engine cannot yet do is measure a deck built from the wider
+pool. That is the real shape of RQ-5, and it is a different claim from the one
+this document made before.
 
 ### Every Game Action any card needs is implemented
 

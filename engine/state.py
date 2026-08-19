@@ -1801,8 +1801,10 @@ class RiftboundState:
         for ref in self.cards.values():
             ref.might_this_turn = 0
             # 437.1.b.1's wording is "...this turn", so an unspent Prevent
-            # Value expires with every other this-turn effect at step 3d.
+            # Value expires with every other this-turn effect at step 3d, and
+            # so does an unused death ward ("the next time it dies this turn").
             ref.prevent = 0
+            ref.death_replacement = None
             # 423.1.a.2 -- Stunned is lost during step 3d, which 317.2.c makes
             # the same moment every other "this turn" effect expires.
             ref.stunned = False
@@ -1887,6 +1889,40 @@ class RiftboundState:
                 changed = True
         return changed
 
+    def _apply_death_replacement(self, ref: CardRef) -> bool:
+        """367-373 -- if this unit's death is replaced, do that instead.
+
+        370.1.a.1: "A unit's death being replaced ... is the same as the kill
+        action that caused that death not occurring." So nothing that triggers
+        on dying triggers, and the unit never reaches the trash.
+
+        The replacement is one-shot ("the next time it dies"), and it is
+        cleared whether or not it fires: a cost that cannot be paid means it
+        did not apply, and 373.2 stops one effect being applied twice to the
+        same sequence either way.
+        """
+        armed = ref.death_replacement
+        if armed is None:
+            return False
+        recall, exhaust, heal, cost_power = armed
+        ref.death_replacement = None
+        pool = self.players[ref.controller].pool
+        if cost_power is not None:
+            if not pool.can_pay(0, [cost_power]):
+                return False               # the cost cannot be paid
+            pool.pay(0, [cost_power])
+        if heal:
+            ref.damage = 0                 # 418 Heal
+        if recall:
+            self.move_to(ref, BASE_LOCATION)   # 454 Recall, 719.3.a
+        if exhaust:
+            ref.exhausted = True
+        self._emit(
+            f"{self.db[ref.card_id].name}'s death is replaced "
+            f"(recalled{' exhausted' if exhaust else ''})"
+        )
+        return True
+
     def _kill(self, ref: CardRef) -> None:
         """428 Kill -- the card goes to its owner's trash (108.2.b)."""
         # 457.1 -- gear left unattached at a battlefield is recalled; gear
@@ -1895,6 +1931,10 @@ class RiftboundState:
         # They are not sent home here: an Equipment whose host died at a
         # battlefield stays there until 457.1 recalls it at the next Cleanup,
         # which is a window other effects can see.
+        # 370.1.a.1 -- a replaced death is the kill not happening at all, so
+        # this comes before anything else the kill would do.
+        if self._apply_death_replacement(ref):
+            return
         if ref.is_token:
             # 186.1 -- a token put into a non-board zone ceases to exist, so
             # it never reaches the trash.
@@ -2002,6 +2042,7 @@ class RiftboundState:
         # the tracked Prevent Value (437) goes with them.
         ref.buffs = 0
         ref.prevent = 0
+        ref.death_replacement = None
 
     def _busy_at(self, index: int) -> bool:
         """Whether a Showdown or Combat is ongoing at this battlefield.

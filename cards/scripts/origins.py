@@ -31,6 +31,7 @@ from cards.dsl import (
     ExhaustSelf,
     GainPoints,
     GrantKeyword,
+    ReplaceDeath,
     Kill,
     LookAtTop,
     RecycleFromTrash,
@@ -361,15 +362,15 @@ SCRIPTS: tuple[CardScript, ...] = (
             Ability(
                 kind=TriggerKind.ACTIVATED,
                 costs=(DiscardCost(1), ExhaustSelf()),
-                effects=(GrantKeyword("Resilient", 1, Duration.THIS_TURN, FRIENDLY_UNIT),),
-                text="Discard 1, Exhaust: Choose a friendly unit...",
+                effects=(ReplaceDeath(
+                    selector=FRIENDLY_UNIT,
+                    recall=True, exhaust=True, cost_power="Fury",
+                    duration=Duration.THIS_TURN,
+                ),),
+                text=("Discard 1, Exhaust: Choose a friendly unit. The next "
+                      "time it dies this turn, you may pay 1 Fury to recall "
+                      "it exhausted instead."),
             ),
-        ),
-        complete=False,
-        note=(
-            "The delayed replacement -- 'the next time it dies this turn, pay 1 "
-            "Fury to recall it exhausted instead' -- needs replacement effects "
-            "(367) and delayed abilities (389). The grant is a marker only."
         ),
     ),
 )

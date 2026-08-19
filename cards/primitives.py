@@ -38,6 +38,7 @@ from cards.dsl import (
     Detach,
     Heal,
     Recycle,
+    ReplaceDeath,
     Reveal,
     Exhaust,
     Stun,
@@ -532,6 +533,21 @@ def _attach(state, effect: Attach, ctx: EffectContext) -> ChoiceRequest | None:
     return None
 
 
+def _replace_death(state, effect: ReplaceDeath, ctx: EffectContext) -> ChoiceRequest | None:
+    """367-373 -- arm a one-shot death replacement on the chosen units."""
+    ids, request = _targets(state, effect.selector, ctx, "Ward against death")
+    if request:
+        return request
+    for instance_id in ids:
+        ref = state.cards[instance_id]
+        ref.death_replacement = (effect.recall, effect.exhaust, effect.heal,
+                                 effect.cost_power)
+        state._emit(
+            f"{state.db[ref.card_id].name} is warded against its next death"
+        )
+    return None
+
+
 def _equip_to_me(state, effect: EquipToMe, ctx: EffectContext) -> ChoiceRequest | None:
     """821 Weaponmaster -- attach a chosen Equipment to the source unit.
 
@@ -795,6 +811,7 @@ HANDLERS: dict[type, Callable] = {
     LookAtTop: _look_at_top,
     Attach: _attach,
     Recycle: _recycle,
+    ReplaceDeath: _replace_death,
     Reveal: _reveal,
     Heal: _heal,
     Banish: _banish,
