@@ -3,6 +3,13 @@
   "description": "Riftbound 1v1, random policy, full game.",
   "source": "synthetic",
   "game": "riftbound",
+  "provenance": {
+    "engine_version": "0.4.0",
+    "rules_version": "CR-v1.4-Vendetta+da73a77ef8cb",
+    "card_pool_version": "0c977ae683a0",
+    "observation_schema_version": "2b799abba4c6",
+    "action_schema_version": "97066f240e2f"
+  },
   "seed": 11,
   "initial_state_hash": "f79d8a2697559ea1",
   "steps": [

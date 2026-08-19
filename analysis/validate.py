@@ -35,6 +35,7 @@ from agents.random_agent import RandomAgent
 from cards.database import load as load_db
 from engine.invariants import check
 from engine.setup import build_state, load_deck
+from engine.versions import provenance
 
 ACTION_CAP = 3000
 
@@ -53,6 +54,15 @@ def main(argv: list[str] | None = None) -> int:
 
     db = load_db()
     d0, d1 = load_deck(args.decks[0]), load_deck(args.decks[1])
+
+    # BUILD.md 37 -- a run's numbers mean nothing without knowing what
+    # produced them. Printed first so it lands in any captured log.
+    stamp = provenance(db)
+    print("provenance")
+    for key in sorted(stamp):
+        print(f"  {key:28s} {stamp[key]}")
+    print(f"  decks                        {args.decks[0]} vs {args.decks[1]}")
+    print(flush=True)
 
     crashes = impossible = unresolved = illegal = 0
     decisions = branch = turns = 0

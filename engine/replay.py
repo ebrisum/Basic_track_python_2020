@@ -91,6 +91,10 @@ class Replay:
     description: str = ""
     source: str = "synthetic"
     game: str = "riftbound"
+    # BUILD.md 37 -- what produced this replay. See `engine/versions.py`.
+    # Empty for a replay recorded before stamping existed, which the drift
+    # reporter treats as "nothing to compare" rather than as a mismatch.
+    provenance: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> "Replay":
@@ -111,6 +115,7 @@ class Replay:
             description=raw.get("description", ""),
             source=raw.get("source", "synthetic"),
             game=raw.get("game", "riftbound"),
+            provenance=dict(raw.get("provenance") or {}),
         )
 
     @classmethod
@@ -123,6 +128,7 @@ class Replay:
             "description": self.description,
             "source": self.source,
             "game": self.game,
+            "provenance": dict(self.provenance),
             "seed": self.seed,
             "initial_state_hash": self.initial_state_hash,
             "steps": [
@@ -161,17 +167,51 @@ def _resolve(state: GameState, action_repr: str, step_index: int) -> Action:
     return matches[0]
 
 
-def run_replay(replay: Replay, build_state: Callable[[int], GameState]) -> None:
+def describe_provenance_drift(recorded: dict[str, str] | None,
+                             current: dict[str, str] | None) -> str:
+    """Name every provenance component that moved between two stamps.
+
+    Returns "" when nothing moved, or when either stamp is missing -- an
+    unstamped replay predates stamping and has nothing to say. This is a
+    *diagnostic*, never a failure on its own: a stamp can move while every
+    recorded hash still matches, which is the happy case and means the change
+    did not touch these games.
+
+    It exists because a bare hash mismatch says only "something changed". This
+    turns it into "the observation schema changed", which is the difference
+    between a five-minute check and an afternoon.
+    """
+    if not recorded or not current:
+        return ""
+    drifted = [
+        f"{key}: {recorded.get(key, '<absent>')} -> {current.get(key, '<absent>')}"
+        for key in sorted(set(recorded) | set(current))
+        if recorded.get(key) != current.get(key)
+    ]
+    if not drifted:
+        return ""
+    return "provenance drift since this replay was recorded:\n  " + "\n  ".join(drifted)
+
+
+def run_replay(replay: Replay, build_state: Callable[[int], GameState],
+               provenance: dict[str, str] | None = None) -> None:
     """Replay a recorded game, raising `ReplayDivergence` at the first mismatch.
 
     `build_state` takes the seed and returns a fresh initial state.
+    `provenance` is the *current* stamp; when a divergence is raised, any
+    component that has moved since recording is named in the message.
     """
+    drift = describe_provenance_drift(replay.provenance, provenance)
+
+    def diverge(message: str) -> ReplayDivergence:
+        return ReplayDivergence(message + (f"\n{drift}" if drift else ""))
+
     state = build_state(replay.seed)
 
     if replay.initial_state_hash is not None:
         actual = state_hash(state)
         if actual != replay.initial_state_hash:
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id}: initial state hash mismatch "
                 f"(expected {replay.initial_state_hash}, got {actual}). "
                 f"Setup or shuffle changed for seed {replay.seed}."
@@ -179,12 +219,12 @@ def run_replay(replay: Replay, build_state: Callable[[int], GameState]) -> None:
 
     for i, step in enumerate(replay.steps):
         if state.is_terminal():
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id} step {i}: game ended early -- "
                 f"{len(replay.steps) - i} recorded step(s) remain."
             )
         if state.current_player != step.player:
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id} step {i}: expected player {step.player} "
                 f"to move, engine says player {state.current_player}. "
                 f"Turn/priority order diverged."
@@ -194,7 +234,7 @@ def run_replay(replay: Replay, build_state: Callable[[int], GameState]) -> None:
 
         actual = state_hash(state)
         if actual != step.expected_state_hash:
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id} step {i}: state hash mismatch after "
                 f"player {step.player} played {step.action}\n"
                 f"  expected {step.expected_state_hash}\n"
@@ -204,13 +244,13 @@ def run_replay(replay: Replay, build_state: Callable[[int], GameState]) -> None:
 
     if replay.final_returns is not None:
         if not state.is_terminal():
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id}: replay recorded a finished game, but the "
                 f"engine's state is not terminal after all steps."
             )
         actual_returns = state.returns()
         if tuple(actual_returns) != tuple(replay.final_returns):
-            raise ReplayDivergence(
+            raise diverge(
                 f"{replay.replay_id}: final returns mismatch "
                 f"(expected {tuple(replay.final_returns)}, got {actual_returns})."
             )
@@ -228,6 +268,7 @@ class ReplayRecorder:
     description: str = ""
     source: str = "synthetic"
     game: str = "riftbound"
+    provenance: dict[str, str] = field(default_factory=dict)
     steps: list[ReplayStep] = field(default_factory=list)
     initial_state_hash: str | None = None
 
@@ -253,6 +294,7 @@ class ReplayRecorder:
             description=self.description,
             source=self.source,
             game=self.game,
+            provenance=dict(self.provenance),
         )
 
 
@@ -264,11 +306,13 @@ def record_game(
     description: str = "",
     game: str = "riftbound",
     max_steps: int = 10_000,
+    provenance: dict[str, str] | None = None,
 ) -> Replay:
     """Play one game under `policy` and return it as a `Replay`."""
     state = build_state(seed)
     rec = ReplayRecorder(
-        replay_id=replay_id, seed=seed, description=description, game=game
+        replay_id=replay_id, seed=seed, description=description, game=game,
+        provenance=dict(provenance or {}),
     )
     rec.start(state)
 

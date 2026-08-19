@@ -22,8 +22,11 @@ from engine.replay import (
     state_hash,
 )
 from cards.database import load as load_db
+from engine import versions
 from engine.setup import build_state as build_riftbound, load_deck
 from tests.fixtures.toy_game import ToyAction, build_toy_state
+
+DB = load_db()
 
 
 def build_riftbound_state(seed: int):
@@ -160,7 +163,10 @@ def test_committed_replay_reproduces(path):
     builders = {"toy": build_toy_state, "riftbound": build_riftbound_state}
     if replay.game not in builders:
         pytest.skip(f"no state builder registered for game {replay.game!r} yet")
-    run_replay(replay, builders[replay.game])
+    # Passing the current stamp means a divergence names which component moved
+    # (BUILD.md 37) rather than only that the hashes differ.
+    stamp = versions.provenance(DB) if replay.game == "riftbound" else None
+    run_replay(replay, builders[replay.game], provenance=stamp)
 
 
 @pytest.mark.parametrize("path", committed_replays(), ids=lambda p: p.stem)
