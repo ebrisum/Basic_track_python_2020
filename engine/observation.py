@@ -103,6 +103,14 @@ class RiftboundObservation:
     focus: int | None = None
     showdown: tuple[int, int, int, bool] | None = None
     choice_prompt: str = ""
+    # 431.1.c.1 -- a card being looked at stays in its zone of origin, so the
+    # Main Deck's Secret privacy (108.4.d) still describes it for everyone
+    # else. But the player doing the looking is looking at it: that is the
+    # instruction. 128.2.a makes Privacy follow the zone only "unless
+    # specified otherwise by the state of the card", and "being looked at by
+    # this player" is such a state. Filled in for the player who owns the
+    # pending choice and empty for anyone else, exactly like `facedown_card`.
+    choice_options: tuple[VisibleCard, ...] = ()
     # 424 -- cards of the opponent's that were revealed from their hand and are
     # still there. Public information the observer was actually shown, so it
     # belongs in their legal view; everything else in that hand stays a count.
@@ -266,6 +274,12 @@ class RiftboundObservation:
                 else None
             ),
             choice_prompt=state.awaiting.prompt if state.awaiting else "",
+            choice_options=(
+                tuple(visible(i) for i in state.awaiting.options)
+                if state.awaiting is not None
+                and state.awaiting.player == player_id
+                else ()
+            ),
             winner=state.winner,
             log_tail=tuple(state.log[-12:]),
         )
@@ -275,8 +289,12 @@ class RiftboundObservation:
 
         `log_tail` and `choice_prompt` are excluded -- they are presentation,
         and hashing them would make every replay depend on message wording.
+        `choice_options` is excluded because the hash covers *both* players'
+        observations: a field only one player may read would put information
+        into the hash that the other side can never reproduce.
         """
         payload = asdict(self)
         payload.pop("log_tail", None)
         payload.pop("choice_prompt", None)
+        payload.pop("choice_options", None)
         return json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()

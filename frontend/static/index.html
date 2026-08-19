@@ -212,6 +212,10 @@
       <div class="chain" id="chain"></div>
     </div>
     <div class="panel"><h2>Agent</h2><div id="agentPanel"></div></div>
+    <div class="panel" id="choicePanel" style="display:none">
+      <h2>Choose <span class="muted" id="choiceWhat"></span></h2>
+      <div class="acts" id="choiceTray" style="flex-wrap:wrap"></div>
+    </div>
     <div class="panel">
       <h2>Decisions <span class="muted" id="decCount"></span></h2>
       <div id="pending"></div>
@@ -574,6 +578,23 @@ function renderMat(host,pid,mine){
   host.appendChild(rows);
 }
 
+/* 431.1.c.1 -- a card being looked at stays in the Main Deck, so it appears
+   nowhere else on the board. Without this tray the prompt said "click a
+   highlighted card" and there was nothing highlighted to click: the options
+   were on top of the deck. `choice_options` is filled in only for the player
+   who owns the choice, so this tray is empty for the other seat. */
+function renderChoices(){
+  const panel=$("choicePanel"), tray=$("choiceTray");
+  const opts=(S.choice_options||[]).filter(
+    c => (S.legal||[]).includes(`choose:${c.instance_id}`));
+  if(!opts.length){ panel.style.display="none"; tray.innerHTML=""; return; }
+  panel.style.display="";
+  $("choiceWhat").textContent=S.choice_prompt||"";
+  tray.innerHTML="";
+  opts.forEach(c => tray.appendChild(
+    cardEl(c,{actions:[{repr:`choose:${c.instance_id}`,label:"choose"}]})));
+}
+
 function renderChain(){
   const wrap=$("chain"); wrap.innerHTML="";
   let label = "";
@@ -612,7 +633,8 @@ function render(){
   if(S.is_terminal) banner(S.winner===null?"Game over — draw."
       :`Game over — <b>Player ${S.winner} wins</b>.`,"win");
   else if(S.phase==="choosing" && S.current_player===me)
-    banner(`<b>${esc(S.choice_prompt)}</b> — click a highlighted card.`,"warn");
+    banner(`<b>${esc(S.choice_prompt)}</b> — click a highlighted card`
+      + `${(S.choice_options||[]).length?" or one below":""}.`,"warn");
   else if(S.showdown)
     banner(`${S.showdown[3]?"<b>Combat</b>":"Showdown"} at battlefield ${S.showdown[0]} — `
       + `P${S.showdown[1]} attacking, focus P${S.focus}.`,"warn");
@@ -625,6 +647,7 @@ function render(){
   renderMat($("matThem"),opp,false);
   renderMat($("matMe"),me,true);
   renderChain();
+  renderChoices();
 
   const hand=$("hand");
   hand.innerHTML=`<div class="muted" style="width:100%;font-size:8.5px;letter-spacing:.1em;

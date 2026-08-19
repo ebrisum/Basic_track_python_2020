@@ -442,3 +442,32 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
 - **Promotions report which weights moved** -- a promotion with no story is
   unauditable, and a feature flipping sign is exactly how the `hand_diff`
   artefact was caught the first time.
+
+## Choices a player cannot see
+
+- **The observation now carries `choice_options`, and the reason it did not
+  is worth writing down** -- the leakage suite (`test_no_cheating`, 35 tests)
+  pins one direction: nothing may appear in a player's observation that the
+  privacy rules do not grant them. Nothing tested the other direction, so a
+  gap of the opposite shape survived for the whole project. When Stacked Deck
+  or Called Shot says "look at the top 3", 431.1.c.1's reminder keeps those
+  cards *in the Main Deck*, whose privacy is Secret (108.4.d) -- so the
+  observation showed nothing at all, while `legal_actions()` offered
+  `ChooseTarget(instance_id=3)`. The agent picked between cards it could not
+  see, and it was a blind pick, not a hard one: the frontend's prompt read
+  "click a highlighted card" with nothing highlighted anywhere on screen.
+- **The rule allows it, so this is a fix rather than an approximation** --
+  128.2.a makes Privacy follow the zone only "unless specified otherwise by
+  the state of the card". Being looked at by a specific player is such a
+  state, which is why the field is filled in for that player and empty for
+  the other, the same treatment `facedown_card` already gets under 128.4.
+- **It is excluded from `to_canonical_bytes`** -- the replay hash covers both
+  players' observations, so a field only one player may read would put
+  something in the hash that the other side can never reproduce.
+  `choice_prompt` is excluded for a different reason (wording), and it would
+  have been easy to fold the two into one line and lose the distinction.
+- **Found by writing an encoder, not by reading the rules** -- the action
+  encoder needs every action's `instance_id` to resolve to something in the
+  observation, so building it made the gap a hard failure instead of a
+  quiet one. That is a third discovery method alongside reading and fuzzing:
+  requiring the interface to be *sufficient*, not merely tight.
