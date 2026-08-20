@@ -1,0 +1,15 @@
+# The engine needs none of this. `python3 play.py` and everything under
+# engine/, cards/, agents/, analysis/ and learning/ run on the standard
+# library alone, and that is a constraint from the founding brief rather than
+# an accident -- it is what makes the rules layer auditable.
+#
+# These are for the model stack only (TCG_AI_BUILD.md sections 16-22). See
+# RQ-22 in RULES_QUESTIONS.md for the decision and what it costs.
+
+pytest>=8
+
+# Sections 17 and 22 ask for a transformer encoder with policy and value
+# heads, trained with PPO: a clipped objective, GAE, an entropy bonus and
+# gradient clipping. Writing that without autograd means writing autograd.
+torch>=2.13
+numpy>=2.5

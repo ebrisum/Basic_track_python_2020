@@ -38,10 +38,13 @@ brief are not repeated here -- only choices made on top of it.
 Built while BLOCKER-1 stands. Everything here is independent of Riftbound's
 rules and card pool, so none of it is blocked and none of it presumes a rule.
 
-- **`state.current_player` added to the agent-facing interface** -- NEEDS
-  APPROVAL. The brief lists five calls; a replay cannot verify turn or
-  priority order without knowing whose move it is, and OpenSpiel's interface
-  has `current_player()` too. Flagged rather than assumed silently.
+- **`state.current_player` added to the agent-facing interface** -- APPROVED
+  and closed (RQ-4). Not a widening of the five-call contract but the call
+  that makes it usable: `observation(player)` needs a player argument, and an
+  agent cannot know which player to ask for without being told. Whose turn it
+  is has no privacy level to violate (128), and OpenSpiel exposes
+  `current_player()` for the same reason. A sixth call is not a precedent for
+  a seventh.
 - **State hashing is derived from the frozen interface, not added to it** --
   `replay.state_hash()` hashes both players' observations plus terminal state
   and returns. Keeps the agent-facing contract at exactly the specified calls

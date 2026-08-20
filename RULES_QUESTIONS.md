@@ -179,14 +179,32 @@ the second-most-common primitive (140 uses), so this will come up early.
 
 ---
 
-## RQ-4 — `state.current_player` is a sixth interface call
+## RQ-4 — `state.current_player` is a sixth interface call — RESOLVED
 
-**Status:** open, awaiting approval.
+**Status:** closed. Kept.
 
-The brief specifies five agent-facing calls. Replays cannot verify turn or
-priority order without knowing whose move it is, and OpenSpiel exposes
-`current_player()` too, so the drop-in is unaffected. Implemented and flagged
-rather than assumed. See `DECISIONS.md`.
+**What the question was.** The founding brief froze the agent-facing surface
+at five calls, mirroring OpenSpiel: `legal_actions`, `apply`, `observation`,
+`is_terminal`, `returns`. The engine grew a sixth, `current_player`, and the
+question was whether that is a widening of the contract that should be undone.
+
+**Why it stays.** It is not a widening; it is the call that makes the other
+five usable. `observation(player)` needs a player argument, and an agent
+cannot know which player to ask for without being told whose decision it is.
+The information is public — whose turn it is has no privacy level to violate
+(128) — and OpenSpiel's own interface exposes `current_player()` for exactly
+this reason, so the drop-in the brief cares about is unaffected.
+
+**The alternative, and why it is worse.** The observation already carries
+`current_player` as a field, so an agent could in principle read it there. But
+building an observation requires naming a player first, so that route is
+circular: it would force every caller to build one player's view speculatively
+to discover it should have built the other's.
+
+**What is not allowed to follow from this.** A sixth call is not a precedent
+for a seventh. Nothing else moves onto the interface without the same
+argument: that it is public information, that it is needed to use the existing
+calls, and that OpenSpiel has an equivalent.
 
 ---
 
@@ -675,3 +693,48 @@ Nothing in the plan's list of configurable fields needs either.
 
 **Reversible.** `learning/config.py` isolates the parse in one function; a
 YAML backend would be a few lines if the dependency is ever approved.
+
+**Since decided:** the first dependency *was* taken, for the model stack
+(RQ-22). It still is not PyYAML, and the reasoning above is why — TOML costs
+nothing and does the job, so there is no reason to add a second.
+
+---
+
+## RQ-22 — PyTorch, and what it costs
+
+**Status.** Decided. The first dependency beyond the standard library and
+pytest in the project's life, taken deliberately and scoped.
+
+**The question.** `TCG_AI_BUILD.md` sections 16-22 ask for a transformer
+encoder with policy and value heads, trained by PPO with a clipped objective,
+GAE, an entropy bonus and gradient clipping. The founding brief says pure
+standard library plus pytest, and ask before adding anything. Three options
+were on the table: PyTorch, NumPy only with a hand-written MLP, or stay
+stdlib.
+
+**Decision: PyTorch.** The plan does not ask for a neural network in the
+abstract; it asks for a specific architecture and a specific RL algorithm.
+Writing PPO without autograd means writing autograd, and a hand-rolled
+backward pass is the least interesting and most bug-prone part of the job --
+with no test that could distinguish "the agent is not learning" from "the
+gradient is wrong". NumPy alone would buy a small MLP and would still not be
+the plan's model.
+
+**What it does not touch.** The engine keeps its constraint. `engine/`,
+`cards/`, `agents/`, `analysis/`, `learning/` and `play.py` import nothing
+outside the standard library, and a test asserts it. Someone who wants to play
+Riftbound or run the validation suite still needs nothing installed. The
+dependency lives in `model/` and in the training entry points, and nowhere
+else.
+
+**A wrinkle worth recording.** `download.pytorch.org` is not reachable through
+this environment's proxy, so the wheel came from PyPI, which on Linux means
+the CUDA build: 4.7 GB of venv for a machine with no GPU
+(`torch.cuda.is_available()` is False). It works and it is what was
+installable. On a box with a GPU it is the right build anyway; on a CPU-only
+box `--index-url https://download.pytorch.org/whl/cpu` is the smaller install
+where the network allows it.
+
+**Reversible?** Partly. The trajectory format, the action encoding and the
+dataset generator are all pure stdlib and stay useful whatever trains on
+them -- that separation was built before this decision, not after it.
