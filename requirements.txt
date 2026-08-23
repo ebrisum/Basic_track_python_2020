@@ -13,3 +13,9 @@ pytest>=8
 # gradient clipping. Writing that without autograd means writing autograd.
 torch>=2.13
 numpy>=2.5
+
+# Note for the Claude Code remote environment this was built in: the container
+# resets its filesystem between turns, so the venv does not persist. Reinstall
+# with `uv pip install --python .venv/bin/python -r requirements.txt`, which is
+# fast because uv's cache does survive. The git tree resets too; recover with
+# `git merge --ff-only origin/<branch>`.

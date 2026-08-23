@@ -41,7 +41,7 @@ conservation.
 
 Evidence:
 
-- 867 tests pass.
+- 877 tests pass.
 - **10,000 games with all 14 invariants checked after every action —
   2,188,138 states, zero violations** (BUILD.md section 10; see
   `VALIDATION.md`). Every earlier version of this line described a *sample*,

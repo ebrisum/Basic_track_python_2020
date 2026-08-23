@@ -10,3 +10,10 @@ action_cap = 400
 
 [game]
 agents = ["random", "random"]
+
+[model]
+# Tiny enough that a forward pass is instant and a shape bug is obvious.
+embedding_dim = 32
+transformer_layers = 2
+attention_heads = 2
+ff_dim = 64

@@ -40,6 +40,27 @@ DEFAULTS: dict[str, Any] = {
         "decks": ["jinx_chaos_fury", "volibear_body_fury"],
         "agents": ["random", "greedy"],
     },
+    "model": {
+        # Section 17's own example. Small first, and configurable, which is
+        # what the plan asks for in as many words.
+        "embedding_dim": 128,
+        "transformer_layers": 4,
+        "attention_heads": 4,
+        "ff_dim": 512,
+        "dropout": 0.0,
+    },
+    "ppo": {
+        # Section 22's defaults, treated as defaults. gamma is 1.0 because a
+        # Riftbound game is short and the reward is terminal: discounting a
+        # win by how long it took would be shaping through the back door.
+        "learning_rate": 0.0003,
+        "gamma": 1.0,
+        "gae_lambda": 0.95,
+        "clip_range": 0.2,
+        "entropy_coef": 0.01,
+        "value_coef": 0.5,
+        "max_grad_norm": 0.5,
+    },
     "reward": {
         # 1.0 win / 0.0 loss / 0.5 draw, and nothing else. See the module note.
         "shaping": False,

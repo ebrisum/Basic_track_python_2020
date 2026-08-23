@@ -140,6 +140,21 @@ class EncodedState:
     tokens: list[Token]
     mask: list[bool]
     player: int
+    # Which game object each row is, or None for a token that is not a card
+    # (the global token, the two player tokens, a battlefield, a chain item).
+    #
+    # This is an *index*, not a model input: instance ids are per-game counters
+    # and embedding them would teach a model that instance 47 means something.
+    # It exists so an action naming a card can be pointed at the row that
+    # describes it, which is what section 18's policy head needs.
+    instances: list[int | None] = field(default_factory=list)
+
+    def row_of(self, instance_id: int) -> int | None:
+        """The token row describing this object, if it has one."""
+        try:
+            return self.instances.index(instance_id)
+        except ValueError:
+            return None
 
     @property
     def length(self) -> int:
@@ -294,9 +309,14 @@ class StateEncoder:
         me = obs.player_id
         them = 1 - me
         tokens: list[Token] = []
+        instances: list[int | None] = []
+
+        def add(token: Token, instance_id: int | None = None) -> None:
+            tokens.append(token)
+            instances.append(instance_id)
 
         # --- global ------------------------------------------------------
-        tokens.append(Token(
+        add(Token(
             kind=KIND_INDEX["global"], card=0, zone=ZONE_INDEX["none"],
             location=0,
             flags=self._flags(mine=obs.current_player == me),
@@ -311,7 +331,7 @@ class StateEncoder:
         for kind, pid in (("me", me), ("opponent", them)):
             pool = obs.pool if pid == me else obs.opponent_pool
             hand_size = (len(obs.hand) if pid == me else obs.opponent_hand_size)
-            tokens.append(Token(
+            add(Token(
                 kind=KIND_INDEX[kind], card=0, zone=ZONE_INDEX["none"],
                 location=0,
                 flags=self._flags(mine=pid == me),
@@ -329,7 +349,7 @@ class StateEncoder:
 
         # --- battlefields -------------------------------------------------
         for battlefield in obs.battlefields:
-            tokens.append(Token(
+            add(Token(
                 kind=KIND_INDEX["battlefield"],
                 card=self._card(battlefield.card_id),
                 zone=ZONE_INDEX["battlefield"],
@@ -346,19 +366,19 @@ class StateEncoder:
         # --- permanents ----------------------------------------------------
         kind_of = {"unit": "unit", "gear": "gear", "rune": "rune"}
         for card in obs.board:
-            tokens.append(self._card_token(
-                card, kind_of.get(card.type, "gear"), "base", me))
+            add(self._card_token(card, kind_of.get(card.type, "gear"), "base", me),
+                card.instance_id)
 
         # --- my hand, and cards of theirs I have legally seen ---------------
         for card in obs.hand:
-            tokens.append(self._card_token(card, "hand", "hand", me))
+            add(self._card_token(card, "hand", "hand", me), card.instance_id)
         for card in obs.revealed_opponent_hand:        # 424
-            tokens.append(self._card_token(card, "hand", "hand", me))
+            add(self._card_token(card, "hand", "hand", me), card.instance_id)
 
         # --- trashes (108.2.d, public) --------------------------------------
         for pile in obs.trash:
             for card in pile:
-                tokens.append(self._card_token(card, "trash", "trash", me))
+                add(self._card_token(card, "trash", "trash", me), card.instance_id)
 
         # --- champions and legends (108.3.e, 107.4.c) -----------------------
         for kind, zone, cards in (
@@ -367,12 +387,12 @@ class StateEncoder:
         ):
             for card in cards:
                 if card is not None:
-                    tokens.append(self._card_token(card, kind, zone, me))
+                    add(self._card_token(card, kind, zone, me), card.instance_id)
 
         # --- the chain (327-340) --------------------------------------------
         for item in obs.chain:
             kind_name, label, controller, instance_id = item
-            tokens.append(Token(
+            add(Token(
                 kind=KIND_INDEX["chain"], card=0, zone=ZONE_INDEX["chain"],
                 location=0,
                 flags=self._flags(mine=controller == me),
@@ -382,13 +402,18 @@ class StateEncoder:
 
         # --- a pending choice, which only the chooser sees (431.1.c.1) -------
         for card in obs.choice_options:
-            tokens.append(self._card_token(card, "choice", "choice", me))
+            add(self._card_token(card, "choice", "choice", me), card.instance_id)
 
         if len(tokens) > self.max_tokens:
             raise EncodingOverflow(
                 f"{len(tokens)} tokens exceeds max_tokens={self.max_tokens}"
             )
 
-        mask = [True] * len(tokens) + [False] * (self.max_tokens - len(tokens))
-        tokens = tokens + [_PAD] * (self.max_tokens - len(tokens))
-        return EncodedState(tokens=tokens, mask=mask, player=me)
+        padding = self.max_tokens - len(tokens)
+        mask = [True] * len(tokens) + [False] * padding
+        return EncodedState(
+            tokens=tokens + [_PAD] * padding,
+            mask=mask,
+            player=me,
+            instances=instances + [None] * padding,
+        )

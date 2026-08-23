@@ -1,0 +1,27 @@
+# Training settings (section 30's `ai/config/train.yaml`).
+#
+# Only what differs from `default.toml`; everything else is inherited, so this
+# file reads as a diff rather than a duplicate that can drift.
+
+[run]
+games = 2000
+seed0 = 0
+progress = 100
+
+[game]
+# Section 20 wants diverse positions, and the six baselines disagree with each
+# other on 39-73% of decisions. A pairing is chosen per run; this is the one
+# that produces the widest spread of positions.
+agents = ["aggro", "conservative"]
+
+[model]
+# Still small. Section 17: "do not begin with a very large model."
+embedding_dim = 128
+transformer_layers = 4
+attention_heads = 4
+ff_dim = 512
+dropout = 0.1          # some regularisation once there is real data
+
+[ppo]
+learning_rate = 0.0003
+entropy_coef = 0.01
