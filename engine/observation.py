@@ -48,6 +48,15 @@ class VisibleCard:
     is_attacker: bool
     is_defender: bool
     stunned: bool          # 423 -- contributes no Might to combat damage
+    # 426 / 702.3 -- Buff counters are physical objects sitting on the card,
+    # and everything on the board is Public (107.1.d, 107.2.c). `current_might`
+    # already folds their effect in, but the *count* is what a player reads to
+    # know whether one can still be spent (702.2.b), so folding was not enough.
+    buffs: int
+    # 437 -- a tracked Prevent value. It is the difference between a unit that
+    # survives the next 3 damage and one that does not, and nothing in the
+    # observation said which. None means "prevent all" (437.1.b.1.b).
+    prevent: int | None
 
 
 @dataclass(frozen=True)
@@ -153,6 +162,8 @@ class RiftboundObservation:
                 is_attacker=ref.is_attacker,
                 is_defender=ref.is_defender,
                 stunned=ref.stunned,
+                buffs=ref.buffs,
+                prevent=ref.prevent,
             )
 
         # Everything on the board is public (107.1.d, 107.2.c).

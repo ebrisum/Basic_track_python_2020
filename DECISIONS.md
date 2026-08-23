@@ -531,3 +531,24 @@ rules and card pool, so none of it is blocked and none of it presumes a rule.
   at the 10-Might unit, which survives. That is not a tie-break artefact or a
   disputable judgement; the removal is simply wasted. It is the kind of error
   a win rate averages away and a scenario names.
+
+## Two more things a player could not see
+
+- **Buff counters and the Prevent value were missing from the observation**
+  -- both are public (107.1.d, 107.2.c) and neither reached a player's view.
+  Found while designing the state encoder (BUILD.md section 16): a token needs
+  a scalar per visible property, and writing that list made the absences
+  obvious in a way that reading the observation dataclass never had.
+- **"Folded in" is not the same as "visible"** -- `current_might` already
+  included Buffs, which is why nobody noticed. But 702.2.b lets a Buff be
+  *spent*, so the count is a different fact from its effect: a unit with one
+  Buff and a unit with +1 Might this turn have the same Might and different
+  futures. The test asserts exactly that pair.
+- **These go into the replay hash and `choice_options` does not** -- the
+  distinction is privacy, not importance. The hash is fed by both players'
+  observations, so a field only one player may read cannot go in it; a field
+  both players read must, or the hash stops covering the board.
+- **The replays were repaired, not regenerated** -- 2,033 hashes moved across
+  739 and 1,292 recorded steps, with every action still legal and both
+  outcomes unchanged. `tests/replays/repair.py` refuses anything else, which
+  is what keeps "the fixture failed so I remade it" from becoming a habit.
