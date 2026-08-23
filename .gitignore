@@ -12,3 +12,12 @@ data/trajectories/
 # ad-hoc metrics files written alongside it are not.
 runs/*.json
 !runs/acceptance.json
+
+# Claude Code's local state, including the git worktrees it creates for
+# subagents. Committing those would nest a checkout inside the checkout.
+.claude/
+
+# Model weights: megabytes per iteration and regenerable from a seed and a
+# config, exactly like the trajectory datasets above. `runs/acceptance.json`
+# stays committed because it is a *measurement*, not an artefact.
+runs/checkpoints/
