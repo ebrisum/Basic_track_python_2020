@@ -37,13 +37,22 @@ def test_an_unknown_command_fails(capsys):
     assert "unknown command" in capsys.readouterr().err
 
 
-def test_train_refuses_rather_than_pretending(capsys):
-    """The command exists in the plan and not in this repository."""
-    assert cli.main(["train"]) == 2
-    err = capsys.readouterr().err
-    assert "not implemented" in err
-    # And it says *why*, so the reader knows it is a decision, not an oversight.
-    assert "dependency" in err
+def test_train_no_longer_refuses(capsys):
+    """It used to exit 2 saying the dependency decision was open. It is not.
+
+    The previous version of this test called `cli.main(["train"])` with no
+    arguments and asserted a refusal. Once `train` was wired up that call
+    started a real five-iteration training run *inside the test suite* — it
+    did not fail, it hung, and it took ten minutes to notice. A test that
+    encodes "this does nothing" has to be deleted the moment the thing starts
+    doing something; there is no version of it that stays harmless.
+
+    So this asserts the parser works without running anything.
+    """
+    with pytest.raises(SystemExit) as caught:
+        cli.main(["train", "--help"])
+    assert caught.value.code == 0
+    assert "--iterations" in capsys.readouterr().out
 
 
 def test_evaluate_grades_an_agent(capsys):
@@ -109,3 +118,61 @@ def test_generate_refuses_to_clobber_an_existing_dataset(tmp_path, capsys):
 
     assert cli.main(["generate", "--games", "1", "--out", str(out), "--force",
                      "--agents", "random", "random", "--progress", "0"]) == 0
+
+
+def test_train_is_wired_and_produces_a_checkpoint(tmp_path, capsys):
+    """`train` used to exit 2 saying the decision was open. It is not now.
+
+    Kept deliberately tiny: this asserts the command runs a real iteration and
+    leaves a loadable checkpoint behind, not that it learns anything. Learning
+    is `test_ppo.py`'s job.
+    """
+    pytest.importorskip("torch")
+    out = tmp_path / "ck"
+    assert cli.main([
+        "train", "--config", "debug", "--iterations", "1", "--games", "1",
+        "--eval-games", "2", "--out", str(out),
+    ]) == 0
+    printed = capsys.readouterr().out
+    assert '"iteration": 1' in printed
+
+    saved = sorted(out.glob("gen_*.pt"))
+    assert saved, "no checkpoint was written"
+    assert (out / "history.json").exists()
+
+    from cards.database import load as load_pool
+    from learning.action_encoding import ActionEncoder
+    from learning.state_encoding import StateEncoder
+    from model.checkpoint import load as load_checkpoint
+
+    db = load_pool()
+    network, payload = load_checkpoint(saved[0], StateEncoder(db), ActionEncoder())
+    assert network is not None
+    assert payload["extra"]["iteration"] == 1
+    assert payload["provenance"]["engine_version"]
+
+
+def test_train_says_what_is_missing_rather_than_failing_on_an_import():
+    """The one command that needs a dependency should name it."""
+    import builtins
+
+    real_import = builtins.__import__
+
+    def refuse(name, *args, **kwargs):
+        if name == "torch":
+            raise ImportError("no torch")
+        return real_import(name, *args, **kwargs)
+
+    builtins.__import__ = refuse
+    try:
+        import io as _io
+        import contextlib
+
+        stderr = _io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = cli.main(["train", "--iterations", "1"])
+        assert code == 2
+        assert "torch is not installed" in stderr.getvalue()
+        assert "standard library" in stderr.getvalue()
+    finally:
+        builtins.__import__ = real_import

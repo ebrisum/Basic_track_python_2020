@@ -8,8 +8,10 @@ Two things are true at once and neither should be lost in the summary:
 
 - On **rules fidelity, determinism, information-tightness and statistical
   rigour**, this project is *ahead* of what the plan asks for.
-- On the **model itself** — a neural policy/value network and the loop that
-  trains it — it is at zero. Sections 16-19 and 22 do not exist.
+- On the **model itself**, the pipeline now exists end to end — encoder,
+  network, policy over legal actions, self-play, PPO, checkpoints — and has
+  been *run*, not trained. No checkpoint yet beats a baseline, and saying so
+  is the point: a built pipeline and a strong agent are different claims.
 
 Everything *around* the model now does: the action encoding (7), the
 trajectory format (14), the dataset generator (20), the three missing baseline
@@ -40,7 +42,7 @@ Legend: **done** / **partial** / **absent** / **n/a**.
 | 7 | **Stable action encoding** | **done** | `learning/action_encoding.py`: a 4,507-wide space, slot-based so an index does not depend on a per-game `instance_id`, factorized into (type, slot, option) and recoverable by `factor()`. `mask()` makes section 29's illegal-action count structurally zero. 28 tests, including an exhaustive proof that the mulligan-subset enumeration is a bijection. |
 | 8 | Headless simulator | **done** | The frozen interface *is* `SimulationEnvironment`. No graphics, no network, no delays; `clone` via a hand-written `__deepcopy__`. |
 | 9 | Deterministic simulation | **done** | Seeded throughout; two committed replays hash every step of two full games. |
-| 10 | Simulator validation | **done** | 877 tests; the 10,000-match run in `VALIDATION.md` now checks all 14 structural invariants after **every action of every game** — 2,188,138 states, not a 500-state sample — with crashes, impossible states, unresolved games and illegal actions all at 0. |
+| 10 | Simulator validation | **done** | 897 tests; the 10,000-match run in `VALIDATION.md` now checks all 14 structural invariants after **every action of every game** — 2,188,138 states, not a 500-state sample — with crashes, impossible states, unresolved games and illegal actions all at 0. |
 | 11 | Performance instrumentation | **done** | `analysis/validate.py` reports games/min, decisions/s, mean branching factor and mean game length, stamps every run with its provenance, and can write all three to a JSON file. 95 games/min single-process with every invariant checked after every action, **379 on four workers**. Above the plan's initial target of 100; its preferred 1,000 is now under 3x away rather than 10x. The fall from engine 0.4.0's 173 is mostly the 323.6 fix making games 78% longer, which is correctness, not regression. |
 
 **Part I is now closed.** Section 7 was its one real hole and it is filled,
@@ -121,10 +123,10 @@ what is missing is the model itself and the training loop, sections 16-19 and
 | 16 | `StateEncoder` producing object tokens | **done** — `learning/state_encoding.py`: a masked sequence of object tokens (global, both players, battlefields, permanents, hand, trashes, champions, legends, chain, pending choice), each with categorical, flag, scalar and keyword columns, written from the acting player's perspective. Pure stdlib, so what a model may see stays on the guarded side of the line. **The test that justifies it**: find a plateau the 13 features call identical — 77% of decisions — and assert the tokens separate it. On the first plateau found, five actions, one feature vector, five encodings |
 | 17 | Embedding + transformer + policy/value heads | **done** — `model/network.py::RiftboundNet`. Embedding tables per categorical column, summed rather than concatenated so width does not grow with columns; a `norm_first` transformer encoder; masked-mean pooling; a value head with `tanh` so the output is in [-1, +1] as the section specifies. Sizes from `config/*.toml`, defaulting to the plan's own 128/4/4/512 (≈979k parameters). Vocabulary sizes come from the encoder's actual widths, never from a config file |
 | 18 | Policy scored over legal actions | **done** — the *preferred* form, not the permitted fallback. An action factorises into (type, slot, option) and the slot names a game object, so the logit is read off the transformer's output at the token describing that object: `MLP([type ; option ; H[row] ; pooled])`. Actions naming no object get a learned vector. Padded and illegal entries are `-inf`, so a softmax cannot put mass on an illegal action — section 29 by construction. Nothing here scales with the 4,507-wide action space |
-| 19 | Supervised bootstrap | **absent** (the plan marks it skippable) |
+| 19 | Supervised bootstrap | **absent**, and skipped on the plan's own terms — it says "do not require human games" and makes the stage optional. There are no human match logs, and bootstrapping from `GreedyAgent` would teach a policy to imitate an evaluator that cannot distinguish 77% of decisions |
 | 20 | Baseline-generated games for pretraining | **done** — `cli.py generate --games N` writes a gzipped trajectory dataset from any pairing of the five baseline agents, seats alternating by game index, with the pairing recorded in the file. ~22 KB per game. Nothing *consumes* it yet, because sections 16-18 are blocked on the dependency decision |
-| 21 | Self-play | **partial** — `analysis/self_play_loop.py` runs generations and saves *weights*; the per-decision trajectory format now exists (section 14) but the loop does not yet write one |
-| 22 | PPO | **absent** |
+| 21 | Self-play | **done** — `model/selfplay.py` plays the network against itself and records exactly what the section lists: observation, legal actions, selected action, action probability, value estimate, final outcome. Seats alternate by seed. `analysis/self_play_loop.py` still exists and does a different job — it fits the *linear evaluator's* weights and needs nothing installed |
+| 22 | PPO | **done** — `model/ppo.py`: clipped objective, value loss, entropy bonus, gradient clipping, checkpointing, deterministic evaluation. **GAE runs per player, not per game**: consecutive decisions belong to opposite seats, and running it across the interleaved sequence would credit one seat's advantage to the other while looking entirely healthy. `gamma` is 1.0 because discounting would make a win worth less for taking longer, which is shaping through a hyperparameter |
 
 ### The decision that blocks this block
 

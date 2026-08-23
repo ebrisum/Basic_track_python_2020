@@ -10,15 +10,15 @@ delegates to the module that already owned the work, so this file adds a door
 and no behaviour -- the point is that a newcomer does not have to know that
 validation lives in `analysis.validate` and scenarios in `analysis.scenarios`.
 
-Two commands the plan lists do not exist yet, and this says so rather than
-printing a stub that looks like it worked:
+Every command the plan lists now exists. Two of them mean different things
+and the names are easy to confuse:
 
-    train      needs a neural policy/value model (sections 16-18, 22), which
-               needs a dependency beyond the standard library. That decision
-               is open -- see BUILD_STATUS.md.
-    selfplay   `analysis.self_play_loop` fits *evaluator weights* by self-play
-               and is wired up below, but it is not the section-21 self-play
-               that trains a network on trajectories.
+    selfplay   fits the *linear evaluator's* weights by self-play, which is
+               `analysis/self_play_loop.py` and needs nothing installed.
+    train      section 21/22 self-play PPO over the neural policy/value model.
+               The only command in this project that requires torch; it says
+               so and exits 2 if the dependency is missing rather than
+               failing with an import error.
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ COMMANDS = """commands:
   fit         fit evaluator weights to recorded outcomes
   selfplay    generational self-play over evaluator weights
   play        start the local web frontend
-  train       not implemented -- see the module docstring
+  train       PPO self-play training (sections 21, 22)
 """
 
 
@@ -157,26 +157,62 @@ def _cmd_play(rest: list[str]) -> int:
 
 
 def _cmd_train(rest: list[str]) -> int:
-    print(
-        "train: not implemented.\n\n"
-        "Sections 16-18 and 22 need a neural policy/value model, which needs a\n"
-        "dependency beyond the standard library (NumPy at minimum, realistically\n"
-        "PyTorch). That decision is open and is not one this CLI should make\n"
-        "quietly. See BUILD_STATUS.md, 'The decision that blocks this block'.\n\n"
-        "What does work today: `fit` fits the linear evaluator, `selfplay` runs\n"
-        "generations of it, and `generate` writes the trajectories a future\n"
-        "trainer would consume.",
-        file=sys.stderr,
+    """PPO self-play training (sections 21, 22)."""
+    parser = argparse.ArgumentParser(prog="cli.py train")
+    parser.add_argument("--config", default="train",
+                        help="a name from config/ or a path to a .toml")
+    parser.add_argument("--iterations", type=int, default=5)
+    parser.add_argument("--games", type=int, default=8,
+                        help="self-play games per iteration")
+    parser.add_argument("--out", default="runs/checkpoints")
+    parser.add_argument("--decks", nargs=2, default=None)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--eval-every", type=int, default=1)
+    parser.add_argument("--eval-games", type=int, default=20)
+    parser.add_argument("--resume", default=None)
+    args = parser.parse_args(rest)
+
+    try:
+        import torch  # noqa: F401
+    except ImportError:
+        print("torch is not installed. This is the one command that needs it:\n"
+              "  uv pip install --python .venv/bin/python -r requirements.txt\n"
+              "Everything else in this project runs on the standard library.",
+              file=sys.stderr)
+        return 2
+
+    from learning.config import ConfigError, load as load_config
+    try:
+        config = load_config(args.config)
+    except ConfigError as problem:
+        print(str(problem), file=sys.stderr)
+        return 2
+
+    from model.train import train
+    decks = tuple(args.decks or config["game"]["decks"])
+    summary = train(
+        iterations=args.iterations,
+        games_per_iteration=args.games,
+        config=config,
+        decks=decks,
+        out=args.out,
+        seed=args.seed,
+        eval_every=args.eval_every,
+        eval_games=args.eval_games,
+        action_cap=config["run"]["action_cap"],
+        resume=args.resume,
     )
-    return 2
+    print(json.dumps({k: v for k, v in summary.items() if k != "history"},
+                     indent=2))
+    return 0
 
 
 def _cmd_config(rest: list[str]) -> int:
     """Print the configuration a run would actually use.
 
     A config system nobody can inspect is a second place for behaviour to
-    hide. This resolves defaults, file and (nothing else, here) and prints the
-    result, so "what did that run use" has an answer.
+    hide. This resolves defaults and file and prints the result, so "what did
+    that run use" has an answer.
     """
     from learning.config import ConfigError, load as load_config
 
